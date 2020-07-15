@@ -86,11 +86,11 @@ body {
 }
 
 .header #btRefresh {
-	background-image: url("/images/refresh.svg") centercenterno-repeat;
+	background: url("/images/refresh.svg") centercenterno-repeat;
 }
 
 .header #btInstall {
-	background-image: url("/images/install.svg") centercenterno-repeat;
+	background: url("/images/install.svg") centercenterno-repeat;
 }
 
 .main {
