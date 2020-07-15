@@ -425,6 +425,7 @@ function callbackSolicitacao() {
   }
 
   document.body.style.cursor = "wait";
+  $("div.transicao").addClass("expand");
   doVerificarSenha(senha).then(retorno => {
     console.log("(app.js) callBackSolicitacao retorno verificarSenha", retorno);
     if (!retorno) {
