@@ -167,9 +167,15 @@ function fecharApp() {
 }
 
 function colocarEspera() {
-  $("div.circle").addClass("expand");
+  $("div.circle").addClass("wait");
+  var w = window.innerWidth;
+  var h = window.innerHeight;
+  width: 1500px;
+	height: 1500px;
+	top: -500px;
+	left: -500px;
 }
 
 function tirarEspera() {
-  $("div.circle").removeClass("expand");
+  $("div.circle").removeClass("wait");
 }
