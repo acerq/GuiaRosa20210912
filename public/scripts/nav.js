@@ -165,3 +165,8 @@ function fecharApp() {
 	  // window.close();
   }
 }
+
+
+function wait() {
+  $("div.circle").addClass("expand");
+}
