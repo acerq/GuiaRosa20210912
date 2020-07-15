@@ -432,10 +432,10 @@ div.menu li.animate:nth-of-type(6) {
 
 
 div.circle.wait {
-	width: 1500px;
-	height: 1500px;
+	width: 100%;
+	height: 100%;
 	top: 0px;
 	left: 0px;
 	background: url("/images/wait.gif") center center no-repeat;
-	opacity: 0.5;
+	opacity: 0.8;
 }

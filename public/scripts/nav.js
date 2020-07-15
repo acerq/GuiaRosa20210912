@@ -64,7 +64,6 @@ function openMenu() {
 
   var conteudo = document.getElementById("divConteudo");
   conteudo.hidden = true;
-  colocarEspera();
 }
 
 function closeMenu() {
@@ -88,7 +87,6 @@ function closeMenu() {
   }, 70);
   const conteudo = document.getElementById("divConteudo");
   conteudo.hidden = false;
-  tirarEspera();
 }
 
 // -----------------------------------------------------------------------------------------//
@@ -168,11 +166,7 @@ function fecharApp() {
 }
 
 function colocarEspera() {
-  var x = $("div.circle").addClass("wait");
-  var w = window.innerWidth;
-  var h = window.innerHeight;
-  x.innerWidth(w + "px");            
-  x.innerHeight(h + "px");            
+  $("div.circle").addClass("wait");
 }
 
 function tirarEspera() {
