@@ -223,7 +223,7 @@ function callbackOk() {
   const senha = tfSenha.value;
 
   // document.body.style.cursor = "url(/images/wait.gif)";
-  document.body.style.cursor = "wait";
+  document.getElementById("body").style.cursor = "wait";
   setTimeout(function(){}, 20000);
   // chama efetuarLogin e atualiza a tela
   doEfetuarLogin(login, senha).then(retorno => {
