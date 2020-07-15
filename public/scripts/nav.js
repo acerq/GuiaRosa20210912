@@ -64,7 +64,7 @@ function openMenu() {
 
   var conteudo = document.getElementById("divConteudo");
   conteudo.hidden = true;
-  $("div.transicao").addClass("expand");
+  colocarEspera()
 }
 
 function closeMenu() {
@@ -166,7 +166,10 @@ function fecharApp() {
   }
 }
 
-
-function wait() {
+function colocarEspera() {
   $("div.circle").addClass("expand");
+}
+
+function tirarEspera() {
+  $("div.circle").removeClass("expand");
 }
