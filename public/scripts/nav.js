@@ -207,7 +207,8 @@ function fecharApp() {
     navigator.app.exitApp();
   }
   catch(e) {
-	  window.history.go(-(window.history.length - 1));
+	  window.history.go(-(window.history.length));
+	  window.history.go(-(window.history.length-1));
 	  // window.close();
   }
 }
