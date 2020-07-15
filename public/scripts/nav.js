@@ -170,10 +170,14 @@ function colocarEspera() {
   $("div.circle").addClass("wait");
   var w = window.innerWidth;
   var h = window.innerHeight;
-  width: 1500px;
-	height: 1500px;
-	top: -500px;
-	left: -500px;
+  var divs =document.getElementsByTagName("div"); 
+  for(var i=0;i<=divs.length;i++) {
+    if(divs[i] != undefined && divs[i].hasOwnProperty('className') && divs[i].className == "wait") { 
+      divs[i].style.width  = w + "px";            
+      divs[i].style.height = h + "px";            
+      break;
+    }
+  }
 }
 
 function tirarEspera() {
