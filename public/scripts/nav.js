@@ -44,54 +44,6 @@ $("div.menu ul li a").on(click, function(e) {
   closeMenu();
 });
 
-function openMenu() {
-  $("div.circle").addClass("expand");
-const divConteudo = document.getElementById("divConteudo");
-var usrApp = null;
-var inicio = false;
-
-$("#hdr").load("burger.html");
-
-// -----------------------------------------------------------------------------------------//
-
-doObterUsuarioCorrente().then(retorno => {
-  console.log("abrirApp retorno", retorno);
-  renderObterUsuarioCorrente(retorno);
-});
-
-// -----------------------------------------------------------------------------------------//
-
-setTimeout(function() {
-  $("div.burger").on(click, function() {
-    if (!$(this).hasClass("open")) {
-      openMenu();
-    } else {
-      closeMenu();
-    }
-  });
-}, 1000);
-
-// -----------------------------------------------------------------------------------------//
-
-if ("ontouchstart" in window) {
-  var click = "click";
-} else {
-  var click = "click";
-}
-
-$("div.burger").on(click, function() {
-  if (!$(this).hasClass("open")) {
-    openMenu();
-  } else {
-    closeMenu();
-  }
-});
-
-$("div.menu ul li a").on(click, function(e) {
-  e.preventDefault();
-  closeMenu();
-});
-}
 
 function openMenu() {
   $("div.circle").addClass("expand");
@@ -112,6 +64,7 @@ function openMenu() {
 
   var conteudo = document.getElementById("divConteudo");
   conteudo.hidden = true;
+  $("div.transicao").addClass("expand");
 }
 
 function closeMenu() {

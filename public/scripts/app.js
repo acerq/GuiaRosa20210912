@@ -102,6 +102,7 @@ function callbackObterLocais() {
 //-----------------------------------------------------------------------------------------//
 
 function doObterLocais() {
+  $("div.transicao").addClass("expand");
   return fetch("/obterLocais/")
     .then(response => {
       console.log("(app.js) obterLocais response");
@@ -425,7 +426,6 @@ function callbackSolicitacao() {
   }
 
   document.body.style.cursor = "wait";
-  $("div.transicao").addClass("expand");
   doVerificarSenha(senha).then(retorno => {
     console.log("(app.js) callBackSolicitacao retorno verificarSenha", retorno);
     if (!retorno) {
