@@ -437,5 +437,5 @@ div.circle.wait {
 	top: 0px;
 	left: 0px;
 	background: url("/images/wait.gif") center center no-repeat;
-	opacity: 0.2;
+	opacity: 0.5;
 }

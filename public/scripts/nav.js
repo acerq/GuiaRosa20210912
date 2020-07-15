@@ -64,7 +64,7 @@ function openMenu() {
 
   var conteudo = document.getElementById("divConteudo");
   conteudo.hidden = true;
-  colocarEspera()
+  colocarEspera();
 }
 
 function closeMenu() {
@@ -88,6 +88,7 @@ function closeMenu() {
   }, 70);
   const conteudo = document.getElementById("divConteudo");
   conteudo.hidden = false;
+  tirarEspera();
 }
 
 // -----------------------------------------------------------------------------------------//
@@ -170,8 +171,8 @@ function colocarEspera() {
   var x = $("div.circle").addClass("wait");
   var w = window.innerWidth;
   var h = window.innerHeight;
-  x.style.width  = w + "px";            
-  x.style.height = h + "px";            
+  x.innerWidth(w + "px");            
+  x.innerHeight(h + "px");            
 }
 
 function tirarEspera() {
