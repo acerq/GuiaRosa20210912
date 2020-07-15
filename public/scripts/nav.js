@@ -167,17 +167,11 @@ function fecharApp() {
 }
 
 function colocarEspera() {
-  $("div.circle").addClass("wait");
+  var x = $("div.circle").addClass("wait");
   var w = window.innerWidth;
   var h = window.innerHeight;
-  var divs =document.getElementsByTagName("div"); 
-  for(var i=0;i<=divs.length;i++) {
-    if(divs[i] != undefined && divs[i].hasOwnProperty('className') && divs[i].className == "wait") { 
-      divs[i].style.width  = w + "px";            
-      divs[i].style.height = h + "px";            
-      break;
-    }
-  }
+  x.style.width  = w + "px";            
+  x.style.height = h + "px";            
 }
 
 function tirarEspera() {
