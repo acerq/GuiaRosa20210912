@@ -432,6 +432,8 @@ div.menu li.animate:nth-of-type(6) {
 
 
 div.circle.wait {
+  position : absolute;
+  z-index: 9999; 
 	width: 100%;
 	height: 100%;
 	top: 0px;
