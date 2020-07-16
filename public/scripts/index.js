@@ -18,7 +18,6 @@ const btNovo = document.getElementById("btNovo");
 const labelLogin = document.getElementById("lbLogin");
 
 var fnMD5 = new Function('a', 'return md5(a)');
-var fnColocarEspera = new Function('colocarEspera()');
 var estadoBtNovo = "Conta";
 
 // -----------------------------------------------------------------------------------------//
@@ -222,7 +221,7 @@ function callbackOk() {
   const login = tfLogin.value;
   const senha = tfSenha.value;
 
-  fnColocarEspera();
+  colocarEspera();
   document.body.style.cursor = "wait";
   // chama efetuarLogin e atualiza a tela
   doEfetuarLogin(login, senha).then(retorno => {
@@ -246,6 +245,12 @@ function callbackCriar() {
       estadoBtNovo = "Conta";
       divInstrucao.innerHTML = "<center><b>Efetue seu Login ou Crie sua Conta</b></center>";
   }
+}
+
+// -----------------------------------------------------------------------------------------//
+
+function colocarEspera() {
+  $("div.circle").addClass("wait");
 }
 
 // -----------------------------------------------------------------------------------------//
