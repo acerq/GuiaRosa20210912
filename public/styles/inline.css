@@ -429,8 +429,6 @@ div.menu li.animate:nth-of-type(6) {
 	transition-delay: 0.15s;
 }
 
-
-
 div.circle.wait {
   position : absolute;
   z-index: 9999; 

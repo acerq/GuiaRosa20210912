@@ -30,8 +30,11 @@ var celular;
 var endereco;
 
 var funcaoMD5 = new Function("a", "return md5(a)");
+var fnTirarEspera = new Function("tirarEspera()");
+var fnTirarEspera = new Function("tirarEspera()");
 
 $(document).ready(function() {
+  fnTirarEspera();
   $("#tfCpf").mask("999.999.999-99");
   $("#tfCelular").mask("(99) 9999-9999?9");
 });
