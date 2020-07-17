@@ -159,9 +159,11 @@ function fecharApp() {
     navigator.app.exitApp();
   }
   catch(e) {
-   
-	  var tamHistory = -window.history.length - 1;
-    window.history.go(tamHistory);
+	  var tamHistory = window.history.length;
+    while(tamHistory > 0) {
+      window.history.go(-1);
+      tamHistory--;
+    }
   }
 }
 

@@ -430,6 +430,11 @@ div.menu li.animate:nth-of-type(6) {
 }
 
 div.circle.wait {
+  -webkit-transition: all 0ms cubic-bezier(0, 0.995, 0.99, 1);
+	-moz-transition: all 0ms cubic-bezier(0, 0.995, 0.99, 1);
+	-ms-transition: all 0ms cubic-bezier(0, 0.995, 0.99, 1);
+	-o-transition: all 0ms cubic-bezier(0, 0.995, 0.99, 1);
+	transition: all 0ms cubic-bezier(0, 0.995, 0.99, 1);
   position : absolute;
   z-index: 9999; 
 	width: 100%;
