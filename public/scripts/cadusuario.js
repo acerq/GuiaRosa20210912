@@ -30,11 +30,9 @@ var celular;
 var endereco;
 
 var funcaoMD5 = new Function("a", "return md5(a)");
-var fnTirarEspera = new Function("tirarEspera()");
-var fnColocarEspera = new Function("colocarEspera()");
 
 $(document).ready(function() {
-  fnTirarEspera();
+  tirarEspera();
   $("#tfCpf").mask("999.999.999-99");
   $("#tfCelular").mask("(99) 9999-9999?9");
 });
@@ -88,13 +86,13 @@ function abrirDbApp() {
   };
 
   requestDB.onerror = event => {
-    fnTirarEspera();
+    tirarEspera();
     console.log("(cadusuario.js) Erro [AppUsr]: " + event.target.errorCode);
     alert("(cadusuario.js) Erro [AppUsr]: " + event.target.errorCode);
   };
 
   requestDB.onsuccess = event => {
-    fnTirarEspera();
+    tirarEspera();
     console.log("(cadusuario.js) [AppUsr] Sucesso");
     db = event.target.result;
     senha = tfSenha.value;
@@ -274,12 +272,12 @@ function callbackCriar() {
     return;
   }
       
-  fnColocarEspera();
+  colocarEspera();
 
   // Solicita ao server.js para que execute o WS para inclusão de paciente
   doIncluirPaciente().then(retorno => {
     console.log("(cadusuario.js) callbackCriar retorno", retorno);
-    fnTirarEspera();
+    tirarEspera();
     if (retorno.hasOwnProperty("status")) {
       if (retorno.status == "success") {
         // Guarda os dados no banco local
@@ -298,5 +296,15 @@ function callbackCriar() {
 
 //-----------------------------------------------------------------------------------------//
 
-btCancelar.addEventListener("click", callbackCancelar);
+function colocarEspera() {
+  $("div.circle").addClass("wait");
+}
+
+// -----------------------------------------------------------------------------------------//
+
+function tirarEspera() {
+  $("div.circle").removeClass("wait");
+}
+
+// -----------------------------------------------------------------------------------------//btCancelar.addEventListener("click", callbackCancelar);
 btCriar.addEventListener("click", callbackCriar);
