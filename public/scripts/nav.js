@@ -159,9 +159,9 @@ function fecharApp() {
     navigator.app.exitApp();
   }
   catch(e) {
-	  window.history.go(-(window.history.length));
-	  //xwindow.history.go(-(window.history.length-1));
-	  // window.close();
+   
+	  var tamHistory = -window.history.length - 1;
+    window.history.go(tamHistory);
   }
 }
 
