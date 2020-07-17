@@ -384,6 +384,7 @@ function doSolicitacao() {
 //-----------------------------------------------------------------------------------------//
 
 function renderSolicitacao(resposta) {
+  fnTirarEspera();
   if (!resposta) {
     console.log("(app.js) renderSolicitacao sem conteúdo");
     alert("Erro na solicitação do exame.");
@@ -392,7 +393,7 @@ function renderSolicitacao(resposta) {
   console.log("(app.js) renderSolicitacao -> ", resposta);
   if(resposta.mensagem == "Ok")	{
 	  alert("Exame agendado com sucesso");
-  	  history.go(-1);
+  	history.go(-1);
   } else {
 	  alert(resposta.mensagem);	  
   }
@@ -433,17 +434,17 @@ function callbackSolicitacao() {
     return;
   }
 
-  document.body.style.cursor = "wait";
+  fnColocarEspera();
   doVerificarSenha(senha).then(retorno => {
     console.log("(app.js) callBackSolicitacao retorno verificarSenha", retorno);
     if (!retorno) {
-      document.body.style.cursor = "default";
+      fnTirarEspera();
       console.log("(app.js) renderVerificarSenha sem conteúdo");
       alert("Erro na conexão com o Servidor #03APP");
       return;
     }
     if (retorno.hasOwnProperty("erro")) {
-      document.body.style.cursor = "default";
+      fnTirarEspera();
       alert(retorno.erro);
       return;
     }
@@ -451,7 +452,6 @@ function callbackSolicitacao() {
     doSolicitacao().then(retorno => {
       console.log("(app.js) callBackSolicitacao retorno", retorno);
       renderSolicitacao(retorno);
-      document.body.style.cursor = "default";
     });
   });
 }
