@@ -1,5 +1,8 @@
 "use strict";
 
+var fnTirarEspera = new Function("tirarEspera()");
+var fnColocarEspera = new Function("colocarEspera()");
+
 export default class DAOPaciente {
   //-----------------------------------------------------------------------------------------//
   constructor() {
@@ -46,18 +49,18 @@ export default class DAOPaciente {
   //-----------------------------------------------------------------------------------------//
 
   obterPacientes(callback) {
-    document.body.style.cursor = "wait";
+    fnColocarEspera();
     this.arrayPacientes = [];
     try {
       this.transacao = this.db.transaction(["Paciente"], "readonly");
       this.store = this.transacao.objectStore("Paciente");
     } catch (e) {
       console.log("[DAOPaciente.obterPacientes] Erro");
-      document.body.style.cursor = "default";
+      fnTirarEspera();
       return null;
     }
     this.store.openCursor().onsuccess = event => {
-      document.body.style.cursor = "default";
+      fnTirarEspera();
       var cursor = event.target.result;
       if (cursor) {
         this.arrayPacientes.push(cursor.value);

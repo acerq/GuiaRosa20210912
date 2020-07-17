@@ -31,7 +31,7 @@ var endereco;
 
 var funcaoMD5 = new Function("a", "return md5(a)");
 var fnTirarEspera = new Function("tirarEspera()");
-var fnTirarEspera = new Function("tirarEspera()");
+var fnColocarEspera = new Function("colocarEspera()");
 
 $(document).ready(function() {
   fnTirarEspera();
@@ -88,11 +88,13 @@ function abrirDbApp() {
   };
 
   requestDB.onerror = event => {
+    fnTirarEspera();
     console.log("(cadusuario.js) Erro [AppUsr]: " + event.target.errorCode);
     alert("(cadusuario.js) Erro [AppUsr]: " + event.target.errorCode);
   };
 
   requestDB.onsuccess = event => {
+    fnTirarEspera();
     console.log("(cadusuario.js) [AppUsr] Sucesso");
     db = event.target.result;
     senha = tfSenha.value;
@@ -148,7 +150,6 @@ function renderCriarUsuario(data) {
 //-----------------------------------------------------------------------------------------//
 
 function doIncluirPaciente() {
-  
   console.log("(cadusuario.js) Executando Incluir Paciente " + cpf);
   return fetch(
     "/incluirPaciente/" +
@@ -272,11 +273,13 @@ function callbackCriar() {
     alert("O endereço deve ser preenchido.");
     return;
   }
-  document.body.style.cursor = "wait";
+      
+  fnColocarEspera();
+
   // Solicita ao server.js para que execute o WS para inclusão de paciente
   doIncluirPaciente().then(retorno => {
     console.log("(cadusuario.js) callbackCriar retorno", retorno);
-    document.body.style.cursor = "default";
+    fnTirarEspera();
     if (retorno.hasOwnProperty("status")) {
       if (retorno.status == "success") {
         // Guarda os dados no banco local
@@ -291,7 +294,6 @@ function callbackCriar() {
     } else
       alert(retorno.erro);
   });
-  document.body.style.cursor = "default";
 }
 
 //-----------------------------------------------------------------------------------------//
