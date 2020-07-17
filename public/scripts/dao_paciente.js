@@ -109,12 +109,14 @@ export default class DAOPaciente {
       return false;
     }
 
+    fnColocarEspera();
     this.transacao = this.db.transaction(["Paciente"], "readwrite");
     this.transacao.oncomplete = event => {
       console.log("[DAOPaciente.incluir] Sucesso");
     };
     this.transacao.onerror = event => {
       console.log("[DAOPaciente.incluir] Erro");
+      fnTirarEspera();
     };
     this.store = this.transacao.objectStore("Paciente");
     this.store.add({
@@ -141,10 +143,12 @@ export default class DAOPaciente {
         enderecoNovo
     ).then(response => {
         console.log("(app.js) incluirPaciente response");
+        fnTirarEspera();
         return true;
       })
       .catch(() => {
         console.log("(app.js) incluirPaciente catch");
+        fnTirarEspera();
         return false;
       });
 
@@ -189,12 +193,14 @@ export default class DAOPaciente {
       return false;
     }
 
+    fnColocarEspera();
     this.transacao = this.db.transaction(["Paciente"], "readwrite");
     this.transacao.oncomplete = event => {
       console.log("[DAOPaciente.alterar] Sucesso");
     };
     this.transacao.onerror = event => {
       console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
+      fnTirarEspera();
     };
     this.store = this.transacao.objectStore("Paciente");
     this.store.openCursor().onsuccess = event => {
@@ -231,10 +237,12 @@ export default class DAOPaciente {
         enderecoNovo
     ).then(response => {
         console.log("(app.js) incluirPaciente response");
+        fnTirarEspera();
         return true;
       })
       .catch(() => {
         console.log("(app.js) incluirPaciente catch");
+        fnTirarEspera();
         return false;
       });
 
@@ -243,12 +251,14 @@ export default class DAOPaciente {
   //-----------------------------------------------------------------------------------------//
 
   excluir(cpfExclusao) {
+    fnColocarEspera();
     this.transacao = this.db.transaction(["Paciente"], "readwrite");
     this.transacao.oncomplete = event => {
       console.log("[DAOPaciente.excluir] Sucesso");
     };
     this.transacao.onerror = event => {
       console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
+      fnTirarEspera();
     };
     this.store = this.transacao.objectStore("Paciente");
     return (this.store.openCursor().onsuccess = event => {
@@ -258,6 +268,7 @@ export default class DAOPaciente {
           const request = cursor.delete();
           request.onsuccess = () => {
             console.log("[DAOPaciente.excluir] Cursor delete - Sucesso ");
+            fnTirarEspera();
             return true;
           };
         }
