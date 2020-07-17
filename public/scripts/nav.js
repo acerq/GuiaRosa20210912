@@ -160,7 +160,7 @@ function fecharApp() {
   }
   catch(e) {
 	  window.history.go(-(window.history.length));
-	  window.history.go(-(window.history.length-1));
+	  //xwindow.history.go(-(window.history.length-1));
 	  // window.close();
   }
 }
