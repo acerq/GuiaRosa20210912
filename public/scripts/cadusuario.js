@@ -273,6 +273,7 @@ function callbackCriar() {
   }
       
   colocarEspera();
+  window.setTimeout(function f(){}, 10000);
 
   // Solicita ao server.js para que execute o WS para inclusão de paciente
   doIncluirPaciente().then(retorno => {
