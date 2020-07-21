@@ -138,11 +138,6 @@ function incluirDbApp() {
 //-----------------------------------------------------------------------------------------//
 
 function renderCriarUsuario(data) {
-  if (data == null) {
-    console.log("(cadusuario.js) renderCriarUsuario no data");
-    alert("Problemas de Conexão com o servidor.");
-    return;
-  }
 }
 
 //-----------------------------------------------------------------------------------------//

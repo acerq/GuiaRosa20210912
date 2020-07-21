@@ -282,6 +282,7 @@ function doIncluirPaciente(req, resp) {
       let resposta = JSON.parse(result1.WsincluipacienteReturn.$value);
       console.log("doIncluirPaciente Resposta ->", resposta);
       resp.json(resposta);
+      resp.end();
     });
   });
 }
