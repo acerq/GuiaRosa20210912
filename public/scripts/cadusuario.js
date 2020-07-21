@@ -306,3 +306,11 @@ function tirarEspera() {
 
 // -----------------------------------------------------------------------------------------//btCancelar.addEventListener("click", callbackCancelar);
 btCriar.addEventListener("click", callbackCriar);
+
+tfCpf.addEventListener("keyup", function(event){if(event.keyCode === 13){tfNome.focus();}});
+tfNome.addEventListener("keyup", function(event){if(event.keyCode === 13){tfCelular.focus();}});
+tfCelular.addEventListener("keyup", function(event){if(event.keyCode === 13){tfEmail.focus();}});
+tfEmail.addEventListener("keyup", function(event){if(event.keyCode === 13){tfEndereco.focus();}});
+tfEmail.addEventListener("keyup", function(event){if(event.keyCode === 13){tfSenha.focus();}});
+tfSenha.addEventListener("keyup", function(event){if(event.keyCode === 13){tfReplay.focus();}});
+tfReplay.addEventListener("keyup", function(event){if(event.keyCode === 13){callbackCriar();}});
