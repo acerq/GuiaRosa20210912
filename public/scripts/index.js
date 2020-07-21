@@ -222,12 +222,10 @@ function callbackOk() {
   const senha = tfSenha.value;
 
   colocarEspera();
-  document.body.style.cursor = "wait";
   // chama efetuarLogin e atualiza a tela
   doEfetuarLogin(login, senha).then(retorno => {
     console.log("callbackOk retorno", retorno);
     renderEfetuarLogin(retorno);
-    document.body.style.cursor = "default";
   });
 }
 
