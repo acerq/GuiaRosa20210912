@@ -151,8 +151,9 @@ function renderObterLocais(data) {
   });
 
   new Promise((res, rej) => {
-    var retorno = "<option value='-1'>Selecione...</option>";
-
+    //--- var retorno = "<option value='-1'>Selecione...</option>";
+    var retorno = "";
+    
     arrayLocais.forEach((value, index, array) => {
       var codigo = value.codigolocal;
       var descricao = value.nomelocal;
@@ -286,8 +287,9 @@ function renderObterExames(data) {
       return 0;
     });
 
-    var retorno = "<option value='-1'>Selecione...</option>";
+    //var retorno = "<option value='-1'>Selecione...</option>";
 
+    var retorno = "";
     arrayExames.forEach((value, index, array) => {
       let codExecutante = value.id_executante;
       let codExame = value.cd_exame;
