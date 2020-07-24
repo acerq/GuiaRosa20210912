@@ -173,8 +173,8 @@ function renderObterLocais(data) {
       })
       .on("select2:select", function(e) {
         codLocal = e.params.data.id;
-      });
-      $('#cbLocal').trigger('change'); 
+      });    
+      codLocal = 0;
   });
 }
 
