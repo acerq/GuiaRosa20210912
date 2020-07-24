@@ -153,12 +153,12 @@ function renderObterLocais(data) {
   new Promise((res, rej) => {
     //--- var retorno = "<option value='-1'>Selecione...</option>";
     var retorno = "";
-    
     arrayLocais.forEach((value, index, array) => {
       var codigo = value.codigolocal;
       var descricao = value.nomelocal;
       retorno += "<option value='" + codigo + "'>" + descricao + "</option>";
-      if (index === array.length - 1) res(retorno);
+      if (index === array.length - 1) 
+        res(retorno);
     });
   }).then(retorno => {
     const divLocal = document.getElementById("divLocal");
@@ -174,6 +174,7 @@ function renderObterLocais(data) {
       .on("select2:select", function(e) {
         codLocal = e.params.data.id;
       });
+      $('#cbLocal').trigger('change'); 
   });
 }
 
