@@ -188,7 +188,8 @@ function doObterLocais(req, resp) {
   let horaAtual = new Date();
   if(horaAtual - guiaRosaApp.tempoCorrente > TEMPO_MAXIMO) {
     resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
-    consol
+    resp.end();
+    console.log("Sessão expirada!")
     return;
   }
   guiaRosaApp.tempoCorrente = horaAtual;
