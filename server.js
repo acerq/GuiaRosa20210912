@@ -4,9 +4,9 @@ const express = require("express");
 const fetch = require("node-fetch");
 const redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
 
-const DELAY = 0;
 const BASE_URL = "http://sisp.e-sisp.org:8049/webrunstudio_73/webservices/GSIServices.jws?wsdl";
-const TEMPO_MAXIMO = 20 * 60 * 1000; // 20 minutos
+// const TEMPO_MAXIMO = 20 * 60 * 1000; // 20 minutos
+const TEMPO_MAXIMO = 30 * 1000; // 20 minutos
 
 //-----------------------------------------------------------------------------------------//
 
@@ -185,7 +185,12 @@ function doLoginPaciente(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doObterLocais(req, resp) {
-  guiaRosaApp.tempoCorrente = new Date();
+  let horaAtual = new Date();
+  if(horaAtual - guiaRosaApp.tempoCorrente > TEMPO_MAXIMO) {
+    resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
+    return;
+  }
+  guiaRosaApp.tempoCorrente = horaAtual;
 
   let soap = require("soap");
   console.log("executando doObterLocais ");
