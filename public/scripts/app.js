@@ -137,6 +137,7 @@ function renderObterLocais(data) {
   }
   if (data.hasOwnProperty("erro")) {
     alert(data.erro);
+    if(data.erro )
     return;
   } else console.log("(app.js) renderObterLocais -> ", data);
 
