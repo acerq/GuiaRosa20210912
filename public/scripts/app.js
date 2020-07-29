@@ -137,7 +137,8 @@ function renderObterLocais(data) {
   }
   if (data.hasOwnProperty("erro")) {
     alert(data.erro);
-    if(data.erro )
+    if(data.erro == "Sessão Expirada")
+        window.location.href = "index.html";
     return;
   } else console.log("(app.js) renderObterLocais -> ", data);
 

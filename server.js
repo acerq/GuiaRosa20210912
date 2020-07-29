@@ -186,13 +186,14 @@ function doLoginPaciente(req, resp) {
 
 function doObterLocais(req, resp) {
   let horaAtual = new Date();
+    
+  console.log("Tempo: " + (horaAtual - guiaRosaApp.tempoCorrente));
   if(horaAtual - guiaRosaApp.tempoCorrente > TEMPO_MAXIMO) {
     resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
     resp.end();
     console.log("Sessão expirada!")
     return;
   }
-  console.log(horaAtual - guiaRosaApp.tempoCorrente)
   guiaRosaApp.tempoCorrente = horaAtual;
 
   let soap = require("soap");
