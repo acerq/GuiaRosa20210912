@@ -191,7 +191,7 @@ body {
 	flex-direction: row;
 	flex-wrap: nowrap;
 	font-size: 12px;
-	height: 48px;
+	height: 30px;
 	justify-content: flex-start;
 	padding: 12px 12px 12px 0px;
 	transition: transform 0.233s cubic-bezier(0, 0, 0.21, 1) 0.1s;
