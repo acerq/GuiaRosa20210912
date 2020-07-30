@@ -174,6 +174,28 @@ function solicitacaoDeExames() {
 
 // -----------------------------------------------------------------------------------------//
 
+function apresentarListas() {
+  console.log("(nav.js) Verificando Timeout ");
+  return fetch("/verificarTimeout")
+    .then(async response => {
+      console.log("(nav.js) VerificarTimeout response");
+      let msg = await response.json();
+      if (msg.hasOwnProperty("erro")) {
+        alert(msg.erro);
+        window.location.href = "index.html";
+        return;
+      }
+      window.location.href = "listas.html";
+      return response.json();
+    })
+    .catch(e => {
+      console.log("(nav.js) do catch", e);
+      return null;
+    });
+}
+
+// -----------------------------------------------------------------------------------------//
+
 window.retornarUsrApp = function() {
   return usrApp;
 };
