@@ -44,6 +44,24 @@ function doObterUsuarioCorrente(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
+function doVerificarTimeout(req, resp) {
+  let diferenca = new Date() - guiaRosaApp.tempoCorrente;
+    
+  console.log("Tempo: " + diferenca);
+  if(diferenca > TEMPO_MAXIMO) {
+    resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
+    resp.end();
+    console.log("Sessão expirada!")
+    return;
+  }
+  guiaRosaApp.tempoCorrente = new Date();
+  resp.json(JSON.parse('{"ok" : "' + diferenca + '"}'));
+  resp.end();
+  console.log("Sessão ok!")
+}
+
+//-----------------------------------------------------------------------------------------//
+
 function doGuardarUsuarioCorrente(req, resp) {
   console.log("doGuardarUsuarioCorrente");
 
@@ -184,17 +202,6 @@ function doLoginPaciente(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doObterLocais(req, resp) {
-  let horaAtual = new Date();
-    
-  console.log("Tempo: " + (horaAtual - guiaRosaApp.tempoCorrente));
-  if(horaAtual - guiaRosaApp.tempoCorrente > TEMPO_MAXIMO) {
-    resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
-    resp.end();
-    console.log("Sessão expirada!")
-    return;
-  }
-  guiaRosaApp.tempoCorrente = horaAtual;
-
   let soap = require("soap");
   console.log("executando doObterLocais ");
 
@@ -503,7 +510,7 @@ function startServer() {
   app.get("/obterExames/:local/:exame", doObterExames);
 
   // Verificar Tempo de Conexão
-  app.get("/verificarTimeout/:local/:exame", doObterExames);
+  app.get("/verificarTimeout/", doVerificarTimeout);
 
   //
   //

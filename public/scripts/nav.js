@@ -131,7 +131,24 @@ function renderObterUsuarioCorrente(retorno) {
 // -----------------------------------------------------------------------------------------//
 
 function cadastroDePacientes() {
-  window.location.href = "cadastro.html";
+  console.log("(nav.js) Verificando Timeout ");
+  return fetch("/verificarTimeout")
+    .then(response => {
+      
+      console.log("(nav.js) VerificarTimeout response", response.body);
+      if (data.hasOwnProperty("erro")) {
+    alert(data.erro);
+    if(data.erro == "Sessão Expirada")
+        window.location.href = "index.html";
+    return;
+
+      window.location.href = "bdpaciente.html";
+      return response.json();
+    })
+    .catch(e => {
+      console.log("(app.js) do catch", e);
+      return null;
+    });
 }
 
 // -----------------------------------------------------------------------------------------//
