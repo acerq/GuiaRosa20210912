@@ -190,14 +190,13 @@ body {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: nowrap;
-	font-size: 20px;
-	height: 56px;
+	font-size: 12px;
+	height: 48px;
 	justify-content: flex-start;
-	padding: 16px 16px 0 16px;
+	padding: 12px 12px 12px 0px;
 	transition: transform 0.233s cubic-bezier(0, 0, 0.21, 1) 0.1s;
 	width: 100%;
 	will-change: transform;
-	z-index: 1000;
 }
 
 #view-code {
