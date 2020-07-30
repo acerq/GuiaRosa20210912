@@ -133,20 +133,19 @@ function renderObterUsuarioCorrente(retorno) {
 function cadastroDePacientes() {
   console.log("(nav.js) Verificando Timeout ");
   return fetch("/verificarTimeout")
-    .then(response => {
-      
-      console.log("(nav.js) VerificarTimeout response", response.body);
-      if (data.hasOwnProperty("erro")) {
-    alert(data.erro);
-    if(data.erro == "Sessão Expirada")
+    .then(async response => {
+      console.log("(nav.js) VerificarTimeout response");
+      let msg = await response.json();
+      if (msg.hasOwnProperty("erro")) {
+        alert(msg.erro);
         window.location.href = "index.html";
-    return;
-
+        return;
+      }
       window.location.href = "bdpaciente.html";
       return response.json();
     })
     .catch(e => {
-      console.log("(app.js) do catch", e);
+      console.log("(nav.js) do catch", e);
       return null;
     });
 }
