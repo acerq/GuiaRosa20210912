@@ -502,6 +502,9 @@ function startServer() {
   // Obter Exames
   app.get("/obterExames/:local/:exame", doObterExames);
 
+  // Verificar Tempo de Conexão
+  app.get("/verificarTimeout/:local/:exame", doObterExames);
+
   //
   //
   //
