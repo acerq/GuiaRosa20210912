@@ -200,9 +200,13 @@ body {
   text-align: center;
 }
 
+.container-de-icones {
+  grid-template-columns: auto auto;
+  display: grid;
+}
+
 .icone-container {
-  width: 40%;
-  cursor: pointer;
+ cursor: pointer;
   background: #fdf;
   border-radius: 10px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2),
@@ -210,22 +214,11 @@ body {
   box-sizing: border-box;
   padding: 10px;
   margin-right: 10px ;
+  margin-left: 10px ;
   margin-top: 30px;
-  text-align: center;
-  
-      display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
 }
 
 .icone {
-  margin: auto;
-  margin-top: 20px;
-  display: inline-block;
-  width: 40%;
-  height: 120px;
   text-align: center;
   text-transform: none;
 }
