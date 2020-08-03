@@ -14,7 +14,7 @@ doObterUsuarioCorrente().then(retorno => {
 // -----------------------------------------------------------------------------------------//
 
 setTimeout(function() {
-  $("div.burger").on(click, function() {
+  $("div.burger").on("click", function() {
     if (!$(this).hasClass("open")) {
       openMenu();
     } else {
@@ -26,12 +26,10 @@ setTimeout(function() {
 // -----------------------------------------------------------------------------------------//
 
 if ("ontouchstart" in window) {
-  var click = "click";
-} else {
-  var click = "click";
+//  var click = "click";
 }
 
-$("div.burger").on(click, function() {
+$("div.burger").on("click", function() {
   if (!$(this).hasClass("open")) {
     openMenu();
   } else {
@@ -39,11 +37,12 @@ $("div.burger").on(click, function() {
   }
 });
 
-$("div.menu ul li a").on(click, function(e) {
+$("div.menu ul li a").on("click", function(e) {
   e.preventDefault();
   closeMenu();
 });
 
+// -----------------------------------------------------------------------------------------//
 
 function openMenu() {
   $("div.circle").addClass("expand");
@@ -63,6 +62,8 @@ function openMenu() {
   }, 120);
 
   var conteudo = document.getElementById("divConteudo");
+    conteudo.height = '100%';
+  conteudo.width = '100%';
   conteudo.hidden = true;
 }
 
@@ -86,6 +87,8 @@ function closeMenu() {
     $("div.x, div.y, div.z").removeClass("collapse");
   }, 70);
   const conteudo = document.getElementById("divConteudo");
+  conteudo.height = '0%';
+  conteudo.width = '0%';
   conteudo.hidden = false;
 }
 
