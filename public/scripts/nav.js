@@ -108,8 +108,10 @@ function doObterUsuarioCorrente() {
 
 function renderObterUsuarioCorrente(retorno) {
   usrApp = retorno;
-  if (usrApp.ehMedico) 
+  if (usrApp.ehMedico) {
 	  $("#menu").load("menu_medico.html");
+    $("#container-de-icones").load("icones_medico.html");
+  }
   else 
 	  $("#menu").load("menu_paciente.html");
 
