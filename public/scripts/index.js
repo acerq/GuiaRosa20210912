@@ -82,7 +82,7 @@ function obterAppUsr() {
       estadoBtNovo = "Login";
       
       if(usrApp.ehMedico == true) {
-        labelLogin.innerHTML = "Login:";
+        labelLogin.innerHTML = "Login (Médico):";
       } else {
         labelLogin.innerHTML = "CPF:";
       }
