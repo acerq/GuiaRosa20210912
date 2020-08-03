@@ -45,7 +45,10 @@ $("div.menu ul li a").on("click", function(e) {
 // -----------------------------------------------------------------------------------------//
 
 function irPara(ref) {
-   window.location.href = ref;
+  if(!ref.includes(".pdf"))
+    window.location.href = ref;
+  else
+    window.open(ref);
 }
 
 // -----------------------------------------------------------------------------------------//
