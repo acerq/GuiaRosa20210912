@@ -137,8 +137,7 @@ function incluirDbApp() {
 
 //-----------------------------------------------------------------------------------------//
 
-function renderCriarUsuario(data) {
-}
+function renderCriarUsuario(data) {}
 
 //-----------------------------------------------------------------------------------------//
 
@@ -199,7 +198,11 @@ function doGuardarUsuarioCorrente() {
 //-----------------------------------------------------------------------------------------//
 
 function callbackCancelar() {
-  window.history.back();
+  var tamHistory = window.history.length;
+  while (tamHistory > 0) {
+    window.history.go(-1);
+    tamHistory--;
+  }
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -301,11 +304,40 @@ function tirarEspera() {
 
 // -----------------------------------------------------------------------------------------//btCancelar.addEventListener("click", callbackCancelar);
 btCriar.addEventListener("click", callbackCriar);
+btCancelar.addEventListener("click", callbackCancelar);
 
-tfCpf.addEventListener("keyup", function(event){if(event.keyCode === 13){tfNome.focus();}});
-tfNome.addEventListener("keyup", function(event){if(event.keyCode === 13){tfCelular.focus();}});
-tfCelular.addEventListener("keyup", function(event){if(event.keyCode === 13){tfEmail.focus();}});
-tfEmail.addEventListener("keyup", function(event){if(event.keyCode === 13){tfEndereco.focus();}});
-tfEmail.addEventListener("keyup", function(event){if(event.keyCode === 13){tfSenha.focus();}});
-tfSenha.addEventListener("keyup", function(event){if(event.keyCode === 13){tfReplay.focus();}});
-tfReplay.addEventListener("keyup", function(event){if(event.keyCode === 13){callbackCriar();}});
+tfCpf.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    tfNome.focus();
+  }
+});
+tfNome.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    tfCelular.focus();
+  }
+});
+tfCelular.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    tfEmail.focus();
+  }
+});
+tfEmail.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    tfEndereco.focus();
+  }
+});
+tfEmail.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    tfSenha.focus();
+  }
+});
+tfSenha.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    tfReplay.focus();
+  }
+});
+tfReplay.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    callbackCriar();
+  }
+});
