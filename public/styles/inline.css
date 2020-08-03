@@ -203,7 +203,6 @@ body {
 .container-de-icones {
   grid-template-columns: auto auto;
   display: grid;
-  z-index: 1001;
 }
 
 .icone-container {
