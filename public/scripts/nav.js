@@ -60,9 +60,9 @@ function openMenu() {
     $("div.x").addClass("rotate45");
     $("div.z").addClass("rotate135");
   }, 120);
-
-  $("div.menu").height = '100%';
-  $("div.menu").width = '100%';
+  const menu = document.getElementById("menu");
+  menu.height = '100%';
+  menu.width = '100%';
   var conteudo = document.getElementById("divConteudo");
   conteudo.hidden = true;
 }
@@ -88,8 +88,9 @@ function closeMenu() {
     $("div.y").show();
     $("div.x, div.y, div.z").removeClass("collapse");
   }, 70);
-  $("div.menu").height = '0%';
-  $("div.menu").width = '0%';
+  const menu = document.getElementById("menu");
+  menu.height = '0%';
+  menu.width = '0%';
   const conteudo = document.getElementById("divConteudo");
   conteudo.hidden = false;
 }
