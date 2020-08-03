@@ -61,11 +61,13 @@ function openMenu() {
     $("div.z").addClass("rotate135");
   }, 120);
 
+  $("div.menu").height = '100%';
+  $("div.menu").width = '100%';
   var conteudo = document.getElementById("divConteudo");
-    conteudo.height = '100%';
-  conteudo.width = '100%';
   conteudo.hidden = true;
 }
+
+// -----------------------------------------------------------------------------------------//
 
 function closeMenu() {
   $("div.burger").removeClass("open");
@@ -86,9 +88,9 @@ function closeMenu() {
     $("div.y").show();
     $("div.x, div.y, div.z").removeClass("collapse");
   }, 70);
+  $("div.menu").height = '0%';
+  $("div.menu").width = '0%';
   const conteudo = document.getElementById("divConteudo");
-  conteudo.height = '0%';
-  conteudo.width = '0%';
   conteudo.hidden = false;
 }
 
@@ -131,6 +133,7 @@ function renderObterUsuarioCorrente(retorno) {
       usrApp.login +
       ")</center>";
   }
+  closeMenu();
 }
 
 // -----------------------------------------------------------------------------------------//
