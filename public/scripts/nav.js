@@ -44,6 +44,12 @@ $("div.menu ul li a").on("click", function(e) {
 
 // -----------------------------------------------------------------------------------------//
 
+function irPara(ref) {
+   window.location.href = ref;
+}
+
+// -----------------------------------------------------------------------------------------//
+
 function openMenu() {
   $("div.circle").addClass("expand");
 
@@ -143,10 +149,10 @@ function cadastroDePacientes() {
       let msg = await response.json();
       if (msg.hasOwnProperty("erro")) {
         alert(msg.erro);
-        window.location.href = "index.html";
+        irPara("index.html");
         return;
       }
-      window.location.href = "bdpaciente.html";
+      irPara("bdpaciente.html");
       return response.json();
     })
     .catch(e => {
@@ -165,10 +171,10 @@ function solicitacaoDeExames() {
       let msg = await response.json();
       if (msg.hasOwnProperty("erro")) {
         alert(msg.erro);
-        window.location.href = "index.html";
+        irPara("index.html");
         return;
       }
-      window.location.href = "solicitacao.html";
+      irPara("solicitacao.html");
       return response.json();
     })
     .catch(e => {
@@ -187,10 +193,10 @@ function apresentarListas() {
       let msg = await response.json();
       if (msg.hasOwnProperty("erro")) {
         alert(msg.erro);
-        window.location.href = "index.html";
+        irPara("index.html");
         return;
       }
-      window.location.href = "listas.html";
+      irPara("listas.html");
       return response.json();
     })
     .catch(e => {
