@@ -29,7 +29,6 @@ const FILES_TO_CACHE = [
 ];
 
 self.addEventListener("install", evt => {
-  self.alert("Instalando...");
   console.log("[SW] Instalação");
   evt.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
