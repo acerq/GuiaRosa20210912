@@ -29,7 +29,7 @@ const FILES_TO_CACHE = [
 ];
 
 self.addEventListener("install", evt => {
-  alert("Instalando...");
+  self.alert("Instalando...");
   console.log("[SW] Instalação");
   evt.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
@@ -41,7 +41,6 @@ self.addEventListener("install", evt => {
 });
 
 self.addEventListener("activate", evt => {
-  alert("Ativando...");
   console.log("[SW] Activate");
   evt.waitUntil(
     caches.keys().then(keyList => {
