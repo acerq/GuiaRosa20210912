@@ -29,6 +29,7 @@ const FILES_TO_CACHE = [
 ];
 
 self.addEventListener("install", evt => {
+  alert("Instalando...");
   console.log("[SW] Instalação");
   evt.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
@@ -40,6 +41,7 @@ self.addEventListener("install", evt => {
 });
 
 self.addEventListener("activate", evt => {
+  alert("Ativando...");
   console.log("[SW] Activate");
   evt.waitUntil(
     caches.keys().then(keyList => {
@@ -101,7 +103,7 @@ self.addEventListener("fetch", evt => {
     );
     return;
   }
-//-------------- solicitacao
+  //-------------- solicitacao
   if (evt.request.url.includes("/solicitacao")) {
     console.log("[SW] Fetch Solicitacao (data)", evt.request.url);
     evt.respondWith(
