@@ -30,6 +30,17 @@ const FILES_TO_CACHE = [
 
 self.addEventListener("install", evt => {
   console.log("[SW] Instalação");
+  caches.keys().then(keyList => {
+    return Promise.all(
+      keyList.map(key => {
+        if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
+          console.log("[SW] Removendo cache antigo", key);
+          return caches.delete(key);
+        }
+      })
+    );
+  });
+
   evt.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       console.log("[SW] Pré-caching dos arquivos" + cache);
