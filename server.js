@@ -120,7 +120,9 @@ function doLoginMedico(req, resp) {
     console.log("createClient: " + client + " - " + err);
 
     if (client == null || typeof client === "undefined") {
-      console.log("doLogin Err -> ", err);
+      console.log("doLogin Err -> " + err);
+      if (err.hasOwnProperty("Error"))
+        console.log("Error -> ", err.Error);
 
       resp.json(
         JSON.parse('{"erro" : "[Erro:#0003] Falha na Conexão com o Servidor"}')
