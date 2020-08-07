@@ -1,6 +1,6 @@
 {
-  "name": "GuiaRosaApp",
-  "short_name": "GuiaRosa",
+  "name": "guiarosaapp",
+  "short_name": "guiarosa",
   "start_url": "index.html",
   "icons": [
 	    {
