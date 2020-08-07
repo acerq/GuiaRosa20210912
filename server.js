@@ -4,7 +4,8 @@ const express = require("express");
 const fetch = require("node-fetch");
 const redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
 
-const BASE_URL = "http://sisp.e-sisp.org:8049/webrunstudio_73/webservices/GSIServices.jws?wsdl";
+const BASE_URL =
+  "http://sisp.e-sisp.org:8049/webrunstudio_73/webservices/GSIServices.jws?wsdl";
 const TEMPO_MAXIMO = 20 * 60 * 1000; // 20 minutos
 
 //-----------------------------------------------------------------------------------------//
@@ -46,18 +47,18 @@ function doObterUsuarioCorrente(req, resp) {
 
 function doVerificarTimeout(req, resp) {
   let diferenca = new Date() - guiaRosaApp.tempoCorrente;
-    
+
   console.log("Tempo: " + diferenca);
-  if(diferenca > TEMPO_MAXIMO) {
+  if (diferenca > TEMPO_MAXIMO) {
     resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
     resp.end();
-    console.log("Sessão expirada!")
+    console.log("Sessão expirada!");
     return;
   }
   guiaRosaApp.tempoCorrente = new Date();
   resp.json(JSON.parse('{"ok" : "' + diferenca + '"}'));
   resp.end();
-  console.log("Sessão ok!")
+  console.log("Sessão ok!");
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -109,16 +110,23 @@ function doLoginMedico(req, resp) {
   let strJson = '{"login": "' + login + '", "senha": "' + senha + '"}';
   console.log("doLoginMedico " + strJson);
 
-// Recupera o objeto soap da biblioteca node.js
+  // Recupera o objeto soap da biblioteca node.js
   let soap = require("soap");
   // Cria um cliente para o WebService
-  soap.createClient(BASE_URL, function(err, client) {
+  soap.createClient(BASE_URL, { wsdl_options: { timeout: 5 } }, function(
+    err,
+    client
+  ) {
     console.log("createClient: " + client + " - " + err);
 
     if (client == null || typeof client === "undefined") {
+      console.log("doLogin Err -> ", err);
+
       resp.json(
-        JSON.parse(JSON.parse('{"erro" : "[Erro:#0003] Falha na Conexão com o Servidor"}'))
+        JSON.parse('{"erro" : "[Erro:#0003] Falha na Conexão com o Servidor"}')
       );
+      resp.end();
+
       return;
     }
 
@@ -351,7 +359,7 @@ function doSolicitacao(req, resp) {
   let dataExame = req.params.data;
   let periodo = req.params.periodo;
   let faturar = req.params.faturar;
-  
+
   console.log("Solicitação - " + guiaRosaApp.login);
   if (guiaRosaApp.ehMedico) {
     solicitante = guiaRosaApp.login;
@@ -398,7 +406,7 @@ function doSolicitacao(req, resp) {
     '"FAT_SN":"' +
     faturar +
     '"}]';
-  
+
   console.log(dados);
 
   soap.createClient(BASE_URL, function(err, client) {
@@ -409,7 +417,9 @@ function doSolicitacao(req, resp) {
         console.log("doSolicitacao webservice");
         if (err) {
           console.log("dodoSolicitacao Err -> ", err.response.body);
-          resp.json(JSON.parse('{"erro" : "[Erro:#0009] Solicitação Inválida"}'));
+          resp.json(
+            JSON.parse('{"erro" : "[Erro:#0009] Solicitação Inválida"}')
+          );
           return;
         }
         console.log(result);
@@ -430,7 +440,9 @@ function doVerificarSenhaUsuarioCorrente(req, resp) {
   let senha = req.params.senha;
 
   console.log("verificarSenhaUsuarioCorrente - " + guiaRosaApp.login);
-  console.log("verificarSenhaUsuarioCorrente - " + guiaRosaApp.senha + " - " + senha);
+  console.log(
+    "verificarSenhaUsuarioCorrente - " + guiaRosaApp.senha + " - " + senha
+  );
   if (typeof senha === "undefined") {
     console.log("undefined 0010");
     resp.json(JSON.parse('{"erro" : "[Erro:#0010] Senha Não Informada."}'));
@@ -440,8 +452,7 @@ function doVerificarSenhaUsuarioCorrente(req, resp) {
   if (guiaRosaApp.senha != senha) {
     console.log("verificarSenhaUsuarioCorrente - erro na senha");
     resp.json(JSON.parse('{"erro" : "[Erro:#0011] Senha Não Confere."}'));
-  }
-  else {
+  } else {
     console.log("verificarSenhaUsuarioCorrente -ok");
     resp.json(JSON.parse('{"mensagem":"Ok"}'));
   }
@@ -487,7 +498,7 @@ function startServer() {
   // Obter Usuário Corrente
   app.get("/inicio", doObterUsuarioCorrente);
   app.get("/obterUsuarioCorrente", doObterUsuarioCorrente);
-  
+
   // Incluir Paciente
   app.get(
     "/incluirPaciente/:cpf/:nome/:senhaMD5/:email/:celular/:endereco",
@@ -517,8 +528,8 @@ function startServer() {
   //
 
   // Indicando ao express que os arquivos estáticos estão na pasta 'public'
-  app.use(express.static("public")); 
-	
+  app.use(express.static("public"));
+
   // Iniciando o servidor local
   return app.listen("8000", () => {
     console.log("Servidor Local iniciado na porta 8000");
