@@ -120,15 +120,20 @@ function doLoginMedico(req, resp) {
     console.log("createClient: " + client + " - " + err);
 
     if (client == null || typeof client === "undefined") {
-      console.log("doLogin Err -> " + err);
-      if (err.hasOwnProperty("Error"))
-        console.log("Error -> ", err.Error);
-      if (err.includes("Error"))
-        console.log("Error 2 -> ", err.Error);
-
-      resp.json(
-        JSON.parse('{"erro" : "[Erro:#0003] Falha na Conexão com o Servidor"}')
-      );
+      console.log("doLogin Err -> " + JSON.stringify(err));
+      if (err.hasOwnProperty("code") && err.code == "ETIMEDOUT") {
+        resp.json(
+          JSON.parse(
+            '{"erro" : "[Erro:#0003] Falha na Conexão com o Servidor: TIMEOUT"}'
+          )
+        );
+      } else {
+        resp.json(
+          JSON.parse(
+            '{"erro" : "[Erro:#0003] Falha na Conexão com o Servidor"}'
+          )
+        );
+      }
       resp.end();
 
       return;
