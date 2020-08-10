@@ -142,6 +142,12 @@ function renderEfetuarLogin(data) {
   }
   console.log("renderEfetuarLogin -> ", data);
   if (data.hasOwnProperty("erro")) {
+    alert(data.erro);
+    if(data.erro.includes("TIMEOUT")) {
+      divInstrucao.innerHTML = "<b>Tempo de Conexão Login não autorizado</b>";     
+      return;
+    }
+    
     if(usrApp == null || tfLogin.value != usrApp.login || fnMD5(tfSenha.value) != usrApp.senha) {
       alert(data.erro);
       divInstrucao.innerHTML = "<b>Login não autorizado</b>";     
