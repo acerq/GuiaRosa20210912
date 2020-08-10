@@ -144,7 +144,7 @@ function renderEfetuarLogin(data) {
   if (data.hasOwnProperty("erro")) {
     alert(data.erro);
     if(data.erro.includes("TIMEOUT")) {
-      divInstrucao.innerHTML = "<b>Tempo de Conexão Login não autorizado</b>";     
+      divInstrucao.innerHTML = "<b>Tempo Excedido de Conexão com o Servidor.</b>";     
       return;
     }
     
