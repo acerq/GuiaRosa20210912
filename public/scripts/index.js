@@ -143,8 +143,9 @@ function renderEfetuarLogin(data) {
   console.log("renderEfetuarLogin -> ", data);
   if (data.hasOwnProperty("erro")) {
     alert(data.erro);
+    retirarEspera();
     if(data.erro.includes("TIMEOUT")) {
-      divInstrucao.innerHTML = "<b>Tempo Excedido de Conexão com o Servidor.</b>";     
+      divInstrucao.innerHTML = "<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>";     
       return;
     }
     
@@ -255,6 +256,12 @@ function callbackCriar() {
 
 function colocarEspera() {
   $("div.circle").addClass("wait");
+}
+
+// -----------------------------------------------------------------------------------------//
+
+function retirarEspera() {
+  $("div.circle").removeClass("wait");
 }
 
 // -----------------------------------------------------------------------------------------//
