@@ -113,7 +113,7 @@ function doLoginMedico(req, resp) {
   // Recupera o objeto soap da biblioteca node.js
   let soap = require("soap");
   // Cria um cliente para o WebService
-  soap.createClient(BASE_URL, { wsdl_options: { timeout: 5 } }, function(
+  soap.createClient(BASE_URL, { wsdl_options: { timeout: 20*60 } }, function(
     err,
     client
   ) {
