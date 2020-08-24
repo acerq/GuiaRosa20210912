@@ -1,6 +1,9 @@
 "use strict";
 
-import DaoPaciente from "./dao_paciente.js";
+//var DaoPaciente = new Function("a", "return md5(a)");
+$.getScript("dao_paciente.js", function() {
+   alert("Script loaded but not necessarily executed.");
+});
 
 var ViewPaciente = function() {
   this.daoPaciente = new DaoPaciente();
