@@ -28,6 +28,7 @@ export default class DAOPaciente {
         });
         this.store.createIndex("cpf", "cpf", { unique: true });
       });
+      this.transacao = await this.db.transaction(["Paciente"], "readonly");      
     } catch (err) {
       alert("Erro [DAOPaciente.construtor]: " + err.message);
       console.log("Erro [DAOPaciente.construtor]: " + err.message);
@@ -48,7 +49,7 @@ export default class DAOPaciente {
         cursor = await cursor.continue();
       }
     } catch (err) {
-      console.log("[DAOPaciente.obterPacientes] Erro" + err.message);
+      console.log("[DAOPaciente.obterPacientes] Erro: " + err.message);
       fnTirarEspera();
     }
     return this.arrayPacientes;

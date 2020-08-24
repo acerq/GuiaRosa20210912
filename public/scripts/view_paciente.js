@@ -59,13 +59,7 @@ export default class ViewPaciente {
   //-----------------------------------------------------------------------------------------//
 
   solicitarObjs() {
-    this.arrayPacientes = this.daoPaciente.obterPacientes(this.receberObjs);
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
-  receberObjs(array) {
-    this.arrayPacientes = array;
+    this.arrayPacientes = this.daoPaciente.obterPacientes();
     if (this.arrayPacientes.length > 0) {
       this.posAtual = 0;
     } else {
@@ -135,8 +129,7 @@ export default class ViewPaciente {
     } else if (this.operacao == "Excluir") {
       commit = this.daoPaciente.excluir(this.cpfAtual);
     }
-    if(commit)
-      this.solicitarObjs();
+    if (commit) this.solicitarObjs();
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -277,9 +270,9 @@ export default class ViewPaciente {
       this.btAlterar.disabled = true;
       this.btExcluir.disabled = true;
     }
-    this.divMensagem.innerHTML = "<p><center>Cadastro de Pacientes</center></p><hr/>";
-    if (!mostrarDivNavegacao) 
-    	this.divNavegacao.hidden = true;
+    this.divMensagem.innerHTML =
+      "<p><center>Cadastro de Pacientes</center></p><hr/>";
+    if (!mostrarDivNavegacao) this.divNavegacao.hidden = true;
     this.btSalvar.textContent = "Salvar";
   }
 
