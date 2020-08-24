@@ -6,7 +6,8 @@ const redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
 
 const BASE_URL =
   "http://sisp.e-sisp.org:8049/webrunstudio_73/webservices/GSIServices.jws?wsdl";
-const TEMPO_MAXIMO = 20 * 60 * 1000; // 20 minutos
+const TEMPO_MAXIMO_SESSAO = 20 * 60 * 1000; // 20 minutos
+const TEMPO_MAXIMO_REQUISICAO = 60 * 1000; // 60 segundos
 
 //-----------------------------------------------------------------------------------------//
 
@@ -49,7 +50,7 @@ function doVerificarTimeout(req, resp) {
   let diferenca = new Date() - guiaRosaApp.tempoCorrente;
 
   console.log("Tempo: " + diferenca);
-  if (diferenca > TEMPO_MAXIMO) {
+  if (diferenca > TEMPO_MAXIMO_SESSAO) {
     resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
     resp.end();
     console.log("Sessão expirada!");
@@ -113,7 +114,7 @@ function doLoginMedico(req, resp) {
   // Recupera o objeto soap da biblioteca node.js
   let soap = require("soap");
   // Cria um cliente para o WebService
-  soap.createClient(BASE_URL, { wsdl_options: { timeout: 20*60 } }, function(
+  soap.createClient(BASE_URL, { wsdl_options: { timeout: TEMPO_MAXIMO_REQUISICAO } }, function(
     err,
     client
   ) {
