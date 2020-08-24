@@ -1,9 +1,21 @@
 "use strict";
 
-//var DaoPaciente = new Function("a", "return md5(a)");
-$.getScript("dao_paciente.js", function() {
-   alert("Script loaded but not necessarily executed.");
-});
+
+function require(script) {
+    $.ajax({
+        url: script,
+        dataType: "script",
+        async: false,           // <-- This is the key
+        success: function () {
+        },
+        error: function () {
+            throw new Error("Could not load script " + script);
+        }
+    });
+}
+
+require("/scripts/dao_paciente.js");
+var DaoPaciente = new Function("return DaoPaciente");
 
 var ViewPaciente = function() {
   this.daoPaciente = new DaoPaciente();
