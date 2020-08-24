@@ -23,6 +23,7 @@ export default class DAOPaciente {
       this.db = await window.indexedDB.open("Paciente", 1, event => {
         console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
         this.db = event.target.result;
+        alert(this.db);
         this.store = this.db.createObjectStore("Paciente", {
           autoIncrement: true
         });
@@ -39,7 +40,7 @@ export default class DAOPaciente {
     fnColocarEspera();
     this.arrayPacientes = [];
     try {
-      this.transacao = await this.db.transaction(["Paciente"], "readonly");
+      this.transacao = await this.db.transaction("Paciente", "readonly");
       this.store = await this.transacao.objectStore("Paciente");
       var cursor = await this.store.openCursor();
       fnTirarEspera();
