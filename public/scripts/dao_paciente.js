@@ -19,11 +19,11 @@ export default class DAOPaciente {
 
   //-----------------------------------------------------------------------------------------//
 
-  abrirDB(callback) {
+ async abrirDB(callback) {
     //
     // Inicialização
     //
-    this.requestDB = window.indexedDB.open("Paciente", 1);
+    this.requestDB = await window.indexedDB.open("Paciente", 1);
 
     this.requestDB.onupgradeneeded = event => {
       console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
