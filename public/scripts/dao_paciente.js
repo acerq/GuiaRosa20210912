@@ -3,7 +3,7 @@
 var fnTirarEspera = new Function("tirarEspera()");
 var fnColocarEspera = new Function("colocarEspera()");
 
-export var DAOPaciente = function() {
+var DAOPaciente = function() {
   this.arrayPacientes = [];
   this.requestDB = null;
   this.db = null;
