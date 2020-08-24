@@ -20,7 +20,14 @@ export default class DAOPaciente {
 
   async abrirDB() {
     try {
-      this.db = await window.indexedDB.open("Paciente", 1, event => {
+      this.db = await window.indexedDB.open("Paciente", 1);      
+    } catch (err) {
+      
+      
+      
+      alert("Erro [DAOPaciente.construtor]: " + err.message);
+      console.log("Erro [DAOPaciente.construtor]: " + err.message);
+      
         console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
         this.db = event.target.result;
         alert(this.db);
@@ -28,10 +35,7 @@ export default class DAOPaciente {
           autoIncrement: true
         });
         this.store.createIndex("cpf", "cpf", { unique: true });
-      });
-    } catch (err) {
-      alert("Erro [DAOPaciente.construtor]: " + err.message);
-      console.log("Erro [DAOPaciente.construtor]: " + err.message);
+
     }
   }
   //-----------------------------------------------------------------------------------------//
