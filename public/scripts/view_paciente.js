@@ -2,8 +2,6 @@
 
 import DaoPaciente from "/scripts/dao_paciente.js";
 
-var view;
-
 export default class ViewPaciente {
   constructor() {
     this.daoPaciente = new DaoPaciente();
@@ -286,6 +284,3 @@ export default class ViewPaciente {
 
   //-----------------------------------------------------------------------------------------//
 }
-
-view = new ViewPaciente();
-this.init();
