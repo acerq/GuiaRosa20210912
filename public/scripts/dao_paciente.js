@@ -10,7 +10,6 @@ export default class DAOPaciente {
     // Atributos
     //
     this.arrayPacientes = [];
-    this.requestDB = null;
     this.db = null;
     this.store = null;
     this.transacao = null;
@@ -19,40 +18,46 @@ export default class DAOPaciente {
 
   //-----------------------------------------------------------------------------------------//
 
- async abrirDB(callback) {
-    //
-    // Inicialização
-    //
-    this.requestDB = await window.indexedDB.open("Paciente", 1);
+  async abrirDB() {
 
-    this.requestDB.onupgradeneeded = event => {
+    try {
+
+    this.db = await window.indexedDB.open("Paciente", 1, event => {
       console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
       this.db = event.target.result;
       this.store = this.db.createObjectStore("Paciente", {
         autoIncrement: true
       });
       this.store.createIndex("cpf", "cpf", { unique: true });
-    };
+    });
+    }  catch(err) {
+
+    //   this.requestDB.onupgradeneeded = event => {
+    //      console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
+    //      this.db = event.target.result;
+    //      this.store = this.db.createObjectStore("Paciente", {
+    //        autoIncrement: true
+    //      });
+    //      this.store.createIndex("cpf", "cpf", { unique: true });
+    //    };
 
     this.requestDB.onerror = event => {
       console.log("Erro [DAOPaciente.construtor]: " + event.target.errorCode);
       alert("Erro [DAOPaciente.construtor]: " + event.target.errorCode);
-      callback();
     };
 
     this.requestDB.onsuccess = event => {
       console.log("[DAOPaciente.construtor] Sucesso");
       this.db = event.target.result;
-      callback();
     };
   }
   //-----------------------------------------------------------------------------------------//
 
-  obterPacientes(callback) {
+  async obterPacientes(callback) {
     fnColocarEspera();
     this.arrayPacientes = [];
     try {
-      this.transacao = this.db.transaction(["Paciente"], "readonly");
+      this.transacao = await this.db.transaction(["Paciente"], "readonly");
       this.store = this.transacao.objectStore("Paciente");
     } catch (e) {
       console.log("[DAOPaciente.obterPacientes] Erro");
@@ -141,7 +146,8 @@ export default class DAOPaciente {
         celularNovo.replace(/\(|\)|\s|-/g, "") +
         "/" +
         enderecoNovo
-    ).then(response => {
+    )
+      .then(response => {
         console.log("(app.js) incluirPaciente response");
         fnTirarEspera();
         return true;
@@ -235,7 +241,8 @@ export default class DAOPaciente {
         celularNovo.replace(/\(|\)|\s|-/g, "") +
         "/" +
         enderecoNovo
-    ).then(response => {
+    )
+      .then(response => {
         console.log("(app.js) incluirPaciente response");
         fnTirarEspera();
         return true;

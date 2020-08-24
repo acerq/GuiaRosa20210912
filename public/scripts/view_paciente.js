@@ -52,7 +52,8 @@ export default class ViewPaciente {
   //-----------------------------------------------------------------------------------------//
 
   init() {
-    this.daoPaciente.abrirDB(this.solicitarObjs);
+    this.daoPaciente.abrirDB();
+    this.solicitarObjs();
   }
 
   //-----------------------------------------------------------------------------------------//
