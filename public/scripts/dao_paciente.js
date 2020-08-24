@@ -3,23 +3,20 @@
 var fnTirarEspera = new Function("tirarEspera()");
 var fnColocarEspera = new Function("colocarEspera()");
 
-export default class DAOPaciente {
-  //-----------------------------------------------------------------------------------------//
-  constructor() {
-    //
-    // Atributos
-    //
-    this.arrayPacientes = [];
-    this.requestDB = null;
-    this.db = null;
-    this.store = null;
-    this.transacao = null;
-    this.index = null;
-  }
 
-  //-----------------------------------------------------------------------------------------//
+var DAOPac = function() {
+  this.arrayPacientes = [];
+  this.requestDB = null;
+  this.db = null;
+  this.store = null;
+  this.transacao = null;
+  this.index = null;
+}
 
-  abrirDB(callback) {
+
+//-----------------------------------------------------------------------------------------//
+
+DAOPac.prototype.abrirDB = function(callback) {
     //
     // Inicialização
     //
@@ -46,9 +43,10 @@ export default class DAOPaciente {
       callback();
     };
   }
-  //-----------------------------------------------------------------------------------------//
 
-  obterPacientes(callback) {
+//-----------------------------------------------------------------------------------------//
+
+DAOPac.prototype.obterPacientes = function(callback) {
     fnColocarEspera();
     this.arrayPacientes = [];
     try {
@@ -73,7 +71,7 @@ export default class DAOPaciente {
 
   //-----------------------------------------------------------------------------------------//
 
-  incluir(cpfNovo, nomeNovo, celularNovo, emailNovo, enderecoNovo) {
+DAOPac.prototype.incluir = function(cpfNovo, nomeNovo, celularNovo, emailNovo, enderecoNovo) {
     if (cpfNovo == null || cpfNovo == "") {
       alert("O CPF deve ser preenchido.");
       return false;
