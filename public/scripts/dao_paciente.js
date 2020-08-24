@@ -19,61 +19,39 @@ export default class DAOPaciente {
   //-----------------------------------------------------------------------------------------//
 
   async abrirDB() {
-
     try {
-
-    this.db = await window.indexedDB.open("Paciente", 1, event => {
-      console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
-      this.db = event.target.result;
-      this.store = this.db.createObjectStore("Paciente", {
-        autoIncrement: true
+      this.db = await window.indexedDB.open("Paciente", 1, event => {
+        console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
+        this.db = event.target.result;
+        this.store = this.db.createObjectStore("Paciente", {
+          autoIncrement: true
+        });
+        this.store.createIndex("cpf", "cpf", { unique: true });
       });
-      this.store.createIndex("cpf", "cpf", { unique: true });
-    });
-    }  catch(err) {
-
-    //   this.requestDB.onupgradeneeded = event => {
-    //      console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
-    //      this.db = event.target.result;
-    //      this.store = this.db.createObjectStore("Paciente", {
-    //        autoIncrement: true
-    //      });
-    //      this.store.createIndex("cpf", "cpf", { unique: true });
-    //    };
-
-    this.requestDB.onerror = event => {
-      console.log("Erro [DAOPaciente.construtor]: " + event.target.errorCode);
-      alert("Erro [DAOPaciente.construtor]: " + event.target.errorCode);
-    };
-
-    this.requestDB.onsuccess = event => {
-      console.log("[DAOPaciente.construtor] Sucesso");
-      this.db = event.target.result;
-    };
+    } catch (err) {
+      alert("Erro [DAOPaciente.construtor]: " + err.message);
+      console.log("Erro [DAOPaciente.construtor]: " + err.message);
+    }
   }
   //-----------------------------------------------------------------------------------------//
 
-  async obterPacientes(callback) {
+  async obterPacientes() {
     fnColocarEspera();
     this.arrayPacientes = [];
     try {
       this.transacao = await this.db.transaction(["Paciente"], "readonly");
-      this.store = this.transacao.objectStore("Paciente");
-    } catch (e) {
-      console.log("[DAOPaciente.obterPacientes] Erro");
+      this.store = await this.transacao.objectStore("Paciente");
+      var cursor = await this.store.openCursor();
       fnTirarEspera();
-      return null;
-    }
-    this.store.openCursor().onsuccess = event => {
-      fnTirarEspera();
-      var cursor = event.target.result;
-      if (cursor) {
+      while (!cursor) {
         this.arrayPacientes.push(cursor.value);
-        cursor.continue();
-      } else {
-        callback(this.arrayPacientes);
+        cursor = await cursor.continue();
       }
-    };
+    } catch (err) {
+      console.log("[DAOPaciente.obterPacientes] Erro" + err.message);
+      fnTirarEspera();
+    }
+    return this.arrayPacientes;
   }
 
   //-----------------------------------------------------------------------------------------//
