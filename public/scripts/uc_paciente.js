@@ -1,6 +1,7 @@
 "use strict";
 
-import {ViewPaciente} from '/script/view_paciente.js';
-const view = new ViewPaciente();
-view.init();
+requirejs(["view_paciente, dao_paciente"], function() {
+  const view = new ViewPaciente();
+  view.init();
+});
 

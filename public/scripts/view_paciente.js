@@ -1,6 +1,6 @@
 "use strict";
 
-import DaoPaciente from "./dao_paciente.js";
+//import DaoPaciente from "./dao_paciente.js";
 
 var view;
 
