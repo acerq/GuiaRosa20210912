@@ -52,7 +52,7 @@ export default class DAOPaciente {
       this.store = await this.transacao.objectStore("Paciente");
       var cursor = await this.store.openCursor();
       fnTirarEspera();
-      while (!cursor) {
+      while(cursor) {
         this.arrayPacientes.push(cursor.value);
         cursor = await cursor.continue();
       }
@@ -65,7 +65,7 @@ export default class DAOPaciente {
 
   //-----------------------------------------------------------------------------------------//
 
-  incluir(cpfNovo, nomeNovo, celularNovo, emailNovo, enderecoNovo) {
+  async incluir(cpfNovo, nomeNovo, celularNovo, emailNovo, enderecoNovo) {
     if (cpfNovo == null || cpfNovo == "") {
       alert("O CPF deve ser preenchido.");
       return false;
@@ -110,8 +110,8 @@ export default class DAOPaciente {
       console.log("[DAOPaciente.incluir] Erro");
       fnTirarEspera();
     };
-    this.store = this.transacao.objectStore("Paciente");
-    this.store.add({
+    this.store = await this.transacao.objectStore("Paciente");
+    await this.store.add({
       cpf: cpfNovo,
       nome: nomeNovo,
       celular: celularNovo,

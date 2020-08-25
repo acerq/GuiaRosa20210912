@@ -129,61 +129,61 @@ export default class ViewPaciente {
         viewer.inputCpf.value,
         viewer.inputNome.value,
         viewer.inputCelular.value,
-        this.inputEmail.value,
-        this.inputEndereco.value
+        viewer.inputEmail.value,
+        viewer.inputEndereco.value
       );
-    } else if (this.operacao == "Alterar") {
-      commit = this.daoPaciente.alterar(
-        this.cpfAtual,
-        this.inputCpf.value,
-        this.inputNome.value,
-        this.inputCelular.value,
-        this.inputEmail.value,
-        this.inputEndereco.value
+    } else if (viewer.operacao == "Alterar") {
+      commit = viewer.daoPaciente.alterar(
+        viewer.cpfAtual,
+        viewer.inputCpf.value,
+        viewer.inputNome.value,
+        viewer.inputCelular.value,
+        viewer.inputEmail.value,
+        viewer.inputEndereco.value
       );
-    } else if (this.operacao == "Excluir") {
-      commit = this.daoPaciente.excluir(this.cpfAtual);
+    } else if (viewer.operacao == "Excluir") {
+      commit = viewer.daoPaciente.excluir(viewer.cpfAtual);
     }
-    if (commit) this.solicitarObjs();
+    if (commit) viewer.solicitarObjs();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   primeiro() {
     let viewer = this.viewer;
-    this.posAtual = 0;
-    this.atualizarInterface();
+    viewer.posAtual = 0;
+    viewer.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   anterior() {
     let viewer = this.viewer;
-    this.posAtual--;
-    this.atualizarInterface();
+    viewer.posAtual--;
+    viewer.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   proximo() {
     let viewer = this.viewer;
-    this.posAtual++;
-    this.atualizarInterface();
+    viewer.posAtual++;
+    viewer.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   ultimo() {
     let viewer = this.viewer;
-    this.posAtual = this.arrayPacientes.length - 1;
-    this.atualizarInterface();
+    viewer.posAtual = viewer.arrayPacientes.length - 1;
+    viewer.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   cancelar() {
-    let viewer = this.viewer;
-    this.atualizarInterface();
+    let viewer = viewer.viewer;
+    viewer.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
