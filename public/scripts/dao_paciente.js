@@ -19,10 +19,9 @@ export default class DAOPaciente {
   //-----------------------------------------------------------------------------------------//
 
   async abrirDB() {
-    let resultado = await new Promise(function(resolve, reject) {
-      var requestDB = window.indexedDB.open("Paciente", 1);
-
-      requestDB.onupgradeneeded = event => {
+    this.db = await new Promise(function(resolve, reject) {  // Necessário tratar com Promise pois pode 
+      var requestDB = window.indexedDB.open("Paciente", 1);  // necessitar do evento onupgradeneeded e onsuccess
+      requestDB.onupgradeneeded = event => {                 
         console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
         let db = event.target.result;
         let store = this.db.createObjectStore("Paciente", {
@@ -38,12 +37,10 @@ export default class DAOPaciente {
 
       requestDB.onsuccess = event => {
         console.log("[DAOPaciente.construtor] Sucesso");
-        if(event.target.result)
-          resolve(event.target.result);
-        else reject(Error('object not found'));
+        if (event.target.result) resolve(event.target.result);
+        else reject(Error("object not found"));
       };
     });
-    this.db = resultado.
   }
   //-----------------------------------------------------------------------------------------//
 
