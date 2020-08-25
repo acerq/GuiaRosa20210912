@@ -33,16 +33,25 @@ export default class ViewPaciente {
     this.inputEndereco = document.getElementById("tfEndereco");
 
     this.btSalvar.onclick = this.salvar;
+    this.btSalvar.viewer = this;
     this.btCancelar.onclick = this.cancelar;
+    this.btCancelar.viewer = this;
     this.btPrimeiro.onclick = this.primeiro;
+    this.btPrimeiro.viewer = this;
     this.btAnterior.onclick = this.anterior;
+    this.btAnterior.viewer = this;
     this.btProximo.onclick = this.proximo;
+    this.btProximo.viewer = this;
     this.btUltimo.onclick = this.ultimo;
+    this.btUltimo.viewer = this;
     this.btIncluir.onclick = this.incluir;
-    this.btIncluir.prototype.dono = this;
+    this.btIncluir.viewer = this;
     this.btAlterar.onclick = this.alterar;
+    this.btAlterar.viewer = this;
     this.btExcluir.onclick = this.excluir;
+    this.btExcluir.viewer = this;
     this.btSair.onclick = this.sair;
+    this.btSair.viewer = this;
 
     $(document).ready(function() {
       $("#tfCpf").mask("999.999.999-99");
@@ -73,49 +82,53 @@ export default class ViewPaciente {
   //-----------------------------------------------------------------------------------------//
 
   incluir() {
-    let dono = this.dono;
-    if (dono.operacao == "Navegar") {
-      this.inabilitarBotoes();
-      this.inputCpf.value = "";
-      this.inputNome.value = "";
-      this.inputCelular.value = "";
-      this.inputEmail.value = "";
-      this.inputEndereco.value = "";
-      this.divMensagem.innerHTML = "<center>Incluindo...</center><hr/>";
-      this.operacao = "Incluir";
+    // Não podemos fazer a associação do this ao ViewPaciente pois o this é o botão
+    let viewer = this.viewer;
+    if (viewer.operacao == "Navegar") {
+      viewer.inabilitarBotoes();
+      viewer.inputCpf.value = "";
+      viewer.inputNome.value = "";
+      viewer.inputCelular.value = "";
+      viewer.inputEmail.value = "";
+      viewer.inputEndereco.value = "";
+      viewer.divMensagem.innerHTML = "<center>Incluindo...</center><hr/>";
+      viewer.operacao = "Incluir";
     }
   }
 
   //-----------------------------------------------------------------------------------------//
 
   alterar() {
-    if (this.operacao == "Navegar") {
-      this.inabilitarBotoes();
-      this.divMensagem.innerHTML = "<center>Alterando...</center><hr/>";
-      this.operacao = "Alterar";
+    let viewer = this.viewer;
+    if (viewer.operacao == "Navegar") {
+      viewer.inabilitarBotoes();
+      viewer.divMensagem.innerHTML = "<center>Alterando...</center><hr/>";
+      viewer.operacao = "Alterar";
     }
   }
 
   //-----------------------------------------------------------------------------------------//
 
   excluir() {
-    if (this.operacao == "Navegar") {
-      this.inabilitarBotoes();
-      this.divMensagem.innerHTML = "<center>Confirmar Exclusão?</center><hr/>";
-      this.operacao = "Excluir";
-      this.btSalvar.textContent = "Excluir";
+    let viewer = this.viewer;
+    if (viewer.operacao == "Navegar") {
+      viewer.inabilitarBotoes();
+      viewer.divMensagem.innerHTML = "<center>Confirmar Exclusão?</center><hr/>";
+      viewer.operacao = "Excluir";
+      viewer.btSalvar.textContent = "Excluir";
     }
   }
 
   //-----------------------------------------------------------------------------------------//
 
   salvar() {
+    let viewer = this.viewer;
     let commit = false;
-    if (this.operacao == "Incluir") {
-      commit = this.daoPaciente.incluir(
-        this.inputCpf.value,
-        this.inputNome.value,
-        this.inputCelular.value,
+    if (viewer.operacao == "Incluir") {
+      commit = viewer.daoPaciente.incluir(
+        viewer.inputCpf.value,
+        viewer.inputNome.value,
+        viewer.inputCelular.value,
         this.inputEmail.value,
         this.inputEndereco.value
       );
@@ -137,6 +150,7 @@ export default class ViewPaciente {
   //-----------------------------------------------------------------------------------------//
 
   primeiro() {
+    let viewer = this.viewer;
     this.posAtual = 0;
     this.atualizarInterface();
   }
@@ -144,6 +158,7 @@ export default class ViewPaciente {
   //-----------------------------------------------------------------------------------------//
 
   anterior() {
+    let viewer = this.viewer;
     this.posAtual--;
     this.atualizarInterface();
   }
@@ -151,6 +166,7 @@ export default class ViewPaciente {
   //-----------------------------------------------------------------------------------------//
 
   proximo() {
+    let viewer = this.viewer;
     this.posAtual++;
     this.atualizarInterface();
   }
@@ -158,6 +174,7 @@ export default class ViewPaciente {
   //-----------------------------------------------------------------------------------------//
 
   ultimo() {
+    let viewer = this.viewer;
     this.posAtual = this.arrayPacientes.length - 1;
     this.atualizarInterface();
   }
@@ -165,6 +182,7 @@ export default class ViewPaciente {
   //-----------------------------------------------------------------------------------------//
 
   cancelar() {
+    let viewer = this.viewer;
     this.atualizarInterface();
   }
 
