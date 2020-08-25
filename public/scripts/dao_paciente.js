@@ -24,7 +24,7 @@ export default class DAOPaciente {
       requestDB.onupgradeneeded = event => {                 
         console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
         let db = event.target.result;
-        let store = this.db.createObjectStore("Paciente", {
+        let store = db.createObjectStore("Paciente", {
           autoIncrement: true
         });
         store.createIndex("cpf", "cpf", { unique: true });
