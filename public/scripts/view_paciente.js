@@ -39,6 +39,7 @@ export default class ViewPaciente {
     this.btProximo.onclick = this.proximo;
     this.btUltimo.onclick = this.ultimo;
     this.btIncluir.onclick = this.incluir;
+    this.btIncluir.setAttribute('dono',this);
     this.btAlterar.onclick = this.alterar;
     this.btExcluir.onclick = this.excluir;
     this.btSair.onclick = this.sair;
@@ -72,7 +73,7 @@ export default class ViewPaciente {
   //-----------------------------------------------------------------------------------------//
 
   incluir() {
-    if (this.operacao == "Navegar") {
+    if (viewer.operacao == "Navegar") {
       this.inabilitarBotoes();
       this.inputCpf.value = "";
       this.inputNome.value = "";
