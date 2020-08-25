@@ -19,16 +19,16 @@ export default class DAOPaciente {
   //-----------------------------------------------------------------------------------------//
 
   async abrirDB() {
-    await new Promise(function(resolve, reject) {
+    let resultado = await new Promise(function(resolve, reject) {
       var requestDB = window.indexedDB.open("Paciente", 1);
 
       requestDB.onupgradeneeded = event => {
         console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
-        var db = event.target.result;
-        var store = this.db.createObjectStore("Paciente", {
+        let db = event.target.result;
+        let store = this.db.createObjectStore("Paciente", {
           autoIncrement: true
         });
-        this.store.createIndex("cpf", "cpf", { unique: true });
+        store.createIndex("cpf", "cpf", { unique: true });
       };
 
       requestDB.onerror = event => {
@@ -38,9 +38,12 @@ export default class DAOPaciente {
 
       requestDB.onsuccess = event => {
         console.log("[DAOPaciente.construtor] Sucesso");
-        this.db = event.target.result;
+        if(event.target.result)
+          resolve(event.target.result);
+        else reject(Error('object not found'));
       };
     });
+    this.db = resultado.
   }
   //-----------------------------------------------------------------------------------------//
 
