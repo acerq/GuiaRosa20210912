@@ -18,7 +18,11 @@ const guiaRosaApp = {
   nome: null,
   celular: null,
   email: null,
-  endereco: null,
+  rua: null,
+  numero: null,
+  complemento: null,
+  bairro: null,
+  cep: null,
   ehMedico: null
 };
 
@@ -73,7 +77,11 @@ function doGuardarUsuarioCorrente(req, resp) {
   let nome = req.params.nome;
   let email = req.params.email;
   let celular = req.params.celular;
-  let endereco = req.params.endereco;
+  let rua = req.params.rua;
+  let numero = req.params.numero;
+  let complemento = req.params.complemento;
+  let bairro = req.params.bairro;
+  let cep = req.params.cep;
 
   guiaRosaApp.tempoCorrente = new Date();
   guiaRosaApp.login = cpf;
@@ -81,7 +89,11 @@ function doGuardarUsuarioCorrente(req, resp) {
   guiaRosaApp.nome = nome;
   guiaRosaApp.email = email;
   guiaRosaApp.celular = celular;
-  guiaRosaApp.endereco = endereco;
+  guiaRosaApp.rua = rua;
+  guiaRosaApp.numero = numero;
+  guiaRosaApp.complemento = complemento;
+  guiaRosaApp.bairro = bairro;
+  guiaRosaApp.cep = cep;
   guiaRosaApp.ehMedico = false;
 
   console.log("doGuardarUsuarioCorrente --> ", JSON.stringify(guiaRosaApp));
@@ -164,7 +176,11 @@ function doLoginMedico(req, resp) {
       guiaRosaApp.nome = resposta.nome;
       guiaRosaApp.email = "";
       guiaRosaApp.celular = "";
-      guiaRosaApp.endereco = "";
+      guiaRosaApp.rua = "";
+      guiaRosaApp.numero = "";
+      guiaRosaApp.complemento = "";
+      guiaRosaApp.bairro = "";
+      guiaRosaApp.cep = "";
       guiaRosaApp.ehMedico = true;
       console.log("doLogin Resposta ->", resposta);
       resp.json(resposta);
@@ -208,8 +224,11 @@ function doLoginPaciente(req, resp) {
       guiaRosaApp.nome = resposta.nome;
       guiaRosaApp.email = "";
       guiaRosaApp.celular = "";
-      guiaRosaApp.endereco = "";
-
+      guiaRosaApp.rua = "";
+      guiaRosaApp.numero = "";
+      guiaRosaApp.complemento = "";
+      guiaRosaApp.bairro = "";
+      guiaRosaApp.cep = "";
       guiaRosaApp.ehMedico = false;
       console.log("doLoginPaciente Resposta ->", resposta);
       resp.json(resposta);
@@ -276,7 +295,7 @@ function doIncluirPaciente(req, resp) {
   let senhaMD5 = req.params.senhaMD5;
   let email = req.params.email;
   let celular = req.params.celular;
-  let endereco = req.params.endereco;
+  let endereco = req.params.rua + " " + req.params.numero + " " + req.params.complemento + "-" + req.params.bairro + "," + req.params.cep;
 
   let strJson =
     '{"nome": "' +
@@ -497,7 +516,7 @@ function startServer() {
 
   // Guardar Usuário Corrente
   app.get(
-    "/guardarUsuarioCorrente/:cpf/:senha/:nome/:email/:celular/:endereco",
+    "/guardarUsuarioCorrente/:cpf/:senha/:nome/:email/:celular/:rua/:numero/:complemento/:bairro/:cep",
     doGuardarUsuarioCorrente
   );
 
@@ -511,7 +530,7 @@ function startServer() {
 
   // Incluir Paciente
   app.get(
-    "/incluirPaciente/:cpf/:nome/:senhaMD5/:email/:celular/:endereco",
+    "/incluirPaciente/:cpf/:nome/:senhaMD5/:email/:celular/:rua/:numero/:complemento/:bairro/:cep",
     doIncluirPaciente
   );
 
