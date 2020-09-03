@@ -182,7 +182,7 @@ export default class ViewPaciente {
   //-----------------------------------------------------------------------------------------//
 
   cancelar() {
-    let viewer = viewer.viewer;
+    let viewer = this.viewer;
     viewer.atualizarInterface();
   }
 
