@@ -108,8 +108,8 @@ export default class DAOPaciente {
       return false;
     }
 
-    const padraoNum = /[0-9]/;
-    if (!padraoNum.test(emailNovo)) {
+    const padraoNum = /\D/g;
+    if (!padraoNum.test(numeroNovo)) {
       alert("O número do endereço é inválido.");
       return false;
     }
