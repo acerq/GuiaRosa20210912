@@ -144,13 +144,33 @@ body {
   box-sizing: border-box;
 }
 
-.main .caixaDialog .grade input {
+.main .caixaDialog .grade input {  
   border: 1px solid #aaa;
   padding: 2px 10px;
   text-align: left;
   font-size: 12px;
   height: 28px;
   width: 99%;
+  border-radius: 4px;
+}
+
+.main .caixaDialog .grade .trinta {
+  border: 1px solid #aaa;
+  padding: 2px 10px;
+  text-align: left;
+  font-size: 12px;
+  height: 28px;
+  width: 25%;
+  border-radius: 4px;
+}
+
+.main .caixaDialog .grade .sessenta {
+  border: 1px solid #aaa;
+  padding: 2px 10px;
+  text-align: left;
+  font-size: 12px;
+  height: 28px;
+  width: 74%;
   border-radius: 4px;
 }
 
