@@ -30,7 +30,11 @@ export default class ViewPaciente {
     this.inputNome = document.getElementById("tfNome");
     this.inputCelular = document.getElementById("tfCelular");
     this.inputEmail = document.getElementById("tfEmail");
-    this.inputEndereco = document.getElementById("tfEndereco");
+    this.inputRua = document.getElementById("tfRua");
+    this.inputNumero = document.getElementById("tfNumero");
+    this.inputComplemento = document.getElementById("tfComplemento");
+    this.inputBairro = document.getElementById("tfBairro");
+    this.inputCep = document.getElementById("tfCep");
 
     this.btSalvar.onclick = this.salvar;
     this.btSalvar.viewer = this;
@@ -90,7 +94,11 @@ export default class ViewPaciente {
       viewer.inputNome.value = "";
       viewer.inputCelular.value = "";
       viewer.inputEmail.value = "";
-      viewer.inputEndereco.value = "";
+      viewer.inputRua.value = "";
+      viewer.inputNumero.value = "";
+      viewer.inputComplemento.value = "";
+      viewer.inputBairro.value = "";
+      viewer.inputCep.value = "";
       viewer.divMensagem.innerHTML = "<center>Incluindo...</center><hr/>";
       viewer.operacao = "Incluir";
     }
@@ -113,7 +121,8 @@ export default class ViewPaciente {
     let viewer = this.viewer;
     if (viewer.operacao == "Navegar") {
       viewer.inabilitarBotoes();
-      viewer.divMensagem.innerHTML = "<center>Confirmar Exclusão?</center><hr/>";
+      viewer.divMensagem.innerHTML =
+        "<center>Confirmar Exclusão?</center><hr/>";
       viewer.operacao = "Excluir";
       viewer.btSalvar.textContent = "Excluir";
     }
@@ -130,7 +139,11 @@ export default class ViewPaciente {
         viewer.inputNome.value,
         viewer.inputCelular.value,
         viewer.inputEmail.value,
-        viewer.inputEndereco.value
+        viewer.inputRua.value,
+        viewer.inputNumero.value,
+        viewer.inputComplemento.value,
+        viewer.inputBairro.value,
+        viewer.inputCep.value
       );
     } else if (viewer.operacao == "Alterar") {
       commit = viewer.daoPaciente.alterar(
@@ -139,7 +152,11 @@ export default class ViewPaciente {
         viewer.inputNome.value,
         viewer.inputCelular.value,
         viewer.inputEmail.value,
-        viewer.inputEndereco.value
+        viewer.inputRua.value,
+        viewer.inputNumero.value,
+        viewer.inputComplemento.value,
+        viewer.inputBairro.value,
+        viewer.inputCep.value
       );
     } else if (viewer.operacao == "Excluir") {
       commit = viewer.daoPaciente.excluir(viewer.cpfAtual);
@@ -204,7 +221,11 @@ export default class ViewPaciente {
     this.inputNome.disabled = true;
     this.inputCelular.disabled = true;
     this.inputEmail.disabled = true;
-    this.inputEndereco.disabled = true;
+    this.inputRua.disabled = true;
+    this.inputNumero.disabled = true;
+    this.inputComplemento.disabled = true;
+    this.inputBairro.disabled = true;
+    this.inputCep.disabled = true;
 
     this.btAlterar.hidden = false;
     this.btIncluir.hidden = false;
@@ -247,7 +268,12 @@ export default class ViewPaciente {
     this.inputNome.disabled = false;
     this.inputCelular.disabled = false;
     this.inputEmail.disabled = false;
-    this.inputEndereco.disabled = false;
+
+    this.inputRua.disabled = false;
+    this.inputNumero.disabled = false;
+    this.inputComplemento.disabled = false;
+    this.inputBairro.disabled = false;
+    this.inputCep.disabled = false;
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -278,7 +304,13 @@ export default class ViewPaciente {
       this.inputNome.value = this.arrayPacientes[this.posAtual].nome;
       this.inputCelular.value = this.arrayPacientes[this.posAtual].celular;
       this.inputEmail.value = this.arrayPacientes[this.posAtual].email;
-      this.inputEndereco.value = this.arrayPacientes[this.posAtual].endereco;
+      this.inputRua.value = this.arrayPacientes[this.posAtual].rua;
+      this.inputNumero.value = this.arrayPacientes[this.posAtual].numero;
+      this.inputComplemento.value = this.arrayPacientes[
+        this.posAtual
+      ].complemento;
+      this.inputBairro.value = this.arrayPacientes[this.posAtual].bairro;
+      this.inputCep.value = this.arrayPacientes[this.posAtual].cep;
       this.btAlterar.disabled = false;
       this.btExcluir.disabled = false;
     } else {
@@ -286,7 +318,11 @@ export default class ViewPaciente {
       this.inputNome.value = "";
       this.inputCelular.value = "";
       this.inputEmail.value = "";
-      this.inputEndereco.value = "";
+      this.inputRua.value = "";
+      this.inputNumero.value = "";
+      this.inputComplemento.value = "";
+      this.inputBairro.value = "";
+      this.inputCep.value = "";
       this.btAlterar.disabled = true;
       this.btExcluir.disabled = true;
     }

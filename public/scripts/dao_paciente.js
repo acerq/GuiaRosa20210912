@@ -65,7 +65,7 @@ export default class DAOPaciente {
 
   //-----------------------------------------------------------------------------------------//
 
-  async incluir(cpfNovo, nomeNovo, celularNovo, emailNovo, enderecoNovo) {
+  async incluir(cpfNovo, nomeNovo, celularNovo, emailNovo, ruaNovo, numeroNovo, complementoNovo, bairroNovo, cepNovo) {
     if (cpfNovo == null || cpfNovo == "") {
       alert("O CPF deve ser preenchido.");
       return false;
@@ -96,7 +96,7 @@ export default class DAOPaciente {
       return false;
     }
 
-    if (enderecoNovo == null || enderecoNovo == "") {
+    if (ruaNovo == null || ruaNovo == "") {
       alert("O endereço deve ser preenchido.");
       return false;
     }
