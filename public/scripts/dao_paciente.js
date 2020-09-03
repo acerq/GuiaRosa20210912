@@ -108,7 +108,7 @@ export default class DAOPaciente {
       return false;
     }
 
-    const padraoNum = /\D/g;
+    const padraoNum = /[0-9]/;
     if (!padraoNum.test(numeroNovo)) {
       alert("O número do endereço é inválido.");
       return false;
