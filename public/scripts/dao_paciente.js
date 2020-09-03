@@ -19,9 +19,10 @@ export default class DAOPaciente {
   //-----------------------------------------------------------------------------------------//
 
   async abrirDB() {
-    this.db = await new Promise(function(resolve, reject) {  // Necessário tratar com Promise pois pode 
-      var requestDB = window.indexedDB.open("Paciente", 1);  // necessitar do evento onupgradeneeded e onsuccess
-      requestDB.onupgradeneeded = event => {                 
+    this.db = await new Promise(function(resolve, reject) {
+      // Necessário tratar com Promise pois pode
+      var requestDB = window.indexedDB.open("Paciente", 1); // necessitar do evento onupgradeneeded e onsuccess
+      requestDB.onupgradeneeded = event => {
         console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
         let db = event.target.result;
         let store = db.createObjectStore("Paciente", {
@@ -52,7 +53,7 @@ export default class DAOPaciente {
       this.store = await this.transacao.objectStore("Paciente");
       var cursor = await this.store.openCursor();
       fnTirarEspera();
-      while(cursor) {
+      while (cursor) {
         this.arrayPacientes.push(cursor.value);
         cursor = await cursor.continue();
       }
@@ -65,7 +66,8 @@ export default class DAOPaciente {
 
   //-----------------------------------------------------------------------------------------//
 
-  async incluir(cpfNovo, nomeNovo, celularNovo, emailNovo, ruaNovo, numeroNovo, complementoNovo, bairroNovo, cepNovo) {
+  validarDados(cpfNovo,nomeNovo,celularNovo,emailNovo,
+    ruaNovo,numeroNovo,complementoNovo,bairroNovo,cepNovo) {
     if (cpfNovo == null || cpfNovo == "") {
       alert("O CPF deve ser preenchido.");
       return false;
@@ -90,17 +92,60 @@ export default class DAOPaciente {
       return false;
     }
 
-    const padrao = /[a-zA-Z0-9._%-]+@[a-zA-Z0-9-]+.[a-zA-Z]{2,4}/;
-    if (!padrao.test(emailNovo)) {
+    const padraoEmail = /[a-zA-Z0-9._%-]+@[a-zA-Z0-9-]+.[a-zA-Z]{2,4}/;
+    if (!padraoEmail.test(emailNovo)) {
       alert("O email é inválido.");
       return false;
     }
 
     if (ruaNovo == null || ruaNovo == "") {
-      alert("O endereço deve ser preenchido.");
+      alert("A rua do endereço deve ser preenchida.");
       return false;
     }
 
+    if (numeroNovo == null || numeroNovo == "") {
+      alert("O número do endereço deve ser preenchido.");
+      return false;
+    }
+
+    const padraoNum = /[0-9]/;
+    if (!padraoNum.test(emailNovo)) {
+      alert("O número do endereço é inválido.");
+      return false;
+    }
+
+    if (complementoNovo == null) {
+      complementoNovo = "";
+    }
+
+    if (bairroNovo == null || bairroNovo == "") {
+      alert("O bairro deve ser preenchido.");
+      return false;
+    }
+
+    if (cepNovo == null || cepNovo == "") {
+      alert("O CEP deve ser preenchido.");
+      return false;
+    }
+    return true;
+  }
+  
+  //-----------------------------------------------------------------------------------------//
+
+  async incluir(cpfNovo,nomeNovo,celularNovo,emailNovo,
+    ruaNovo,numeroNovo,complementoNovo,bairroNovo,cepNovo) {
+    
+    if(validarDados(cpfNovo,
+    nomeNovo,
+    celularNovo,
+    emailNovo,
+    ruaNovo,
+    numeroNovo,
+    complementoNovo,
+    bairroNovo,
+    cepNovo
+  ))
+      return false;
     fnColocarEspera();
     this.transacao = this.db.transaction(["Paciente"], "readwrite");
     this.transacao.oncomplete = event => {
@@ -116,7 +161,11 @@ export default class DAOPaciente {
       nome: nomeNovo,
       celular: celularNovo,
       email: emailNovo,
-      endereco: enderecoNovo
+      rua: ruaNovo,
+      numero: numeroNovo,
+      complemento: complementoNovo,
+      bairro: bairroNovo,
+      cep: cepNovo
     });
 
     // md5('@@MedicoNoApp@@') --> 5759494f25129de6d0bd71f41a582a8c
@@ -132,7 +181,15 @@ export default class DAOPaciente {
         "/" +
         celularNovo.replace(/\(|\)|\s|-/g, "") +
         "/" +
-        enderecoNovo
+        ruaNovo +
+        "/" +
+        numeroNovo +
+        "/" +
+        complementoNovo +
+        "/" +
+        bairroNovo +
+        "/" +
+        cepNovo 
     )
       .then(response => {
         console.log("(app.js) incluirPaciente response");
@@ -150,7 +207,17 @@ export default class DAOPaciente {
 
   //-----------------------------------------------------------------------------------------//
 
-  alterar(cpfAntigo, cpfNovo, nomeNovo, celularNovo, emailNovo, enderecoNovo) {
+  alterar(
+    cpfNovo,
+    nomeNovo,
+    celularNovo,
+    emailNovo,
+    ruaNovo,
+    numeroNovo,
+    complementoNovo,
+    bairroNovo,
+    cepNovo
+  ) {
     if (cpfNovo == null || cpfNovo == "") {
       alert("O CPF deve ser preenchido.");
       return false;
