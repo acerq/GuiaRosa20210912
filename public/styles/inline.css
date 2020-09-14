@@ -574,8 +574,8 @@ div.menu li.animate:nth-of-type(6) {
 
 .checkout-price {
   position: absolute;
-  top: -14px;
-  right: -14px;
+  top: -2px;
+  right: 5px;
   width: 30%;
   font: 12px/40px Helvetica, Arial, sans-serif;
   color: white;
@@ -648,16 +648,15 @@ input {
 }
 
 .checkout-name {
-  width: 150px;
+  width: 90%;
 }
 
 .checkout-card {
-  width: 210px;
+  width: 90%;
 }
 
 .checkout-exp,
 .checkout-cvc {
-  margin-left: 15px;
   width: 45px;
 }
 
