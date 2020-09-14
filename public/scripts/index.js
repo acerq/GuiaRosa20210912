@@ -119,7 +119,7 @@ function incluirDbApp(login, senha, nome, email, celular, endereco, ehMedico) {
 		  ehMedico: ehMedico
 	  });
 	  objectStoreRequest.onsuccess = function(event) {
-		  window.location.href = "inicio.html";
+		  window.location.href = "pgto.html"; //inicio.html
 	  }
    };
 }
