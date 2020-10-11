@@ -55,7 +55,7 @@ export default class DAOPaciente {
       } catch (e) {
         console.log("[DAOPaciente.obterPacientes] Erro");
         fnTirarEspera();
-        reject(Error("[DAOPaciente.obterPacientes] Erro"));
+        resolve([]);
       }
       this.store.openCursor().onsuccess = event => {
         fnTirarEspera();
@@ -214,14 +214,36 @@ export default class DAOPaciente {
       return false;
 
     fnColocarEspera();
-    this.transacao = this.db.transaction(["Paciente"], "readwrite");
-    this.transacao.oncomplete = event => {
-      console.log("[DAOPaciente.alterar] Sucesso");
-    };
-    this.transacao.onerror = event => {
+    this.transacao = 
+       await new Promise(function(resolve, reject) {
+        this.db.transaction(["Paciente"], "readwrite");
+        this.transacao.oncomplete = event => {
+          console.log("[DAOPaciente.alterar] Sucesso");
+        };
+        this.transacao.onerror = event => {
       console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
       fnTirarEspera();
     };
+      try {
+        this.transacao = this.db.transaction(["Paciente"], "readonly");
+        this.store = this.transacao.objectStore("Paciente");
+      } catch (e) {
+        console.log("[DAOPaciente.obterPacientes] Erro");
+        fnTirarEspera();
+        reject([]);
+      }
+      this.store.openCursor().onsuccess = event => {
+        fnTirarEspera();
+        var cursor = event.target.result;
+        if (cursor) {
+          this.arrayPacientes.push(cursor.value);
+          cursor.continue();
+        } else {
+          resolve(this.arrayPacientes);
+        }
+      };
+    });
+      
     this.store = this.transacao.objectStore("Paciente");
     this.store.openCursor().onsuccess = event => {
       const cursor = event.target.result;
