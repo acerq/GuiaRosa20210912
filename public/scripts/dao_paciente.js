@@ -207,41 +207,24 @@ export default class DAOPaciente {
 
   //-----------------------------------------------------------------------------------------//
 
-  alterar(cpfAntigo,cpfNovo,nomeNovo,celularNovo,emailNovo,
+  async alterar(cpfAntigo,cpfNovo,nomeNovo,celularNovo,emailNovo,
     ruaNovo,numeroNovo,complementoNovo,bairroNovo,cepNovo) {
     if(!this.validarDados(cpfNovo,nomeNovo,celularNovo,emailNovo,
     ruaNovo,numeroNovo,complementoNovo,bairroNovo,cepNovo))
       return false;
 
     fnColocarEspera();
-    this.transacao = 
-       await new Promise(function(resolve, reject) {
+    this.transacao = await new Promise(function(resolve, reject) {
         this.db.transaction(["Paciente"], "readwrite");
         this.transacao.oncomplete = event => {
           console.log("[DAOPaciente.alterar] Sucesso");
+          resolve(this.transacao);
         };
         this.transacao.onerror = event => {
-      console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
-      fnTirarEspera();
-    };
-      try {
-        this.transacao = this.db.transaction(["Paciente"], "readonly");
-        this.store = this.transacao.objectStore("Paciente");
-      } catch (e) {
-        console.log("[DAOPaciente.obterPacientes] Erro");
-        fnTirarEspera();
-        reject([]);
-      }
-      this.store.openCursor().onsuccess = event => {
-        fnTirarEspera();
-        var cursor = event.target.result;
-        if (cursor) {
-          this.arrayPacientes.push(cursor.value);
-          cursor.continue();
-        } else {
-          resolve(this.arrayPacientes);
-        }
-      };
+          console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
+          fnTirarEspera();
+          reject(Error("[DAOPaciente.alterar] Erro"));
+        };
     });
       
     this.store = this.transacao.objectStore("Paciente");
