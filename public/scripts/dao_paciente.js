@@ -48,7 +48,30 @@ export default class DAOPaciente {
   async obterPacientes() {
     fnColocarEspera();
     this.arrayPacientes = [];
-    try {
+    await new Promise(function(resolve, reject) {
+      try {
+        this.transacao = this.db.transaction(["Paciente"], "readonly");
+        this.store = this.transacao.objectStore("Paciente");
+      } catch (e) {
+        console.log("[DAOPaciente.obterPacientes] Erro");
+        fnTirarEspera();
+        reject(Error("[DAOPaciente.obterPacientes] Erro"));
+      }
+      this.store.openCursor().onsuccess = event => {
+        fnTirarEspera();
+        var cursor = event.target.result;
+        if (cursor) {
+          this.arrayPacientes.push(cursor.value);
+          cursor.continue();
+        } else {
+          callback(this.arrayPacientes);
+        }
+      };
+      
+      
+      
+      
+      try {
       this.transacao = await this.db.transaction("Paciente", "readonly");
       this.store = await this.transacao.objectStore("Paciente");
       var cursor = await this.store.openCursor();
@@ -140,7 +163,7 @@ export default class DAOPaciente {
       return false;
     
     fnColocarEspera();
-    this.transacao = this.db.transaction(["Paciente"], "readwrite");
+    this.transacao = await this.db.transaction(["Paciente"], "readwrite");
     this.transacao.oncomplete = event => {
       console.log("[DAOPaciente.incluir] Sucesso");
     };
