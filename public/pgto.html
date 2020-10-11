@@ -22,101 +22,40 @@
   <body>
     <header id="hdr" class="header"></header>
     <main class="main">
-      <div id="menu"></div>
       <div id="divConteudo" class="caixaDialog">
-        <form class="checkout">
-    <div class="checkout-header">
-      <h1 class="checkout-title">
-        Checkout
-        <span class="checkout-price">R$450,00</span>
-      </h1>
-    </div>
-    <p>
-      <input type="text" class="checkout-input checkout-name" placeholder="Nome no Cartão">
-    </p>
-    <p>
-      <input type="text" class="checkout-input checkout-card" placeholder="4111 1111 1111 1111">
-      <input type="text" class="checkout-input checkout-exp" placeholder="MM">
-      <input type="text" class="checkout-input checkout-exp" placeholder="AA">
-      <input type="text" class="checkout-input checkout-cvc" placeholder="CVC">
-    </p>
-    <p>
-      <input type="submit" value="Efetuar Pgto" class="checkout-btn">
-    </p>
-  </form>
-
+        <div class="grade">
+          <div class="rotulo" id="divMensagem"></div>
+          <div class="rotulo"></div>
+          <div class="rotulo">Nome no Cartão:</div>
+          <div>
+            <input id="tfNomeCartao" type="text" />
+          </div>
+          <div class="rotulo">Número do Cartão:</div>
+          <div>
+            <input id="tfNumCartao" type="text" />
+          </div>
+          <div class="rotulo">Validade (Mês/Ano)</div>
+          <div>
+            <input id="tfMesValidade" type="text" class="trinta" />&nbsp;/&nbsp;
+            <input id="tfAnoValidade" type="text" class="trinta" />
+          </div>
+          <div class="rotulo">CVV</div>
+          <div>
+            <input id="tfCvv" type="text" class="trinta"  />
+          </div>div>
+        </div>
         <div class="caixaBotoes">
-          <button id="btEnviar" onclick="callbackSolicitacao()">
-            Enviar
-          </button>
-          <button id="btSair" onclick="callbackSair()">
-            Sair
-          </button>
+          <div>
+            <button id="btCancelar" hidden>
+              Cancelar
+            </button>
+            <button id="btSalvar" hidden>
+              Salvar
+            </button>
+          </div>
         </div>
       </div>
       <div id="logo"></div>
-    </main>
-    <footer class="footer"></footer>
-    <script src="scripts/md5.min.js"></script>
-    <script type="module" src="scripts/solicitacao.js"></script>
-    <script src="scripts/app.js"></script>
-    <script src="scripts/nav.js"></script>
-    <script src="scripts/select2.js"></script>
-    <script>
-      doObterUsuarioCorrente();
-
-$(function() {
-  $('#cardnumber').payment('formatCardNumber');
-  $('#cardexpiration').payment('formatCardExpiry');
-  $('#cardcvc').payment('formatCardCVC');
-  
-  $('#cardnumber').keyup(function(event) {
-    $('#label-cardnumber').empty().append($(this).val());
-  });
-  
-  $('#cardexpiration').keyup(function(event) {
-    var data = $(this).val() + '<span>' + $('#cardcvc').val() + '</span>';
-    $('#label-cardexpiration').empty().append(data);
-  });
-  
-  $('#cardcvc').keyup(function(event) {
-    var data = $('#cardexpiration').val() + '<span>' + $(this).val() + '</span>';
-    $('#label-cardexpiration').empty().append(data);
-  });
-  
-  $('.button-cta').on('click', function () { 
-    var proceed = true;
-    $(".field input").each(function(){
-      $(this).parent().find('path').each(function(){
-        $(this).attr('fill', '#dddfe6');
-      });
-      
-      if(!$.trim($(this).val())){
-        $(this).parent().find('path').each(function(){
-          $(this).attr('fill', '#f1404b');
-          proceed = false;
-        });
-        
-        if(!proceed){
-          $(this).parent().find('svg').animate({opacity: '0.1'}, "slow");
-          $(this).parent().find('svg').animate({opacity: '1'}, "slow");
-          $(this).parent().find('svg').animate({opacity: '0.1'}, "slow");
-          $(this).parent().find('svg').animate({opacity: '1'}, "slow");
-        }
-      }
-    });
-       
-    if(proceed) //everything looks good! proceed purchase...
-    {
-      $('.field').find('path').each(function(){
-        $(this).attr('fill', '#3ac569');
-      });
-      $('.payment').fadeToggle('slow', function() {
-        $('.paid').fadeToggle('slow', 'linear');
-      });
-    }
-  });
-});
-    </script>
+    </main>    
   </body>
 </html>
