@@ -272,6 +272,7 @@ export default class DAOPaciente {
       return false;
 
     fnColocarEspera();
+
     this.transacao = await new Promise(function(resolve, reject) {
       this.db.transaction(["Paciente"], "readwrite");
       this.transacao.oncomplete = event => {
@@ -285,29 +286,33 @@ export default class DAOPaciente {
       };
     });
 
-    this.store = this.transacao.objectStore("Paciente");
-    this.store.openCursor().onsuccess = event => {
-      const cursor = event.target.result;
-      if (cursor) {
-        if (cursor.value.cpf == cpfAntigo) {
-          const updateData = cursor.value;
-          updateData.cpf = cpfNovo;
-          updateData.nome = nomeNovo;
-          updateData.celular = celularNovo;
-          updateData.email = emailNovo;
-          updateData.rua = ruaNovo;
-          updateData.numero = numeroNovo;
-          updateData.complemento = complementoNovo;
-          updateData.bairro = bairroNovo;
-          updateData.cep = cepNovo;
-          const request = cursor.update(updateData);
-          request.onsuccess = () => {
-            console.log("[DAOPaciente.alterar] Cursor update - Sucesso ");
-          };
+    this.store = await new Promise(function(resolve, reject) {
+      this.store = this.transacao.objectStore("Paciente");
+      this.store.openCursor().onsuccess = event => {
+        const cursor = event.target.result;
+        if (cursor) {
+          if (cursor.value.cpf == cpfAntigo) {
+            const updateData = cursor.value;
+            updateData.cpf = cpfNovo;
+            updateData.nome = nomeNovo;
+            updateData.celular = celularNovo;
+            updateData.email = emailNovo;
+            updateData.rua = ruaNovo;
+            updateData.numero = numeroNovo;
+            updateData.complemento = complementoNovo;
+            updateData.bairro = bairroNovo;
+            updateData.cep = cepNovo;
+            const request = cursor.update(updateData);
+            request.onsuccess = () => {
+              console.log("[DAOPaciente.alterar] Cursor update - Sucesso ");
+            };
+          }
+          cursor.continue();
         }
-        cursor.continue();
-      }
-    };
+      };
+      resolve(this.store);
+    });
+
     // md5('@@MedicoNoApp@@') --> 5759494f25129de6d0bd71f41a582a8c
     let retorno = fetch(
       "/incluirPaciente/" +
@@ -346,31 +351,39 @@ export default class DAOPaciente {
   }
   //-----------------------------------------------------------------------------------------//
 
-  excluir(cpfExclusao) {
+  async excluir(cpfExclusao) {
     fnColocarEspera();
-    this.transacao = this.db.transaction(["Paciente"], "readwrite");
-    this.transacao.oncomplete = event => {
-      console.log("[DAOPaciente.excluir] Sucesso");
-    };
-    this.transacao.onerror = event => {
-      console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
-      fnTirarEspera();
-    };
-    this.store = this.transacao.objectStore("Paciente");
-    return (this.store.openCursor().onsuccess = event => {
-      const cursor = event.target.result;
-      if (cursor) {
-        if (cursor.value.cpf == cpfExclusao) {
-          const request = cursor.delete();
-          request.onsuccess = () => {
-            console.log("[DAOPaciente.excluir] Cursor delete - Sucesso ");
-            fnTirarEspera();
-            return true;
-          };
+
+    this.transacao = await new Promise(function(resolve, reject) {
+      this.db.transaction(["Paciente"], "readwrite");
+      this.transacao.oncomplete = event => {
+        console.log("[DAOPaciente.alterar] Sucesso");
+        resolve(this.transacao);
+      };
+      this.transacao.onerror = event => {
+        console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
+        fnTirarEspera();
+        reject(Error("[DAOPaciente.alterar] Erro"));
+      };
+    });
+
+    this.store = await new Promise(function(resolve, reject) {
+      this.store = this.transacao.objectStore("Paciente");
+      this.store.openCursor().onsuccess = event => {
+        const cursor = event.target.result;
+        if (cursor) {
+          if (cursor.value.cpf == cpfExclusao) {
+            const request = cursor.delete();
+            request.onsuccess = () => {
+              console.log("[DAOPaciente.excluir] Cursor delete - Sucesso ");
+              fnTirarEspera();
+              return true;
+            };
+          }
+          cursor.continue();
         }
-        cursor.continue();
-      }
-      return false;
+        resolve(this.store);
+      };
     });
   }
 
