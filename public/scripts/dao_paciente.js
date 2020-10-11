@@ -55,7 +55,7 @@ export default class DAOPaciente {
       fnTirarEspera();
       while (cursor) {
         this.arrayPacientes.push(cursor.value);
-        cursor = cursor.continue();
+        cursor.continue();
       }
     } catch (err) {
       console.log("[DAOPaciente.obterPacientes] Erro: " + err.message);
