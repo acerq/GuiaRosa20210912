@@ -64,26 +64,10 @@ export default class DAOPaciente {
           this.arrayPacientes.push(cursor.value);
           cursor.continue();
         } else {
-          callback(this.arrayPacientes);
+          resolve(this.arrayPacientes);
         }
       };
-      
-      
-      
-      
-      try {
-      this.transacao = await this.db.transaction("Paciente", "readonly");
-      this.store = await this.transacao.objectStore("Paciente");
-      var cursor = await this.store.openCursor();
-      fnTirarEspera();
-      while (cursor) {
-        this.arrayPacientes.push(cursor.value);
-        cursor.continue();
-      }
-    } catch (err) {
-      console.log("[DAOPaciente.obterPacientes] Erro: " + err.message);
-      fnTirarEspera();
-    }
+    });
     return this.arrayPacientes;
   }
 
