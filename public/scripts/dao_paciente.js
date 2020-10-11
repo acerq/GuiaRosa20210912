@@ -73,8 +73,17 @@ export default class DAOPaciente {
 
   //-----------------------------------------------------------------------------------------//
 
- validarDados(cpfNovo,nomeNovo,celularNovo,emailNovo,
-    ruaNovo,numeroNovo,complementoNovo,bairroNovo,cepNovo) {
+  validarDados(
+    cpfNovo,
+    nomeNovo,
+    celularNovo,
+    emailNovo,
+    ruaNovo,
+    numeroNovo,
+    complementoNovo,
+    bairroNovo,
+    cepNovo
+  ) {
     if (cpfNovo == null || cpfNovo == "") {
       alert("O CPF deve ser preenchido.");
       return false;
@@ -136,36 +145,64 @@ export default class DAOPaciente {
     }
     return true;
   }
-  
+
   //-----------------------------------------------------------------------------------------//
 
-  async incluir(cpfNovo,nomeNovo,celularNovo,emailNovo,
-    ruaNovo,numeroNovo,complementoNovo,bairroNovo,cepNovo) {
-    
-    if(!this.validarDados(cpfNovo,nomeNovo,celularNovo,emailNovo,
-    ruaNovo,numeroNovo,complementoNovo,bairroNovo,cepNovo))
+  async incluir(
+    cpfNovo,
+    nomeNovo,
+    celularNovo,
+    emailNovo,
+    ruaNovo,
+    numeroNovo,
+    complementoNovo,
+    bairroNovo,
+    cepNovo
+  ) {
+    if (
+      !this.validarDados(
+        cpfNovo,
+        nomeNovo,
+        celularNovo,
+        emailNovo,
+        ruaNovo,
+        numeroNovo,
+        complementoNovo,
+        bairroNovo,
+        cepNovo
+      )
+    )
       return false;
-    
+
     fnColocarEspera();
-    this.transacao = await this.db.transaction(["Paciente"], "readwrite");
-    this.transacao.oncomplete = event => {
-      console.log("[DAOPaciente.incluir] Sucesso");
-    };
-    this.transacao.onerror = event => {
-      console.log("[DAOPaciente.incluir] Erro");
-      fnTirarEspera();
-    };
-    this.store = await this.transacao.objectStore("Paciente");
-    await this.store.add({
-      cpf: cpfNovo,
-      nome: nomeNovo,
-      celular: celularNovo,
-      email: emailNovo,
-      rua: ruaNovo,
-      numero: numeroNovo,
-      complemento: complementoNovo,
-      bairro: bairroNovo,
-      cep: cepNovo
+
+    this.transacao = await new Promise(function(resolve, reject) {
+      this.db.transaction(["Paciente"], "readwrite");
+      this.transacao.oncomplete = event => {
+        console.log("[DAOPaciente.alterar] Sucesso");
+        resolve(this.transacao);
+      };
+      this.transacao.onerror = event => {
+        console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
+        fnTirarEspera();
+        reject(Error("[DAOPaciente.alterar] Erro"));
+      };
+    });
+
+    this.store = await new Promise(function(resolve, reject) {
+      this.store = this.transacao.objectStore("Paciente");
+      this.store.add({
+        cpf: cpfNovo,
+        nome: nomeNovo,
+        celular: celularNovo,
+        email: emailNovo,
+        rua: ruaNovo,
+        numero: numeroNovo,
+        complemento: complementoNovo,
+        bairro: bairroNovo,
+        cep: cepNovo
+      });
+      resolve(this.store);
     });
 
     // md5('@@MedicoNoApp@@') --> 5759494f25129de6d0bd71f41a582a8c
@@ -189,7 +226,7 @@ export default class DAOPaciente {
         "/" +
         bairroNovo +
         "/" +
-        cepNovo 
+        cepNovo
     )
       .then(response => {
         console.log("(app.js) incluirPaciente response");
@@ -207,26 +244,47 @@ export default class DAOPaciente {
 
   //-----------------------------------------------------------------------------------------//
 
-  async alterar(cpfAntigo,cpfNovo,nomeNovo,celularNovo,emailNovo,
-    ruaNovo,numeroNovo,complementoNovo,bairroNovo,cepNovo) {
-    if(!this.validarDados(cpfNovo,nomeNovo,celularNovo,emailNovo,
-    ruaNovo,numeroNovo,complementoNovo,bairroNovo,cepNovo))
+  async alterar(
+    cpfAntigo,
+    cpfNovo,
+    nomeNovo,
+    celularNovo,
+    emailNovo,
+    ruaNovo,
+    numeroNovo,
+    complementoNovo,
+    bairroNovo,
+    cepNovo
+  ) {
+    if (
+      !this.validarDados(
+        cpfNovo,
+        nomeNovo,
+        celularNovo,
+        emailNovo,
+        ruaNovo,
+        numeroNovo,
+        complementoNovo,
+        bairroNovo,
+        cepNovo
+      )
+    )
       return false;
 
     fnColocarEspera();
     this.transacao = await new Promise(function(resolve, reject) {
-        this.db.transaction(["Paciente"], "readwrite");
-        this.transacao.oncomplete = event => {
-          console.log("[DAOPaciente.alterar] Sucesso");
-          resolve(this.transacao);
-        };
-        this.transacao.onerror = event => {
-          console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
-          fnTirarEspera();
-          reject(Error("[DAOPaciente.alterar] Erro"));
-        };
+      this.db.transaction(["Paciente"], "readwrite");
+      this.transacao.oncomplete = event => {
+        console.log("[DAOPaciente.alterar] Sucesso");
+        resolve(this.transacao);
+      };
+      this.transacao.onerror = event => {
+        console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
+        fnTirarEspera();
+        reject(Error("[DAOPaciente.alterar] Erro"));
+      };
     });
-      
+
     this.store = this.transacao.objectStore("Paciente");
     this.store.openCursor().onsuccess = event => {
       const cursor = event.target.result;
@@ -271,7 +329,7 @@ export default class DAOPaciente {
         "/" +
         bairroNovo +
         "/" +
-        cepNovo 
+        cepNovo
     )
       .then(response => {
         console.log("(app.js) incluirPaciente response");
