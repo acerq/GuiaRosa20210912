@@ -22,9 +22,10 @@
   <body>
     <header id="hdr" class="header"></header>
     <main class="main">
+      <div id="menu"></div>
       <div id="divConteudo" class="caixaDialog">
         <div class="grade">
-          <div class="rotulo" id="divMensagem"></div>
+          <div class="rotulo" id="divMensagem"><center>Insira os Dados do Cartão</center></div><hr/>
           <div class="rotulo"></div>
           <div class="rotulo">Nome no Cartão:</div>
           <div>
@@ -36,28 +37,29 @@
           </div>
           <div class="rotulo">Validade (Mês/Ano)</div>
           <div>
-            <input id="tfMesValidade" type="text" class="trinta" />&nbsp;/&nbsp;
+            <input id="tfMesValidade" type="text" class="trinta" />&nbsp;&nbsp;/&nbsp;
             <input id="tfAnoValidade" type="text" class="trinta" />
           </div>
           <div class="rotulo">CVV</div>
           <div>
-            <input id="tfCvv" type="text" class="trinta"  />
+            <input id="tfCvv" type="text" class="trinta" />
           </div>
         </div>
         <div class="caixaBotoes">
           <div>
-            <button id="btCancelar" hidden>
-              Cancelar
+            <button id="btOk">
+              Ok
             </button>
-            <button id="btSalvar" hidden>
-              Salvar
+            <button id="btCancelar">
+              Cancelar
             </button>
           </div>
         </div>
       </div>
       <div id="logo"></div>
-    </main>    
+    </main>
     <footer class="footer"></footer>
     <script src="scripts/pgto.js"></script>
+    <script src="scripts/nav.js"></script>
   </body>
 </html>
