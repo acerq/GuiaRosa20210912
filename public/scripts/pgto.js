@@ -15,8 +15,8 @@ const tfNomeCartao = document.getElementById("tfNomeCartao");
 const tfNumCartao = document.getElementById("tfNumCartao");
 const tfMesValidade = document.getElementById("tfMesValidade");
 const tfAnoValidade = document.getElementById("tfAnoValidade");
-const tfCVV = document.getElementById("tfCvv");
-const btCriar = document.getElementById("btOk");
+const tfCvv = document.getElementById("tfCvv");
+const btOk = document.getElementById("btOk");
 const btCancelar = document.getElementById("btCancelar");
 
 var nomeCartao;
@@ -35,6 +35,17 @@ $(document).ready(function() {
 
 //-----------------------------------------------------------------------------------------//
 
+function validarMes(strMes) {
+  var mes;
+
+  mes = parseInt(strMes);
+  if(mes < 1 || mes > 12)
+    return false;
+  return true;
+}
+
+//-----------------------------------------------------------------------------------------//
+
 function validarAno(strAno) {
   var ano;
 
@@ -46,56 +57,37 @@ function validarAno(strAno) {
 
 //-----------------------------------------------------------------------------------------//
 
-function doProcessarPgtoCredito() {
-  console.log("(pgto.js) Executando Pgto Crédito" );
-  return fetch(
-    "/pagarCredito/" +
-      cpf.replace(/\.|-/g, "") +
-      "/" +
-      nome +
-      "/" +
-      funcaoMD5(senha) +
-      "/" +
-      email +
-      "/" +
-      celular.replace(/\(|\)|\s|-/g, "") +
-      "/" +
-      endereco
-  )
-    .then(response => {
-      console.log("(cadusuario.js) incluirPaciente response");
-      return response.json();
-    })
-    .catch(() => {
-      console.log("(cadusuario.js) incluirPaciente catch");
-      return null;
-    });
+function validarCvv(strCvv) {
+  var cvv;
+
+  cvv = parseInt(strCvv);
+  if(cvv < 0 || cvv > 999)
+    return false;
+  return true;
 }
 
 //-----------------------------------------------------------------------------------------//
 
-function doGuardarUsuarioCorrente() {
-  console.log("(cadusuario.js) Executando Guardar Usuário Corrente " + cpf);
+function doPgtoCredito() {
+  console.log("(pgto.js) Executando Pgto Crédito" );
   return fetch(
-    "/guardarUsuarioCorrente/" +
-      cpf +
+    "/pagarCredito/" +
+      nomeCartao +
       "/" +
-      funcaoMD5(senha) +
+      numCartao +
       "/" +
-      nome +
+      mesValidade +
       "/" +
-      email +
+      anoValidade +
       "/" +
-      celular +
-      "/" +
-      endereco
+      cvv
   )
     .then(response => {
-      console.log("(cadusuario.js) doGuardarUsuarioCorrente response");
+      console.log("(pgto.js) Pgto Crédito response");
       return response.json();
     })
     .catch(() => {
-      console.log("(cadusuario.js) doGuardarUsuarioCorrente catch");
+      console.log("(pgto.js) Pgto Crédito catch");
       return null;
     });
 }
@@ -128,66 +120,45 @@ function callbackOk() {
   // Verificando o mês de validade
   mesValidade = tfMesValidade.value;
   if (mesValidade  == null || mesValidade  == "") {
-    alert("O Mês de Validade  deve ser preenchido.");
+    alert("O Mês de Validade do Cartão deve ser preenchido.");
     return;
   }
-  // Verificando o email
-  email = tfEmail.value;
-  if (email == null || email == "") {
-    alert("O email deve ser preenchido.");
+  if(!validarMes(mesValidade)) {
+    alert("O Mês da Validade do Cartão é inválido.");
     return;
   }
-  const padrao = /[a-zA-Z0-9._%-]+@[a-zA-Z0-9-]+.[a-zA-Z]{2,4}/;
-  if (!padrao.test(email)) {
-    alert("O email é inválido.");
+  // Verificando o ano de validade
+  anoValidade = tfAnoValidade.value;
+  if (anoValidade  == null || anoValidade  == "") {
+    alert("O Ano de Validade do Cartão deve ser preenchido.");
     return;
   }
-  // Verificando a senha
-  senha = tfSenha.value;
-  if (senha == null || senha == "") {
-    alert("A senha deve ser preenchida.");
+  if(!validarAno(anoValidade)) {
+    alert("O Ano da Validade do Cartão é inválido.");
     return;
   }
-  if (senha.length < 6) {
-    alert("A senha deve pelo menos 6 caracteres.");
+  // Verificando o CVV de validade
+  cvv = tfCvv.value;
+  if (cvv  == null || cvv  == "") {
+    alert("O CVV do Cartão deve ser preenchido.");
     return;
   }
-  // Verificando o replay da senha
-  replay = tfReplay.value;
-  if (replay == null || replay == "") {
-    alert("A repetição da senha deve ser preenchida.");
+  if(!validarCvv(cvv)) {
+    alert("O CVV do Cartão é inválido.");
     return;
   }
-  if (senha != replay) {
-    alert("A repetição da senha está divergente da senha informada.");
-    return;
-  }
-
-  // Verificando o endereço
-  endereco = tfEndereco.value;
-  if (endereco == null || endereco == "") {
-    alert("O endereço deve ser preenchido.");
-    return;
-  }
-
+  
+  
   colocarEspera();
 
   // Solicita ao server.js para que execute o WS para inclusão de paciente
-  doIncluirPaciente().then(retorno => {
-    console.log("(cadusuario.js) callbackCriar retorno", retorno);
+  doPgtoCredito().then(retorno => {
+    console.log("(pgto.js) callbackOk retorno", retorno);
     if (retorno.hasOwnProperty("status")) {
       if (retorno.status == "success") {
-        // Guarda os dados no banco local
-        abrirDbApp();
-        // Solicita ao server.js para guardar os dados do usuário
-        doGuardarUsuarioCorrente().then(retorno => {
-          console.log("(cadusuario.js) callbackCriar retorno", retorno);
-          renderCriarUsuario(retorno);
-        });
-      } else alert(retorno.msg);
-    } else alert(retorno.erro);
+      } else alert(retorno.erro);
     tirarEspera();
-  });
+  }});
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -203,41 +174,31 @@ function tirarEspera() {
 }
 
 // -----------------------------------------------------------------------------------------//btCancelar.addEventListener("click", callbackCancelar);
-btCriar.addEventListener("click", callbackCriar);
+btOk.addEventListener("click", callbackOk);
 btCancelar.addEventListener("click", callbackCancelar);
 
-tfCpf.addEventListener("keyup", function(event) {
+tfNomeCartao.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
-    tfNome.focus();
+    tfNumCartao.focus();
   }
 });
-tfNome.addEventListener("keyup", function(event) {
+tfNumCartao.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
-    tfCelular.focus();
+    tfMesValidade.focus();
   }
 });
-tfCelular.addEventListener("keyup", function(event) {
+tfMesValidade.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
-    tfEmail.focus();
+    tfAnoValidade.focus();
   }
 });
-tfEmail.addEventListener("keyup", function(event) {
+tfAnoValidade.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
-    tfEndereco.focus();
+    tfCvv.focus();
   }
 });
-tfEmail.addEventListener("keyup", function(event) {
+tfCvv.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
-    tfSenha.focus();
-  }
-});
-tfSenha.addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
-    tfReplay.focus();
-  }
-});
-tfReplay.addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
-    callbackCriar();
+    callbackOk();
   }
 });
