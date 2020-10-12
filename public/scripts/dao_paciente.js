@@ -178,7 +178,7 @@ export default class DAOPaciente {
     fnColocarEspera();
 
     let db = this.db;
-    await new Promise(function(resolve, reject) {
+    let resultado = await new Promise(function(resolve, reject) {
       let transacao = db.transaction(["Paciente"], "readwrite");
       transacao.onsuccess = event => {
         console.log("[DAOPaciente.incluir] Sucesso");
@@ -194,7 +194,7 @@ export default class DAOPaciente {
           bairro: bairroNovo,
           cep: cepNovo
         });
-        resolve();
+        resolve("Ok");
       };
       transacao.onerror = event => {
         console.log("[DAOPaciente.incluir] Erro: ", event.target.error);
