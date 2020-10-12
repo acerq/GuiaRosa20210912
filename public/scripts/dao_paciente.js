@@ -11,8 +11,6 @@ export default class DAOPaciente {
     //
     this.arrayPacientes = [];
     this.db = null;
-    this.store = null;
-    this.transacao = null;
     this.index = null;
   }
 
@@ -49,17 +47,20 @@ export default class DAOPaciente {
   //-----------------------------------------------------------------------------------------//
 
   async obterPacientes() {
+    let db = this.db;
+    let transacao;
+    let store;
     fnColocarEspera();
     this.arrayPacientes = await new Promise(function(resolve, reject) {
       try {
-        this.transacao = this.db.transaction(["Paciente"], "readonly");
-        this.store = this.transacao.objectStore("Paciente");
+        transacao = db.transaction(["Paciente"], "readonly");
+        store = transacao.objectStore("Paciente");
       } catch (e) {
         console.log("[DAOPaciente.obterPacientes] Erro");
         fnTirarEspera();
         resolve([]);
       }
-      this.store.openCursor().onsuccess = event => {
+      store.openCursor().onsuccess = event => {
         fnTirarEspera();
         var cursor = event.target.result;
         let array = [];
@@ -179,7 +180,9 @@ export default class DAOPaciente {
 
     fnColocarEspera();
 
-    this.transacao = await new Promise(function(resolve, reject) {
+    let db = this.db;
+    let store;
+    let transacao = await new Promise(function(resolve, reject) {
       this.db.transaction(["Paciente"], "readwrite");
       this.transacao.oncomplete = event => {
         console.log("[DAOPaciente.alterar] Sucesso");
