@@ -377,7 +377,8 @@ export default class DAOPaciente {
             request.onsuccess = () => {
               console.log("[DAOPaciente.excluir] Cursor delete - Sucesso ");
               fnTirarEspera();
-              return true;
+              resolve(this.store);
+              return;
             };
           }
           cursor.continue();
