@@ -24,11 +24,11 @@ export default class DAOPaciente {
       var requestDB = window.indexedDB.open("Paciente", 1); // necessitar do evento onupgradeneeded e onsuccess
       requestDB.onupgradeneeded = event => {
         console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
-        this.db = event.target.result;
-        this.store = this.db.createObjectStore("Paciente", {
+        let db = event.target.result;
+        let store = db.createObjectStore("Paciente", {
           autoIncrement: true
         });
-        this.store.createIndex("cpf", "cpf", { unique: true });
+        store.createIndex("cpf", "cpf", { unique: true });
       };
 
       requestDB.onerror = event => {
@@ -50,8 +50,7 @@ export default class DAOPaciente {
 
   async obterPacientes() {
     fnColocarEspera();
-    this.arrayPacientes = [];
-    await new Promise(function(resolve, reject) {
+    this.arrayPacientes = await new Promise(function(resolve, reject) {
       try {
         this.transacao = this.db.transaction(["Paciente"], "readonly");
         this.store = this.transacao.objectStore("Paciente");
@@ -63,11 +62,12 @@ export default class DAOPaciente {
       this.store.openCursor().onsuccess = event => {
         fnTirarEspera();
         var cursor = event.target.result;
+        let array = [];
         if (cursor) {
-          this.arrayPacientes.push(cursor.value);
+          array.push(cursor.value);
           cursor.continue();
         } else {
-          resolve(this.arrayPacientes);
+          resolve(array);
         }
       };
     });
