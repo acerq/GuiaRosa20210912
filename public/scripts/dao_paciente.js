@@ -11,7 +11,6 @@ export default class DAOPaciente {
     //
     this.arrayPacientes = [];
     this.db = null;
-    this.index = null;
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -36,10 +35,8 @@ export default class DAOPaciente {
 
       requestDB.onsuccess = event => {
         console.log("[DAOPaciente.construtor] Sucesso");
-        if (event.target.result) 
-          resolve(event.target.result);
-        else 
-          reject(Error("object not found"));
+        if (event.target.result) resolve(event.target.result);
+        else reject(Error("object not found"));
       };
     });
     let i = 0;
@@ -48,10 +45,10 @@ export default class DAOPaciente {
 
   async obterPacientes() {
     let db = this.db;
-    let transacao;
-    let store;
     fnColocarEspera();
     this.arrayPacientes = await new Promise(function(resolve, reject) {
+      let transacao;
+      let store;
       try {
         transacao = db.transaction(["Paciente"], "readonly");
         store = transacao.objectStore("Paciente");
@@ -181,23 +178,22 @@ export default class DAOPaciente {
     fnColocarEspera();
 
     let db = this.db;
-    let store;
     let transacao = await new Promise(function(resolve, reject) {
-      this.db.transaction(["Paciente"], "readwrite");
-      this.transacao.oncomplete = event => {
+      transacao = db.transaction(["Paciente"], "readwrite");
+      transacao.oncomplete = event => {
         console.log("[DAOPaciente.alterar] Sucesso");
-        resolve(this.transacao);
+        resolve(transacao);
       };
-      this.transacao.onerror = event => {
+      transacao.onerror = event => {
         console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
         fnTirarEspera();
         reject(Error("[DAOPaciente.alterar] Erro"));
       };
     });
 
-    this.store = await new Promise(function(resolve, reject) {
-      this.store = this.transacao.objectStore("Paciente");
-      this.store.add({
+    let store = await new Promise(function(resolve, reject) {
+      store = transacao.objectStore("Paciente");
+      store.add({
         cpf: cpfNovo,
         nome: nomeNovo,
         celular: celularNovo,
@@ -208,7 +204,7 @@ export default class DAOPaciente {
         bairro: bairroNovo,
         cep: cepNovo
       });
-      resolve(this.store);
+      resolve(store);
     });
 
     // md5('@@MedicoNoApp@@') --> 5759494f25129de6d0bd71f41a582a8c
@@ -279,22 +275,23 @@ export default class DAOPaciente {
 
     fnColocarEspera();
 
-    this.transacao = await new Promise(function(resolve, reject) {
-      this.db.transaction(["Paciente"], "readwrite");
-      this.transacao.oncomplete = event => {
+    let db = this.db;
+    let transacao = await new Promise(function(resolve, reject) {
+      transacao = db.transaction(["Paciente"], "readwrite");
+      transacao.oncomplete = event => {
         console.log("[DAOPaciente.alterar] Sucesso");
-        resolve(this.transacao);
+        resolve(transacao);
       };
-      this.transacao.onerror = event => {
+      transacao.onerror = event => {
         console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
         fnTirarEspera();
         reject(Error("[DAOPaciente.alterar] Erro"));
       };
     });
 
-    this.store = await new Promise(function(resolve, reject) {
-      this.store = this.transacao.objectStore("Paciente");
-      this.store.openCursor().onsuccess = event => {
+    let store = await new Promise(function(resolve, reject) {
+      store = transacao.objectStore("Paciente");
+      store.openCursor().onsuccess = event => {
         const cursor = event.target.result;
         if (cursor) {
           if (cursor.value.cpf == cpfAntigo) {
@@ -316,7 +313,7 @@ export default class DAOPaciente {
           cursor.continue();
         }
       };
-      resolve(this.store);
+      resolve(store);
     });
 
     // md5('@@MedicoNoApp@@') --> 5759494f25129de6d0bd71f41a582a8c
@@ -360,22 +357,23 @@ export default class DAOPaciente {
   async excluir(cpfExclusao) {
     fnColocarEspera();
 
-    this.transacao = await new Promise(function(resolve, reject) {
-      this.db.transaction(["Paciente"], "readwrite");
-      this.transacao.oncomplete = event => {
+        let db = this.db;
+    let transacao = await new Promise(function(resolve, reject) {
+      transacao = db.transaction(["Paciente"], "readwrite");
+      transacao.oncomplete = event => {
         console.log("[DAOPaciente.alterar] Sucesso");
-        resolve(this.transacao);
+        resolve(transacao);
       };
-      this.transacao.onerror = event => {
+      transacao.onerror = event => {
         console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
         fnTirarEspera();
         reject(Error("[DAOPaciente.alterar] Erro"));
       };
     });
 
-    this.store = await new Promise(function(resolve, reject) {
-      this.store = this.transacao.objectStore("Paciente");
-      this.store.openCursor().onsuccess = event => {
+    let store = await new Promise(function(resolve, reject) {
+      store = transacao.objectStore("Paciente");
+      store.openCursor().onsuccess = event => {
         const cursor = event.target.result;
         if (cursor) {
           if (cursor.value.cpf == cpfExclusao) {
@@ -383,13 +381,13 @@ export default class DAOPaciente {
             request.onsuccess = () => {
               console.log("[DAOPaciente.excluir] Cursor delete - Sucesso ");
               fnTirarEspera();
-              resolve(this.store);
+              resolve(store);
               return;
             };
           }
           cursor.continue();
         }
-        resolve(this.store);
+        resolve(store);
       };
     });
   }
