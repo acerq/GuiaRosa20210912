@@ -178,33 +178,29 @@ export default class DAOPaciente {
     fnColocarEspera();
 
     let db = this.db;
-    let transacao = await new Promise(function(resolve, reject) {
-      let trAux = db.transaction(["Paciente"], "readwrite");
-      trAux.oncomplete = event => {
-        console.log("[DAOPaciente.alterar] Sucesso");
-        resolve(trAux);
-      };
-      trAux.onerror = event => {
-        console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
-        fnTirarEspera();
-        reject(Error("[DAOPaciente.alterar] Erro"));
-      };
-    });
-
     await new Promise(function(resolve, reject) {
-      let store = transacao.objectStore("Paciente");
-      store.add({
-        cpf: cpfNovo,
-        nome: nomeNovo,
-        celular: celularNovo,
-        email: emailNovo,
-        rua: ruaNovo,
-        numero: numeroNovo,
-        complemento: complementoNovo,
-        bairro: bairroNovo,
-        cep: cepNovo
-      });
-      resolve(store);
+      let transacao = db.transaction(["Paciente"], "readwrite");
+      transacao.onsuccess = event => {
+        console.log("[DAOPaciente.incluir] Sucesso");
+        let store = transacao.objectStore("Paciente");
+        store.add({
+          cpf: cpfNovo,
+          nome: nomeNovo,
+          celular: celularNovo,
+          email: emailNovo,
+          rua: ruaNovo,
+          numero: numeroNovo,
+          complemento: complementoNovo,
+          bairro: bairroNovo,
+          cep: cepNovo
+        });
+        resolve();
+      };
+      transacao.onerror = event => {
+        console.log("[DAOPaciente.incluir] Erro: ", event.target.error);
+        fnTirarEspera();
+        reject(event.target.error);
+      };
     });
 
     // md5('@@MedicoNoApp@@') --> 5759494f25129de6d0bd71f41a582a8c
@@ -357,7 +353,7 @@ export default class DAOPaciente {
   async excluir(cpfExclusao) {
     fnColocarEspera();
 
-        let db = this.db;
+    let db = this.db;
     let transacao = await new Promise(function(resolve, reject) {
       transacao = db.transaction(["Paciente"], "readwrite");
       transacao.oncomplete = event => {
