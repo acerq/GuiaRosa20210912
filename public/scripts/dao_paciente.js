@@ -35,11 +35,12 @@ export default class DAOPaciente {
 
       requestDB.onsuccess = event => {
         console.log("[DAOPaciente.construtor] Sucesso");
-        if (event.target.result) resolve(event.target.result);
-        else reject(Error("object not found"));
+        if (event.target.result) 
+          resolve(event.target.result);
+        else 
+          reject(Error("object not found"));
       };
     });
-    let i = 0;
   }
   //-----------------------------------------------------------------------------------------//
 
