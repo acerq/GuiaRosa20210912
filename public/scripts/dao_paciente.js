@@ -24,11 +24,11 @@ export default class DAOPaciente {
       var requestDB = window.indexedDB.open("Paciente", 1); // necessitar do evento onupgradeneeded e onsuccess
       requestDB.onupgradeneeded = event => {
         console.log("[DAOPaciente.construtor] Criando IndexedDB Paciente");
-        let db = event.target.result;
-        let store = db.createObjectStore("Paciente", {
+        this.db = event.target.result;
+        this.store = this.db.createObjectStore("Paciente", {
           autoIncrement: true
         });
-        store.createIndex("cpf", "cpf", { unique: true });
+        this.store.createIndex("cpf", "cpf", { unique: true });
       };
 
       requestDB.onerror = event => {
@@ -38,10 +38,13 @@ export default class DAOPaciente {
 
       requestDB.onsuccess = event => {
         console.log("[DAOPaciente.construtor] Sucesso");
-        if (event.target.result) resolve(event.target.result);
-        else reject(Error("object not found"));
+        if (event.target.result) 
+          resolve(event.target.result);
+        else 
+          reject(Error("object not found"));
       };
     });
+    let i = 0;
   }
   //-----------------------------------------------------------------------------------------//
 
