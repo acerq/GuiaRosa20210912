@@ -57,10 +57,10 @@ export default class DAOPaciente {
         fnTirarEspera();
         resolve([]);
       }
+      let array = [];
       store.openCursor().onsuccess = event => {
         fnTirarEspera();
         var cursor = event.target.result;
-        let array = [];
         if (cursor) {
           array.push(cursor.value);
           cursor.continue();
@@ -180,7 +180,6 @@ export default class DAOPaciente {
     let db = this.db;
     let resultado = await new Promise(function(resolve, reject) {
       let transacao = db.transaction(["Paciente"], "readwrite");
-      transacao.onsuccess = event => {
         console.log("[DAOPaciente.incluir] Sucesso");
         let store = transacao.objectStore("Paciente");
         store.add({
@@ -195,12 +194,6 @@ export default class DAOPaciente {
           cep: cepNovo
         });
         resolve("Ok");
-      };
-      transacao.onerror = event => {
-        console.log("[DAOPaciente.incluir] Erro: ", event.target.error);
-        fnTirarEspera();
-        reject(event.target.error);
-      };
     });
 
     // md5('@@MedicoNoApp@@') --> 5759494f25129de6d0bd71f41a582a8c
