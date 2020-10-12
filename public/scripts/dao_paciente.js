@@ -179,20 +179,20 @@ export default class DAOPaciente {
 
     let db = this.db;
     let transacao = await new Promise(function(resolve, reject) {
-      transacao = db.transaction(["Paciente"], "readwrite");
-      transacao.oncomplete = event => {
+      let trAux = db.transaction(["Paciente"], "readwrite");
+      trAux.oncomplete = event => {
         console.log("[DAOPaciente.alterar] Sucesso");
-        resolve(transacao);
+        resolve(trAux);
       };
-      transacao.onerror = event => {
+      trAux.onerror = event => {
         console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
         fnTirarEspera();
         reject(Error("[DAOPaciente.alterar] Erro"));
       };
     });
 
-    let store = await new Promise(function(resolve, reject) {
-      store = transacao.objectStore("Paciente");
+    await new Promise(function(resolve, reject) {
+      let store = transacao.objectStore("Paciente");
       store.add({
         cpf: cpfNovo,
         nome: nomeNovo,
