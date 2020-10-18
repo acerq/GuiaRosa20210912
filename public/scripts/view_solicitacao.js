@@ -112,7 +112,7 @@ export default class ViewSolicitacao {
       .on("select2:select", function(e) {
         this.codLocalSelecionado = e.params.data.id;
       });
-    this.codLocalSelecionado = null;
+    this.codLocalSelecionado = 0;
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -142,12 +142,14 @@ export default class ViewSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   obterExames() {
-    if (this.codLocalSelecionado == null) {
+    if (self.codLocalSelecionado == null) {
       alert("Não foi indicado o local para realização do exame.");
     }
-    this.ctrl.obterExames(
-      this.codLocalSelecionado,
-      this.tfExame.value.toUpperCase()
+    self.tfExame.value = self.tfExame.value.toUpperCase();
+    var strExame = self.tfExame.value;
+    self.ctrl.obterExames(
+      self.codLocalSelecionado,
+      strExame
     );
   }
 
