@@ -52,6 +52,7 @@ export default class ViewSolicitacao {
         );
       }
     });
+    
     this.pwSenha.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
         this.enviarSolicitacao();
@@ -124,6 +125,16 @@ export default class ViewSolicitacao {
   }
 
   //-----------------------------------------------------------------------------------------//
+  
+  obterExames() {
+    if (this.codLocalSelecionado == null) {
+      alert("Não foi indicado o local para realização do exame.");
+    }
+    this.ctrl.obterExames(this.codLocalSelecionado,this.tfExame.value.toUpperCase());
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
 
   formatarSelecaoExame(item) {
     var returnString;
