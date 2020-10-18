@@ -38,10 +38,10 @@ export default class ViewSolicitacao {
 
     $(document).on("keypress", "input", function(e) {
       if (e.which == 13 && e.target == this.tfExame) {
-        if (this.codLocalSelecionado == null) {
+        if (this.codLocalSelecionado == null || this.codLocalSelecionado == -1) {
           alert("Não foi indicado o local para realização do exame.");
         }
-        this.ctrl.callbackConsultarExames();
+        this.ctrl.obterExames(this.codLocalSelecionado,this.tfExame.value);
       }
     });
     this.pwSenha.addEventListener("keyup", function(event) {
@@ -126,7 +126,7 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  formatarSelecao(item) {
+  formatarSelecaoExame (item) {
     var returnString;
     if (item.text == "Selecione...")
       returnString =
@@ -147,7 +147,9 @@ export default class ViewSolicitacao {
     return novoSpan;
   }
 
-  formatarItens(item) {
+  //-----------------------------------------------------------------------------------------//
+
+  formatarItensDeExames(item) {
     var returnString;
     if (item.text == "Selecione...")
       returnString =
@@ -230,8 +232,8 @@ export default class ViewSolicitacao {
         .select2({
           placeholder: "Selecione os exames...",
           allowClear: false,
-          templateResult: this.formatarItens,
-          templateSelection: this.formatarSelecao
+          templateResult: this.formatarItensDeExames,
+          templateSelection: this.formatarSelecaoExame 
         })
         .on("select2:select", function(e) {
           var selectionText = e.params.data.id.split(SEPARADOR);

@@ -127,7 +127,7 @@ export default class UCSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  async doObterExames(local, exame) {
+  async obterExames(local, exame) {
     let response = await fetch("/obterExames/" + local + "/" + exame);
     if (!response) {
       console.log("(app.js) obterExames sem conteúdo");
