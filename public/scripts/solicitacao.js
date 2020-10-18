@@ -37,15 +37,8 @@ export default class ViewSolicitacao {
 
   async solicitarObjs() {
     view.arrayPacientes = await view.daoPaciente.obterPacientes();
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
-  receberObjs(array) {
-    setTimeout(function() {
       view.usrApp = window.retornarUsrApp();
       if (view.usrApp.ehMedico) {
-        view.arrayPacientes = array;
         if (view.arrayPacientes.length > 0) {
           view.posAtual = 0;
         } else {
@@ -66,10 +59,10 @@ export default class ViewSolicitacao {
         ];
       }
       view.atualizarInterface();
-    }, 1000);
   }
 
   //-----------------------------------------------------------------------------------------//
+
 
   enviar() {
     if (view.operacao == "Incluir") {
