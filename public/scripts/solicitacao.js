@@ -27,14 +27,16 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  init() {
-    view.daoPaciente.abrirDB(view.solicitarObjs);
+  
+  async init() {
+    await view.daoPaciente.abrirDB();
+    view.solicitarObjs();
   }
 
   //-----------------------------------------------------------------------------------------//
 
-  solicitarObjs() {
-    view.arrayPacientes = view.daoPaciente.obterPacientes(view.receberObjs);
+  async solicitarObjs() {
+    view.arrayPacientes = await view.daoPaciente.obterPacientes();
   }
 
   //-----------------------------------------------------------------------------------------//
