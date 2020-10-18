@@ -8,7 +8,7 @@ export default class UCSolicitacao {
     this.view = new ViewSolicitacao(this);
 
     this.daoPaciente = new DaoPaciente();
-    
+
     this.usrApp = null;
 
     this.arrayPacientes = [];
@@ -28,14 +28,13 @@ export default class UCSolicitacao {
     this.data = null;
     this.faturar = null;
     this.senha = null;
-    
+
     this.init();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   async init() {
-    
     this.view.colocarEspera();
 
     await this.daoPaciente.abrirDB();
@@ -43,7 +42,7 @@ export default class UCSolicitacao {
     await this.obterLocais();
 
     this.view.atualizarInterface(this.arrayPacientes, this.arrayLocais);
-    
+
     this.view.tirarEspera();
   }
 
@@ -128,7 +127,9 @@ export default class UCSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterExames(local, exame) {
-    let response = await fetch("/obterExames/" + local + "/" + exame.toUpperCase());
+    let response = await fetch(
+      "/obterExames/" + local + "/" + exame.toUpperCase()
+    );
     if (!response) {
       console.log("(app.js) obterExames sem conteúdo");
       return;
@@ -160,21 +161,20 @@ export default class UCSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  async doSolicitacao(codExecutante, paciente, cpf, exame, data, dtPeriodo, faturar) {
-    let executante = codExecutante;
-    let solicitante = this.usrApp.login;
-    let dadosPaciente = cbPaciente.value.split(SEPARADOR);
-    paciente = dadosPaciente[0];
-    cpf = dadosPaciente[1].replace(/\.|-/g, "");
-    exame = codExame;
-    data = dtExame.value;
-    faturar = cbFaturar.value;
-
+  async enviarSolicitacao(
+    codExecutante,
+    paciente,
+    cpf,
+    exame,
+    data,
+    dtPeriodo,
+    faturar
+  ) {
     var requisicao =
       "/solicitacao/" +
-      executante +
+      codExecutante +
       "/" +
-      solicitante +
+      this.usrApp.login +
       "/" +
       paciente +
       "/" +
@@ -184,31 +184,24 @@ export default class UCSolicitacao {
       "/" +
       data +
       "/" +
-      dtPeriodo +
+      this.dtPeriodo +
       "/" +
       faturar;
 
     console.log("(app.js) Executando solicitacao");
     let response = await fetch(requisicao);
-     
-     return response.json();
-  }
 
-  //-----------------------------------------------------------------------------------------//
-
-  renderSolicitacao(resposta) {
-    fnTirarEspera();
-    if (!resposta) {
+    if (!response.json) {
       console.log("(app.js) renderSolicitacao sem conteúdo");
       alert("Erro na solicitação do exame.");
       return;
     }
-    console.log("(app.js) renderSolicitacao -> ", resposta);
-    if (resposta.mensagem == "Ok") {
+    console.log("(app.js) renderSolicitacao -> ", response);
+    if (response.json().mensagem == "Ok") {
       alert("Exame agendado com sucesso");
       window.history.go(-1);
     } else {
-      alert(resposta.mensagem);
+      alert(response.json().mensagem);
     }
   }
 

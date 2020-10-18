@@ -38,14 +38,16 @@ export default class ViewSolicitacao {
     this.codExecutanteSelecionado = null;
     this.codExameSelecionado = null;
     this.dtPeriodo = null;
-    
 
     $(document).on("keypress", "input", function(e) {
       if (e.which == 13 && e.target == this.tfExame) {
         if (this.codLocalSelecionado == null) {
           alert("Não foi indicado o local para realização do exame.");
         }
-        this.ctrl.obterExames(this.codLocalSelecionado,this.tfExame.value.toUpperCase());
+        this.ctrl.obterExames(
+          this.codLocalSelecionado,
+          this.tfExame.value.toUpperCase()
+        );
       }
     });
     this.pwSenha.addEventListener("keyup", function(event) {
@@ -130,7 +132,7 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  formatarSelecaoExame (item) {
+  formatarSelecaoExame(item) {
     var returnString;
     if (item.text == "Selecione...")
       returnString =
@@ -237,7 +239,7 @@ export default class ViewSolicitacao {
           placeholder: "Selecione os exames...",
           allowClear: false,
           templateResult: this.formatarItensDeExames,
-          templateSelection: this.formatarSelecaoExame 
+          templateSelection: this.formatarSelecaoExame
         })
         .on("select2:select", function(e) {
           var selectionText = e.params.data.id.split(SEPARADOR);
@@ -257,7 +259,7 @@ export default class ViewSolicitacao {
   }
 
   //-----------------------------------------------------------------------------------------//
-  
+
   enviarSolicitacao() {
     fnColocarEspera();
     if (this.codExecutanteSelecionado == null) {
@@ -271,8 +273,8 @@ export default class ViewSolicitacao {
       return;
     }
     let solicitante = "XXXX";
-    let paciente = this.cbPaciente.value;
-    if (paciente == null || paciente == "") {
+    let pacienteValue = this.cbPaciente.value;
+    if (pacienteValue == null || pacienteValue == "") {
       fnTirarEspera();
       alert("O paciente não foi escolhido.");
       return;
@@ -297,37 +299,32 @@ export default class ViewSolicitacao {
     }
 
     fnColocarEspera();
-    if(!this.ctrl.verificarSenha(senha)) {
-        fnTirarEspera();
-      alert("Informe sua senha para confirmação.");
-      
+    if (!this.ctrl.verificarSenha(senha)) {
+      fnTirarEspera();
+      alert("Senha não confere.");
     }
 
-    if (!retorno) {
-        console.log("(app.js) renderVerificarSenha sem conteúdo");
-        alert("Erro na conexão com o Servidor #03APP");
-        return;
-      }
-      if (retorno.hasOwnProperty("erro")) {
-        fnTirarEspera();
-        alert(retorno.erro);
-        return;
-      }
+    let dadosPaciente = this.cbPaciente.value.split(SEPARADOR);
+    let paciente = dadosPaciente[0];
+    let cpf = dadosPaciente[1].replace(/\.|-/g, "");
 
-      doSolicitacao().then(retorno => {
-        console.log("(app.js) callBackSolicitacao retorno", retorno);
-        renderSolicitacao(retorno);
-      });
-    });
+    this.ctrl.enviardoSolicitacao(
+      this.codExecutanteSelecionado,
+      paciente,
+      cpf,
+      this.codExameSelecionado,
+      data,
+      faturar
+    );
   }
 
   //-----------------------------------------------------------------------------------------//
-  
+
   sair() {
     history.go(-1);
   }
-  
-//-----------------------------------------------------------------------------------------//
+
+  //-----------------------------------------------------------------------------------------//
 
   colocarEspera() {
     fnColocarEspera();
@@ -340,7 +337,6 @@ export default class ViewSolicitacao {
   }
 
   //-----------------------------------------------------------------------------------------//
-  
 }
 
 //-----------------------------------------------------------------------------------------//
