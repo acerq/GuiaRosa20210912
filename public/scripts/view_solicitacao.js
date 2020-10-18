@@ -268,8 +268,8 @@ export default class ViewSolicitacao {
         })
         .on("select2:select", function(e) {
           var selectionText = e.params.data.id.split(SEPARADOR);
-          this.codExecutanteSelecionado = selectionText[0];
-          this.codExameSelecionado = selectionText[1];
+          self.codExecutanteSelecionado = selectionText[0];
+          self.codExameSelecionado = selectionText[1];
         });
 
       var element = document.querySelector(
@@ -287,12 +287,12 @@ export default class ViewSolicitacao {
 
   enviarSolicitacao() {
     fnColocarEspera();
-    if (this.codExecutanteSelecionado == null) {
+    if (self.codExecutanteSelecionado == null) {
       fnTirarEspera();
       alert("O exame não foi escolhido.");
       return;
     }
-    if (this.codExameSelecionado == null) {
+    if (self.codExameSelecionado == null) {
       fnTirarEspera();
       alert("O exame não foi escolhido.");
       return;
@@ -304,19 +304,19 @@ export default class ViewSolicitacao {
       alert("O paciente não foi escolhido.");
       return;
     }
-    let data = this.dtExame.value;
+    let data = self.dtExame.value;
     if (data == null) {
       fnTirarEspera();
       alert("A data não foi escolhida.");
       return;
     }
-    let faturar = this.cbFaturar.value;
+    let faturar = self.cbFaturar.value;
     if (faturar == null) {
       fnTirarEspera();
       alert("Não foi indicado se o exame será faturado ou não.");
       return;
     }
-    let senha = funcaoMD5(this.pwSenha.value);
+    let senha = funcaoMD5(self.pwSenha.value);
     if (senha == null) {
       fnTirarEspera();
       alert("Informe sua senha para confirmação.");
@@ -324,20 +324,20 @@ export default class ViewSolicitacao {
     }
 
     fnColocarEspera();
-    if (!this.ctrl.verificarSenha(senha)) {
+    if (!self.ctrl.verificarSenha(senha)) {
       fnTirarEspera();
       alert("Senha não confere.");
     }
 
-    let dadosPaciente = this.cbPaciente.value.split(SEPARADOR);
+    let dadosPaciente = self.cbPaciente.value.split(SEPARADOR);
     let paciente = dadosPaciente[0];
     let cpf = dadosPaciente[1].replace(/\.|-/g, "");
 
-    this.ctrl.enviardoSolicitacao(
-      this.codExecutanteSelecionado,
+    self.ctrl.enviardoSolicitacao(
+      self.codExecutanteSelecionado,
       paciente,
       cpf,
-      this.codExameSelecionado,
+      self.codExameSelecionado,
       data,
       faturar
     );
