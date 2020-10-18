@@ -101,7 +101,8 @@ enviar() {
       this.codLocalSelecionado = e.params.data.id;
     });
     this.codLocalSelecionado = -1;
-  }
+}
+
 
 //-----------------------------------------------------------------------------------------//
 
@@ -116,7 +117,6 @@ enviar() {
   }
 
   //-----------------------------------------------------------------------------------------//
-
 
   dataParaInput() {
     const agora = new Date();
@@ -139,7 +139,29 @@ enviar() {
 
   //-----------------------------------------------------------------------------------------//
 
- 
+  atualizarExames(arrayExames) {
+    if (codLocal == null) {
+      alert("Não foi indicado o local para realização do exame.");
+      return;
+    }
+    if (arrayExames == null || arrayExames.length == 0) {
+      alert(
+        "Nenhum exame encontrado\ncom os parâmetros informados.\nTente novamente."
+      );
+      return;
+    }
+  
+  async obterExames() {
+    fnColocarEspera();
+    tfExame.value = tfExame.value.toUpperCase();
+    var strExame = tfExame.value;
+    // chama doObterExames e atualiza a tela
+    doObterExames(codLocal, strExame).then(retorno => {
+      console.log("(app.js) callBackConsultarExames retorno", retorno);
+      renderObterExames(retorno);
+    });
+  }
+
   //-----------------------------------------------------------------------------------------//
 
  
@@ -187,7 +209,11 @@ enviar() {
     return novoSpan;
   }
 
-  renderObterExames(data) {
+ 
+
+
+  //-----------------------------------------------------------------------------------------//
+ renderObterExames(data) {
     if (!data) {
       console.log("(app.js) renderObterExames sem conteúdo");
       alert("Erro na conexão com o Servidor #03APP");

@@ -11,6 +11,7 @@ export default class UCSolicitacao {
   
     this.arrayPacientes = [];
     this.arrayLocais = [];
+    this.arrayExames = [];
 
     this.codLocal = null;
     this.codExecutante = null;
@@ -118,9 +119,29 @@ this.senha = null;
     }
   }
 
-  //-----------------------------------------------------------------------------------------//
+//-----------------------------------------------------------------------------------------//
 
- doVerificarSenha(senha) {
+ async doObterExames(local, exame) {
+
+  let response = await fetch("/obterExames/" + local + "/" + exame);
+  if(!response) {
+        console.log("(app.js) obterExames sem conteúdo");
+        return;
+    }
+    let objExames = response.json();
+    if(objExames.hasOwnProperty("erro")) {
+      alert(objExames.erro);
+      this.arrayExames = [];
+      return;
+    } else {
+      this.arrayExames = JSON.parse(objExames);
+    }
+ }
+  
+
+
+   
+   doVerificarSenha(senha) {
   console.log("(app.js) Executando verificarSenha");
   return fetch("/verificarSenha/" + senha)
     .then(response => {
