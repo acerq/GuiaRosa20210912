@@ -19,6 +19,7 @@ export default class ViewSolicitacao {
     this.dtExame = document.getElementById("dtExame");
     this.cbFaturar = document.getElementById("cbFaturar");
     this.btPacientes = document.getElementById("btPacientes");
+    this.btConsultar = document.getElementById("btConsultar");
     this.btEnviar = document.getElementById("btEnviar");
     this.btSair = document.getElementById("btSair");
 
@@ -33,6 +34,7 @@ export default class ViewSolicitacao {
     this.btSair.onclick = this.sair;
     this.btSair.onclick = this.enviarSolicitacao;
     this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
+    this.btConsultar.onclick = this.obterExames;
 
     this.codLocalSelecionado = null;
     this.codExecutanteSelecionado = null;
@@ -102,7 +104,7 @@ export default class ViewSolicitacao {
   formatarLocal(item) {
     var returnString =
       "<span style='font-size: 12px; padding: 0px'>" +
-      this.tiraEspacos(item.text) +
+      tiraEspacos(item.text) +
       "</span>";
     var novoSpan = document.createElement("span");
     novoSpan.innerHTML = returnString;
@@ -123,15 +125,6 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  tiraEspacos(item) {
-    if (item == null) return "";
-    var pos = item.length - 1;
-    while (item[pos] == " " && pos > 0) pos--;
-    return item.substr(0, pos + 1);
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
   formatarSelecaoExame(item) {
     var returnString;
     if (item.text == "Selecione...")
@@ -141,11 +134,11 @@ export default class ViewSolicitacao {
       var selectionText = item.text.split(SEPARADOR);
       returnString =
         "<span style='font-size: 12px;'><b>" +
-        this.tiraEspacos(selectionText[0]) +
+        tiraEspacos(selectionText[0]) +
         "</b><br/>" +
-        this.tiraEspacos(selectionText[1]) +
+        tiraEspacos(selectionText[1]) +
         "<br/>R$ " +
-        this.tiraEspacos(selectionText[3]) +
+        tiraEspacos(selectionText[3]) +
         "</span>";
     }
     var novoSpan = document.createElement("span");
@@ -164,13 +157,13 @@ export default class ViewSolicitacao {
       var selectionText = item.text.split(SEPARADOR);
       returnString =
         "<span style='font-size: 12px;'><b>" +
-        this.tiraEspacos(selectionText[0]) +
+        tiraEspacos(selectionText[0]) +
         "</b><br/>" +
-        this.tiraEspacos(selectionText[1]) +
+        tiraEspacos(selectionText[1]) +
         "<br/>" +
-        this.tiraEspacos(selectionText[2]) +
+        tiraEspacos(selectionText[2]) +
         "<br/>R$ " +
-        this.tiraEspacos(selectionText[3]) +
+        tiraEspacos(selectionText[3]) +
         "</span>";
     }
     var novoSpan = document.createElement("span");
@@ -211,11 +204,11 @@ export default class ViewSolicitacao {
         let codExecutante = value.id_executante;
         let codExame = value.cd_exame;
         var descricao =
-          this.tiraEspacos(value.exame) +
+          tiraEspacos(value.exame) +
           SEPARADOR +
-          this.tiraEspacos(value.nome_executante) +
+          tiraEspacos(value.nome_executante) +
           SEPARADOR +
-          this.tiraEspacos(value.endereco) +
+          tiraEspacos(value.endereco) +
           SEPARADOR +
           value.valor;
         retorno +=
@@ -337,6 +330,13 @@ export default class ViewSolicitacao {
   }
 
   //-----------------------------------------------------------------------------------------//
+}
+
+function tiraEspacos(item) {
+  if (item == null) return "";
+  var pos = item.length - 1;
+  while (item[pos] == " " && pos > 0) pos--;
+  return item.substr(0, pos + 1);
 }
 
 //-----------------------------------------------------------------------------------------//

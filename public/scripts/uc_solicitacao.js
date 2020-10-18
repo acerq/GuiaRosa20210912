@@ -208,7 +208,7 @@ export default class CtrlSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  callbackCadastrarPaciente() {
+  chamarCadastrarPacientes() {
     window.location.href = "bdpaciente.html";
   }
 
