@@ -73,8 +73,8 @@ export default class ViewPaciente {
 
   //-----------------------------------------------------------------------------------------//
 
-  solicitarObjs() {
-    this.arrayPacientes = this.daoPaciente.obterPacientes();
+  async solicitarObjs() {
+    this.arrayPacientes = await this.daoPaciente.obterPacientes();
     if (this.arrayPacientes.length > 0) {
       this.posAtual = 0;
     } else {

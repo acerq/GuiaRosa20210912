@@ -266,21 +266,19 @@ export default class DAOPaciente {
     fnColocarEspera();
 
     let db = this.db;
-    let transacao = await new Promise(function(resolve, reject) {
-      transacao = db.transaction(["Paciente"], "readwrite");
+    let resultado = await new Promise(function(resolve, reject) {
+      let transacao = db.transaction(["Paciente"], "readwrite");
       transacao.oncomplete = event => {
         console.log("[DAOPaciente.alterar] Sucesso");
-        resolve(transacao);
+        fnTirarEspera();
+        resolve("Ok");
       };
       transacao.onerror = event => {
         console.log("[DAOPaciente.excluir] Erro: ", event.target.error);
         fnTirarEspera();
         reject(Error("[DAOPaciente.alterar] Erro"));
       };
-    });
-
-    let store = await new Promise(function(resolve, reject) {
-      store = transacao.objectStore("Paciente");
+      let store = transacao.objectStore("Paciente");
       store.openCursor().onsuccess = event => {
         const cursor = event.target.result;
         if (cursor) {
@@ -298,12 +296,12 @@ export default class DAOPaciente {
             const request = cursor.update(updateData);
             request.onsuccess = () => {
               console.log("[DAOPaciente.alterar] Cursor update - Sucesso ");
+              resolve("Ok");
             };
           }
           cursor.continue();
         }
       };
-      resolve(store);
     });
 
     // md5('@@MedicoNoApp@@') --> 5759494f25129de6d0bd71f41a582a8c
