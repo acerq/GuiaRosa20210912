@@ -1,9 +1,9 @@
 "use strict";
 
-import ViewSolicitacao from "/scripts/view_paciente.js";
+import ViewSolicitacao from "./view_solicitacao.js";
 import DaoPaciente from "./dao_paciente.js";
 
-export default class UCSolicitacao {
+export default class CtrlSolicitacao {
   constructor() {
     this.view = new ViewSolicitacao(this);
 
@@ -78,7 +78,7 @@ export default class UCSolicitacao {
 
   async obterLocais() {
     let response = await fetch("/obterLocais/");
-    this.arrayLocais = response.json();
+    this.arrayLocais = await response.json();
     if (!this.arrayLocais) {
       console.log("obterLocais sem conteúdo");
       alert("Erro na conexão com o Servidor #02APP");
@@ -110,7 +110,7 @@ export default class UCSolicitacao {
       console.log("(app.js) renderObterPeriodo sem conteúdo");
       return;
     }
-    let objPeriodo = response.json();
+    let objPeriodo = await response.json();
     if (objPeriodo.hasOwnProperty("erro")) {
       alert(objPeriodo.erro);
       this.dtPeriodo = null;
@@ -134,7 +134,7 @@ export default class UCSolicitacao {
       console.log("(app.js) obterExames sem conteúdo");
       return;
     }
-    let objExames = response.json();
+    let objExames = await response.json();
     if (objExames.hasOwnProperty("erro")) {
       alert(objExames.erro);
       this.arrayExames = [];
@@ -190,18 +190,19 @@ export default class UCSolicitacao {
 
     console.log("(app.js) Executando solicitacao");
     let response = await fetch(requisicao);
-
-    if (!response.json) {
+    let resposta = await response.json();
+      
+    if (!resposta) {
       console.log("(app.js) renderSolicitacao sem conteúdo");
       alert("Erro na solicitação do exame.");
       return;
     }
     console.log("(app.js) renderSolicitacao -> ", response);
-    if (response.json().mensagem == "Ok") {
+    if (resposta.mensagem == "Ok") {
       alert("Exame agendado com sucesso");
       window.history.go(-1);
     } else {
-      alert(response.json().mensagem);
+      alert(resposta.mensagem);
     }
   }
 
@@ -219,3 +220,5 @@ export default class UCSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 }
+
+var ucSolicitacao = new CtrlSolicitacao();
