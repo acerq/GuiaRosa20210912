@@ -41,7 +41,7 @@ export default class CtrlSolicitacao {
     await this.obterPacientes();
     await this.obterLocais();
 
-    this.view.atualizarInterface(this.arrayPacientes, this.arrayLocais);
+    this.view.atualizarInterface(this.usrApp.ehMedico, this.arrayPacientes, this.arrayLocais);
 
     this.view.tirarEspera();
   }
@@ -59,10 +59,6 @@ export default class CtrlSolicitacao {
         this.cpfAtual = null;
       }
     } else {
-      this.cbPaciente.remove(this.cbPaciente.selectedIndex);
-      this.btPacientes.hidden = true;
-      this.cbPaciente.style =
-        "width:100%;-webkit-appearance:none;-moz-appearance:none;text-indent:1px;text-overflow: '';";
       this.arrayPacientes = [
         {
           cpf: this.usrApp.login,

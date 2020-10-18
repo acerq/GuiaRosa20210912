@@ -6,11 +6,20 @@ const funcaoObterUsuario = new Function("b", "return usrApp.login");
 const fnTirarEspera = new Function("tirarEspera()");
 const fnColocarEspera = new Function("colocarEspera()");
 
+function tiraEspacos(item) {
+  if (item == null) return "";
+  var pos = item.length - 1;
+  while (item[pos] == " " && pos > 0) pos--;
+  return item.substr(0, pos + 1);
+}
+var self;
+
 export default class ViewSolicitacao {
   constructor(ctrlSolicitacao) {
     this.ctrl = ctrlSolicitacao;
 
     this.usrApp = null;
+    self = this;
 
     this.hdExecutante = document.getElementById("hdExecutante");
     this.hdSolicitante = document.getElementById("hdSolicitante");
@@ -42,17 +51,11 @@ export default class ViewSolicitacao {
     this.dtPeriodo = null;
 
     $(document).on("keypress", "input", function(e) {
-      if (e.which == 13 && e.target == this.tfExame) {
-        if (this.codLocalSelecionado == null) {
-          alert("Não foi indicado o local para realização do exame.");
-        }
-        this.ctrl.obterExames(
-          this.codLocalSelecionado,
-          this.tfExame.value.toUpperCase()
-        );
+      if (e.which == 13 && e.target == self.tfExame) {
+        self.obterExames();
       }
     });
-    
+
     this.pwSenha.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
         this.enviarSolicitacao();
@@ -62,14 +65,26 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  async atualizarInterface(arrayPacientes, arrayLocais) {
+  async atualizarInterface(ehMedico, arrayPacientes, arrayLocais) {
     //---- Formata a combobox de pacientes ----//
-    await arrayPacientes.forEach(e => {
-      var elem = document.createElement("option");
-      elem.value = e.nome + SEPARADOR + e.cpf;
-      elem.text = e.nome;
-      this.cbPaciente.add(elem);
-    });
+    if (ehMedico) {
+      let i,
+        tam = this.cbPaciente.options.length - 1;
+      for (i = tam; i > 0; i--) {
+        this.cbPaciente.remove(i);
+      }
+      await arrayPacientes.forEach(e => {
+        var elem = document.createElement("option");
+        elem.value = e.nome + SEPARADOR + e.cpf;
+        elem.text = e.nome;
+        this.cbPaciente.add(elem);
+      });
+    } else {
+      this.cbPaciente.remove(this.cbPaciente.selectedIndex);
+      this.btPacientes.hidden = true;
+      this.cbPaciente.style =
+        "width:100%;-webkit-appearance:none;-moz-appearance:none;text-indent:1px;text-overflow: '';";
+    }
     this.dtExame.value = this.dataParaInput();
 
     //---- Formata a combobox de locais ----//
@@ -125,16 +140,18 @@ export default class ViewSolicitacao {
   }
 
   //-----------------------------------------------------------------------------------------//
-  
+
   obterExames() {
     if (this.codLocalSelecionado == null) {
       alert("Não foi indicado o local para realização do exame.");
     }
-    this.ctrl.obterExames(this.codLocalSelecionado,this.tfExame.value.toUpperCase());
+    this.ctrl.obterExames(
+      this.codLocalSelecionado,
+      this.tfExame.value.toUpperCase()
+    );
   }
 
   //-----------------------------------------------------------------------------------------//
-
 
   formatarSelecaoExame(item) {
     var returnString;
@@ -341,13 +358,6 @@ export default class ViewSolicitacao {
   }
 
   //-----------------------------------------------------------------------------------------//
-}
-
-function tiraEspacos(item) {
-  if (item == null) return "";
-  var pos = item.length - 1;
-  while (item[pos] == " " && pos > 0) pos--;
-  return item.substr(0, pos + 1);
 }
 
 //-----------------------------------------------------------------------------------------//
