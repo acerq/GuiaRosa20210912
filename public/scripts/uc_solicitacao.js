@@ -18,7 +18,7 @@ export default class UCSolicitacao {
     this.codExame = null;
     this.dtPeriodo = null;
 
-this.executante = null;
+    this.executante = null;
 this.solicitante = null;
 this.paciente = null;
 this.cpf = null;
@@ -156,7 +156,7 @@ this.senha = null;
 
 //-----------------------------------------------------------------------------------------//
 
-function doSolicitacao() {
+ doSolicitacao() {
   executante = codExecutante;
   solicitante = funcaoObterUsuario();
   let dadosPaciente = cbPaciente.value.split(SEPARADOR);      
@@ -198,7 +198,7 @@ function doSolicitacao() {
 
 //-----------------------------------------------------------------------------------------//
 
-function renderSolicitacao(resposta) {
+ renderSolicitacao(resposta) {
   fnTirarEspera();
   if (!resposta) {
     console.log("(app.js) renderSolicitacao sem conteúdo");
@@ -216,7 +216,7 @@ function renderSolicitacao(resposta) {
 
 //-----------------------------------------------------------------------------------------//
 
-function callbackSolicitacao() {
+ callbackSolicitacao() {
   executante = codExecutante;
   if (executante == null) {
     alert("O exame não foi escolhido.");
@@ -273,25 +273,15 @@ function callbackSolicitacao() {
 
 //-----------------------------------------------------------------------------------------//
 
-function callbackCadastrarPaciente() {
+ callbackCadastrarPaciente() {
   window.location.href = "bdpaciente.html";
 }
 
 //-----------------------------------------------------------------------------------------//
 
-function callbackSair() {
+ callbackSair() {
   history.go(-1);
 }
 
 //-----------------------------------------------------------------------------------------//
-
-$(document).on("keypress", "input", function(e) {
-  if (e.which == 13 && e.target == tfExame) {
-    callbackConsultarExames();
-  }
-});
-
-//-----------------------------------------------------------------------------------------//
-
-pwSenha.addEventListener("keyup", function(event){if(event.keyCode === 13){callbackSolicitacao();}});
 

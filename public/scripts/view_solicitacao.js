@@ -34,8 +34,22 @@ export default class ViewSolicitacao {
 
     //this.btEnviar.onclick = this.enviar;
     this.btSair.onclick = this.sair;
-    
+
     this.codLocalSelecionado = -1;
+
+    $(document).on("keypress", "input", function(e) {
+      if (e.which == 13 && e.target == this.tfExame) {
+        if (this.codLocalSelecionado == null) {
+          alert("Não foi indicado o local para realização do exame.");
+        }
+        this.ctrl.callbackConsultarExames();
+      }
+    });
+    this.pwSenha.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.ctrl.callbackSolicitacao();
+      }
+    });
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -47,25 +61,8 @@ export default class ViewSolicitacao {
   }
 
   //-----------------------------------------------------------------------------------------//
-enviar() {
-    if (this.operacao == "Incluir") {
-      this.daoPaciente.incluir(this.inputCpf.value, this.inputNome.value);
-    } else if (this.operacao == "Alterar") {
-      this.daoPaciente.alterar(
-        this.cpfAtual,
-        this.inputCpf.value,
-        this.inputNome.value
-      );
-    } else if (this.operacao == "Excluir") {
-      this.daoPaciente.exluir(this.cpfAtual);
-    }
-    this.solicitarObjs();
-  }
-
-  //-----------------------------------------------------------------------------------------//
 
   async atualizarInterface(arrayPacientes, arrayLocais) {
-    
     //---- Formata a combobox de pacientes ----//
     await arrayPacientes.forEach(e => {
       var elem = document.createElement("option");
@@ -75,7 +72,6 @@ enviar() {
     });
     this.dtExame.value = this.dataParaInput();
 
-  
     //---- Formata a combobox de locais ----//
     let optionsLocais = await new Promise((resolve, reject) => {
       //--- var retorno = "<option value='-1'>Selecione...</option>";
@@ -84,27 +80,27 @@ enviar() {
         var codigo = value.codigolocal;
         var descricao = value.nomelocal;
         retorno += "<option value='" + codigo + "'>" + descricao + "</option>";
-        if (index === array.length - 1) 
-          resolve(retorno);
+        if (index === array.length - 1) resolve(retorno);
       });
     });
-    
+
     const divLocal = document.getElementById("divLocal");
-    divLocal.innerHTML = "<select id='cbLocal'>" + optionsLocais + "</select></div></form>";
+    divLocal.innerHTML =
+      "<select id='cbLocal'>" + optionsLocais + "</select></div></form>";
     $("#cbLocal")
       .select2({
-      placeholder: "Selecione o local...",
-      allowClear: false,
-      templateResult: this.formatarLocal,
-      templateSelection: this.formatarLocal
-    }).on("select2:select", function(e) {
-      this.codLocalSelecionado = e.params.data.id;
-    });
+        placeholder: "Selecione o local...",
+        allowClear: false,
+        templateResult: this.formatarLocal,
+        templateSelection: this.formatarLocal
+      })
+      .on("select2:select", function(e) {
+        this.codLocalSelecionado = e.params.data.id;
+      });
     this.codLocalSelecionado = -1;
-}
+  }
 
-
-//-----------------------------------------------------------------------------------------//
+  //-----------------------------------------------------------------------------------------//
 
   formatarLocal(item) {
     var returnString =
@@ -139,22 +135,10 @@ enviar() {
 
   //-----------------------------------------------------------------------------------------//
 
-  atualizarExames(arrayExames) {
-    if (codLocal == null) {
-      alert("Não foi indicado o local para realização do exame.");
-      return;
-    }
-    if (arrayExames == null || arrayExames.length == 0) {
-      alert(
-        "Nenhum exame encontrado\ncom os parâmetros informados.\nTente novamente."
-      );
-      return;
-    }
-  
   async obterExames() {
     fnColocarEspera();
-    tfExame.value = tfExame.value.toUpperCase();
-    var strExame = tfExame.value;
+    this.tfExame.value = this.tfExame.value.toUpperCase();
+    var strExame = this.tfExame.value;
     // chama doObterExames e atualiza a tela
     doObterExames(codLocal, strExame).then(retorno => {
       console.log("(app.js) callBackConsultarExames retorno", retorno);
@@ -164,7 +148,6 @@ enviar() {
 
   //-----------------------------------------------------------------------------------------//
 
- 
   formatarSelecao(item) {
     var returnString;
     if (item.text == "Selecione...")
@@ -174,11 +157,11 @@ enviar() {
       var selectionText = item.text.split(SEPARADOR);
       returnString =
         "<span style='font-size: 12px;'><b>" +
-        tiraEspacos(selectionText[0]) +
+        this.tiraEspacos(selectionText[0]) +
         "</b><br/>" +
-        tiraEspacos(selectionText[1]) +
+        this.tiraEspacos(selectionText[1]) +
         "<br/>R$ " +
-        tiraEspacos(selectionText[3]) +
+        this.tiraEspacos(selectionText[3]) +
         "</span>";
     }
     var novoSpan = document.createElement("span");
@@ -195,13 +178,13 @@ enviar() {
       var selectionText = item.text.split(SEPARADOR);
       returnString =
         "<span style='font-size: 12px;'><b>" +
-        tiraEspacos(selectionText[0]) +
+        this.tiraEspacos(selectionText[0]) +
         "</b><br/>" +
-        tiraEspacos(selectionText[1]) +
+        this.tiraEspacos(selectionText[1]) +
         "<br/>" +
-        tiraEspacos(selectionText[2]) +
+        this.tiraEspacos(selectionText[2]) +
         "<br/>R$ " +
-        tiraEspacos(selectionText[3]) +
+        this.tiraEspacos(selectionText[3]) +
         "</span>";
     }
     var novoSpan = document.createElement("span");
@@ -209,25 +192,15 @@ enviar() {
     return novoSpan;
   }
 
- 
-
-
   //-----------------------------------------------------------------------------------------//
- renderObterExames(data) {
-    if (!data) {
-      console.log("(app.js) renderObterExames sem conteúdo");
-      alert("Erro na conexão com o Servidor #03APP");
-      fnTirarEspera();
+
+  atualizarExames(arrayExames) {
+    if (arrayExames == null || arrayExames.length == 0) {
+      alert(
+        "Nenhum exame encontrado\ncom os parâmetros informados.\nTente novamente."
+      );
       return;
     }
-    if (data.hasOwnProperty("erro")) {
-      alert(data.erro);
-      fnTirarEspera();
-      return;
-    } else console.log("(app.js) renderObterExames -> ", data);
-
-    var arrayExames = data;
-    var arrayExames = JSON.parse(data);
     if (arrayExames == null || arrayExames.length == 0) {
       fnTirarEspera();
       alert(
@@ -247,17 +220,16 @@ enviar() {
       });
 
       //var retorno = "<option value='-1'>Selecione...</option>";
-
       var retorno = "";
       arrayExames.forEach((value, index, array) => {
         let codExecutante = value.id_executante;
         let codExame = value.cd_exame;
         var descricao =
-          tiraEspacos(value.exame) +
+          this.tiraEspacos(value.exame) +
           SEPARADOR +
-          tiraEspacos(value.nome_executante) +
+          this.tiraEspacos(value.nome_executante) +
           SEPARADOR +
-          tiraEspacos(value.endereco) +
+          this.tiraEspacos(value.endereco) +
           SEPARADOR +
           value.valor;
         retorno +=
@@ -280,13 +252,13 @@ enviar() {
         .select2({
           placeholder: "Selecione os exames...",
           allowClear: false,
-          templateResult: formatarItens,
-          templateSelection: formatarSelecao
+          templateResult: this.formatarItens,
+          templateSelection: this.formatarSelecao
         })
         .on("select2:select", function(e) {
           var selectionText = e.params.data.id.split(SEPARADOR);
-          codExecutante = selectionText[0];
-          codExame = selectionText[1];
+          this.codExecutante = selectionText[0];
+          this.codExame = selectionText[1];
         });
 
       var element = document.querySelector(
@@ -299,4 +271,23 @@ enviar() {
       fnTirarEspera();
     });
   }
+
+  //-----------------------------------------------------------------------------------------//
+
+  enviar() {
+    if (this.operacao == "Incluir") {
+      this.daoPaciente.incluir(this.inputCpf.value, this.inputNome.value);
+    } else if (this.operacao == "Alterar") {
+      this.daoPaciente.alterar(
+        this.cpfAtual,
+        this.inputCpf.value,
+        this.inputNome.value
+      );
+    } else if (this.operacao == "Excluir") {
+      this.daoPaciente.exluir(this.cpfAtual);
+    }
+    this.solicitarObjs();
+  }
 }
+
+//-----------------------------------------------------------------------------------------//
