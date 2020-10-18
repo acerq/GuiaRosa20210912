@@ -1,7 +1,5 @@
 "use strict";
 
-import DaoPaciente from "./dao_paciente.js";
-
 const SEPARADOR = "##";
 const funcaoMD5 = new Function("a", "return md5(a)");
 const funcaoObterUsuario = new Function("b", "return usrApp.login");
@@ -34,6 +32,7 @@ export default class ViewSolicitacao {
 
     this.btSair.onclick = this.sair;
     this.btSair.onclick = this.enviarSolicitacao;
+    this.btPacientes.onclick = this.chamarCadastrarPaciente;
 
     this.codLocalSelecionado = -1;
 
@@ -350,9 +349,31 @@ export default class ViewSolicitacao {
   }
 
   //-----------------------------------------------------------------------------------------//
+
+  chamarCadastrarPacientes()  {
+    window.location.href = "bdpaciente.html";  
+  }
+  
+  //-----------------------------------------------------------------------------------------//
+  
   sair() {
     history.go(-1);
   }
+  
+//-----------------------------------------------------------------------------------------//
+
+  colocarEspera() {
+    fnColocarEspera();
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
+  tirarEspera() {
+    fnTirarEspera();
+  }
+
+  //-----------------------------------------------------------------------------------------//
+  
 }
 
 //-----------------------------------------------------------------------------------------//

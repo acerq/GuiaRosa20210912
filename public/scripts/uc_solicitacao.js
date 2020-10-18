@@ -1,6 +1,10 @@
 "use strict";
 
 import ViewSolicitacao from "/scripts/view_paciente.js";
+import DaoPaciente from "./dao_paciente.js";
+
+
+const fnObterUsuarioCorrente = new Function("doObterUsuarioCorrente()");
 
 export default class UCSolicitacao {
   constructor() {
@@ -31,14 +35,17 @@ export default class UCSolicitacao {
 
   async init() {
     
-      doObterUsuarioCorrente();
-const fnTirarEspera = new Function("tirarEspera()");
+    this.view.colocarEspera();
+
+    fnObterUsuarioCorrente();
 
     await this.daoPaciente.abrirDB();
     await this.obterPacientes();
     await this.obterLocais();
 
-    this.view.atualizarInterface();
+    this.view.atualizarInterface(this.arrayPacientes, this.arrayLocais);
+    
+    this.view.tirarEspera();
   }
 
   //-----------------------------------------------------------------------------------------//
