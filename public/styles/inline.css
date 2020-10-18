@@ -142,7 +142,6 @@ body {
 .main .caixaDialog .grade .rotulo {
   text-align: left;
   box-sizing: border-box;
-  grid-template-columns: auto;
 }
 
 .main .caixaDialog .grade input {  
@@ -155,15 +154,33 @@ body {
   border-radius: 4px;
 }
 
-.main .caixaDialog .grade .trinta input {
+.main .caixaDialog .grade input .trinta {
+  border: 1px solid #aaa;
+  padding: 2px 10px;
+  text-align: left;
+  font-size: 12px;
+  height: 28px;
+  border-radius: 4px;
   width: 25%;
 }
 
-.main .caixaDialog .grade .quarenta input {
+.main .caixaDialog .grade input .quarenta {
+  border: 1px solid #aaa;
+  padding: 2px 10px;
+  text-align: left;
+  font-size: 12px;
+  height: 28px;
+  border-radius: 4px;
   width: 43%;
 }
 
-.main .caixaDialog .grade .setenta input {
+.main .caixaDialog .grade input .setenta {
+  border: 1px solid #aaa;
+  padding: 2px 10px;
+  text-align: left;
+  font-size: 12px;
+  height: 28px;
+  border-radius: 4px;
   width: 73%;
 }
 
