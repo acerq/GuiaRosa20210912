@@ -155,12 +155,21 @@ body {
 }
 
 .main .caixaDialog .grade .trinta {
-  border: 1px solid #aaa;
   padding: 2px 10px;
   text-align: left;
   font-size: 12px;
   height: 28px;
   width: 25%;
+  border-radius: 4px;
+}
+
+.main .caixaDialog .grade .quarenta {
+  border: 1px solid #aaa;
+  padding: 2px 10px;
+  text-align: left;
+  font-size: 12px;
+  height: 28px;
+  width: 43%;
   border-radius: 4px;
 }
 
