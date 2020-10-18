@@ -32,7 +32,7 @@ export default class ViewSolicitacao {
 
     this.btSair.onclick = this.sair;
     this.btSair.onclick = this.enviarSolicitacao;
-    this.btPacientes.onclick = this.chamarCadastrarPaciente;
+    this.btPacientes.onclick = this.chamarCadastrarPacientes;
 
     this.codLocalSelecionado = -1;
 
@@ -49,14 +49,6 @@ export default class ViewSolicitacao {
         this.ctrl.callbackSolicitacao();
       }
     });
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
-  async init() {
-    fnColocarEspera();
-    this.atualizarInterface();
-    fnTirarEspera();
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -130,19 +122,6 @@ export default class ViewSolicitacao {
     var pos = item.length - 1;
     while (item[pos] == " " && pos > 0) pos--;
     return item.substr(0, pos + 1);
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
-  async obterExames() {
-    fnColocarEspera();
-    this.tfExame.value = this.tfExame.value.toUpperCase();
-    var strExame = this.tfExame.value;
-    // chama doObterExames e atualiza a tela
-    doObterExames(codLocal, strExame).then(retorno => {
-      console.log("(app.js) callBackConsultarExames retorno", retorno);
-      renderObterExames(retorno);
-    });
   }
 
   //-----------------------------------------------------------------------------------------//

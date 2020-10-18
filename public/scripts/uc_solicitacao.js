@@ -3,14 +3,13 @@
 import ViewSolicitacao from "/scripts/view_paciente.js";
 import DaoPaciente from "./dao_paciente.js";
 
-
-const fnObterUsuarioCorrente = new Function("doObterUsuarioCorrente()");
-
 export default class UCSolicitacao {
   constructor() {
     this.view = new ViewSolicitacao(this);
 
     this.daoPaciente = new DaoPaciente();
+    
+    this.usrApp = null;
 
     this.arrayPacientes = [];
     this.arrayLocais = [];
@@ -29,6 +28,8 @@ export default class UCSolicitacao {
     this.data = null;
     this.faturar = null;
     this.senha = null;
+    
+    this.init();
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -36,8 +37,6 @@ export default class UCSolicitacao {
   async init() {
     
     this.view.colocarEspera();
-
-    fnObterUsuarioCorrente();
 
     await this.daoPaciente.abrirDB();
     await this.obterPacientes();
@@ -74,7 +73,6 @@ export default class UCSolicitacao {
         }
       ];
     }
-    this.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
