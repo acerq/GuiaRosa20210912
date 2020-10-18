@@ -27,7 +27,6 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  
   async init() {
     await view.daoPaciente.abrirDB();
     view.solicitarObjs();
@@ -63,7 +62,6 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-
   enviar() {
     if (view.operacao == "Incluir") {
       view.daoPaciente.incluir(view.inputCpf.value, view.inputNome.value);
@@ -81,10 +79,10 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  atualizarInterface() {
+  async atualizarInterface() {
     const SEPARADOR = "##"; // Usado também em app.js
 
-    view.arrayPacientes.forEach(e => {
+    await view.arrayPacientes.forEach(e => {
       var elem = document.createElement("option");
       elem.value = e.nome + SEPARADOR + e.cpf;
       elem.text = e.nome;
