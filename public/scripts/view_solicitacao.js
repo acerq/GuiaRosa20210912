@@ -11,7 +11,9 @@ const fnColocarEspera = new Function("colocarEspera()");
 export default class ViewSolicitacao {
   constructor() {
     this.daoPaciente = new DaoPaciente();
+
     this.arrayPacientes = [];
+    this.arrayLocais = [];
 
     this.usrApp = null;
 
@@ -42,6 +44,7 @@ export default class ViewSolicitacao {
   async init() {
     fnColocarEspera();
     await this.daoPaciente.abrirDB();
+    await this.obterPacientes();
     await this.obterLocais();
     this.atualizarInterface();
     fnTirarEspera();
@@ -50,21 +53,21 @@ export default class ViewSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterLocais() {
-     let response = await fetch("/obterLocais/");
-      if (!response.json()) {
-      console.log("(app.js) renderObterLocais sem conteúdo");
+    let response = await fetch("/obterLocais/");
+    this.locais = response.json();
+    if (!locais) {
+      console.log("obterLocais sem conteúdo");
       alert("Erro na conexão com o Servidor #02APP");
       return;
     }
-    if (data.hasOwnProperty("erro")) {
-      alert(data.erro);
-      if (data.erro == "Sessão Expirada") window.location.href = "index.html";
+    if (locais.hasOwnProperty("erro")) {
+      alert(locais.erro);
+      if (locais.erro == "Sessão Expirada") 
+        window.location.href = "index.html";
       return;
-    } else console.log("(app.js) renderObterLocais -> ", data);
-
-    var arrayLocais = data;
-
-    arrayLocais.sort(function(a, b) {
+    } 
+    var arrayLocais = locais;
+    await arrayLocais.sort(function(a, b) {
       var keyA = a.codigolocal;
       var keyB = b.codigolocal;
       if (keyA < keyB) return -1;
@@ -72,47 +75,35 @@ export default class ViewSolicitacao {
       return 0;
     });
 
-    new Promise((res, rej) => {
+    let optionsLocais = await new Promise((resolve, reject) => {
       //--- var retorno = "<option value='-1'>Selecione...</option>";
       var retorno = "";
       arrayLocais.forEach((value, index, array) => {
         var codigo = value.codigolocal;
         var descricao = value.nomelocal;
         retorno += "<option value='" + codigo + "'>" + descricao + "</option>";
-        if (index === array.length - 1) res(retorno);
+        if (index === array.length - 1) 
+          resolve(retorno);
       });
-    }).then(retorno => {
-      const divLocal = document.getElementById("divLocal");
-      divLocal.innerHTML =
-        "<select id='cbLocal'>" + retorno + "</select></div></form>";
-      $("#cbLocal")
-        .select2({
-          placeholder: "Selecione o local...",
-          allowClear: false,
-          templateResult: formatarLocal,
-          templateSelection: formatarLocal
-        })
-        .on("select2:select", function(e) {
-          codLocal = e.params.data.id;
-        });
-      codLocal = 0;
     });
+    
+    const divLocal = document.getElementById("divLocal");
+    divLocal.innerHTML = "<select id='cbLocal'>" + optionsLocais + "</select></div></form>";
+    $("#cbLocal")
+      .select2({
+      placeholder: "Selecione o local...",
+      allowClear: false,
+      templateResult: this.formatarLocal,
+      templateSelection: this.formatarLocal
+    }).on("select2:select", function(e) {
+      codLocal = e.params.data.id;
+    });
+    codLocal = 0;
+  }
+  
+//-----------------------------------------------------------------------------------------//
 
-  })
-      .catch(() => {
-        console.log("(app.js) obterLocais catch");
-        return;
-      });
-    
-    doObterLocais().then(retorno => {
-      console.log("(app.js) callBackObterLocais retorno", retorno);
-      renderObterLocais(retorno);
-      callbackPeriodo();
-    });
-    
-    
-    
-     formatarLocal(item) {
+  formatarLocal(item) {
     var returnString =
       "<span style='font-size: 12px; padding: 0px'>" +
       this.tiraEspacos(item.text) +
@@ -122,20 +113,6 @@ export default class ViewSolicitacao {
     return novoSpan;
   }
 
-  //-----------------------------------------------------------------------------------------//
-
-  renderObterLocais(data) {
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
-    
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
-  doObterLocais() {
-  }
 
   //-----------------------------------------------------------------------------------------//
 enviar() {
