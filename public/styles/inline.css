@@ -154,7 +154,7 @@ body {
   border-radius: 4px;
 }
 
-.main .caixaDialog .grade input .trinta {
+.main .caixaDialog .grade .trinta {
   border: 1px solid #aaa;
   padding: 2px 10px;
   text-align: left;
@@ -164,17 +164,17 @@ body {
   width: 25%;
 }
 
-.main .caixaDialog .grade input .quarenta {
+.main .caixaDialog .grade .quarenta {
   border: 1px solid #aaa;
   padding: 2px 10px;
   text-align: left;
   font-size: 12px;
   height: 28px;
   border-radius: 4px;
-  width: 43%;
+  width: 47%;
 }
 
-.main .caixaDialog .grade input .setenta {
+.main .caixaDialog .grade .setenta  {
   border: 1px solid #aaa;
   padding: 2px 10px;
   text-align: left;
