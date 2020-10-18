@@ -128,7 +128,7 @@ export default class UCSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterExames(local, exame) {
-    let response = await fetch("/obterExames/" + local + "/" + exame);
+    let response = await fetch("/obterExames/" + local + "/" + exame.toUpperCase());
     if (!response) {
       console.log("(app.js) obterExames sem conteúdo");
       return;
@@ -140,8 +140,11 @@ export default class UCSolicitacao {
       return;
     } else {
       this.arrayExames = JSON.parse(objExames);
+      this.view.atualizarExames(this.arrayExames);
     }
   }
+
+  //-----------------------------------------------------------------------------------------//
 
   doVerificarSenha(senha) {
     console.log("(app.js) Executando verificarSenha");
@@ -158,9 +161,9 @@ export default class UCSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  doSolicitacao() {
-    executante = codExecutante;
-    solicitante = funcaoObterUsuario();
+  async doSolicitacao(codExecutante, paciente, cpf, exame, data, dtPeriodo, faturar) {
+    let executante = codExecutante;
+    let solicitante = this.usrApp.login;
     let dadosPaciente = cbPaciente.value.split(SEPARADOR);
     paciente = dadosPaciente[0];
     cpf = dadosPaciente[1].replace(/\.|-/g, "");
@@ -187,15 +190,9 @@ export default class UCSolicitacao {
       faturar;
 
     console.log("(app.js) Executando solicitacao");
-    return fetch(requisicao)
-      .then(response => {
-        console.log("(app.js) solicitacao response");
-        return response.json();
-      })
-      .catch(() => {
-        console.log("(app.js) solicitacao catch");
-        return null;
-      });
+    let response = await fetch(requisicao);
+     
+     return response.json();
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -217,7 +214,6 @@ export default class UCSolicitacao {
   }
 
   //-----------------------------------------------------------------------------------------//
-
 
   callbackCadastrarPaciente() {
     window.location.href = "bdpaciente.html";

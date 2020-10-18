@@ -32,7 +32,7 @@ export default class ViewSolicitacao {
 
     this.btSair.onclick = this.sair;
     this.btSair.onclick = this.enviarSolicitacao;
-    this.btPacientes.onclick = this.chamarCadastrarPacientes;
+    this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
 
     this.codLocalSelecionado = -1;
 
@@ -41,12 +41,12 @@ export default class ViewSolicitacao {
         if (this.codLocalSelecionado == null || this.codLocalSelecionado == -1) {
           alert("Não foi indicado o local para realização do exame.");
         }
-        this.ctrl.obterExames(this.codLocalSelecionado,this.tfExame.value);
+        this.ctrl.obterExames(this.codLocalSelecionado,this.tfExame.value.toUpperCase());
       }
     });
     this.pwSenha.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
-        this.ctrl.callbackSolicitacao();
+        this.enviarSolicitacao();
       }
     });
   }
@@ -253,23 +253,6 @@ export default class ViewSolicitacao {
   }
 
   //-----------------------------------------------------------------------------------------//
-
-  enviar() {
-    if (this.operacao == "Incluir") {
-      this.daoPaciente.incluir(this.inputCpf.value, this.inputNome.value);
-    } else if (this.operacao == "Alterar") {
-      this.daoPaciente.alterar(
-        this.cpfAtual,
-        this.inputCpf.value,
-        this.inputNome.value
-      );
-    } else if (this.operacao == "Excluir") {
-      this.daoPaciente.exluir(this.cpfAtual);
-    }
-    this.solicitarObjs();
-  }
-
-  //-----------------------------------------------------------------------------------------//
   
   enviarSolicitacao() {
     executante = codExecutante;
@@ -329,12 +312,6 @@ export default class ViewSolicitacao {
     });
   }
 
-  //-----------------------------------------------------------------------------------------//
-
-  chamarCadastrarPacientes()  {
-    window.location.href = "bdpaciente.html";  
-  }
-  
   //-----------------------------------------------------------------------------------------//
   
   sair() {
