@@ -106,7 +106,7 @@ export default class UCSolicitacao {
 
   async obterPeriodo() {
     let response = fetch("/obterPeriodo/");
-    console.log("obterPeriodo retorno", retorno);
+    console.log("obterPeriodo retorno", response);
     if (!response) {
       console.log("(app.js) renderObterPeriodo sem conteúdo");
       return;
@@ -118,9 +118,9 @@ export default class UCSolicitacao {
       return;
     } else {
       console.log("obterPeriodo -> ", objPeriodo.Periodo);
-      var dia = data.Periodo.substring(0, 2);
-      var mes = data.Periodo.substring(3, 5);
-      var ano = data.Periodo.substring(6, 10);
+      var dia = objPeriodo.Periodo.substring(0, 2);
+      var mes = objPeriodo.Periodo.substring(3, 5);
+      var ano = objPeriodo.Periodo.substring(6, 10);
       this.dtPeriodo = ano + "-" + mes + "-" + dia;
     }
   }
@@ -146,17 +146,16 @@ export default class UCSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  doVerificarSenha(senha) {
-    console.log("(app.js) Executando verificarSenha");
-    return fetch("/verificarSenha/" + senha)
-      .then(response => {
-        console.log("(app.js) verificarSenha response");
-        return response.json();
-      })
-      .catch(() => {
-        console.log("(app.js) obterPeriodo catch");
-        return;
-      });
+  async verificarSenha(senha) {
+    let response = await fetch("/verificarSenha/" + senha);
+    if (!response) {
+      return false;
+    }
+    if (response.hasOwnProperty("erro")) {
+      alert(response.erro);
+      return false;
+    }
+    return true;
   }
 
   //-----------------------------------------------------------------------------------------//

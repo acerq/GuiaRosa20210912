@@ -34,11 +34,15 @@ export default class ViewSolicitacao {
     this.btSair.onclick = this.enviarSolicitacao;
     this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
 
-    this.codLocalSelecionado = -1;
+    this.codLocalSelecionado = null;
+    this.codExecutanteSelecionado = null;
+    this.codExameSelecionado = null;
+    this.dtPeriodo = null;
+    
 
     $(document).on("keypress", "input", function(e) {
       if (e.which == 13 && e.target == this.tfExame) {
-        if (this.codLocalSelecionado == null || this.codLocalSelecionado == -1) {
+        if (this.codLocalSelecionado == null) {
           alert("Não foi indicado o local para realização do exame.");
         }
         this.ctrl.obterExames(this.codLocalSelecionado,this.tfExame.value.toUpperCase());
@@ -88,7 +92,7 @@ export default class ViewSolicitacao {
       .on("select2:select", function(e) {
         this.codLocalSelecionado = e.params.data.id;
       });
-    this.codLocalSelecionado = -1;
+    this.codLocalSelecionado = null;
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -237,8 +241,8 @@ export default class ViewSolicitacao {
         })
         .on("select2:select", function(e) {
           var selectionText = e.params.data.id.split(SEPARADOR);
-          this.codExecutante = selectionText[0];
-          this.codExame = selectionText[1];
+          this.codExecutanteSelecionado = selectionText[0];
+          this.codExameSelecionado = selectionText[1];
         });
 
       var element = document.querySelector(
@@ -255,46 +259,51 @@ export default class ViewSolicitacao {
   //-----------------------------------------------------------------------------------------//
   
   enviarSolicitacao() {
-    executante = codExecutante;
-    if (executante == null) {
+    fnColocarEspera();
+    if (this.codExecutanteSelecionado == null) {
+      fnTirarEspera();
       alert("O exame não foi escolhido.");
       return;
     }
-    exame = codExame;
-    if (exame == null) {
+    if (this.codExameSelecionado == null) {
+      fnTirarEspera();
       alert("O exame não foi escolhido.");
       return;
     }
-    solicitante = "XXXX";
-    paciente = cbPaciente.value;
+    let solicitante = "XXXX";
+    let paciente = this.cbPaciente.value;
     if (paciente == null || paciente == "") {
+      fnTirarEspera();
       alert("O paciente não foi escolhido.");
       return;
     }
-    data = dtExame.value;
+    let data = this.dtExame.value;
     if (data == null) {
+      fnTirarEspera();
       alert("A data não foi escolhida.");
       return;
     }
-    faturar = cbFaturar.value;
+    let faturar = this.cbFaturar.value;
     if (faturar == null) {
+      fnTirarEspera();
       alert("Não foi indicado se o exame será faturado ou não.");
       return;
     }
-    senha = funcaoMD5(pwSenha.value);
+    let senha = funcaoMD5(this.pwSenha.value);
     if (senha == null) {
+      fnTirarEspera();
       alert("Informe sua senha para confirmação.");
       return;
     }
 
     fnColocarEspera();
-    doVerificarSenha(senha).then(retorno => {
-      console.log(
-        "(app.js) callBackSolicitacao retorno verificarSenha",
-        retorno
-      );
-      if (!retorno) {
+    if(!this.ctrl.verificarSenha(senha)) {
         fnTirarEspera();
+      alert("Informe sua senha para confirmação.");
+      
+    }
+
+    if (!retorno) {
         console.log("(app.js) renderVerificarSenha sem conteúdo");
         alert("Erro na conexão com o Servidor #03APP");
         return;
