@@ -60,6 +60,7 @@ export default class ViewPaciente {
     $(document).ready(function() {
       $("#tfCpf").mask("999.999.999-99");
       $("#tfCelular").mask("(99) 9999-9999?9");
+      $("#tfCep").mask("99999-999");
     });
   }
 

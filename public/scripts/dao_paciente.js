@@ -35,10 +35,8 @@ export default class DAOPaciente {
 
       requestDB.onsuccess = event => {
         console.log("[DAOPaciente.construtor] Sucesso");
-        if (event.target.result) 
-          resolve(event.target.result);
-        else 
-          reject(Error("object not found"));
+        if (event.target.result) resolve(event.target.result);
+        else reject(Error("object not found"));
       };
     });
   }
@@ -181,20 +179,22 @@ export default class DAOPaciente {
     let db = this.db;
     let resultado = await new Promise(function(resolve, reject) {
       let transacao = db.transaction(["Paciente"], "readwrite");
+      transacao.oncomplete = event => {
         console.log("[DAOPaciente.incluir] Sucesso");
-        let store = transacao.objectStore("Paciente");
-        store.add({
-          cpf: cpfNovo,
-          nome: nomeNovo,
-          celular: celularNovo,
-          email: emailNovo,
-          rua: ruaNovo,
-          numero: numeroNovo,
-          complemento: complementoNovo,
-          bairro: bairroNovo,
-          cep: cepNovo
-        });
         resolve("Ok");
+      };
+      let store = transacao.objectStore("Paciente");
+      store.add({
+        cpf: cpfNovo,
+        nome: nomeNovo,
+        celular: celularNovo,
+        email: emailNovo,
+        rua: ruaNovo,
+        numero: numeroNovo,
+        complemento: complementoNovo,
+        bairro: bairroNovo,
+        cep: cepNovo
+      });
     });
 
     // md5('@@MedicoNoApp@@') --> 5759494f25129de6d0bd71f41a582a8c
