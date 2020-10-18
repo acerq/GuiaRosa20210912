@@ -41,7 +41,7 @@ export default class ViewSolicitacao {
     this.pwSenha = document.getElementById("pwSenha");
 
     this.btSair.onclick = this.sair;
-    this.btSair.onclick = this.enviarSolicitacao;
+    this.btEnviar.onclick = this.enviarSolicitacao;
     this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
     this.btConsultar.onclick = this.obterExames;
 
@@ -142,6 +142,7 @@ export default class ViewSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   obterExames() {
+    fnColocarEspera
     if (self.codLocalSelecionado == null) {
       alert("Não foi indicado o local para realização do exame.");
     }
@@ -151,6 +152,7 @@ export default class ViewSolicitacao {
       self.codLocalSelecionado,
       strExame
     );
+    fnTirarEspera();
   }
 
   //-----------------------------------------------------------------------------------------//
