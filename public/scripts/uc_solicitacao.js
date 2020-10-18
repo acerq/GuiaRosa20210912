@@ -124,7 +124,7 @@ export default class CtrlSolicitacao {
 
   async obterExames(local, exame) {
     let response = await fetch(
-      "/obterExames/" + local + "/" + exame.toUpperCase()
+      "/obterExames/" + local + "/" + exame
     );
     if (!response) {
       console.log("(app.js) obterExames sem conteúdo");
