@@ -1,13 +1,9 @@
 "use strict";
 
-const tfExame = document.getElementById("tfExame");
-const cbPaciente = document.getElementById("cbPaciente");
-const hdExame = document.getElementById("hdExame");
-const dtExame = document.getElementById("dtExame");
-const cbFaturar = document.getElementById("cbFaturar");
-const divResposta = document.getElementById("divResposta");
-const pwSenha = document.getElementById("pwSenha");
-const SEPARADOR = "##";
+import ViewSolicitacao from '/scripts/view_paciente.js';
+
+const view = new ViewSolicitacao();
+view.init();
 
 var codLocal = null;
 var codExecutante = null;
@@ -23,59 +19,6 @@ var data = null;
 var faturar = null;
 var senha = null;
 
-var funcaoMD5 = new Function("a", "return md5(a)");
-var funcaoObterUsuario = new Function("b", "return usrApp.login");
-var fnTirarEspera = new Function("tirarEspera()");
-var fnColocarEspera = new Function("colocarEspera()");
-
-//-----------------------------------------------------------------------------------------//
-
-function tiraEspacos(item) {
-  if (item == null) return "";
-  var pos = item.length - 1;
-  while (item[pos] == " " && pos > 0) pos--;
-  return item.substr(0, pos + 1);
-}
-
-//-----------------------------------------------------------------------------------------//
-
-function callbackPeriodo() {
-  doObterPeriodo().then(retorno => {
-    console.log("(app.js) callBackPeriodo retorno", retorno);
-    renderObterPeriodo(retorno);
-    fnTirarEspera();
-  });
-}
-
-//-----------------------------------------------------------------------------------------//
-
-function renderObterPeriodo(data) {
-  if (!data) {
-    console.log("(app.js) renderObterPeriodo sem conteúdo");
-    return;
-  }
-  if (data.hasOwnProperty("erro")) {
-    alert(data.erro);
-    return;
-  } else {
-    console.log("(app.js) renderObterPeriodo -> ", data.Periodo);
-    var dia = data.Periodo.substring(0, 2);
-    var mes = data.Periodo.substring(3, 5);
-    var ano = data.Periodo.substring(6, 10);
-    dtPeriodo = ano + "-" + mes + "-" + dia;
-  }
-}
-
-//-----------------------------------------------------------------------------------------//
-
-function doObterPeriodo() {
-  console.log("(app.js) Executando obterPeriodo");
-  return fetch("/obterPeriodo/")
-    .then(response => {
-      console.log("(app.js) obterPeriodo " + response);
-      return response.json();
-    });
-}
 
 //-----------------------------------------------------------------------------------------//
 

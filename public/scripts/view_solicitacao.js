@@ -2,7 +2,11 @@
 
 import DaoPaciente from "./dao_paciente.js";
 
-var view;
+const SEPARADOR = "##";
+const funcaoMD5 = new Function("a", "return md5(a)");
+const funcaoObterUsuario = new Function("b", "return usrApp.login");
+const fnTirarEspera = new Function("tirarEspera()");
+const fnColocarEspera = new Function("colocarEspera()");
 
 export default class ViewSolicitacao {
   constructor() {
@@ -20,6 +24,14 @@ export default class ViewSolicitacao {
     this.btPacientes = document.getElementById("btPacientes");
     this.btEnviar = document.getElementById("btEnviar");
     this.btSair = document.getElementById("btSair");
+        
+    this.tfExame = document.getElementById("tfExame");
+    this.cbPaciente = document.getElementById("cbPaciente");
+    this.hdExame = document.getElementById("hdExame");
+    this.dtExame = document.getElementById("dtExame");
+    this.cbFaturar = document.getElementById("cbFaturar");
+    this.divResposta = document.getElementById("divResposta");
+    this.pwSenha = document.getElementById("pwSenha");
 
     //this.btEnviar.onclick = this.enviar;
     this.btSair.onclick = this.sair;
@@ -28,53 +40,53 @@ export default class ViewSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async init() {
-    await view.daoPaciente.abrirDB();
-    view.solicitarObjs();
+    await this.daoPaciente.abrirDB();
+    this.solicitarObjs();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   async solicitarObjs() {
-    view.arrayPacientes = await view.daoPaciente.obterPacientes();
-      view.usrApp = window.retornarUsrApp();
-      if (view.usrApp.ehMedico) {
-        if (view.arrayPacientes.length > 0) {
-          view.posAtual = 0;
+    this.arrayPacientes = await this.daoPaciente.obterPacientes();
+      this.usrApp = window.retornarUsrApp();
+      if (this.usrApp.ehMedico) {
+        if (this.arrayPacientes.length > 0) {
+          this.posAtual = 0;
         } else {
-          view.posAtual = -1;
-          view.cpfAtual = null;
+          this.posAtual = -1;
+          this.cpfAtual = null;
         }
       } else {
-        view.cbPaciente.remove(view.cbPaciente.selectedIndex);
-        view.btPacientes.hidden = true;
-        view.cbPaciente.style = "width:100%;-webkit-appearance:none;-moz-appearance:none;text-indent:1px;text-overflow: '';";
-        view.arrayPacientes = [
+        this.cbPaciente.remove(this.cbPaciente.selectedIndex);
+        this.btPacientes.hidden = true;
+        this.cbPaciente.style = "width:100%;-webkit-appearance:none;-moz-appearance:none;text-indent:1px;text-overflow: '';";
+        this.arrayPacientes = [
           {
-            cpf: view.usrApp.login,
-            nome: view.usrApp.nome,
-            celular: view.usrApp.celular,
-            email: view.usrApp.email
+            cpf: this.usrApp.login,
+            nome: this.usrApp.nome,
+            celular: this.usrApp.celular,
+            email: this.usrApp.email
           }
         ];
       }
-      view.atualizarInterface();
+      this.atualizarInterface();
   }
 
   //-----------------------------------------------------------------------------------------//
 
   enviar() {
-    if (view.operacao == "Incluir") {
-      view.daoPaciente.incluir(view.inputCpf.value, view.inputNome.value);
-    } else if (view.operacao == "Alterar") {
-      view.daoPaciente.alterar(
-        view.cpfAtual,
-        view.inputCpf.value,
-        view.inputNome.value
+    if (this.operacao == "Incluir") {
+      this.daoPaciente.incluir(this.inputCpf.value, this.inputNome.value);
+    } else if (this.operacao == "Alterar") {
+      this.daoPaciente.alterar(
+        this.cpfAtual,
+        this.inputCpf.value,
+        this.inputNome.value
       );
-    } else if (view.operacao == "Excluir") {
-      view.daoPaciente.exluir(view.cpfAtual);
+    } else if (this.operacao == "Excluir") {
+      this.daoPaciente.exluir(this.cpfAtual);
     }
-    view.solicitarObjs();
+    this.solicitarObjs();
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -82,13 +94,13 @@ export default class ViewSolicitacao {
   async atualizarInterface() {
     const SEPARADOR = "##"; // Usado também em app.js
 
-    await view.arrayPacientes.forEach(e => {
+    await this.arrayPacientes.forEach(e => {
       var elem = document.createElement("option");
       elem.value = e.nome + SEPARADOR + e.cpf;
       elem.text = e.nome;
-      view.cbPaciente.add(elem);
+      this.cbPaciente.add(elem);
     });
-    view.dtExame.value = view.dataParaInput();
+    this.dtExame.value = this.dataParaInput();
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -102,7 +114,56 @@ export default class ViewSolicitacao {
     if (m < 10) m = "0" + m;
     return y + "-" + m + "-" + d;
   }
+  
+  
+  //-----------------------------------------------------------------------------------------//
+
+ tiraEspacos(item) {
+  if (item == null) return "";
+  var pos = item.length - 1;
+  while (item[pos] == " " && pos > 0) pos--;
+  return item.substr(0, pos + 1);
 }
 
-view = new ViewSolicitacao();
-view.init();
+//-----------------------------------------------------------------------------------------//
+
+ callbackPeriodo() {
+  doObterPeriodo().then(retorno => {
+    console.log("(app.js) callBackPeriodo retorno", retorno);
+    renderObterPeriodo(retorno);
+    fnTirarEspera();
+  });
+}
+
+//-----------------------------------------------------------------------------------------//
+
+ renderObterPeriodo(data) {
+  if (!data) {
+    console.log("(app.js) renderObterPeriodo sem conteúdo");
+    return;
+  }
+  if (data.hasOwnProperty("erro")) {
+    alert(data.erro);
+    return;
+  } else {
+    console.log("(app.js) renderObterPeriodo -> ", data.Periodo);
+    var dia = data.Periodo.substring(0, 2);
+    var mes = data.Periodo.substring(3, 5);
+    var ano = data.Periodo.substring(6, 10);
+    dtPeriodo = ano + "-" + mes + "-" + dia;
+  }
+}
+
+//-----------------------------------------------------------------------------------------//
+
+ doObterPeriodo() {
+  console.log("(app.js) Executando obterPeriodo");
+  return fetch("/obterPeriodo/")
+    .then(response => {
+      console.log("(app.js) obterPeriodo " + response);
+      return response.json();
+    });
+}
+
+
+}
