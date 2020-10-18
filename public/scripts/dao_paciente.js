@@ -359,8 +359,8 @@ export default class DAOPaciente {
       };
     });
 
-    let store = await new Promise(function(resolve, reject) {
-      store = transacao.objectStore("Paciente");
+    let resultado = await new Promise(function(resolve, reject) {
+      let store = transacao.objectStore("Paciente");
       store.openCursor().onsuccess = event => {
         const cursor = event.target.result;
         if (cursor) {
@@ -369,13 +369,13 @@ export default class DAOPaciente {
             request.onsuccess = () => {
               console.log("[DAOPaciente.excluir] Cursor delete - Sucesso ");
               fnTirarEspera();
-              resolve(store);
+              resolve("Ok");
               return;
             };
           }
           cursor.continue();
         }
-        resolve(store);
+        reject("Não Encontrou");
       };
     });
   }
