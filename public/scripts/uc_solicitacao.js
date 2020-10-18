@@ -8,22 +8,23 @@ export default class UCSolicitacao {
     this.view = new ViewSolicitacao(this);
       
     this.daoPaciente = new DaoPaciente();
-
   
+    this.arrayPacientes = [];
+    this.arrayLocais = [];
 
     this.codLocal = null;
     this.codExecutante = null;
-var codExame = null;
-var dtPeriodo = null;
+    this.codExame = null;
+    this.dtPeriodo = null;
 
-var executante = null;
-var solicitante = null;
-var paciente = null;
-var cpf = null;
-var exame = null;
-var data = null;
-var faturar = null;
-var senha = null;
+this.executante = null;
+this.solicitante = null;
+this.paciente = null;
+this.cpf = null;
+this.exame = null;
+this.data = null;
+this.faturar = null;
+this.senha = null;
 
   }
   
@@ -34,13 +35,92 @@ var senha = null;
     await this.obterPacientes();
     await this.obterLocais();
 
-    view.init();
+    this.view.atualizarInterface();
 
   }
   
 //-----------------------------------------------------------------------------------------//
 
-function doVerificarSenha(senha) {
+  async obterPacientes() {
+    this.arrayPacientes = await this.daoPaciente.obterPacientes();
+    this.usrApp = window.retornarUsrApp();
+    if (this.usrApp.ehMedico) {
+      if (this.arrayPacientes.length > 0) {
+        this.posAtual = 0;
+      } else {
+        this.posAtual = -1;
+        this.cpfAtual = null;
+      }
+    } else {
+      this.cbPaciente.remove(this.cbPaciente.selectedIndex);
+      this.btPacientes.hidden = true;
+      this.cbPaciente.style =
+        "width:100%;-webkit-appearance:none;-moz-appearance:none;text-indent:1px;text-overflow: '';";
+      this.arrayPacientes = [
+        {
+          cpf: this.usrApp.login,
+          nome: this.usrApp.nome,
+          celular: this.usrApp.celular,
+          email: this.usrApp.email
+        }
+      ];
+    }
+    this.atualizarInterface();
+  }
+
+  //-----------------------------------------------------------------------------------------//
+ 
+  async obterLocais() {
+    let response = await fetch("/obterLocais/");
+    this.arrayLocais = response.json();
+    if (!this.arrayLocais) {
+      console.log("obterLocais sem conteúdo");
+      alert("Erro na conexão com o Servidor #02APP");
+      this.arrayLocais = [];
+      return;
+    }
+    if(this.arrayLocais.hasOwnProperty("erro")) {
+      alert(this.arrayLocais.erro);
+      this.arrayLocais = [];
+      if(this.arrayLocais.erro == "Sessão Expirada") 
+        window.location.href = "index.html";
+      return;
+    } 
+    await this.arrayLocais.sort(function(a, b) {
+      var keyA = a.codigolocal;
+      var keyB = b.codigolocal;
+      if (keyA < keyB) return -1;
+      if (keyA > keyB) return 1;
+      return 0;
+    });
+  }
+  
+ //-----------------------------------------------------------------------------------------//
+
+  async obterPeriodo() {  
+    let response = fetch("/obterPeriodo/");
+    console.log("obterPeriodo retorno", retorno);
+    if(!response) {
+        console.log("(app.js) renderObterPeriodo sem conteúdo");
+        return;
+    }
+    let objPeriodo = response.json();
+    if(objPeriodo.hasOwnProperty("erro")) {
+      alert(objPeriodo.erro);
+      this.dtPeriodo = null;
+      return;
+    } else {
+      console.log("obterPeriodo -> ", objPeriodo.Periodo);
+      var dia = data.Periodo.substring(0, 2);
+      var mes = data.Periodo.substring(3, 5);
+      var ano = data.Periodo.substring(6, 10);
+      this.dtPeriodo = ano + "-" + mes + "-" + dia;
+    }
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
+ doVerificarSenha(senha) {
   console.log("(app.js) Executando verificarSenha");
   return fetch("/verificarSenha/" + senha)
     .then(response => {

@@ -12,9 +12,6 @@ export default class ViewSolicitacao {
   constructor(ctrlSolicitacao) {
     this.ctrl = ctrlSolicitacao;
 
-    this.arrayPacientes = [];
-    this.arrayLocais = [];
-
     this.usrApp = null;
 
     this.hdExecutante = document.getElementById("hdExecutante");
@@ -50,33 +47,6 @@ export default class ViewSolicitacao {
   }
 
   //-----------------------------------------------------------------------------------------//
-
-  async obterLocais() {
-    let response = await fetch("/obterLocais/");
-    this.arrayLocais = response.json();
-    if (!this.arrayLocais) {
-      console.log("obterLocais sem conteúdo");
-      alert("Erro na conexão com o Servidor #02APP");
-      this.arrayLocais = [];
-      return;
-    }
-    if(this.arrayLocais.hasOwnProperty("erro")) {
-      alert(this.arrayLocais.erro);
-      this.arrayLocais = [];
-      if(this.arrayLocais.erro == "Sessão Expirada") 
-        window.location.href = "index.html";
-      return;
-    } 
-    await this.arrayLocais.sort(function(a, b) {
-      var keyA = a.codigolocal;
-      var keyB = b.codigolocal;
-      if (keyA < keyB) return -1;
-      if (keyA > keyB) return 1;
-      return 0;
-    });
-  }
-  
-  //-----------------------------------------------------------------------------------------//
 enviar() {
     if (this.operacao == "Incluir") {
       this.daoPaciente.incluir(this.inputCpf.value, this.inputNome.value);
@@ -94,8 +64,10 @@ enviar() {
 
   //-----------------------------------------------------------------------------------------//
 
-  async atualizarInterface() {
-    await this.arrayPacientes.forEach(e => {
+  async atualizarInterface(arrayPacientes, arrayLocais) {
+    
+    //---- Formata a combobox de pacientes ----//
+    await arrayPacientes.forEach(e => {
       var elem = document.createElement("option");
       elem.value = e.nome + SEPARADOR + e.cpf;
       elem.text = e.nome;
@@ -104,10 +76,11 @@ enviar() {
     this.dtExame.value = this.dataParaInput();
 
   
+    //---- Formata a combobox de locais ----//
     let optionsLocais = await new Promise((resolve, reject) => {
       //--- var retorno = "<option value='-1'>Selecione...</option>";
       var retorno = "";
-      this.arrayLocais.forEach((value, index, array) => {
+      arrayLocais.forEach((value, index, array) => {
         var codigo = value.codigolocal;
         var descricao = value.nomelocal;
         retorno += "<option value='" + codigo + "'>" + descricao + "</option>";
@@ -144,34 +117,6 @@ enviar() {
 
   //-----------------------------------------------------------------------------------------//
 
-  async obterPacientes() {
-    this.arrayPacientes = await this.daoPaciente.obterPacientes();
-    this.usrApp = window.retornarUsrApp();
-    if (this.usrApp.ehMedico) {
-      if (this.arrayPacientes.length > 0) {
-        this.posAtual = 0;
-      } else {
-        this.posAtual = -1;
-        this.cpfAtual = null;
-      }
-    } else {
-      this.cbPaciente.remove(this.cbPaciente.selectedIndex);
-      this.btPacientes.hidden = true;
-      this.cbPaciente.style =
-        "width:100%;-webkit-appearance:none;-moz-appearance:none;text-indent:1px;text-overflow: '';";
-      this.arrayPacientes = [
-        {
-          cpf: this.usrApp.login,
-          nome: this.usrApp.nome,
-          celular: this.usrApp.celular,
-          email: this.usrApp.email
-        }
-      ];
-    }
-    this.atualizarInterface();
-  }
-
-  //-----------------------------------------------------------------------------------------//
 
   dataParaInput() {
     const agora = new Date();
@@ -194,78 +139,10 @@ enviar() {
 
   //-----------------------------------------------------------------------------------------//
 
-  callbackPeriodo() {
-    doObterPeriodo().then(retorno => {
-      console.log("(app.js) callBackPeriodo retorno", retorno);
-      renderObterPeriodo(retorno);
-      fnTirarEspera();
-    });
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
-  renderObterPeriodo(data) {
-    if (!data) {
-      console.log("(app.js) renderObterPeriodo sem conteúdo");
-      return;
-    }
-    if (data.hasOwnProperty("erro")) {
-      alert(data.erro);
-      return;
-    } else {
-      console.log("(app.js) renderObterPeriodo -> ", data.Periodo);
-      var dia = data.Periodo.substring(0, 2);
-      var mes = data.Periodo.substring(3, 5);
-      var ano = data.Periodo.substring(6, 10);
-      dtPeriodo = ano + "-" + mes + "-" + dia;
-    }
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
-  doObterPeriodo() {
-    console.log("(app.js) Executando obterPeriodo");
-    return fetch("/obterPeriodo/").then(response => {
-      console.log("(app.js) obterPeriodo " + response);
-      return response.json();
-    });
-  }
-
+ 
   //-----------------------------------------------------------------------------------------//
 
  
-  callbackConsultarExames() {
-    if (codLocal == null) {
-      alert("Não foi indicado o local para realização do exame.");
-      return;
-    }
-    fnColocarEspera();
-    tfExame.value = tfExame.value.toUpperCase();
-    var strExame = tfExame.value;
-    // chama doObterExames e atualiza a tela
-    doObterExames(codLocal, strExame).then(retorno => {
-      console.log("(app.js) callBackConsultarExames retorno", retorno);
-      renderObterExames(retorno);
-    });
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
-  doObterExames(local, exame) {
-    console.log("(app.js) Executando ObterExames");
-    return fetch("/obterExames/" + local + "/" + exame)
-      .then(response => {
-        console.log("(app.js) ObterExames response");
-        return response.json();
-      })
-      .catch(() => {
-        console.log("(app.js) ObterExames catch");
-        return null;
-      });
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
   formatarSelecao(item) {
     var returnString;
     if (item.text == "Selecione...")
