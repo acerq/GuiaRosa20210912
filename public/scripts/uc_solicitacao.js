@@ -2,11 +2,17 @@
 
 import ViewSolicitacao from '/scripts/view_paciente.js';
 
-const view = new ViewSolicitacao();
-view.init();
 
-var codLocal = null;
-var codExecutante = null;
+export default class UCSolicitacao {
+  constructor() {
+    this.view = new ViewSolicitacao(this);
+      
+    this.daoPaciente = new DaoPaciente();
+
+  
+
+    this.codLocal = null;
+    this.codExecutante = null;
 var codExame = null;
 var dtPeriodo = null;
 
@@ -19,7 +25,19 @@ var data = null;
 var faturar = null;
 var senha = null;
 
+  }
+  
+//-----------------------------------------------------------------------------------------//
 
+  async init() {
+      await this.daoPaciente.abrirDB();
+    await this.obterPacientes();
+    await this.obterLocais();
+
+    view.init();
+
+  }
+  
 //-----------------------------------------------------------------------------------------//
 
 function doVerificarSenha(senha) {

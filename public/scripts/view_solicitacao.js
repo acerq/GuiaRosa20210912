@@ -9,8 +9,8 @@ const fnTirarEspera = new Function("tirarEspera()");
 const fnColocarEspera = new Function("colocarEspera()");
 
 export default class ViewSolicitacao {
-  constructor() {
-    this.daoPaciente = new DaoPaciente();
+  constructor(ctrlSolicitacao) {
+    this.ctrl = ctrlSolicitacao;
 
     this.arrayPacientes = [];
     this.arrayLocais = [];
@@ -37,15 +37,14 @@ export default class ViewSolicitacao {
 
     //this.btEnviar.onclick = this.enviar;
     this.btSair.onclick = this.sair;
+    
+    this.codLocalSelecionado = -1;
   }
 
   //-----------------------------------------------------------------------------------------//
 
   async init() {
     fnColocarEspera();
-    await this.daoPaciente.abrirDB();
-    await this.obterPacientes();
-    await this.obterLocais();
     this.atualizarInterface();
     fnTirarEspera();
   }
@@ -54,66 +53,29 @@ export default class ViewSolicitacao {
 
   async obterLocais() {
     let response = await fetch("/obterLocais/");
-    this.locais = response.json();
-    if (!locais) {
+    this.arrayLocais = response.json();
+    if (!this.arrayLocais) {
       console.log("obterLocais sem conteúdo");
       alert("Erro na conexão com o Servidor #02APP");
+      this.arrayLocais = [];
       return;
     }
-    if (locais.hasOwnProperty("erro")) {
-      alert(locais.erro);
-      if (locais.erro == "Sessão Expirada") 
+    if(this.arrayLocais.hasOwnProperty("erro")) {
+      alert(this.arrayLocais.erro);
+      this.arrayLocais = [];
+      if(this.arrayLocais.erro == "Sessão Expirada") 
         window.location.href = "index.html";
       return;
     } 
-    var arrayLocais = locais;
-    await arrayLocais.sort(function(a, b) {
+    await this.arrayLocais.sort(function(a, b) {
       var keyA = a.codigolocal;
       var keyB = b.codigolocal;
       if (keyA < keyB) return -1;
       if (keyA > keyB) return 1;
       return 0;
     });
-
-    let optionsLocais = await new Promise((resolve, reject) => {
-      //--- var retorno = "<option value='-1'>Selecione...</option>";
-      var retorno = "";
-      arrayLocais.forEach((value, index, array) => {
-        var codigo = value.codigolocal;
-        var descricao = value.nomelocal;
-        retorno += "<option value='" + codigo + "'>" + descricao + "</option>";
-        if (index === array.length - 1) 
-          resolve(retorno);
-      });
-    });
-    
-    const divLocal = document.getElementById("divLocal");
-    divLocal.innerHTML = "<select id='cbLocal'>" + optionsLocais + "</select></div></form>";
-    $("#cbLocal")
-      .select2({
-      placeholder: "Selecione o local...",
-      allowClear: false,
-      templateResult: this.formatarLocal,
-      templateSelection: this.formatarLocal
-    }).on("select2:select", function(e) {
-      codLocal = e.params.data.id;
-    });
-    codLocal = 0;
   }
   
-//-----------------------------------------------------------------------------------------//
-
-  formatarLocal(item) {
-    var returnString =
-      "<span style='font-size: 12px; padding: 0px'>" +
-      this.tiraEspacos(item.text) +
-      "</span>";
-    var novoSpan = document.createElement("span");
-    novoSpan.innerHTML = returnString;
-    return novoSpan;
-  }
-
-
   //-----------------------------------------------------------------------------------------//
 enviar() {
     if (this.operacao == "Incluir") {
@@ -133,7 +95,6 @@ enviar() {
   //-----------------------------------------------------------------------------------------//
 
   async atualizarInterface() {
-    await this.obterPacientes();
     await this.arrayPacientes.forEach(e => {
       var elem = document.createElement("option");
       elem.value = e.nome + SEPARADOR + e.cpf;
@@ -141,6 +102,44 @@ enviar() {
       this.cbPaciente.add(elem);
     });
     this.dtExame.value = this.dataParaInput();
+
+  
+    let optionsLocais = await new Promise((resolve, reject) => {
+      //--- var retorno = "<option value='-1'>Selecione...</option>";
+      var retorno = "";
+      this.arrayLocais.forEach((value, index, array) => {
+        var codigo = value.codigolocal;
+        var descricao = value.nomelocal;
+        retorno += "<option value='" + codigo + "'>" + descricao + "</option>";
+        if (index === array.length - 1) 
+          resolve(retorno);
+      });
+    });
+    
+    const divLocal = document.getElementById("divLocal");
+    divLocal.innerHTML = "<select id='cbLocal'>" + optionsLocais + "</select></div></form>";
+    $("#cbLocal")
+      .select2({
+      placeholder: "Selecione o local...",
+      allowClear: false,
+      templateResult: this.formatarLocal,
+      templateSelection: this.formatarLocal
+    }).on("select2:select", function(e) {
+      this.codLocalSelecionado = e.params.data.id;
+    });
+    this.codLocalSelecionado = -1;
+  }
+
+//-----------------------------------------------------------------------------------------//
+
+  formatarLocal(item) {
+    var returnString =
+      "<span style='font-size: 12px; padding: 0px'>" +
+      this.tiraEspacos(item.text) +
+      "</span>";
+    var novoSpan = document.createElement("span");
+    novoSpan.innerHTML = returnString;
+    return novoSpan;
   }
 
   //-----------------------------------------------------------------------------------------//
