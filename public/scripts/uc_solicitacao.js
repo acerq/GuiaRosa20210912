@@ -1,14 +1,13 @@
 "use strict";
 
-import ViewSolicitacao from '/scripts/view_paciente.js';
-
+import ViewSolicitacao from "/scripts/view_paciente.js";
 
 export default class UCSolicitacao {
   constructor() {
     this.view = new ViewSolicitacao(this);
-      
+
     this.daoPaciente = new DaoPaciente();
-  
+
     this.arrayPacientes = [];
     this.arrayLocais = [];
     this.arrayExames = [];
@@ -19,28 +18,30 @@ export default class UCSolicitacao {
     this.dtPeriodo = null;
 
     this.executante = null;
-this.solicitante = null;
-this.paciente = null;
-this.cpf = null;
-this.exame = null;
-this.data = null;
-this.faturar = null;
-this.senha = null;
-
+    this.solicitante = null;
+    this.paciente = null;
+    this.cpf = null;
+    this.exame = null;
+    this.data = null;
+    this.faturar = null;
+    this.senha = null;
   }
-  
-//-----------------------------------------------------------------------------------------//
+
+  //-----------------------------------------------------------------------------------------//
 
   async init() {
-      await this.daoPaciente.abrirDB();
+    
+      doObterUsuarioCorrente();
+const fnTirarEspera = new Function("tirarEspera()");
+
+    await this.daoPaciente.abrirDB();
     await this.obterPacientes();
     await this.obterLocais();
 
     this.view.atualizarInterface();
-
   }
-  
-//-----------------------------------------------------------------------------------------//
+
+  //-----------------------------------------------------------------------------------------//
 
   async obterPacientes() {
     this.arrayPacientes = await this.daoPaciente.obterPacientes();
@@ -70,7 +71,7 @@ this.senha = null;
   }
 
   //-----------------------------------------------------------------------------------------//
- 
+
   async obterLocais() {
     let response = await fetch("/obterLocais/");
     this.arrayLocais = response.json();
@@ -80,13 +81,13 @@ this.senha = null;
       this.arrayLocais = [];
       return;
     }
-    if(this.arrayLocais.hasOwnProperty("erro")) {
+    if (this.arrayLocais.hasOwnProperty("erro")) {
       alert(this.arrayLocais.erro);
       this.arrayLocais = [];
-      if(this.arrayLocais.erro == "Sessão Expirada") 
+      if (this.arrayLocais.erro == "Sessão Expirada")
         window.location.href = "index.html";
       return;
-    } 
+    }
     await this.arrayLocais.sort(function(a, b) {
       var keyA = a.codigolocal;
       var keyB = b.codigolocal;
@@ -95,18 +96,18 @@ this.senha = null;
       return 0;
     });
   }
-  
- //-----------------------------------------------------------------------------------------//
 
-  async obterPeriodo() {  
+  //-----------------------------------------------------------------------------------------//
+
+  async obterPeriodo() {
     let response = fetch("/obterPeriodo/");
     console.log("obterPeriodo retorno", retorno);
-    if(!response) {
-        console.log("(app.js) renderObterPeriodo sem conteúdo");
-        return;
+    if (!response) {
+      console.log("(app.js) renderObterPeriodo sem conteúdo");
+      return;
     }
     let objPeriodo = response.json();
-    if(objPeriodo.hasOwnProperty("erro")) {
+    if (objPeriodo.hasOwnProperty("erro")) {
       alert(objPeriodo.erro);
       this.dtPeriodo = null;
       return;
@@ -119,169 +120,109 @@ this.senha = null;
     }
   }
 
-//-----------------------------------------------------------------------------------------//
+  //-----------------------------------------------------------------------------------------//
 
- async doObterExames(local, exame) {
-
-  let response = await fetch("/obterExames/" + local + "/" + exame);
-  if(!response) {
-        console.log("(app.js) obterExames sem conteúdo");
-        return;
+  async doObterExames(local, exame) {
+    let response = await fetch("/obterExames/" + local + "/" + exame);
+    if (!response) {
+      console.log("(app.js) obterExames sem conteúdo");
+      return;
     }
     let objExames = response.json();
-    if(objExames.hasOwnProperty("erro")) {
+    if (objExames.hasOwnProperty("erro")) {
       alert(objExames.erro);
       this.arrayExames = [];
       return;
     } else {
       this.arrayExames = JSON.parse(objExames);
     }
- }
-  
-
-
-   
-   doVerificarSenha(senha) {
-  console.log("(app.js) Executando verificarSenha");
-  return fetch("/verificarSenha/" + senha)
-    .then(response => {
-      console.log("(app.js) verificarSenha response");
-      return response.json();
-    })
-    .catch(() => {
-      console.log("(app.js) obterPeriodo catch");
-      return;
-    });
-}
-
-//-----------------------------------------------------------------------------------------//
-
- doSolicitacao() {
-  executante = codExecutante;
-  solicitante = funcaoObterUsuario();
-  let dadosPaciente = cbPaciente.value.split(SEPARADOR);      
-  paciente = dadosPaciente[0];
-  cpf = dadosPaciente[1].replace(/\.|-/g,'');
-  exame = codExame;
-  data = dtExame.value;
-  faturar = cbFaturar.value;
-
-  var requisicao =
-    "/solicitacao/" +
-    executante +
-    "/" +
-    solicitante +
-    "/" +
-    paciente +
-    "/" +
-    cpf +
-    "/" +
-    exame +
-    "/" +
-    data +
-    "/" +
-    dtPeriodo +
-    "/" +
-    faturar;
-
-  console.log("(app.js) Executando solicitacao");
-  return fetch(requisicao)
-    .then(response => {
-      console.log("(app.js) solicitacao response");
-      return response.json();
-    })
-    .catch(() => {
-      console.log("(app.js) solicitacao catch");
-      return null;
-    });
-}
-
-//-----------------------------------------------------------------------------------------//
-
- renderSolicitacao(resposta) {
-  fnTirarEspera();
-  if (!resposta) {
-    console.log("(app.js) renderSolicitacao sem conteúdo");
-    alert("Erro na solicitação do exame.");
-    return;
-  } 
-  console.log("(app.js) renderSolicitacao -> ", resposta);
-  if(resposta.mensagem == "Ok")	{
-	  alert("Exame agendado com sucesso");
-  	window.history.go(-1);
-  } else {
-	  alert(resposta.mensagem);	  
-  }
-}
-
-//-----------------------------------------------------------------------------------------//
-
- callbackSolicitacao() {
-  executante = codExecutante;
-  if (executante == null) {
-    alert("O exame não foi escolhido.");
-    return;
-  }
-  exame = codExame;
-  if (exame == null) {
-    alert("O exame não foi escolhido.");
-    return;
-  }
-  solicitante = "XXXX";
-  paciente = cbPaciente.value;
-  if (paciente == null || paciente == "") {
-    alert("O paciente não foi escolhido.");
-    return;
-  }
-  data = dtExame.value;
-  if (data == null) {
-    alert("A data não foi escolhida.");
-    return;
-  }
-  faturar = cbFaturar.value;
-  if (faturar == null) {
-    alert("Não foi indicado se o exame será faturado ou não.");
-    return;
-  }
-  senha = funcaoMD5(pwSenha.value);
-  if (senha == null) {
-    alert("Informe sua senha para confirmação.");
-    return;
   }
 
-  fnColocarEspera();
-  doVerificarSenha(senha).then(retorno => {
-    console.log("(app.js) callBackSolicitacao retorno verificarSenha", retorno);
-    if (!retorno) {
-      fnTirarEspera();
-      console.log("(app.js) renderVerificarSenha sem conteúdo");
-      alert("Erro na conexão com o Servidor #03APP");
+  doVerificarSenha(senha) {
+    console.log("(app.js) Executando verificarSenha");
+    return fetch("/verificarSenha/" + senha)
+      .then(response => {
+        console.log("(app.js) verificarSenha response");
+        return response.json();
+      })
+      .catch(() => {
+        console.log("(app.js) obterPeriodo catch");
+        return;
+      });
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
+  doSolicitacao() {
+    executante = codExecutante;
+    solicitante = funcaoObterUsuario();
+    let dadosPaciente = cbPaciente.value.split(SEPARADOR);
+    paciente = dadosPaciente[0];
+    cpf = dadosPaciente[1].replace(/\.|-/g, "");
+    exame = codExame;
+    data = dtExame.value;
+    faturar = cbFaturar.value;
+
+    var requisicao =
+      "/solicitacao/" +
+      executante +
+      "/" +
+      solicitante +
+      "/" +
+      paciente +
+      "/" +
+      cpf +
+      "/" +
+      exame +
+      "/" +
+      data +
+      "/" +
+      dtPeriodo +
+      "/" +
+      faturar;
+
+    console.log("(app.js) Executando solicitacao");
+    return fetch(requisicao)
+      .then(response => {
+        console.log("(app.js) solicitacao response");
+        return response.json();
+      })
+      .catch(() => {
+        console.log("(app.js) solicitacao catch");
+        return null;
+      });
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
+  renderSolicitacao(resposta) {
+    fnTirarEspera();
+    if (!resposta) {
+      console.log("(app.js) renderSolicitacao sem conteúdo");
+      alert("Erro na solicitação do exame.");
       return;
     }
-    if (retorno.hasOwnProperty("erro")) {
-      fnTirarEspera();
-      alert(retorno.erro);
-      return;
+    console.log("(app.js) renderSolicitacao -> ", resposta);
+    if (resposta.mensagem == "Ok") {
+      alert("Exame agendado com sucesso");
+      window.history.go(-1);
+    } else {
+      alert(resposta.mensagem);
     }
+  }
 
-    doSolicitacao().then(retorno => {
-      console.log("(app.js) callBackSolicitacao retorno", retorno);
-      renderSolicitacao(retorno);
-    });
-  });
+  //-----------------------------------------------------------------------------------------//
+
+
+  callbackCadastrarPaciente() {
+    window.location.href = "bdpaciente.html";
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
+  callbackSair() {
+    history.go(-1);
+  }
+
+  //-----------------------------------------------------------------------------------------//
 }
-
-//-----------------------------------------------------------------------------------------//
-
- callbackCadastrarPaciente() {
-  window.location.href = "bdpaciente.html";
-}
-
-//-----------------------------------------------------------------------------------------//
-
- callbackSair() {
-  history.go(-1);
-}
-
-//-----------------------------------------------------------------------------------------//
-

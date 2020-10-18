@@ -32,8 +32,8 @@ export default class ViewSolicitacao {
     this.divResposta = document.getElementById("divResposta");
     this.pwSenha = document.getElementById("pwSenha");
 
-    //this.btEnviar.onclick = this.enviar;
     this.btSair.onclick = this.sair;
+    this.btSair.onclick = this.enviarSolicitacao;
 
     this.codLocalSelecionado = -1;
 
@@ -287,6 +287,71 @@ export default class ViewSolicitacao {
       this.daoPaciente.exluir(this.cpfAtual);
     }
     this.solicitarObjs();
+  }
+
+  //-----------------------------------------------------------------------------------------//
+  
+  enviarSolicitacao() {
+    executante = codExecutante;
+    if (executante == null) {
+      alert("O exame não foi escolhido.");
+      return;
+    }
+    exame = codExame;
+    if (exame == null) {
+      alert("O exame não foi escolhido.");
+      return;
+    }
+    solicitante = "XXXX";
+    paciente = cbPaciente.value;
+    if (paciente == null || paciente == "") {
+      alert("O paciente não foi escolhido.");
+      return;
+    }
+    data = dtExame.value;
+    if (data == null) {
+      alert("A data não foi escolhida.");
+      return;
+    }
+    faturar = cbFaturar.value;
+    if (faturar == null) {
+      alert("Não foi indicado se o exame será faturado ou não.");
+      return;
+    }
+    senha = funcaoMD5(pwSenha.value);
+    if (senha == null) {
+      alert("Informe sua senha para confirmação.");
+      return;
+    }
+
+    fnColocarEspera();
+    doVerificarSenha(senha).then(retorno => {
+      console.log(
+        "(app.js) callBackSolicitacao retorno verificarSenha",
+        retorno
+      );
+      if (!retorno) {
+        fnTirarEspera();
+        console.log("(app.js) renderVerificarSenha sem conteúdo");
+        alert("Erro na conexão com o Servidor #03APP");
+        return;
+      }
+      if (retorno.hasOwnProperty("erro")) {
+        fnTirarEspera();
+        alert(retorno.erro);
+        return;
+      }
+
+      doSolicitacao().then(retorno => {
+        console.log("(app.js) callBackSolicitacao retorno", retorno);
+        renderSolicitacao(retorno);
+      });
+    });
+  }
+
+  //-----------------------------------------------------------------------------------------//
+  sair() {
+    history.go(-1);
   }
 }
 
