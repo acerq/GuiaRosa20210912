@@ -193,14 +193,14 @@ export default class CtrlSolicitacao {
       alert("Erro - pagamento não processado");
       return;
     }
-    if(resposta.Status == 1) {
+    if(resposta.Payment.ReasonCode == 0) {
       let MerchantOrderId = resposta.MerchantOrderId;
       let ProofOfSale = resposta.ProofOfSale;
       let PaymentId = resposta.PaymentId;
       alert("Pagamento Processado " + JSON.stringify(resposta));
     }
     else {
-      switch(resposta.Status) {
+      switch(resposta.Payment.ReasonCode) {
         case 7 : alert("Pagamento Recusado: Não Autorizado\n\n" + JSON.stringify(resposta));
           return;
         case 13 : alert("Pagamento Recusado: Cartão Cancelado\n\n" + JSON.stringify(resposta));
