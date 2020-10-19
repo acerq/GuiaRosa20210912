@@ -352,7 +352,7 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  async colocarFormPgto() {
+  colocarFormPgto() {
     $("#divConteudo").load("pgto.html", function() {
       self.tfNomeCartao = document.getElementById("tfNomeCartao");
       self.tfNumCartao = document.getElementById("tfNumCartao");
@@ -363,10 +363,14 @@ export default class ViewSolicitacao {
       self.btOk = document.getElementById("btOk");
       self.btCancelar = document.getElementById("btCancelar");
 
+      $("#tfNumCartao").mask("9999 9999 9999 9999");
+      $("#tfMesValidade").mask("99");
+      $("#tfAnoValidade").mask("9999");
+      
       alert($("divExame"));
       let selecao = self.dadosExame.text.split(SEPARADOR);
       let msg =
-        "<b>Exame Solicitado:</b><br/>" +
+        "<center><b>Exame Solicitado:</b><br/>" +
         "<span style='font-size: 10px;'><b>" +
         tiraEspacos(selecao[0]) +
         "</b><br/>" +
@@ -375,7 +379,104 @@ export default class ViewSolicitacao {
         tiraEspacos(selecao[2]) +
         "<br/>R$ " +
         tiraEspacos(selecao[3]) +
-        "</span>";
+        "</span></center>";
+      $("#divExame").html(msg);
+
+      self.btOk.onclick = self.enviarSolicitacao;
+      self.btCancelar.onclick = self.sair;
+    });
+    // let paciente = dadosPaciente[0];
+    // let cpf = dadosPaciente[1].replace(/\.|-/g, "");
+    //self.ctrl.enviarSolicitacao(
+    //  self.codExecutanteSelecionado,
+    //  paciente,
+    //  cpf,
+    //  self.codExameSelecionado,
+    //  data,
+    //  faturar
+    //);
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
+  enviarSolicitacao() {
+    fnColocarEspera();
+    
+    self.tfMesValidade = document.getElementById("tfMesValidade");
+    self.tfAnoValidade = document.getElementById("tfAnoValidade");
+    self.cbBandeira = document.getElementById("cbBandeira");
+    self.tfCvv = document.getElementById("tfCvv");
+
+    let numCartao = self.tfNumCartao.value;
+    if (numCartao == null || numCartao == "") {
+      fnTirarEspera();
+      alert("O número do cartão não foi informado");
+      return;
+    }
+    if (numCartao.length() < 16) {
+      fnTirarEspera();
+      alert("O número do cartão não foi informado corretamente");
+      return;
+    }
+    
+    let nomeCartao = self.tfNomeCartao.value;
+    if (nomeCartao == null || nomeCartao == "") {
+      fnTirarEspera();
+      alert("O nome no cartão não foi informado");
+      return;
+    }
+
+    let mesValidade = self.tfMesValidade.value;
+    if (mesValidade == null || mesValidade == "") {
+      fnTirarEspera();
+      alert("O mês da validade cartão não foi informado");
+      return;
+    }
+
+    let faturar = self.cbFaturar.value;
+    if (faturar == null) {
+      fnTirarEspera();
+      alert("Não foi indicado se o exame será faturado ou não.");
+      return;
+    }
+    let senha = funcaoMD5(self.pwSenha.value);
+    if (senha == null) {
+      fnTirarEspera();
+      alert("Informe sua senha para confirmação.");
+      return;
+    }
+
+    fnColocarEspera();
+    if (!(await self.ctrl.verificarSenha(senha))) {
+      fnTirarEspera();
+      alert("Senha não confere.");
+    }
+
+    self.dadosPaciente = self.cbPaciente.value;
+
+    fnTirarEspera();
+    alert("Procedendo checkout do pedido de exame");
+    $("#divConteudo").load("pgto.html", function() {
+      self.btOk = document.getElementById("btOk");
+      self.btCancelar = document.getElementById("btCancelar");
+
+      $("#tfNumCartao").mask("9999 9999 9999 9999");
+      $("#tfMesValidade").mask("99");
+      $("#tfAnoValidade").mask("9999");
+      
+      alert($("divExame"));
+      let selecao = self.dadosExame.text.split(SEPARADOR);
+      let msg =
+        "<center><b>Exame Solicitado:</b><br/>" +
+        "<span style='font-size: 10px;'><b>" +
+        tiraEspacos(selecao[0]) +
+        "</b><br/>" +
+        tiraEspacos(selecao[1]) +
+        "<br/>" +
+        tiraEspacos(selecao[2]) +
+        "<br/>R$ " +
+        tiraEspacos(selecao[3]) +
+        "</span></center>";
       $("#divExame").html(msg);
 
       self.btOk.onclick = self.enviarSolicitacao;
