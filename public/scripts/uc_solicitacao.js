@@ -200,8 +200,20 @@ export default class CtrlSolicitacao {
       alert("Pagamento Processado " + JSON.stringify(resposta));
     }
     else {
-      alert("Pagamento Recusado " + JSON.stringify(resposta));
-      return;
+      switch(resposta.Status) {
+        case 7 : alert("Pagamento Recusado: Não Autorizado" + JSON.stringify(resposta));
+          return;
+        case 13 : alert("Pagamento Recusado: Cartão Cancelado" + JSON.stringify(resposta));
+          return;
+        case 14 : alert("Pagamento Recusado: Cartão de Crédito Bloqueado" + JSON.stringify(resposta));
+          return;
+        case 15 : alert("Pagamento Recusado: Cartão Expirado" + JSON.stringify(resposta));
+          return;
+        case 22 : alert("Pagamento Recusado: Tempo Expirado" + JSON.stringify(resposta));
+          return;
+        default : alert("Pagamento Recusado" + JSON.stringify(resposta));
+          return;
+      }
     }
     // Agendamento
     requisicao =
