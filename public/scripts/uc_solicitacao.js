@@ -41,7 +41,11 @@ export default class CtrlSolicitacao {
     await this.obterPacientes();
     await this.obterLocais();
 
-    this.view.atualizarInterface(this.usrApp.ehMedico, this.arrayPacientes, this.arrayLocais);
+    this.view.atualizarInterface(
+      this.usrApp.ehMedico,
+      this.arrayPacientes,
+      this.arrayLocais
+    );
 
     this.view.tirarEspera();
   }
@@ -123,9 +127,7 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterExames(local, exame) {
-    let response = await fetch(
-      "/obterExames/" + local + "/" + exame
-    );
+    let response = await fetch("/obterExames/" + local + "/" + exame);
     if (!response) {
       console.log("(app.js) obterExames sem conteúdo");
       return;
@@ -183,12 +185,12 @@ export default class CtrlSolicitacao {
       this.dtPeriodo +
       "/" +
       "S";
-      //faturar;
+    //faturar;
 
     console.log("(app.js) Executando solicitacao");
     let response = await fetch(requisicao);
     let resposta = await response.json();
-      
+
     if (!resposta) {
       console.log("(app.js) renderSolicitacao sem conteúdo");
       alert("Erro na solicitação do exame.");
@@ -196,6 +198,19 @@ export default class CtrlSolicitacao {
     }
     console.log("(app.js) renderSolicitacao -> ", response);
     if (resposta.mensagem == "Ok") {
+      var requisicao =
+        "/pgtocc/" +
+        "4235647728025684" +
+        "/" +
+        "JOSE DA SILVA" +
+        "/" +
+        "11/2027" +
+        "/" +
+        "123" +
+        "/" +
+        "32109";
+      let response = await fetch(requisicao);
+      let resposta = await response.json();
       alert("Exame agendado com sucesso");
       window.history.go(-1);
     } else {
