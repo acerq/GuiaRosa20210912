@@ -198,7 +198,7 @@ export default class CtrlSolicitacao {
       alert("Exame agendado com sucesso");
       window.history.go(-1);
     } else {
-      alert(resposta.mensagem);
+      alert(resposta.erro);
     }
   }
 
