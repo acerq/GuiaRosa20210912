@@ -498,46 +498,44 @@ async function doPgtoCC(req, resp) {
 
   console.log("parâmetros ok doPgtoCC");
 
+  const myHeaders = new Headers({
+      "Content-Type": "application/json",
+      "MerchantId"  : "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
+      "MerchantKey" : "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
+    });
+  
   const myBody = {
     "MerchantOrderId": "2020101701",
-   "Customer":{
-      "Name": nome,
-      "Identity": "12345678909",
+    "Customer":{
+      "Name"         : nome,
+      "Identity"     : "12345678909",
       "IdentityType" : "CPF",
-      "Email": "alessandro.cerqueira@hotmail.com",
-   },
-   "Payment":{
-     "Provider":"Simulado",
-     "Type: "CreditCard",
-     "Amount: valor,
-     "Currency: "BRL",
-      Country: "BRA",
-      Installments: 1,
-      SoftDescriptor: "GuiaRosa",
-     "Capture":true,
-     "Installments":1,
-     "CreditCard":{
-         "CardNumber":"4551870000000181",
-         "Holder":"Nome do Portador",
-         "ExpirationDate":"12/2021",
-         "SecurityCode":"123",
-         "Brand":"Visa"
-     }
-   }
-};
-    
-    
-    
+      "Email"        : "alessandro.cerqueira@hotmail.com",
+    },
+    "Payment":{
+      "Provider"       : "Simulado",
+      "Type"           : "CreditCard",
+      "Amount"         : valor,
+      "Currency"       : "BRL",
+      "Country"        : "BRA",
+      "SoftDescriptor" : "GuiaRosa",
+      "Capture"        : true,
+      "Installments"   : 1,
+      "CreditCard":{
+         "CardNumber"     : "4551870000000181",
+         "Holder"         : "Nome do Portador",
+         "ExpirationDate" : "12/2021",
+         "SecurityCode"   : "123",
+         "Brand"          : "Visa"
+      }
+    }
+  };
     
   console.log("doPgtoCC --> " + JSON.stringify(myBody));
   const responseBraspag = await fetch("https://apisandbox.braspag.com.br/v2/sales/", {
     method: "POST",
     body: myBody, 
-    headers: {
-      "Content-Type": "application/json",
-      "MerchantId"  : "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
-      "MerchantKey" : "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
-    }
+    headers: myHeaders
   });
   console.log("fetch doPgtoCC");
   const myJson = await responseBraspag.json();
