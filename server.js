@@ -508,7 +508,7 @@ async function doPgtoCC(req, resp) {
     };
   
   const myBody = {
-    "MerchantOrderId": "2020101701",
+    "MerchantOrderId": "2020101902",
     "Customer":{
       "Name"         : nome,
       "Identity"     : "12345678909",
