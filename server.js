@@ -498,19 +498,16 @@ async function doPgtoCC(req, resp) {
 
   console.log("parâmetros ok doPgtoCC");
 
-  const fetch = require('node-fetch');
-  const { Headers } = require('node-fetch');
-  
   const myHeaders = {
       "Content-Type": "application/json",
       "MerchantId"  : "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
       "MerchantKey" : "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
     };
   
-  const myBody = {
+  const myBody =    {
     "MerchantOrderId": "2020101902",
     "Customer":{
-      "Name"         : nome,
+      "Name"         : "JOSE DA SILVA",
       "Identity"     : "12345678909",
       "IdentityType" : "CPF",
       "Email"        : "alessandro.cerqueira@hotmail.com",
@@ -518,7 +515,7 @@ async function doPgtoCC(req, resp) {
     "Payment":{
       "Provider"       : "Simulado",
       "Type"           : "CreditCard",
-      "Amount"         : valor,
+      "Amount"         : "30000",
       "Currency"       : "BRL",
       "Country"        : "BRA",
       "SoftDescriptor" : "GuiaRosa",
@@ -526,18 +523,21 @@ async function doPgtoCC(req, resp) {
       "Installments"   : 1,
       "CreditCard":{
          "CardNumber"     : "4551870000000181",
-         "Holder"         : "Nome do Portador",
+         "Holder"         : "JOSE DA SILVA",
          "ExpirationDate" : "12/2021",
          "SecurityCode"   : "123",
          "Brand"          : "Visa"
       }
     }
   };
-    
+        
+        
+        
+      
   const requisicao = {
     method: "POST",
-    body: myBody, 
-    headers: myHeaders
+    headers: myHeaders,
+    body: JSON.stringify(myBody)
   };
   
   console.log("doPgtoCC --> " + JSON.stringify(requisicao));
