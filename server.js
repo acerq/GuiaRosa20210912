@@ -498,6 +498,9 @@ async function doPgtoCC(req, resp) {
 
   console.log("parâmetros ok doPgtoCC");
 
+  const fetch = require('node-fetch');
+  const { Headers } = require('node-fetch');
+  
   const myHeaders = new Headers({
       "Content-Type": "application/json",
       "MerchantId"  : "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
