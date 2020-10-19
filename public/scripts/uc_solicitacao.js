@@ -201,17 +201,17 @@ export default class CtrlSolicitacao {
     }
     else {
       switch(resposta.Status) {
-        case 7 : alert("Pagamento Recusado: Não Autorizado" + JSON.stringify(resposta));
+        case 7 : alert("Pagamento Recusado: Não Autorizado\n\n" + JSON.stringify(resposta));
           return;
-        case 13 : alert("Pagamento Recusado: Cartão Cancelado" + JSON.stringify(resposta));
+        case 13 : alert("Pagamento Recusado: Cartão Cancelado\n\n" + JSON.stringify(resposta));
           return;
-        case 14 : alert("Pagamento Recusado: Cartão de Crédito Bloqueado" + JSON.stringify(resposta));
+        case 14 : alert("Pagamento Recusado: Cartão de Crédito Bloqueado\n\n" + JSON.stringify(resposta));
           return;
-        case 15 : alert("Pagamento Recusado: Cartão Expirado" + JSON.stringify(resposta));
+        case 15 : alert("Pagamento Recusado: Cartão Expirado\n\n" + JSON.stringify(resposta));
           return;
-        case 22 : alert("Pagamento Recusado: Tempo Expirado" + JSON.stringify(resposta));
+        case 22 : alert("Pagamento Recusado: Tempo Expirado\n\n" + JSON.stringify(resposta));
           return;
-        default : alert("Pagamento Recusado" + JSON.stringify(resposta));
+        default : alert("Pagamento Recusado\n\n" + JSON.stringify(resposta));
           return;
       }
     }
