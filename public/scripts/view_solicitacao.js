@@ -50,6 +50,12 @@ export default class ViewSolicitacao {
     this.codExameSelecionado = null;
     this.dtPeriodo = null;
 
+    this.dadosPaciente = null;
+    this.dadosExame = null;
+    this.dataExame = null;
+    this.formaPgto =  null;
+    
+    
     $(document).on("keypress", "input", function(e) {
       if (e.which == 13 && e.target == self.tfExame) {
         self.obterExames();
@@ -268,6 +274,7 @@ export default class ViewSolicitacao {
         })
         .on("select2:select", function(e) {
           var selectionText = e.params.data.id.split(SEPARADOR);
+          self.dadosExame = selectionText;
           self.codExecutanteSelecionado = selectionText[0];
           self.codExameSelecionado = selectionText[1];
         });
@@ -329,10 +336,11 @@ export default class ViewSolicitacao {
       alert("Senha não confere.");
     }
 
-    let dadosPaciente = self.cbPaciente.value.split(SEPARADOR);
-    let paciente = dadosPaciente[0];
-    let cpf = dadosPaciente[1].replace(/\.|-/g, "");
+    this.dadosPaciente = self.cbPaciente.value.split(SEPARADOR);
+    // let paciente = dadosPaciente[0];
+    // let cpf = dadosPaciente[1].replace(/\.|-/g, "");
 
+  alert("Procedendo checkout do pedido de exame");
     self.ctrl.enviarSolicitacao(
       self.codExecutanteSelecionado,
       paciente,
