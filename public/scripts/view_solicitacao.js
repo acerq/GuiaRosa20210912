@@ -44,6 +44,17 @@ export default class ViewSolicitacao {
     this.btEnviar.onclick = this.enviarSolicitacao;
     this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
     this.btConsultar.onclick = this.obterExames;
+    
+    // Elementos da página de pagamento
+    this.tfNomeCartao = null;
+    this.tfNumCartao = null;
+    this.tfMesValidade = null;
+    this.tfAnoValidade = null;
+    this.cbBandeira = null;
+    this.tfCvv = null;
+    this.btOk = null;
+    this.btCancelar = null;
+    //
 
     this.codLocalSelecionado = null;
     this.codExecutanteSelecionado = null;
@@ -337,19 +348,9 @@ export default class ViewSolicitacao {
     }
 
     this.dadosPaciente = self.cbPaciente.value.split(SEPARADOR);
-    // let paciente = dadosPaciente[0];
-    // let cpf = dadosPaciente[1].replace(/\.|-/g, "");
 
-  alert("Procedendo checkout do pedido de exame");
-    self.ctrl.enviarSolicitacao(
-      self.codExecutanteSelecionado,
-      paciente,
-      cpf,
-      self.codExameSelecionado,
-      data,
-      faturar
-    );
     fnTirarEspera();
+    alert("Procedendo checkout do pedido de exame");
     self.colocarFormPgto();
   }
 
@@ -357,6 +358,25 @@ export default class ViewSolicitacao {
 
   colocarFormPgto() {
     $( '#divConteudo' ).load( 'pgto.html' );  
+    this.tfNomeCartao = document.getElementById("tfNomeCartao");
+    this.tfNumCartao = document.getElementById("tfNumCartao");
+    this.tfMesValidade = document.getElementById("tfMesValidade");
+    this.tfAnoValidade = document.getElementById("tfAnoValidade");
+    this.cbBandeira = document.getElementById("cbBandeira");
+    this.tfCvv = document.getElementById("tfCvv");
+    this.btOk = document.getElementById("btOk");
+    this.btCancelar = document.getElementById("btCancelar");    
+
+    // let paciente = dadosPaciente[0];
+    // let cpf = dadosPaciente[1].replace(/\.|-/g, "");
+    //self.ctrl.enviarSolicitacao(
+    //  self.codExecutanteSelecionado,
+    //  paciente,
+    //  cpf,
+    //  self.codExameSelecionado,
+    //  data,
+    //  faturar
+    //);
   }
 
   //-----------------------------------------------------------------------------------------//
