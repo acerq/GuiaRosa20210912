@@ -258,6 +258,8 @@ export default class ViewSolicitacao {
           codExecutante +
           SEPARADOR +
           codExame +
+          SEPARADOR +
+          value.Exame +
           "'>" +
           descricao +
           "</option>";
@@ -281,7 +283,7 @@ export default class ViewSolicitacao {
           self.dadosExame = e.params.data;
           self.codExecutanteSelecionado = selectionText[0];
           self.codExameSelecionado = selectionText[1];
-          self.valorExameSelecionado = selectionText[3];
+          self.valorExameSelecionado = selectionText[2];
         });
 
       var element = document.querySelector(
@@ -398,6 +400,7 @@ export default class ViewSolicitacao {
       alert("O número do cartão não foi informado!");
       return;
     }
+    numCartao = numCartao.replace(/ /g, "");
     if (numCartao.length < 16) {
       fnTirarEspera();
       alert("O número do cartão não foi informado corretamente!");
@@ -452,7 +455,7 @@ export default class ViewSolicitacao {
     
     self.ctrl.enviarPagamentoAgendamento(
       self.codExecutanteSelecionado,
-      self.cpfPaciente,
+      self.cpfPaciente.replace(/\.|-/g, ""),
       self.nomePaciente,
       self.emailPaciente,
       self.codExameSelecionado,
@@ -463,7 +466,7 @@ export default class ViewSolicitacao {
       mesValidade,
       anoValidade,
       cvv,
-      self.valorExameSelecionado,
+      self.valorExameSelecionado.replace(/\.|\,/g, "")
     );
     fnTirarEspera();
   }

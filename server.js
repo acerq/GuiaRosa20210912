@@ -483,12 +483,10 @@ async function doPgtoCC(req, resp) {
   let numeroCartao = req.params.numeroCartao;
   let nomeCartao = req.params.nomeCartao;
   let bandeira = req.params.bandeira;
-  let mesValidade = req.params.validade.replace(/-/g,"/");
+  let mesValidade = req.params.mesValidade;
+  let anoValidade = req.params.anoValidade;
   let cvv = req.params.cvv;
   let valor = req.params.valor;
-  
-    app.get("/pgtocc/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor", doPgtoCC);
-
   
   console.log("executando doPgtoCC" + nome );
   if (
@@ -498,7 +496,8 @@ async function doPgtoCC(req, resp) {
     typeof numeroCartao === "undefined" ||
     typeof nomeCartao === "undefined" ||
     typeof bandeira === "undefined" ||
-    typeof validade === "undefined" ||
+    typeof mesValidade === "undefined" ||
+    typeof anoValidade === "undefined" ||
     typeof cvv === "undefined" ||
     typeof valor === "undefined"
   ) {
@@ -539,7 +538,7 @@ async function doPgtoCC(req, resp) {
       "CreditCard":{
          "CardNumber"     : numeroCartao,
          "Holder"         : nomeCartao,
-         "ExpirationDate" : validade,
+         "ExpirationDate" : mesValidade + "/" + anoValidade,
          "SecurityCode"   : cvv,
          "Brand"          : bandeira
       }

@@ -187,7 +187,7 @@ export default class CtrlSolicitacao {
         "/" +
         cvv +
         "/" +
-        valor;
+        valor.replace(/\.|\,/g, "");
     let response = await fetch(requisicao);
     let resposta = await response.json();
     if (!resposta) {
