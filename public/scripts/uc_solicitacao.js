@@ -151,8 +151,9 @@ export default class CtrlSolicitacao {
 
   async enviarPagamentoAgendamento(
     codExecutante,
-    nomePaciente,
     cpfPaciente,
+    nomePaciente,
+    emailPaciente,
     codExame,
     dataExame,
     numCartao,
@@ -164,23 +165,15 @@ export default class CtrlSolicitacao {
     valor
   ) {
       
-    let email = null;
-    // Procurando o paciente no array de pacientes
-    await this.arrayPacientes.forEach(e => {
-        if(e.nome == nomePaciente) {
-          email = e.email;
-        }
-    });
-
     // Processando o pagamento
     let requisicao =        
         "/pgtocc" +
         "/" +
+        cpfPaciente.replace(/\.|-/g, "") +
+        "/" +
         nomePaciente +
         "/" +
-        cpf
-        "/" +
-        email +
+        emailPaciente +
         "/" +
         numCartao.replace(/ /g,"") + 
         "/" +

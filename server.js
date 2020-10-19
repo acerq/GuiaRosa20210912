@@ -483,9 +483,12 @@ async function doPgtoCC(req, resp) {
   let numeroCartao = req.params.numeroCartao;
   let nomeCartao = req.params.nomeCartao;
   let bandeira = req.params.bandeira;
-  let validade = req.params.validade.replace(/-/g,"/");
+  let mesValidade = req.params.validade.replace(/-/g,"/");
   let cvv = req.params.cvv;
   let valor = req.params.valor;
+  
+    app.get("/pgtocc/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor", doPgtoCC);
+
   
   console.log("executando doPgtoCC" + nome );
   if (
@@ -638,8 +641,8 @@ function startServer() {
   );
 
   // Pagamento por cartão
-  app.get("/pgtocc/:nome/:cpf/:email/:numeroCartao/:nomeCartao/:bandeira/:validade/:cvv/:valor", doPgtoCC);
-  
+  app.get("/pgtocc/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor", doPgtoCC);
+
   // Obter Locais
   app.get("/obterLocais/", doObterLocais);
 

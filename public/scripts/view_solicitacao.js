@@ -344,6 +344,7 @@ export default class ViewSolicitacao {
     let dadosPaciente = self.cbPaciente.value.split(SEPARADOR);
     self.nomePaciente = dadosPaciente[0];
     self.cpfPaciente = dadosPaciente[1];
+    self.emailPaciente = dadosPaciente[2];
 
     fnTirarEspera();
     alert("Procedendo checkout do pedido de exame");
@@ -453,6 +454,7 @@ export default class ViewSolicitacao {
       self.codExecutanteSelecionado,
       self.cpfPaciente,
       self.nomePaciente,
+      self.emailPaciente,
       self.codExameSelecionado,
       self.dtExame.value,
       numCartao,
