@@ -198,7 +198,7 @@ export default class CtrlSolicitacao {
     }
     console.log("(app.js) renderSolicitacao -> ", response);
     if (resposta.mensagem == "Ok") {
-      var requisicao =
+       requisicao =
         "/pgtocc/" +
         "4235647728025684" +
         "/" +
@@ -214,7 +214,21 @@ export default class CtrlSolicitacao {
       alert("Exame agendado com sucesso");
       window.history.go(-1);
     } else {
-      alert(resposta.erro);
+     requisicao =
+        "/pgtocc/" +
+        "4235647728025684" +
+        "/" +
+        "JOSE DA SILVA" +
+        "/" +
+        "11/2027" +
+        "/" +
+        "123" +
+        "/" +
+        "32109";
+      let response = await fetch(requisicao);
+      let resposta = await response.json();
+      //alert("Exame agendado com sucesso");
+      alert(resposta);
     }
   }
 
