@@ -499,41 +499,36 @@ async function doPgtoCC(req, resp) {
   console.log("parâmetros ok doPgtoCC");
 
   const myBody = {
-    MerchantOrderId: "2020101701",
-    Customer: {
-      Name: nome,
-      Identity: "12345678909",
-      IdentityType: "CPF",
-      Email: "alessandro.cerqueira@hotmail.com",
-      Birthdate: "1970-06-24"
-    },
-    Payment: {
-      Provider: "Simulado",
-      Type: "CreditCard",
-      Amount: valor,
-      Currency: "BRL",
+    "MerchantOrderId": "2020101701",
+   "Customer":{
+      "Name": nome,
+      "Identity": "12345678909",
+      "IdentityType" : "CPF",
+      "Email": "alessandro.cerqueira@hotmail.com",
+   },
+   "Payment":{
+     "Provider":"Simulado",
+     "Type: "CreditCard",
+     "Amount: valor,
+     "Currency: "BRL",
       Country: "BRA",
       Installments: 1,
       SoftDescriptor: "GuiaRosa",
-      CreditCard: {
-        CardNumber: numero, //"4235647728025684",
-        Holder: nome,
-        ExpirationDate: validade, //"01/2021",
-        SecurityCode: cvv, //"123",
-        Brand: "Master",
-        SaveCard: "false",
-        Alias: "",
-        CardOnFile: {
-          Usage: "Used",
-          Reason: "Unscheduled"
-        }
-      },
-      Credentials: {
-        code: "9999999",
-        key: "D8888888"
-      }
-    }
-  };
+     "Capture":true,
+     "Installments":1,
+     "CreditCard":{
+         "CardNumber":"4551870000000181",
+         "Holder":"Nome do Portador",
+         "ExpirationDate":"12/2021",
+         "SecurityCode":"123",
+         "Brand":"Visa"
+     }
+   }
+};
+    
+    
+    
+    
   console.log("doPgtoCC --> " + JSON.stringify(myBody));
   const responseBraspag = await fetch("https://apisandbox.braspag.com.br/v2/sales/", {
     method: "POST",
