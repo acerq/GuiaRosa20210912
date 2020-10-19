@@ -515,14 +515,14 @@ async function doPgtoCC(req, resp) {
     "Payment":{
       "Provider"       : "Simulado",
       "Type"           : "CreditCard",
-      "Amount"         : "30000",
+      "Amount"         : valor,
       "Currency"       : "BRL",
       "Country"        : "BRA",
       "SoftDescriptor" : "GuiaRosa",
       "Capture"        : true,
       "Installments"   : 1,
       "CreditCard":{
-         "CardNumber"     : "4551870000000181",
+         "CardNumber"     : numero,
          "Holder"         : "JOSE DA SILVA",
          "ExpirationDate" : "12/2021",
          "SecurityCode"   : "123",
@@ -629,8 +629,12 @@ function startServer() {
   );
 
   // Pagamento por cartão
-  app.get("/pgtocc/:numero/:nome/:validade/:cvv/:valor", doPgtoCC);
+  app.get("/pgtocc/:nome/:/:numeroCartao/:nomeNoCartao/:validade/:cvv/:valor", doPgtoCC);
 
+  
+  
+  
+  
   // Obter Locais
   app.get("/obterLocais/", doObterLocais);
 
