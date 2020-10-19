@@ -22,23 +22,18 @@ export default class ViewSolicitacao {
     this.usrApp = null;
     self = this;
 
-    this.hdExecutante = document.getElementById("hdExecutante");
-    this.hdSolicitante = document.getElementById("hdSolicitante");
+    this.tfExame = document.getElementById("tfExame");
     this.cbPaciente = document.getElementById("cbPaciente");
     this.cbExame = document.getElementById("cbExame");
     this.dtExame = document.getElementById("dtExame");
     this.cbFaturar = document.getElementById("cbFaturar");
+    this.pwSenha = document.getElementById("pwSenha");
     this.btPacientes = document.getElementById("btPacientes");
     this.btConsultar = document.getElementById("btConsultar");
     this.btEnviar = document.getElementById("btEnviar");
     this.btSair = document.getElementById("btSair");
 
-    this.tfExame = document.getElementById("tfExame");
-    this.cbPaciente = document.getElementById("cbPaciente");
-    this.dtExame = document.getElementById("dtExame");
-    this.cbFaturar = document.getElementById("cbFaturar");
     this.divResposta = document.getElementById("divResposta");
-    this.pwSenha = document.getElementById("pwSenha");
 
     this.btSair.onclick = this.sair;
     this.btEnviar.onclick = this.irParaCheckout;
@@ -62,7 +57,7 @@ export default class ViewSolicitacao {
     this.valorExameSelecionado = null;
     this.dtPeriodo = null;
 
-    this.dadosPaciente = null;
+    this.nomePaciente = null;
     this.dadosExame = null;
     this.dataExame = null;
     this.formaPgto = null;
@@ -345,7 +340,7 @@ export default class ViewSolicitacao {
       alert("Senha não confere.");
     }
 
-    self.dadosPaciente = self.cbPaciente.value;
+    self.nomePaciente = self.cbPaciente.text;
 
     fnTirarEspera();
     alert("Procedendo checkout do pedido de exame");
@@ -369,7 +364,6 @@ export default class ViewSolicitacao {
       $("#tfMesValidade").mask("99");
       $("#tfAnoValidade").mask("9999");
       
-      alert($("divExame"));
       let selecao = self.dadosExame.text.split(SEPARADOR);
       let msg =
         "<center><b>Exame Solicitado:</b><br/>" +
@@ -400,7 +394,7 @@ export default class ViewSolicitacao {
       alert("O número do cartão não foi informado!");
       return;
     }
-    if (numCartao.length() < 16) {
+    if (numCartao.length < 16) {
       fnTirarEspera();
       alert("O número do cartão não foi informado corretamente!");
       return;
@@ -446,18 +440,15 @@ export default class ViewSolicitacao {
     }
 
     let cvv = self.tfCvv.value;
-    if (cvv == null || cvv == "" || cvv.length() != cvv) {
+    if (cvv == null || cvv == "" || cvv.length != 3) {
       fnTirarEspera();
       alert("CVV inválido!");
       return;
     }
     
-    let nomePaciente = self.dadosPaciente[0];
-    let cpf = self.dadosPaciente[1].replace(/\.|-/g, "");
     self.ctrl.enviarPagamentoAgendamento(
       self.codExecutanteSelecionado,
-      nomePaciente,
-      cpf,
+      self.nomePaciente,
       self.codExameSelecionado,
       self.dtExame.value,
       numCartao,
