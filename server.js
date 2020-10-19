@@ -485,12 +485,52 @@ function doPgtoCC(req, resp) {
     return;
   }
 
+  const myBody = {  
+   "MerchantOrderId":"20201001",
+   "Customer":{  
+      "Name":"José da Silva",
+      "Identity":"12345678909",
+      "IdentityType":"CPF",
+      "Email":"alessandro.cerqueira@hotmail.com",
+      "Birthdate":"1970-06-24"
+   },
+   "Payment":{  
+      "Provider":"Simulado",
+      "Type":"CreditCard",
+      "Amount":32109,
+      "Currency":"BRL",
+      "Country":"BRA",
+      "Installments":1,
+      "SoftDescriptor":"GuiaRosa",
+      "CreditCard":{  
+         "CardNumber":"4235647728025684",
+         "Holder":"Nome do Portador",
+         "ExpirationDate":"01/2021",
+         "SecurityCode":"123",
+         "Brand":"Master",
+         "SaveCard":"false",
+         "Alias":"",
+         "CardOnFile":{
+            "Usage": "Used",
+            "Reason":"Unscheduled"
+         }
+      },
+      "Credentials":{  
+         "code":"9999999",
+         "key":"D8888888"
+      }
+   }
+}
+  
+  
   const userAction = async () => {
-  const response = await fetch('http://example.com/movies.json', {
+  const response = await fetch('https://apisandbox.braspag.com.br/v2/sales/', {
     method: 'POST',
     body: myBody, // string or object
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'MerchantId' : '6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c',
+      'MerchantKey':'MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB'
     }
   });
   const myJson = await response.json(); //extract JSON from the http response
