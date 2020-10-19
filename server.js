@@ -126,66 +126,67 @@ function doLoginMedico(req, resp) {
   // Recupera o objeto soap da biblioteca node.js
   let soap = require("soap");
   // Cria um cliente para o WebService
-  soap.createClient(BASE_URL, { wsdl_options: { timeout: TEMPO_MAXIMO_REQUISICAO } }, function(
-    err,
-    client
-  ) {
-    console.log("createClient: " + client + " - " + err);
+  soap.createClient(
+    BASE_URL,
+    { wsdl_options: { timeout: TEMPO_MAXIMO_REQUISICAO } },
+    function(err, client) {
+      console.log("createClient: " + client + " - " + err);
 
-    if (client == null || typeof client === "undefined") {
-      console.log("doLogin Err -> " + JSON.stringify(err));
-      if (err.hasOwnProperty("code") && err.code == "ETIMEDOUT") {
-        resp.json(
-          JSON.parse(
-            '{"erro" : "[Erro:#0003] Falha na Conexão com o Servidor: TIMEOUT"}'
-          )
-        );
-      } else {
-        resp.json(
-          JSON.parse(
-            '{"erro" : "[Erro:#0003] Falha na Conexão com o Servidor"}'
-          )
-        );
+      if (client == null || typeof client === "undefined") {
+        console.log("doLogin Err -> " + JSON.stringify(err));
+        if (err.hasOwnProperty("code") && err.code == "ETIMEDOUT") {
+          resp.json(
+            JSON.parse(
+              '{"erro" : "[Erro:#0003] Falha na Conexão com o Servidor: TIMEOUT"}'
+            )
+          );
+        } else {
+          resp.json(
+            JSON.parse(
+              '{"erro" : "[Erro:#0003] Falha na Conexão com o Servidor"}'
+            )
+          );
+        }
+        resp.end();
+
+        return;
       }
-      resp.end();
 
-      return;
+      // Faz a solicitação ao WebService 'Wslogin'
+      client.Wslogin({ TXTjson: strJson }, function(err, wsResposta) {
+        console.log("doLogin webservice");
+        if (err) {
+          console.log("doLogin Err -> ", err.response.body);
+          resp.json(
+            JSON.parse(
+              '{"erro" : "[Erro:#0004] Falha na Conexão com o Servidor"}'
+            )
+          );
+          return;
+        }
+        let resposta = JSON.parse(wsResposta.WsloginReturn.$value);
+        if (resposta.status == "error") {
+          doLoginPaciente(req, resp);
+          return;
+        }
+        console.log("doLogin Resposta ->", wsResposta);
+        guiaRosaApp.tempoCorrente = new Date();
+        guiaRosaApp.login = login;
+        guiaRosaApp.senha = senha;
+        guiaRosaApp.nome = resposta.nome;
+        guiaRosaApp.email = "";
+        guiaRosaApp.celular = "";
+        guiaRosaApp.rua = "";
+        guiaRosaApp.numero = "";
+        guiaRosaApp.complemento = "";
+        guiaRosaApp.bairro = "";
+        guiaRosaApp.cep = "";
+        guiaRosaApp.ehMedico = true;
+        console.log("doLogin Resposta ->", resposta);
+        resp.json(resposta);
+      });
     }
-
-    // Faz a solicitação ao WebService 'Wslogin'
-    client.Wslogin({ TXTjson: strJson }, function(err, wsResposta) {
-      console.log("doLogin webservice");
-      if (err) {
-        console.log("doLogin Err -> ", err.response.body);
-        resp.json(
-          JSON.parse(
-            '{"erro" : "[Erro:#0004] Falha na Conexão com o Servidor"}'
-          )
-        );
-        return;
-      }
-      let resposta = JSON.parse(wsResposta.WsloginReturn.$value);
-      if (resposta.status == "error") {
-        doLoginPaciente(req, resp);
-        return;
-      }
-      console.log("doLogin Resposta ->", wsResposta);
-      guiaRosaApp.tempoCorrente = new Date();
-      guiaRosaApp.login = login;
-      guiaRosaApp.senha = senha;
-      guiaRosaApp.nome = resposta.nome;
-      guiaRosaApp.email = "";
-      guiaRosaApp.celular = "";
-      guiaRosaApp.rua = "";
-      guiaRosaApp.numero = "";
-      guiaRosaApp.complemento = "";
-      guiaRosaApp.bairro = "";
-      guiaRosaApp.cep = "";
-      guiaRosaApp.ehMedico = true;
-      console.log("doLogin Resposta ->", resposta);
-      resp.json(resposta);
-    });
-  });
+  );
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -295,7 +296,16 @@ function doIncluirPaciente(req, resp) {
   let senhaMD5 = req.params.senhaMD5;
   let email = req.params.email;
   let celular = req.params.celular;
-  let endereco = req.params.rua + " " + req.params.numero + " " + req.params.complemento + "-" + req.params.bairro + "," + req.params.cep;
+  let endereco =
+    req.params.rua +
+    " " +
+    req.params.numero +
+    " " +
+    req.params.complemento +
+    "-" +
+    req.params.bairro +
+    "," +
+    req.params.cep;
 
   let strJson =
     '{"nome": "' +
@@ -464,7 +474,7 @@ function doSolicitacao(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
-function doPgtoCC(req, resp) {
+async function doPgtoCC(req, resp) {
   guiaRosaApp.tempoCorrente = new Date();
 
   let numero = req.params.numero;
@@ -479,89 +489,64 @@ function doPgtoCC(req, resp) {
     typeof nome === "undefined" ||
     typeof validade === "undefined" ||
     typeof cvv === "undefined" ||
-    typeof valor === "undefined") {
+    typeof valor === "undefined"
+  ) {
     console.log("undefined 0010");
     resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
     return;
   }
 
-  const myBody = {  
-   "MerchantOrderId":"20201001",
-   "Customer":{  
-      "Name":"José da Silva",
-      "Identity":"12345678909",
-      "IdentityType":"CPF",
-      "Email":"alessandro.cerqueira@hotmail.com",
-      "Birthdate":"1970-06-24"
-   },
-   "Payment":{  
-      "Provider":"Simulado",
-      "Type":"CreditCard",
-      "Amount":32109,
-      "Currency":"BRL",
-      "Country":"BRA",
-      "Installments":1,
-      "SoftDescriptor":"GuiaRosa",
-      "CreditCard":{  
-         "CardNumber":"4235647728025684",
-         "Holder":"Nome do Portador",
-         "ExpirationDate":"01/2021",
-         "SecurityCode":"123",
-         "Brand":"Master",
-         "SaveCard":"false",
-         "Alias":"",
-         "CardOnFile":{
-            "Usage": "Used",
-            "Reason":"Unscheduled"
-         }
+  const myBody = {
+    MerchantOrderId: "2020101701",
+    Customer: {
+      Name: nome,
+      Identity: "12345678909",
+      IdentityType: "CPF",
+      Email: "alessandro.cerqueira@hotmail.com",
+      Birthdate: "1970-06-24"
+    },
+    Payment: {
+      Provider: "Simulado",
+      Type: "CreditCard",
+      Amount: valor,
+      Currency: "BRL",
+      Country: "BRA",
+      Installments: 1,
+      SoftDescriptor: "GuiaRosa",
+      CreditCard: {
+        CardNumber: numero, //"4235647728025684",
+        Holder: nome,
+        ExpirationDate: validade, //"01/2021",
+        SecurityCode: cvv, //"123",
+        Brand: "Master",
+        SaveCard: "false",
+        Alias: "",
+        CardOnFile: {
+          Usage: "Used",
+          Reason: "Unscheduled"
+        }
       },
-      "Credentials":{  
-         "code":"9999999",
-         "key":"D8888888"
+      Credentials: {
+        code: "9999999",
+        key: "D8888888"
       }
-   }
-}
-  
-  
-  const userAction = async () => {
-  const response = await fetch('https://apisandbox.braspag.com.br/v2/sales/', {
-    method: 'POST',
+    }
+  };
+  const responseBraspag = await fetch("https://apisandbox.braspag.com.br/v2/sales/", {
+    method: "POST",
     body: myBody, // string or object
     headers: {
-      'Content-Type': 'application/json',
-      'MerchantId' : '6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c',
-      'MerchantKey':'MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB'
+      "Content-Type": "application/json",
+      MerchantId: "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
+      MerchantKey: "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
     }
   });
-  const myJson = await response.json(); //extract JSON from the http response
-  // do something with myJson
-}
-
-  soap.createClient(BASE_URL, function(err, client) {
-    console.log("createClient");
-    client.Importacaoguiarosaimportarincluirregistromobws(
-      { Dados: dados },
-      function(err, result) {
-        console.log("doSolicitacao webservice");
-        if (err) {
-          console.log("dodoSolicitacao Err -> ", err.response.body);
-          resp.json(
-            JSON.parse('{"erro" : "[Erro:#0009] Solicitação Inválida"}')
-          );
-          return;
-        }
-        console.log(result);
-        let resposta =
-          result.ImportacaoguiarosaimportarincluirregistromobwsReturn.multiRef
-            .$value;
-        console.log("doSolicitacao Resposta 1->" + resposta);
-        resp.json(JSON.parse('{"mensagem":"Ok"}'));
-      }
-    );
-  });
+  const myJson = await responseBraspag.json();
+  resp.json(myJson);
 }
 
 //-----------------------------------------------------------------------------------------//
+
 function doVerificarSenhaUsuarioCorrente(req, resp) {
   guiaRosaApp.tempoCorrente = new Date();
   let senha = req.params.senha;
@@ -638,12 +623,8 @@ function startServer() {
     doSolicitacao
   );
 
-
   // Pagamento por cartão
-  app.get(
-    "/pgtocc/:numero/:nome/:validade/:cvv/:valor",
-    doPgtoCC
-  );
+  app.get("/pgtocc/:numero/:nome/:validade/:cvv/:valor", doPgtoCC);
 
   // Obter Locais
   app.get("/obterLocais/", doObterLocais);
