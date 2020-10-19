@@ -333,7 +333,7 @@ export default class ViewSolicitacao {
     let paciente = dadosPaciente[0];
     let cpf = dadosPaciente[1].replace(/\.|-/g, "");
 
-    self.ctrl.enviardoSolicitacao(
+    self.ctrl.enviarSolicitacao(
       self.codExecutanteSelecionado,
       paciente,
       cpf,
