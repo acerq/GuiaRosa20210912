@@ -34,7 +34,6 @@ export default class ViewSolicitacao {
 
     this.tfExame = document.getElementById("tfExame");
     this.cbPaciente = document.getElementById("cbPaciente");
-    this.hdExame = document.getElementById("hdExame");
     this.dtExame = document.getElementById("dtExame");
     this.cbFaturar = document.getElementById("cbFaturar");
     this.divResposta = document.getElementById("divResposta");
@@ -347,7 +346,8 @@ export default class ViewSolicitacao {
       alert("Senha não confere.");
     }
 
-    this.dadosPaciente = self.cbPaciente.value.split(SEPARADOR);
+    self.dadosPaciente = self.cbPaciente.value;
+    self.dadosExame    = $('cbExame').select2('data');
 
     fnTirarEspera();
     alert("Procedendo checkout do pedido de exame");
