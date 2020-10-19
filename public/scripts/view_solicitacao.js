@@ -12,6 +12,7 @@ function tiraEspacos(item) {
   while (item[pos] == " " && pos > 0) pos--;
   return item.substr(0, pos + 1);
 }
+
 var self;
 
 export default class ViewSolicitacao {
@@ -43,7 +44,7 @@ export default class ViewSolicitacao {
     this.btEnviar.onclick = this.irParaCheckout;
     this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
     this.btConsultar.onclick = this.obterExames;
-    
+
     // Elementos da página de pagamento
     this.tfNomeCartao = null;
     this.tfNumCartao = null;
@@ -63,9 +64,8 @@ export default class ViewSolicitacao {
     this.dadosPaciente = null;
     this.dadosExame = null;
     this.dataExame = null;
-    this.formaPgto =  null;
-    
-    
+    this.formaPgto = null;
+
     $(document).on("keypress", "input", function(e) {
       if (e.which == 13 && e.target == self.tfExame) {
         self.obterExames();
@@ -164,10 +164,7 @@ export default class ViewSolicitacao {
     }
     self.tfExame.value = self.tfExame.value.toUpperCase();
     var strExame = self.tfExame.value;
-    await self.ctrl.obterExames(
-      self.codLocalSelecionado,
-      strExame
-    );
+    await self.ctrl.obterExames(self.codLocalSelecionado, strExame);
     fnTirarEspera();
   }
 
@@ -341,7 +338,7 @@ export default class ViewSolicitacao {
     }
 
     fnColocarEspera();
-    if (!await self.ctrl.verificarSenha(senha)) {
+    if (!(await self.ctrl.verificarSenha(senha))) {
       fnTirarEspera();
       alert("Senha não confere.");
     }
@@ -356,18 +353,20 @@ export default class ViewSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async colocarFormPgto() {
-    await $( '#divConteudo' ).load( 'pgto.html' );  
-    self.tfNomeCartao = document.getElementById("tfNomeCartao");
-    self.tfNumCartao = document.getElementById("tfNumCartao");
-    self.tfMesValidade = document.getElementById("tfMesValidade");
-    self.tfAnoValidade = document.getElementById("tfAnoValidade");
-    self.cbBandeira = document.getElementById("cbBandeira");
-    self.tfCvv = document.getElementById("tfCvv");
-    self.btOk = document.getElementById("btOk");
-    self.btCancelar = document.getElementById("btCancelar");    
+    $("#divConteudo").load("pgto.html", function() {
+      self.tfNomeCartao = document.getElementById("tfNomeCartao");
+      self.tfNumCartao = document.getElementById("tfNumCartao");
+      self.tfMesValidade = document.getElementById("tfMesValidade");
+      self.tfAnoValidade = document.getElementById("tfAnoValidade");
+      self.cbBandeira = document.getElementById("cbBandeira");
+      self.tfCvv = document.getElementById("tfCvv");
+      self.btOk = document.getElementById("btOk");
+      self.btCancelar = document.getElementById("btCancelar");
 
-    let selecao = self.dadosExame.text.split(SEPARADOR);
-    let msg = "<b>Exame Solicitado:</b><br/>" +
+      alert($("divExame"));
+      let selecao = self.dadosExame.text.split(SEPARADOR);
+      let msg =
+        "<b>Exame Solicitado:</b><br/>" +
         "<span style='font-size: 10px;'><b>" +
         tiraEspacos(selecao[0]) +
         "</b><br/>" +
@@ -377,10 +376,11 @@ export default class ViewSolicitacao {
         "<br/>R$ " +
         tiraEspacos(selecao[3]) +
         "</span>";
-    $( '#divExame' ).load( msg );  
-    
-    self.btOk.onclick = self.enviarSolicitacao;
-    self.btCancelar.onclick = self.sair;
+      $("#divExame").html(msg);
+
+      self.btOk.onclick = self.enviarSolicitacao;
+      self.btCancelar.onclick = self.sair;
+    });
     // let paciente = dadosPaciente[0];
     // let cpf = dadosPaciente[1].replace(/\.|-/g, "");
     //self.ctrl.enviarSolicitacao(
@@ -394,7 +394,7 @@ export default class ViewSolicitacao {
   }
 
   //-----------------------------------------------------------------------------------------//
-  
+
   sair() {
     history.go(-1);
   }
