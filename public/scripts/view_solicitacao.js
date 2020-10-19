@@ -285,7 +285,7 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  enviarSolicitacao() {
+  async enviarSolicitacao() {
     fnColocarEspera();
     if (self.codExecutanteSelecionado == null) {
       fnTirarEspera();
@@ -298,7 +298,7 @@ export default class ViewSolicitacao {
       return;
     }
     let solicitante = "XXXX";
-    let pacienteValue = this.cbPaciente.value;
+    let pacienteValue = self.cbPaciente.value;
     if (pacienteValue == null || pacienteValue == "") {
       fnTirarEspera();
       alert("O paciente não foi escolhido.");
@@ -324,7 +324,7 @@ export default class ViewSolicitacao {
     }
 
     fnColocarEspera();
-    if (!self.ctrl.verificarSenha(senha)) {
+    if (!await self.ctrl.verificarSenha(senha)) {
       fnTirarEspera();
       alert("Senha não confere.");
     }
