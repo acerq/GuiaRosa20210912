@@ -141,14 +141,14 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  obterExames() {
-    fnColocarEspera
+  async obterExames() {
+    fnColocarEspera();
     if (self.codLocalSelecionado == null) {
       alert("Não foi indicado o local para realização do exame.");
     }
     self.tfExame.value = self.tfExame.value.toUpperCase();
     var strExame = self.tfExame.value;
-    self.ctrl.obterExames(
+    await self.ctrl.obterExames(
       self.codLocalSelecionado,
       strExame
     );
