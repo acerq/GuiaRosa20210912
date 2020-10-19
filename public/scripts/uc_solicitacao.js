@@ -12,17 +12,10 @@ export default class CtrlSolicitacao {
     this.usrApp = null;
 
     this.arrayPacientes = [];
+    this.dtPeriodo = null;
     this.arrayLocais = [];
     this.arrayExames = [];
 
-    this.codLocal = null;
-    this.codExecutante = null;
-    this.codExame = null;
-    this.dtPeriodo = null;
-
-    this.executante = null;
-    this.solicitante = null;
-    this.paciente = null;
     this.cpf = null;
     this.exame = null;
     this.data = null;
@@ -35,34 +28,11 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async init() {
-    let requisicao =        
-        "/pgtocc" +
-        "/" +
-        "José da Silva" +
-        "/" +
-        "11111111111" + 
-        "/" +
-        "jose@fake.com" +
-        "/" +
-        "4235647728025684" +
-        "/" +
-        "JOSE DA SILVA" +
-        "/" +
-        "VISA" +
-        "/" +
-        "11-2027" +
-        "/" +
-        "123" +
-        "/" +
-        "32000";
-    let response = await fetch(requisicao);
-    let resposta = await response.json();
-    
-    
     this.view.colocarEspera();
 
     await this.daoPaciente.abrirDB();
     await this.obterPacientes();
+    await this.obterPeriodo();
     await this.obterLocais();
 
     this.view.atualizarInterface(
@@ -222,37 +192,57 @@ export default class CtrlSolicitacao {
     }
     console.log("(app.js) renderSolicitacao -> ", response);
     if (resposta.mensagem == "Ok") {
-       requisicao =
-        "/pgtocc/" +
+    //app.get("/pgtocc/:nome/:cpf/:email/:numeroCartao/:nomeCartao/:bandeira/:validade/:cvv/:valor", doPgtoCC);
+
+    let requisicao =        
+        "/pgtocc" +
+        "/" +
+        "José da Silva" +
+        "/" +
+        "11111111111" + 
+        "/" +
+        "jose@fake.com" +
+        "/" +
         "4235647728025684" +
         "/" +
         "JOSE DA SILVA" +
         "/" +
-        "11/2027" +
+        "VISA" +
+        "/" +
+        "11-2027" +
         "/" +
         "123" +
         "/" +
-        "32109";
-      let response = await fetch(requisicao);
-      let resposta = await response.json();
-      alert("Exame agendado com sucesso");
-      window.history.go(-1);
+        "32000";
+    let response = await fetch(requisicao);
+    let resposta = await response.json();
+    alert("Exame agendado com sucesso\n" + JSON.stringify(resposta));
+    window.history.go(-1);
     } else {
-     requisicao =
-        "/pgtocc/" +
+    let requisicao =        
+      //alert("Erro no agendamento");
+        "/pgtocc" +
+        "/" +
+        "José da Silva" +
+        "/" +
+        "11111111111" + 
+        "/" +
+        "jose@fake.com" +
+        "/" +
         "4235647728025684" +
         "/" +
         "JOSE DA SILVA" +
         "/" +
-        "11/2027" +
+        "VISA" +
+        "/" +
+        "11-2027" +
         "/" +
         "123" +
         "/" +
-        "32109";
-      let response = await fetch(requisicao);
-      let resposta = await response.json();
-      //alert("Exame agendado com sucesso");
-      alert(resposta);
+        "32000";
+    let response = await fetch(requisicao);
+    let resposta = await response.json();
+    alert("Exame agendado com sucesso\n" + JSON.stringify(resposta));
     }
   }
 

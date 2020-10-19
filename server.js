@@ -483,12 +483,11 @@ async function doPgtoCC(req, resp) {
   let numeroCartao = req.params.numeroCartao;
   let nomeCartao = req.params.nomeCartao;
   let bandeira = req.params.bandeira;
-  let validade = req.params.validade;
-  //validade = validade.replace(/-/g,"/");
+  let validade = req.params.validade.replace(/-/g,"/");
   let cvv = req.params.cvv;
   let valor = req.params.valor;
   
-  console.log("executando doPgtoCC");
+  console.log("executando doPgtoCC" + nome );
   if (
     typeof nome === "undefined" ||
     typeof cpf === "undefined" ||
@@ -507,8 +506,9 @@ async function doPgtoCC(req, resp) {
 
   console.log("parâmetros ok doPgtoCC");
 
-  var agora = new Date();
-  var timeMillis = agora.getTime().toString();
+  let agora = new Date();
+  let timeMillis = agora.getTime().toString();
+  let id = guiaRosaApp.login + "-" + timeMillis;
   
   const myHeaders = {
       "Content-Type": "application/json",
@@ -517,7 +517,7 @@ async function doPgtoCC(req, resp) {
     };
   
   const myBody =    {
-    "MerchantOrderId": timeMillis,
+    "MerchantOrderId": id,
     "Customer":{
       "Name"         : nome,
       "Identity"     : cpf,
@@ -638,7 +638,7 @@ function startServer() {
   );
 
   // Pagamento por cartão
-  app.get("/pgtocc/:nome/:cpf/:email/:numeroCartao/:nomeNoCartao/:bandeira/:validade/:cvv/:valor", doPgtoCC);
+  app.get("/pgtocc/:nome/:cpf/:email/:numeroCartao/:nomeCartao/:bandeira/:validade/:cvv/:valor", doPgtoCC);
   
   // Obter Locais
   app.get("/obterLocais/", doObterLocais);
