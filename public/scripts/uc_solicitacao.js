@@ -193,8 +193,16 @@ export default class CtrlSolicitacao {
       alert("Erro - pagamento não processado");
       return;
     }
-    alert("Pagamento Processado " + JSON.stringify(resposta));
-
+    if(resposta.Status == 1) {
+      let MerchantOrderId = resposta.MerchantOrderId;
+      let ProofOfSale = resposta.ProofOfSale;
+      let PaymentId = resposta.PaymentId;
+      alert("Pagamento Processado " + JSON.stringify(resposta));
+    }
+    else {
+      alert("Pagamento Recusado " + JSON.stringify(resposta));
+      return;
+    }
     // Agendamento
     requisicao =
       "/solicitacao/" +
