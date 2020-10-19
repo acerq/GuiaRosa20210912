@@ -464,6 +464,86 @@ function doSolicitacao(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
+function doPgtoCC(req, resp) {
+  guiaRosaApp.tempoCorrente = new Date();
+
+  
+   "/pgtocc/:numero/:nome/:validade/:cvv/:valor",
+    doPgtoCC
+  
+  let soap = require("soap");
+
+  let numero = req.params.numero;
+  let nome = req.params.nome;
+  let validade = req.params.validade;
+  let cvv = req.params.cvv;
+  let valor = req.params.valor;
+
+  console.log("executando doSolicitacao");
+  if (
+    typeof numero === "undefined" ||
+    typeof nome === "undefined" ||
+    typeof validade === "undefined" ||
+    typeof cvv === "undefined" ||
+    typeof valor === "undefined") {
+    console.log("undefined 0010");
+    resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
+    return;
+  }
+
+  let dados =
+    '[{"CD_EXECUTANTE":' +
+    executante +
+    "," +
+    '"CD_SOLICITANTE":' +
+    solicitante +
+    "," +
+    '"NM_PACIENTE":"' +
+    paciente +
+    '",' +
+    '"CPF":"' +
+    cpf +
+    '",' +
+    '"CD_EXAME":"' +
+    exame +
+    '",' +
+    '"DT_EXAME":"' +
+    acertaData(dataExame) +
+    '",' +
+    '"DT_PERIODO":"' +
+    acertaData(periodo) +
+    '",' +
+    '"FAT_SN":"' +
+    faturar +
+    '"}]';
+
+  console.log(dados);
+
+  soap.createClient(BASE_URL, function(err, client) {
+    console.log("createClient");
+    client.Importacaoguiarosaimportarincluirregistromobws(
+      { Dados: dados },
+      function(err, result) {
+        console.log("doSolicitacao webservice");
+        if (err) {
+          console.log("dodoSolicitacao Err -> ", err.response.body);
+          resp.json(
+            JSON.parse('{"erro" : "[Erro:#0009] Solicitação Inválida"}')
+          );
+          return;
+        }
+        console.log(result);
+        let resposta =
+          result.ImportacaoguiarosaimportarincluirregistromobwsReturn.multiRef
+            .$value;
+        console.log("doSolicitacao Resposta 1->" + resposta);
+        resp.json(JSON.parse('{"mensagem":"Ok"}'));
+      }
+    );
+  });
+}
+
+//-----------------------------------------------------------------------------------------//
 function doVerificarSenhaUsuarioCorrente(req, resp) {
   guiaRosaApp.tempoCorrente = new Date();
   let senha = req.params.senha;
@@ -543,8 +623,8 @@ function startServer() {
 
   // Pagamento por cartão
   app.get(
-    "/pgtocc/:num/:solicitante/:paciente/:cpf/:exame/:data/:periodo/:faturar",
-    doSolicitacao
+    "/pgtocc/:numero/:nome/:validade/:cvv/:valor",
+    doPgtoCC
   );
 
   // Obter Locais
