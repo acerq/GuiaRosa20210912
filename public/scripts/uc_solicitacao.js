@@ -35,17 +35,24 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async init() {
-    let requisicao =
-        "/pgtocc/" +
+    let requisicao =        
+        "/pgtocc" +
+        "/" +
+        "José da Silva" +
+        "/" +
+        "11111111111" + 
+        "/" +
         "4235647728025684" +
         "/" +
         "JOSE DA SILVA" +
+        "/" +
+        "VISA" +
         "/" +
         "11-2027" +
         "/" +
         "123" +
         "/" +
-        "32109";
+        "32000";
     let response = await fetch(requisicao);
     let resposta = await response.json();
     

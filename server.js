@@ -477,12 +477,18 @@ function doSolicitacao(req, resp) {
 async function doPgtoCC(req, resp) {
   guiaRosaApp.tempoCorrente = new Date();
 
-  let numero = req.params.numero;
   let nome = req.params.nome;
+  let cpf = req.params.cpf;
+  let email = req.params.email;
+  let numeroCartao = req.params.numeroCartao;
+  let nomeCartao = req.params.nomeCartao;
+  let bandeira = req.params.bandeira;
   let validade = req.params.validade;
+  validade = validade.replace(/-/g,"/");
+
   let cvv = req.params.cvv;
   let valor = req.params.valor;
-
+  
   console.log("executando doPgtoCC");
   if (
     typeof numero === "undefined" ||
@@ -507,10 +513,10 @@ async function doPgtoCC(req, resp) {
   const myBody =    {
     "MerchantOrderId": "2020101902",
     "Customer":{
-      "Name"         : "JOSE DA SILVA",
-      "Identity"     : "12345678909",
+      "Name"         : nome,
+      "Identity"     : cpf,
       "IdentityType" : "CPF",
-      "Email"        : "alessandro.cerqueira@hotmail.com",
+      "Email"        : email,
     },
     "Payment":{
       "Provider"       : "Simulado",
@@ -522,17 +528,14 @@ async function doPgtoCC(req, resp) {
       "Capture"        : true,
       "Installments"   : 1,
       "CreditCard":{
-         "CardNumber"     : numero,
-         "Holder"         : "JOSE DA SILVA",
-         "ExpirationDate" : "12/2021",
-         "SecurityCode"   : "123",
-         "Brand"          : "Visa"
+         "CardNumber"     : numeroCartao,
+         "Holder"         : nomeCartao,
+         "ExpirationDate" : validade,
+         "SecurityCode"   : cvv,
+         "Brand"          : bandeira
       }
     }
   };
-        
-        
-        
       
   const requisicao = {
     method: "POST",
@@ -629,11 +632,7 @@ function startServer() {
   );
 
   // Pagamento por cartão
-  app.get("/pgtocc/:nome/:/:numeroCartao/:nomeNoCartao/:validade/:cvv/:valor", doPgtoCC);
-
-  
-  
-  
+  app.get("/pgtocc/:nome/:cpf/:email/:numeroCartao/:nomeNoCartao/:bandeira/:validade/:cvv/:valor", doPgtoCC);
   
   // Obter Locais
   app.get("/obterLocais/", doObterLocais);
