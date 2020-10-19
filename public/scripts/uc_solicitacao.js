@@ -152,6 +152,7 @@ export default class CtrlSolicitacao {
   async enviarPagamentoAgendamento(
     codExecutante,
     nomePaciente,
+    cpfPaciente,
     codExame,
     dataExame,
     numCartao,
@@ -163,12 +164,10 @@ export default class CtrlSolicitacao {
     valor
   ) {
       
-    let cpf = null;
     let email = null;
     // Procurando o paciente no array de pacientes
-    await arrayPacientes.forEach(e => {
+    await this.arrayPacientes.forEach(e => {
         if(e.nome == nomePaciente) {
-          cpf = e.cpf;
           email = e.email;
         }
     });

@@ -58,6 +58,7 @@ export default class ViewSolicitacao {
     this.dtPeriodo = null;
 
     this.nomePaciente = null;
+    this.cpfPaciente = null;
     this.dadosExame = null;
     this.dataExame = null;
     this.formaPgto = null;
@@ -87,7 +88,7 @@ export default class ViewSolicitacao {
       }
       await arrayPacientes.forEach(e => {
         var elem = document.createElement("option");
-        elem.value = e.nome + SEPARADOR + e.cpf;
+        elem.value = e.nome + SEPARADOR + e.cpf + SEPARADOR + e.email;
         elem.text = e.nome;
         this.cbPaciente.add(elem);
       });
@@ -340,7 +341,9 @@ export default class ViewSolicitacao {
       alert("Senha não confere.");
     }
 
-    self.nomePaciente = self.cbPaciente.text;
+    let dadosPaciente = self.cbPaciente.value.split(SEPARADOR);
+    self.nomePaciente = dadosPaciente[0];
+    self.cpfPaciente = dadosPaciente[1];
 
     fnTirarEspera();
     alert("Procedendo checkout do pedido de exame");
@@ -448,6 +451,7 @@ export default class ViewSolicitacao {
     
     self.ctrl.enviarPagamentoAgendamento(
       self.codExecutanteSelecionado,
+      self.cpfPaciente,
       self.nomePaciente,
       self.codExameSelecionado,
       self.dtExame.value,
