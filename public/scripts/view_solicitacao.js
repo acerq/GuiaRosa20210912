@@ -59,6 +59,7 @@ export default class ViewSolicitacao {
     this.codLocalSelecionado = null;
     this.codExecutanteSelecionado = null;
     this.codExameSelecionado = null;
+    this.valorExameSelecionado = null;
     this.dtPeriodo = null;
 
     this.dadosPaciente = null;
@@ -284,6 +285,7 @@ export default class ViewSolicitacao {
           self.dadosExame = e.params.data;
           self.codExecutanteSelecionado = selectionText[0];
           self.codExameSelecionado = selectionText[1];
+          self.valorExameSelecionado = selectionText[3];
         });
 
       var element = document.querySelector(
@@ -463,7 +465,8 @@ export default class ViewSolicitacao {
       self.cbBandeira.value,
       mesValidade,
       anoValidade,
-      cvv
+      cvv,
+      self.valorExameSelecionado,
     );
     fnTirarEspera();
   }

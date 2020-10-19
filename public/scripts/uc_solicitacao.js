@@ -159,16 +159,19 @@ export default class CtrlSolicitacao {
     bandeira,
     mesValidade,
     anoValidade,
-    cvv
+    cvv,
+    valor
   ) {
       
+    let cpf = null;
+    let email = null;
     // Procurando o paciente no array de pacientes
     await arrayPacientes.forEach(e => {
-        if(e.nome == )
-        elem.value = e.nome + SEPARADOR + e.cpf;
-        elem.text = e.nome;
-        this.cbPaciente.add(elem);
-      });
+        if(e.nome == nomePaciente) {
+          cpf = e.cpf;
+          email = e.email;
+        }
+    });
 
     // Processando o pagamento
     let requisicao =        
@@ -176,28 +179,34 @@ export default class CtrlSolicitacao {
         "/" +
         nomePaciente +
         "/" +
+        cpf
+        "/" +
+        email +
+        "/" +
         numCartao.replace(/ /g,"") + 
         "/" +
-        "jose@fake.com" +
+        nomeCartao +
         "/" +
-        "4235647728025684" +
+        bandeira +
         "/" +
-        "JOSE DA SILVA" +
+        mesValidade +
         "/" +
-        "VISA" +
+        anoValidade +
         "/" +
-        "11-2027" +
+        cvv +
         "/" +
-        "123" +
-        "/" +
-        "32000";
+        valor;
     let response = await fetch(requisicao);
     let resposta = await response.json();
+    if (!resposta) {
+      console.log("Erro no pagamento");
+      alert("Erro - pagamento não processado");
+      return;
+    }
+    alert("Pagamento Processado " + resposta)
       
-      
-      
-      
-      var requisicao =
+    // Agendamento
+    requisicao =
       "/solicitacao/" +
       codExecutante +
       "/" +
@@ -217,68 +226,20 @@ export default class CtrlSolicitacao {
     //faturar;
 
     console.log("(app.js) Executando solicitacao");
-    let response = await fetch(requisicao);
-    let resposta = await response.json();
+    response = await fetch(requisicao);
+    resposta = await response.json();
 
     if (!resposta) {
-      console.log("(app.js) renderSolicitacao sem conteúdo");
-      alert("Erro na solicitação do exame.");
+      console.log(" erro no agendamento");
+      alert("Erro no agendamento do exame.");
       return;
     }
     console.log("(app.js) renderSolicitacao -> ", response);
     if (resposta.mensagem == "Ok") {
-    //app.get("/pgtocc/:nome/:cpf/:email/:numeroCartao/:nomeCartao/:bandeira/:validade/:cvv/:valor", doPgtoCC);
-    //this.view.colocarFormPgto();
-    return;
-    let requisicao =        
-        "/pgtocc" +
-        "/" +
-        "José da Silva" +
-        "/" +
-        "11111111111" + 
-        "/" +
-        "jose@fake.com" +
-        "/" +
-        "4235647728025684" +
-        "/" +
-        "JOSE DA SILVA" +
-        "/" +
-        "VISA" +
-        "/" +
-        "11-2027" +
-        "/" +
-        "123" +
-        "/" +
-        "32000";
-    let response = await fetch(requisicao);
-    let resposta = await response.json();
-    alert("Exame agendado com sucesso\n" + JSON.stringify(resposta));
-    window.history.go(-1);
+      alert("Exame agendado com sucesso\n" + JSON.stringify(resposta));
+      window.history.go(-1);
     } else {
-    let requisicao =        
-      //alert("Erro no agendamento");
-        "/pgtocc" +
-        "/" +
-        "José da Silva" +
-        "/" +
-        "11111111111" + 
-        "/" +
-        "jose@fake.com" +
-        "/" +
-        "4235647728025684" +
-        "/" +
-        "JOSE DA SILVA" +
-        "/" +
-        "VISA" +
-        "/" +
-        "11-2027" +
-        "/" +
-        "123" +
-        "/" +
-        "32000";
-    let response = await fetch(requisicao);
-    let resposta = await response.json();
-    alert("Exame agendado com sucesso\n" + JSON.stringify(resposta));
+      alert("Erro no agendamento\n" + JSON.stringify(resposta));
     }
   }
 
