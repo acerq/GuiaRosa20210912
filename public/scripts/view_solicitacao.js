@@ -341,10 +341,18 @@ export default class ViewSolicitacao {
       data,
       faturar
     );
+    fnTirarEspera();
+    self.colocarFormPgto();
   }
 
   //-----------------------------------------------------------------------------------------//
 
+  colocarFormPgto() {
+    $( '#divConteudo' ).load( 'pgto.html' );  
+  }
+
+  //-----------------------------------------------------------------------------------------//
+  
   sair() {
     history.go(-1);
   }

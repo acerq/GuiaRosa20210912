@@ -100,17 +100,10 @@ function closeMenu() {
 
 // -----------------------------------------------------------------------------------------//
 
-function doObterUsuarioCorrente() {
+async function doObterUsuarioCorrente() {
   console.log("(app.js) Executando doLoad ");
-  return fetch("/obterUsuarioCorrente")
-    .then(response => {
-      console.log("(app.js) doObterUsuarioCorrente response", response.body);
-      return response.json();
-    })
-    .catch(e => {
-      console.log("(app.js) doObterUsuarioCorrente catch", e);
-      return null;
-    });
+  let response = await fetch("/obterUsuarioCorrente");
+  return await response.json();
 }
 
 // -----------------------------------------------------------------------------------------//

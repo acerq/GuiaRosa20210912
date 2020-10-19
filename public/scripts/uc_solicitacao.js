@@ -188,7 +188,8 @@ export default class CtrlSolicitacao {
     console.log("(app.js) renderSolicitacao -> ", response);
     if (resposta.mensagem == "Ok") {
     //app.get("/pgtocc/:nome/:cpf/:email/:numeroCartao/:nomeCartao/:bandeira/:validade/:cvv/:valor", doPgtoCC);
-
+    //this.view.colocarFormPgto();
+    return;
     let requisicao =        
         "/pgtocc" +
         "/" +
