@@ -467,12 +467,6 @@ function doSolicitacao(req, resp) {
 function doPgtoCC(req, resp) {
   guiaRosaApp.tempoCorrente = new Date();
 
-  
-   "/pgtocc/:numero/:nome/:validade/:cvv/:valor",
-    doPgtoCC
-  
-  let soap = require("soap");
-
   let numero = req.params.numero;
   let nome = req.params.nome;
   let validade = req.params.validade;
@@ -491,33 +485,17 @@ function doPgtoCC(req, resp) {
     return;
   }
 
-  let dados =
-    '[{"CD_EXECUTANTE":' +
-    executante +
-    "," +
-    '"CD_SOLICITANTE":' +
-    solicitante +
-    "," +
-    '"NM_PACIENTE":"' +
-    paciente +
-    '",' +
-    '"CPF":"' +
-    cpf +
-    '",' +
-    '"CD_EXAME":"' +
-    exame +
-    '",' +
-    '"DT_EXAME":"' +
-    acertaData(dataExame) +
-    '",' +
-    '"DT_PERIODO":"' +
-    acertaData(periodo) +
-    '",' +
-    '"FAT_SN":"' +
-    faturar +
-    '"}]';
-
-  console.log(dados);
+  const userAction = async () => {
+  const response = await fetch('http://example.com/movies.json', {
+    method: 'POST',
+    body: myBody, // string or object
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  const myJson = await response.json(); //extract JSON from the http response
+  // do something with myJson
+}
 
   soap.createClient(BASE_URL, function(err, client) {
     console.log("createClient");
