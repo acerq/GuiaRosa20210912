@@ -508,7 +508,7 @@ async function doPgtoCC(req, resp) {
 
   let agora = new Date();
   let timeMillis = agora.getTime().toString();
-  let id = guiaRosaApp.login + "-" + timeMillis;
+  let id = guiaRosaApp.login + "_" + timeMillis;
   
   const myHeaders = {
       "Content-Type": "application/json",

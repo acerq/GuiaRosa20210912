@@ -16,12 +16,6 @@ export default class CtrlSolicitacao {
     this.arrayLocais = [];
     this.arrayExames = [];
 
-    this.cpf = null;
-    this.exame = null;
-    this.data = null;
-    this.faturar = null;
-    this.senha = null;
-
     this.init();
   }
 
@@ -98,7 +92,7 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterPeriodo() {
-    let response = fetch("/obterPeriodo/");
+    let response = await fetch("/obterPeriodo/");
     console.log("obterPeriodo retorno", response);
     if (!response) {
       console.log("(app.js) renderObterPeriodo sem conteúdo");
@@ -121,6 +115,8 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterExames(local, exame) {
+    if(exame == null || exame == "")
+      exame = "*";
     let response = await fetch("/obterExames/" + local + "/" + exame);
     if (!response) {
       console.log("(app.js) obterExames sem conteúdo");
@@ -155,11 +151,10 @@ export default class CtrlSolicitacao {
 
   async enviarSolicitacao(
     codExecutante,
-    paciente,
+    nomePaciente,
     cpf,
     exame,
     data,
-    dtPeriodo,
     faturar
   ) {
     var requisicao =
@@ -168,7 +163,7 @@ export default class CtrlSolicitacao {
       "/" +
       this.usrApp.login +
       "/" +
-      paciente +
+      nomePaciente +
       "/" +
       cpf +
       "/" +
