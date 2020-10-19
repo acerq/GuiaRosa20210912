@@ -483,7 +483,7 @@ async function doPgtoCC(req, resp) {
   let cvv = req.params.cvv;
   let valor = req.params.valor;
 
-  console.log("executando doSolicitacao");
+  console.log("executando doPgtoCC");
   if (
     typeof numero === "undefined" ||
     typeof nome === "undefined" ||
@@ -495,6 +495,8 @@ async function doPgtoCC(req, resp) {
     resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
     return;
   }
+
+  console.log("parâmetros ok doPgtoCC");
 
   const myBody = {
     MerchantOrderId: "2020101701",
@@ -532,16 +534,21 @@ async function doPgtoCC(req, resp) {
       }
     }
   };
+  console.log("doPgtoCC --> " + JSON.stringify(myBody));
   const responseBraspag = await fetch("https://apisandbox.braspag.com.br/v2/sales/", {
     method: "POST",
-    body: myBody, // string or object
+    body: myBody, 
     headers: {
       "Content-Type": "application/json",
-      MerchantId: "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
-      MerchantKey: "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
+      "MerchantId"  : "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
+      "MerchantKey" : "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
     }
   });
+  console.log("fetch doPgtoCC");
   const myJson = await responseBraspag.json();
+  console.log("json doPgtoCC");
+  console.log(myJson);
+
   resp.json(myJson);
 }
 

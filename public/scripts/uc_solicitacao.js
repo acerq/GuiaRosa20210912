@@ -35,6 +35,21 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async init() {
+    let requisicao =
+        "/pgtocc/" +
+        "4235647728025684" +
+        "/" +
+        "JOSE DA SILVA" +
+        "/" +
+        "11-2027" +
+        "/" +
+        "123" +
+        "/" +
+        "32109";
+    let response = await fetch(requisicao);
+    let resposta = await response.json();
+    
+    
     this.view.colocarEspera();
 
     await this.daoPaciente.abrirDB();
