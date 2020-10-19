@@ -149,15 +149,55 @@ export default class CtrlSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  async enviarSolicitacao(
+  async enviarPagamentoAgendamento(
     codExecutante,
     nomePaciente,
-    cpf,
-    exame,
-    data,
-    faturar
+    codExame,
+    dataExame,
+    numCartao,
+    nomeCartao,
+    bandeira,
+    mesValidade,
+    anoValidade,
+    cvv
   ) {
-    var requisicao =
+      
+    // Procurando o paciente no array de pacientes
+    await arrayPacientes.forEach(e => {
+        if(e.nome == )
+        elem.value = e.nome + SEPARADOR + e.cpf;
+        elem.text = e.nome;
+        this.cbPaciente.add(elem);
+      });
+
+    // Processando o pagamento
+    let requisicao =        
+        "/pgtocc" +
+        "/" +
+        nomePaciente +
+        "/" +
+        numCartao.replace(/ /g,"") + 
+        "/" +
+        "jose@fake.com" +
+        "/" +
+        "4235647728025684" +
+        "/" +
+        "JOSE DA SILVA" +
+        "/" +
+        "VISA" +
+        "/" +
+        "11-2027" +
+        "/" +
+        "123" +
+        "/" +
+        "32000";
+    let response = await fetch(requisicao);
+    let resposta = await response.json();
+      
+      
+      
+      
+      var requisicao =
       "/solicitacao/" +
       codExecutante +
       "/" +
@@ -167,9 +207,9 @@ export default class CtrlSolicitacao {
       "/" +
       cpf +
       "/" +
-      exame +
+      codExame +
       "/" +
-      data +
+      dataExame +
       "/" +
       this.dtPeriodo +
       "/" +

@@ -450,18 +450,22 @@ export default class ViewSolicitacao {
       return;
     }
     
-    fnTirarEspera();
-
     let nomePaciente = self.dadosPaciente[0];
-    // let cpf = dadosPaciente[1].replace(/\.|-/g, "");
-    //self.ctrl.enviarSolicitacao(
-    //  self.codExecutanteSelecionado,
-    //  paciente,
-    //  cpf,
-    //  self.codExameSelecionado,
-    //  data,
-    //  faturar
-    //);
+    let cpf = self.dadosPaciente[1].replace(/\.|-/g, "");
+    self.ctrl.enviarPagamentoAgendamento(
+      self.codExecutanteSelecionado,
+      nomePaciente,
+      cpf,
+      self.codExameSelecionado,
+      self.dtExame.value,
+      numCartao,
+      nomeCartao,
+      self.cbBandeira.value,
+      mesValidade,
+      anoValidade,
+      cvv
+    );
+    fnTirarEspera();
   }
 
   //-----------------------------------------------------------------------------------------//
