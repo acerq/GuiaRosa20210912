@@ -115,8 +115,7 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterExames(local, exame) {
-    if(exame == null || exame == "")
-      exame = "*";
+    if (exame == null || exame == "") exame = "*";
     let response = await fetch("/obterExames/" + local + "/" + exame);
     if (!response) {
       console.log("(app.js) obterExames sem conteúdo");
@@ -164,30 +163,29 @@ export default class CtrlSolicitacao {
     cvv,
     valor
   ) {
-      
     // Processando o pagamento
-    let requisicao =        
-        "/pgtocc" +
-        "/" +
-        cpfPaciente.replace(/\.|-/g, "") +
-        "/" +
-        nomePaciente +
-        "/" +
-        emailPaciente +
-        "/" +
-        numCartao.replace(/ /g,"") + 
-        "/" +
-        nomeCartao +
-        "/" +
-        bandeira +
-        "/" +
-        mesValidade +
-        "/" +
-        anoValidade +
-        "/" +
-        cvv +
-        "/" +
-        valor.replace(/\.|\,/g, "");
+    let requisicao =
+      "/pgtocc" +
+      "/" +
+      cpfPaciente.replace(/\.|-/g, "") +
+      "/" +
+      nomePaciente +
+      "/" +
+      emailPaciente +
+      "/" +
+      numCartao.replace(/ /g, "") +
+      "/" +
+      nomeCartao +
+      "/" +
+      bandeira +
+      "/" +
+      mesValidade +
+      "/" +
+      anoValidade +
+      "/" +
+      cvv +
+      "/" +
+      valor.replace(/\.|\,/g, "");
     let response = await fetch(requisicao);
     let resposta = await response.json();
     if (!resposta) {
@@ -195,8 +193,8 @@ export default class CtrlSolicitacao {
       alert("Erro - pagamento não processado");
       return;
     }
-    alert("Pagamento Processado " + resposta)
-      
+    alert("Pagamento Processado " + JSON.stringify(resposta));
+
     // Agendamento
     requisicao =
       "/solicitacao/" +
@@ -206,7 +204,7 @@ export default class CtrlSolicitacao {
       "/" +
       nomePaciente +
       "/" +
-      cpf +
+      cpfPaciente.replace(/\.|-/g, "") +
       "/" +
       codExame +
       "/" +

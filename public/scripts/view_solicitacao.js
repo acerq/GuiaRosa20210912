@@ -245,6 +245,7 @@ export default class ViewSolicitacao {
       arrayExames.forEach((value, index, array) => {
         let codExecutante = value.id_executante;
         let codExame = value.cd_exame;
+        let valor = value.valor;
         var descricao =
           tiraEspacos(value.exame) +
           SEPARADOR +
@@ -252,14 +253,14 @@ export default class ViewSolicitacao {
           SEPARADOR +
           tiraEspacos(value.endereco) +
           SEPARADOR +
-          value.valor;
+          tiraEspacos(value.valor);
         retorno +=
           "<option value='" +
           codExecutante +
           SEPARADOR +
           codExame +
           SEPARADOR +
-          value.Exame +
+          valor +
           "'>" +
           descricao +
           "</option>";
@@ -466,7 +467,7 @@ export default class ViewSolicitacao {
       mesValidade,
       anoValidade,
       cvv,
-      self.valorExameSelecionado.replace(/\.|\,/g, "")
+      self.valorExameSelecionado.replace(/\./g, "")
     );
     fnTirarEspera();
   }
