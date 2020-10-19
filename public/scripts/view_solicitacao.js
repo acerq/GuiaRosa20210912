@@ -284,7 +284,7 @@ export default class ViewSolicitacao {
         })
         .on("select2:select", function(e) {
           var selectionText = e.params.data.id.split(SEPARADOR);
-          self.dadosExame = selectionText;
+          self.dadosExame = e.params.data;
           self.codExecutanteSelecionado = selectionText[0];
           self.codExameSelecionado = selectionText[1];
         });
@@ -347,7 +347,6 @@ export default class ViewSolicitacao {
     }
 
     self.dadosPaciente = self.cbPaciente.value;
-    self.dadosExame    = $('cbExame').select2('data');
 
     fnTirarEspera();
     alert("Procedendo checkout do pedido de exame");
@@ -356,8 +355,8 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  colocarFormPgto() {
-    $( '#divConteudo' ).load( 'pgto.html' );  
+  async colocarFormPgto() {
+    await $( '#divConteudo' ).load( 'pgto.html' );  
     self.tfNomeCartao = document.getElementById("tfNomeCartao");
     self.tfNumCartao = document.getElementById("tfNumCartao");
     self.tfMesValidade = document.getElementById("tfMesValidade");
@@ -380,8 +379,8 @@ export default class ViewSolicitacao {
         "</span>";
     $( '#divExame' ).load( msg );  
     
-    self.btOk.onclick = this.enviarSolicitacao;
-    self.btCancelar.onclick = this.sair;
+    self.btOk.onclick = self.enviarSolicitacao;
+    self.btCancelar.onclick = self.sair;
     // let paciente = dadosPaciente[0];
     // let cpf = dadosPaciente[1].replace(/\.|-/g, "");
     //self.ctrl.enviarSolicitacao(
