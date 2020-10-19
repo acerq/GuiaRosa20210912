@@ -540,6 +540,13 @@ function startServer() {
     doSolicitacao
   );
 
+
+  // Pagamento por cartão
+  app.get(
+    "/pgtocc/:num/:solicitante/:paciente/:cpf/:exame/:data/:periodo/:faturar",
+    doSolicitacao
+  );
+
   // Obter Locais
   app.get("/obterLocais/", doObterLocais);
 
