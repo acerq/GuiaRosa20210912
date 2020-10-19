@@ -484,26 +484,32 @@ async function doPgtoCC(req, resp) {
   let nomeCartao = req.params.nomeCartao;
   let bandeira = req.params.bandeira;
   let validade = req.params.validade;
-  validade = validade.replace(/-/g,"/");
-
+  //validade = validade.replace(/-/g,"/");
   let cvv = req.params.cvv;
   let valor = req.params.valor;
   
   console.log("executando doPgtoCC");
   if (
-    typeof numero === "undefined" ||
     typeof nome === "undefined" ||
+    typeof cpf === "undefined" ||
+    typeof email === "undefined" ||
+    typeof numeroCartao === "undefined" ||
+    typeof nomeCartao === "undefined" ||
+    typeof bandeira === "undefined" ||
     typeof validade === "undefined" ||
     typeof cvv === "undefined" ||
     typeof valor === "undefined"
   ) {
-    console.log("undefined 0010");
+    console.log("undefined 0012");
     resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
     return;
   }
 
   console.log("parâmetros ok doPgtoCC");
 
+  var agora = new Date();
+  var timeMillis = agora.getTime().toString();
+  
   const myHeaders = {
       "Content-Type": "application/json",
       "MerchantId"  : "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
@@ -511,7 +517,7 @@ async function doPgtoCC(req, resp) {
     };
   
   const myBody =    {
-    "MerchantOrderId": "2020101902",
+    "MerchantOrderId": timeMillis,
     "Customer":{
       "Name"         : nome,
       "Identity"     : cpf,
