@@ -41,7 +41,7 @@ export default class ViewSolicitacao {
     this.pwSenha = document.getElementById("pwSenha");
 
     this.btSair.onclick = this.sair;
-    this.btEnviar.onclick = this.enviarSolicitacao;
+    this.btEnviar.onclick = this.irParaCheckout;
     this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
     this.btConsultar.onclick = this.obterExames;
     
@@ -75,7 +75,7 @@ export default class ViewSolicitacao {
 
     this.pwSenha.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
-        this.enviarSolicitacao();
+        this.irParaCheckout();
       }
     });
   }
@@ -303,7 +303,7 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  async enviarSolicitacao() {
+  async irParaCheckout() {
     fnColocarEspera();
     if (self.codExecutanteSelecionado == null) {
       fnTirarEspera();
@@ -358,15 +358,30 @@ export default class ViewSolicitacao {
 
   colocarFormPgto() {
     $( '#divConteudo' ).load( 'pgto.html' );  
-    this.tfNomeCartao = document.getElementById("tfNomeCartao");
-    this.tfNumCartao = document.getElementById("tfNumCartao");
-    this.tfMesValidade = document.getElementById("tfMesValidade");
-    this.tfAnoValidade = document.getElementById("tfAnoValidade");
-    this.cbBandeira = document.getElementById("cbBandeira");
-    this.tfCvv = document.getElementById("tfCvv");
-    this.btOk = document.getElementById("btOk");
-    this.btCancelar = document.getElementById("btCancelar");    
+    self.tfNomeCartao = document.getElementById("tfNomeCartao");
+    self.tfNumCartao = document.getElementById("tfNumCartao");
+    self.tfMesValidade = document.getElementById("tfMesValidade");
+    self.tfAnoValidade = document.getElementById("tfAnoValidade");
+    self.cbBandeira = document.getElementById("cbBandeira");
+    self.tfCvv = document.getElementById("tfCvv");
+    self.btOk = document.getElementById("btOk");
+    self.btCancelar = document.getElementById("btCancelar");    
 
+    let selecao = self.dadosExame.text.split(SEPARADOR);
+    let msg = "<b>Exame Solicitado:</b><br/>" +
+        "<span style='font-size: 10px;'><b>" +
+        tiraEspacos(selecao[0]) +
+        "</b><br/>" +
+        tiraEspacos(selecao[1]) +
+        "<br/>" +
+        tiraEspacos(selecao[2]) +
+        "<br/>R$ " +
+        tiraEspacos(selecao[3]) +
+        "</span>";
+    $( '#divExame' ).load( msg );  
+    
+    self.btOk.onclick = this.enviarSolicitacao;
+    self.btCancelar.onclick = this.sair;
     // let paciente = dadosPaciente[0];
     // let cpf = dadosPaciente[1].replace(/\.|-/g, "");
     //self.ctrl.enviarSolicitacao(
