@@ -501,11 +501,11 @@ async function doPgtoCC(req, resp) {
   const fetch = require('node-fetch');
   const { Headers } = require('node-fetch');
   
-  const myHeaders = new Headers({
+  const myHeaders = {
       "Content-Type": "application/json",
       "MerchantId"  : "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
       "MerchantKey" : "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
-    });
+    };
   
   const myBody = {
     "MerchantOrderId": "2020101701",
@@ -534,12 +534,14 @@ async function doPgtoCC(req, resp) {
     }
   };
     
-  console.log("doPgtoCC --> " + JSON.stringify(myBody));
-  const responseBraspag = await fetch("https://apisandbox.braspag.com.br/v2/sales/", {
+  const requisicao = {
     method: "POST",
     body: myBody, 
     headers: myHeaders
-  });
+  };
+  
+  console.log("doPgtoCC --> " + JSON.stringify(requisicao));
+  const responseBraspag = await fetch("https://apisandbox.braspag.com.br/v2/sales/", requisicao);
   console.log("fetch doPgtoCC");
   const myJson = await responseBraspag.json();
   console.log("json doPgtoCC");
