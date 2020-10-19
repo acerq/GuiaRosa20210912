@@ -182,7 +182,8 @@ export default class CtrlSolicitacao {
       "/" +
       this.dtPeriodo +
       "/" +
-      faturar;
+      "S";
+      //faturar;
 
     console.log("(app.js) Executando solicitacao");
     let response = await fetch(requisicao);
