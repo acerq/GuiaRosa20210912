@@ -421,8 +421,8 @@ export default class ViewSolicitacao {
       alert("O mês da validade do cartão não foi informado!");
       return;
     }
-    mesValidade = parseInt(mesValidade);
-    if (mesValidade == NaN || mesValidade < 1 || mesValidade > 12) {
+    let mesInt = parseInt(mesValidade);
+    if (mesInt == NaN || mesInt < 1 || mesInt > 12) {
       fnTirarEspera();
       alert("Valor inválido para o mês da validade do cartão!");
       return;
