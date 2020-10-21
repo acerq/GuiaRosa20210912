@@ -201,7 +201,7 @@ export default class CtrlSolicitacao {
     }
     else {
       switch(resposta.Payment.ReasonCode) {
-        case 7  : alert("Pagamento Recusado: Não Autorizado\n\n" + JSON.stringify(resposta));
+        case  7 : alert("Pagamento Recusado: Não Autorizado\n\n" + JSON.stringify(resposta));
           return;
         case 13 : alert("Pagamento Recusado: Cartão Cancelado\n\n" + JSON.stringify(resposta));
           return;
@@ -215,6 +215,16 @@ export default class CtrlSolicitacao {
           return;
       }
     }
+      //
+      // Status: representa o status atual da transação.
+      // ReasonCode: representa o status da requisição.
+      // ProviderReturnCode: representa o código de resposta da transação da adquirente.
+      // Por exemplo, uma requisição de autorização poderá ter o retorno com ReasonCode=0 (Sucessfull), 
+      // ou seja, a requisição finalizou com sucesso, porém, o Status poderá ser 0-Denied, por ter a 
+      // transação não autorizada pela adquirente, por exemplo, ProviderReturnCode 57 (um dos códigos de negada da Cielo)
+      //
+      //
+    
     // Agendamento
     requisicao =
       "/solicitacao/" +
