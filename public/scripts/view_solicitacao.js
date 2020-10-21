@@ -40,7 +40,7 @@ export default class ViewSolicitacao {
     this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
     this.btConsultar.onclick = this.obterExames;
 
-    // Elementos da página de pagamento
+    //---- Elementos da página de pagamento
     this.tfNomeCartao = null;
     this.tfNumCartao = null;
     this.tfMesValidade = null;
@@ -49,7 +49,7 @@ export default class ViewSolicitacao {
     this.tfCvv = null;
     this.btOk = null;
     this.btCancelar = null;
-    //
+    //----
 
     this.codLocalSelecionado = null;
     this.codExecutanteSelecionado = null;
@@ -259,11 +259,6 @@ export default class ViewSolicitacao {
         if (index === array.length - 1) res(retorno);
       });
     }).then(retorno => {
-      // Inicialização da seleção      
-      self.dadosExame = arrayExames[0];
-      self.codExecutanteSelecionado = arrayExames[0].id_executante;
-      self.codExameSelecionado = arrayExames[0].cd_exame;
-      self.valorExameSelecionado = arrayExames[0].valor;
       
       const divExame = document.getElementById("divExame");
 
