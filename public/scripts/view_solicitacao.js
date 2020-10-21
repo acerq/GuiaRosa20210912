@@ -391,33 +391,40 @@ export default class ViewSolicitacao {
     let numCartao = self.tfNumCartao.value;
     if (numCartao == null || numCartao == "") {
       fnTirarEspera();
-      alert("O número do cartão não foi informado.");
+      alert("O número do cartão não foi informado!");
       return;
     }
     numCartao = numCartao.replace(/ /g, "");
     if (numCartao.length < 16) {
       fnTirarEspera();
-      alert("O número do cartão não foi informado corretamente.");
+      alert("O número do cartão não foi informado corretamente!");
       return;
     }
     
+    let nomeCartao = self.tfNomeCartao.value;
+    if (nomeCartao == null || nomeCartao == "") {
+      fnTirarEspera();
+      alert("O nome no cartão não foi informado!");
+      return;
+    }
+
     let bandeira = self.cbBandeira.value;
     if (bandeira == null || bandeira == "" ) {
       fnTirarEspera();
       alert("A Bandeira não foi selecionada.");
       return;
     }
-
+    
     let mesValidade = self.tfMesValidade.value;
     if (mesValidade == null || mesValidade == "") {
       fnTirarEspera();
-      alert("O mês da validade do cartão não foi informado.");
+      alert("O mês da validade do cartão não foi informado!");
       return;
     }
     let mesInt = parseInt(mesValidade);
     if (mesInt == NaN || mesInt < 1 || mesInt > 12) {
       fnTirarEspera();
-      alert("Valor inválido para o mês da validade do cartão.");
+      alert("Valor inválido para o mês da validade do cartão!");
       return;
     }
 
@@ -456,7 +463,7 @@ export default class ViewSolicitacao {
       self.dtExame.value,
       numCartao,
       nomeCartao,
-      self.cbBandeira.value,
+      bandeira,
       mesValidade,
       anoValidade,
       cvv,
