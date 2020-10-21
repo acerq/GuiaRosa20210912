@@ -224,21 +224,21 @@ export default class ViewSolicitacao {
     }
     new Promise((res, rej) => {
       arrayExames.sort(function(a, b) {
-        var keyA = a.exame;
-        var keyB = b.exame;
+        let keyA = a.exame;
+        let keyB = b.exame;
         // Compare the 2 dates
         if (keyA < keyB) return -1;
         if (keyA > keyB) return 1;
         return 0;
       });
 
-      var retorno = "<option value='-1'>Selecione...</option>";
-      var retorno = "";
+      let retorno = "<option value='-1'>Selecione...</option>";
+      //let retorno = "";
       arrayExames.forEach((value, index, array) => {
         let codExecutante = value.id_executante;
         let codExame = value.cd_exame;
         let valor = value.valor;
-        var descricao =
+        let descricao =
           tiraEspacos(value.exame) +
           SEPARADOR +
           tiraEspacos(value.nome_executante) +
@@ -259,6 +259,12 @@ export default class ViewSolicitacao {
         if (index === array.length - 1) res(retorno);
       });
     }).then(retorno => {
+      // Inicialização da seleção      
+      self.dadosExame = arrayExames[0];
+      self.codExecutanteSelecionado = arrayExames[0].id_executante;
+      self.codExameSelecionado = arrayExames[0].cd_exame;
+      self.valorExameSelecionado = arrayExames[0].valor;
+      
       const divExame = document.getElementById("divExame");
 
       divExame.style = "height:66px";
