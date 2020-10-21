@@ -222,14 +222,6 @@ export default class ViewSolicitacao {
       );
       return;
     }
-    if (arrayExames == null || arrayExames.length == 0) {
-      fnTirarEspera();
-      alert(
-        "Nenhum exame encontrado\ncom os parâmetros informados.\nTente novamente."
-      );
-      return;
-    }
-
     new Promise((res, rej) => {
       arrayExames.sort(function(a, b) {
         var keyA = a.exame;
@@ -240,7 +232,7 @@ export default class ViewSolicitacao {
         return 0;
       });
 
-      //var retorno = "<option value='-1'>Selecione...</option>";
+      var retorno = "<option value='-1'>Selecione...</option>";
       var retorno = "";
       arrayExames.forEach((value, index, array) => {
         let codExecutante = value.id_executante;
