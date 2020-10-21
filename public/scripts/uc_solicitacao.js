@@ -197,24 +197,24 @@ export default class CtrlSolicitacao {
       let MerchantOrderId = resposta.MerchantOrderId;
       let ProofOfSale = resposta.ProofOfSale;
       let PaymentId = resposta.PaymentId;
-      alert("Pagamento Processado " + JSON.stringify(resposta));
+      alert("Pagamento Processado com Sucesso");
     }
     else {
       switch(resposta.Payment.ReasonCode) {
-        case  7 : alert("Pagamento Recusado: Não Autorizado\n\n" + JSON.stringify(resposta));
+        case  7 : alert("Pagamento Recusado: Não Autorizado");
           return;
-        case 12 : alert("Pagamento Recusado: Cartão Cancelado\n\n" + JSON.stringify(resposta));
+        case 12 : alert("Pagamento Recusado: Problemas com o Cartão de Crédito");
           return;
-        case 13 : alert("Pagamento Recusado: Cartão Cancelado\n\n" + JSON.stringify(resposta));
+        case 13 : alert("Pagamento Recusado: Cartão Cancelado");
           return;
-        case 14 : alert("Pagamento Recusado: Cartão de Crédito Bloqueado\n\n" + JSON.stringify(resposta));
+        case 14 : alert("Pagamento Recusado: Cartão de Crédito Bloqueado");
           return;
-        case 15 : alert("Pagamento Recusado: Cartão Expirado\n\n" + JSON.stringify(resposta));
+        case 15 : alert("Pagamento Recusado: Cartão Expirado");
           return;
         case 4  :
-        case 22 : alert("Pagamento não realizado: Tempo Expirado\n\n" + JSON.stringify(resposta));
+        case 22 : alert("Pagamento não realizado: Tempo Expirado");
           return;
-        default : alert("Pagamento Recusado\n\n" + JSON.stringify(resposta));
+        default : alert("Pagamento Recusado");
           return;
       }
     }
@@ -259,7 +259,7 @@ export default class CtrlSolicitacao {
     }
     console.log("(app.js) renderSolicitacao -> ", response);
     if (resposta.mensagem == "Ok") {
-      alert("Exame agendado com sucesso\n" + JSON.stringify(resposta));
+      alert("Exame agendado com sucesso");
       window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
