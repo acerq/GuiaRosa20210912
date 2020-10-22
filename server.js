@@ -647,16 +647,17 @@ async function doGerarConfirmacao(req, resp) {
     let pdfData = Buffer.concat(buffers);
     resp.setHeader("Content-type", "application/pdf");
     resp.setHeader("Content-Length", Buffer.byteLength(pdfData));
-    resp.setHeader("Content-disposition","attachment;filename=confirmacao.pdf"
+    resp.setHeader("Content-disposition","attachment;filename=confirmacao_" + merchantOrderId + ".pdf"
     );
     resp.send(pdfData);
     resp.end();
   });
 
+  pdf.image('public/images/logoguiarosa.png', 100, 75, {fit: [100, 100]});
   pdf
     .font("public/fonts/SourceSansPro-SemiBold.ttf")
     .fontSize(25)
-    .text("Guia Rosa - Agendamento de Exame", 150, 100);
+    .text("Agendamento de Exame", 210, 100);
 
   pdf
     .font("public/fonts/SourceSansPro-Regular.ttf")
@@ -664,28 +665,15 @@ async function doGerarConfirmacao(req, resp) {
 
   pdf.text(nomeExame + "\n");
   pdf.text(nomeExecutante + "\n");
-  pdf.text(enderec+ "\n");
-  pdf.text("Cpf: " + nome);
-  pdf.text("Cpf: " + nome);
-  let email = req.params.email;
-  let numeroCartao = req.params.numeroCartao;
-  let nomeCartao = req.params.nomeCartao;
-  let bandeira = req.params.bandeira;
-  let mesValidade = req.params.mesValidade;
-  let anoValidade = req.params.anoValidade;
-  let cvv = req.params.cvv;
-  let nomeExame = req.params.nomeExame;
-  let nomeExecutante = req.params.nomeExecutante;
-  let endereco = req.params.endereco;
-  let valor = req.params.valor;
-  let merchantOrderId = req.params.merchantOrderId;
-  let proofOfSale = req.params.proofOfSale;
-  let paymentId = req.params.paymentId;
-
+  pdf.text(endereco + "\n");
+  pdf.text("Valor: R$ " + valor);
+  pdf.text("Agendado para " + nome + " (" + cpf + ")\n");
+  pdf.text("Pagamento feito com  " + numeroCartao + " (" + bandeira + ")\n");
+  pdf.text("ID Guia Rosa: " + merchantOrderId + "\n");
+  pdf.text("Número da Autorização: " +  proofOfSale + "\n")
+  pdf.text("Identificação do Pagamento: " + paymentId);
   pdf.end();
-
-  console.log("enviar");
-}
+} 
 
 //-----------------------------------------------------------------------------------------//
 
@@ -748,11 +736,11 @@ function startServer() {
 
   // Gerar PDF de resposta
   app.get(
-    "/gerarConfirmacao/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv" +
-      "/:nomeExame/:nomeExecutante/:endereco/:valor/:merchantOrderId/:proofOfSale/:paymentId",
+    "/gerarConfirmacao/:cpf/:nome/:numeroCartao/:nomeCartao/:bandeira/:nomeExame/:nomeExecutante/:endereco" +
+    "/:valor/:merchantOrderId/:proofOfSale/:paymentId",
     doGerarConfirmacao
   );
-
+  
   // Obter Locais
   app.get("/obterLocais/", doObterLocais);
 

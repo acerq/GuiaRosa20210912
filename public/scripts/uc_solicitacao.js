@@ -287,19 +287,11 @@ export default class CtrlSolicitacao {
         "/" +
         nomePaciente +
         "/" +
-        emailPaciente +
-        "/" +
         numCartao +
         "/" +
         nomeCartao +
         "/" +
         bandeira +
-        "/" +
-        mesValidade +
-        "/" +
-        anoValidade +
-        "/" +
-        cvv +
         "/" +
         nomeExame,
         "/" +
