@@ -164,7 +164,9 @@ export default class CtrlSolicitacao {
     anoValidade,
     cvv,
     valor
-  ) {
+  ) {  
+    this.view.colocarEspera();
+
     // Processando o pagamento
     let requisicao =
       "/pgtocc" +
@@ -192,6 +194,7 @@ export default class CtrlSolicitacao {
     let resposta = await response.json();
     if (!resposta) {
       console.log("Erro no pagamento");
+      this.view.tirarEspera();
       alert("Erro - pagamento não processado");
       return;
     }
@@ -199,7 +202,9 @@ export default class CtrlSolicitacao {
       let MerchantOrderId = resposta.MerchantOrderId;
       let ProofOfSale = resposta.ProofOfSale;
       let PaymentId = resposta.PaymentId;
+      this.view.tirarEspera();
       alert("Pagamento Processado com Sucesso");
+      this.view.colocarEspera();
     } else {
       switch (resposta.Payment.ReasonCode) {
         case 7:
