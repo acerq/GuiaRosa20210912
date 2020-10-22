@@ -645,7 +645,7 @@ async function doGerarConfirmacao(req, resp) {
     resp.end();
   });
 
-  pdf.image('public/images/logoguiarosa.png', 100, 75, {fit: [100, 100]});
+  pdf.image('public/images/icons/android/android-launchericon-144-144.png', 100, 75, {fit: [100, 100]});
   pdf
     .font("public/fonts/SourceSansPro-SemiBold.ttf")
     .fontSize(25)
@@ -655,13 +655,15 @@ async function doGerarConfirmacao(req, resp) {
     .font("public/fonts/SourceSansPro-Regular.ttf")
     .fontSize(14);
 
-  pdf.text(nomeExame + "\n");
+  pdf.text("ID Guia Rosa: " + merchantOrderId + "\n");
+  pdf.text(nomeExame + "\n",100, 300);
   pdf.text(nomeExecutante + "\n");
   pdf.text(endereco + "\n");
-  pdf.text("Valor: R$ " + valor);
-  pdf.text("Agendado para " + nome + " (" + cpf + ")\n");
-  pdf.text("Pagamento feito com  " + numeroCartao + " (" + bandeira + ")\n");
-  pdf.text("ID Guia Rosa: " + merchantOrderId + "\n");
+  let tamValor = valor.length
+  pdf.text("Valor: R$ " + valor + "\n\n");
+  pdf.text("Agendado para " + nome + " (" + cpf + ")\n\n\n");
+  numeroCartao = numeroCartao.substring(0,4) + " " + numeroCartao.substring(4,6) + "XX XXXX XX" + numeroCartao.substring(15);
+  pdf.text("Pagamento feito com  cartão de crédito " + numeroCartao + " (" + bandeira + ")\n");
   pdf.text("Número da Autorização: " +  proofOfSale + "\n")
   pdf.text("Identificação do Pagamento: " + paymentId);
   pdf.end();
