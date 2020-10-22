@@ -636,11 +636,10 @@ async function doGerarConfirmacao(req, resp) {
   pdf.on("end", () => {
     let pdfData = Buffer.concat(buffers);
     console.log("2 RESP -> " + resp);
-    resp.writeHead(200, {
-        "Content-Length": Buffer.byteLength(pdfData),
-        "Content-Type": "application/pdf",
-        "Content-disposition": "attachment;filename=confirmacao.pdf"
-      });
+    resp.setHeader('Content-type', 'application/pdf');
+    resp.setHeader("Content-Length", Buffer.byteLength(pdfData));
+    resp.setHeader("Content-disposition","attachment;filename=confirmacao.pdf");
+    await pdfDoc.pipe(res);
     console.log("3 RESP -> " + resp);
     resp.end(pdfData);
   });
