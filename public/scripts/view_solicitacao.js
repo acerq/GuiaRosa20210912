@@ -454,6 +454,11 @@ export default class ViewSolicitacao {
       return;
     }
     
+    let selecao = self.dadosExame.text.split(SEPARADOR);
+    let nomeExame = tiraEspacos(selecao[0]);
+    let nomeExecutante = tiraEspacos(selecao[1]);
+    let endereco = tiraEspacos(selecao[2]);
+
     self.ctrl.enviarPagamentoAgendamento(
       self.codExecutanteSelecionado,
       self.cpfPaciente.replace(/\.|-/g, ""),

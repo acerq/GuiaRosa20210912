@@ -164,8 +164,11 @@ export default class CtrlSolicitacao {
     anoValidade,
     cvv,
     valor
-  ) {  
+  ) {
     this.view.colocarEspera();
+    let merchantOrderId = "";
+    let proofOfSale = "";
+    let paymentId = "";
 
     // Processando o pagamento
     let requisicao =
@@ -199,9 +202,9 @@ export default class CtrlSolicitacao {
       return;
     }
     if (resposta.Payment.ReasonCode == 0) {
-      let MerchantOrderId = resposta.MerchantOrderId;
-      let ProofOfSale = resposta.ProofOfSale;
-      let PaymentId = resposta.PaymentId;
+      merchantOrderId = resposta.MerchantOrderId;
+      proofOfSale = resposta.ProofOfSale;
+      paymentId = resposta.PaymentId;
     } else {
       this.view.tirarEspera();
       switch (resposta.Payment.ReasonCode) {
@@ -271,18 +274,19 @@ export default class CtrlSolicitacao {
     }
     console.log("(app.js) renderAgendamento -> ", response);
     if (resposta.mensagem == "Ok") {
-      alert("Exame agendado com sucesso!\nEfetuando download de confirmação.");
-
+      this.view.tirarEspera();
+      alert("Exame agendado com sucesso!\nAguarde download de confirmação.");
+      this.view.colocarEspera();
       requisicao =
         "/gerarConfirmacao" +
         "/" +
-        cpfPaciente.replace(/\.|-/g, "") +
+        cpfPaciente +
         "/" +
         nomePaciente +
         "/" +
         emailPaciente +
         "/" +
-        numCartao.replace(/ /g, "") +
+        numCartao +
         "/" +
         nomeCartao +
         "/" +
@@ -294,15 +298,21 @@ export default class CtrlSolicitacao {
         "/" +
         cvv +
         "/" +
-        valor.replace(/\.|\,/g, "");
+        valor
+      
+        "/" +
+        merchantOrderId 
+        "/" +
+        proofOfSale
+        "/" +
+        paymentId 
+      ;
 
       let response = await fetch(requisicao);
       let blob = await response.blob();
-      this.view.tirarEspera();
-      alert("Pagamento Processado com Sucesso");
-      this.view.colocarEspera();
       await download(blob);
-      alert("Download");
+      this.view.tirarEspera();
+      alert("Download de documento de confirmação realizado.");
       window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
