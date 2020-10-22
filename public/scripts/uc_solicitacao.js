@@ -202,10 +202,8 @@ export default class CtrlSolicitacao {
       let MerchantOrderId = resposta.MerchantOrderId;
       let ProofOfSale = resposta.ProofOfSale;
       let PaymentId = resposta.PaymentId;
-      this.view.tirarEspera();
-      alert("Pagamento Processado com Sucesso");
-      this.view.colocarEspera();
     } else {
+      this.view.tirarEspera();
       switch (resposta.Payment.ReasonCode) {
         case 7:
           alert("Pagamento Recusado: Não Autorizado");
@@ -261,19 +259,19 @@ export default class CtrlSolicitacao {
       "/" +
       "S";
     //faturar;
-
     console.log("(app.js) Executando agendamento");
     response = await fetch(requisicao);
     resposta = await response.json();
 
     if (!resposta) {
       console.log(" erro no agendamento");
+      this.view.tirarEspera();
       alert("Erro no agendamento do exame.");
       return;
     }
     console.log("(app.js) renderAgendamento -> ", response);
     if (resposta.mensagem == "Ok") {
-      alert("Exame agendado com sucesso");
+      alert("Exame agendado com sucesso!\nEfetuando download de confirmação.");
 
       requisicao =
         "/gerarConfirmacao" +
@@ -300,6 +298,9 @@ export default class CtrlSolicitacao {
 
       let response = await fetch(requisicao);
       let blob = await response.blob();
+      this.view.tirarEspera();
+      alert("Pagamento Processado com Sucesso");
+      this.view.colocarEspera();
       await download(blob);
       alert("Download");
       window.history.go(-1);
