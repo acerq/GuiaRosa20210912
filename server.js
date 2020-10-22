@@ -596,13 +596,9 @@ async function doGerarConfirmacao(req, resp) {
 
   let nome = req.params.nome;
   let cpf = req.params.cpf;
-  let email = req.params.email;
   let numeroCartao = req.params.numeroCartao;
   let nomeCartao = req.params.nomeCartao;
   let bandeira = req.params.bandeira;
-  let mesValidade = req.params.mesValidade;
-  let anoValidade = req.params.anoValidade;
-  let cvv = req.params.cvv;
   let nomeExame = req.params.nomeExame;
   let nomeExecutante = req.params.nomeExecutante;
   let endereco = req.params.endereco;
@@ -611,7 +607,7 @@ async function doGerarConfirmacao(req, resp) {
   let proofOfSale = req.params.proofOfSale;
   let paymentId = req.params.paymentId;
 
-  console.log("executando doPgtoCC" + nome);
+  console.log("executando doGerarConfirmação" + nome);
   if (
     typeof nome === "undefined" ||
     typeof cpf === "undefined" ||
