@@ -630,26 +630,28 @@ async function doGerarConfirmacao(req, resp) {
   let fs = require("fs");
   let pdf = new PDFDocument({ bufferPages: true });
 
+  console.log("1 RESP -> " + resp);
   let buffers = [];
   pdf.on("data", buffers.push.bind(buffers));
   pdf.on("end", () => {
     let pdfData = Buffer.concat(buffers);
-    resp
-      .writeHead(200, {
+    console.log("2 RESP -> " + resp);
+    resp.writeHead(200, {
         "Content-Length": Buffer.byteLength(pdfData),
         "Content-Type": "application/pdf",
         "Content-disposition": "attachment;filename=confirmacao.pdf"
-      })
-      .end(pdfData);
+      });
+    console.log("3 RESP -> " + resp);
+    resp.end(pdfData);
   });
 
   pdf
-    .font("/fonts/SourceSansPro-SemiBold.ttf")
+    .font("public/fonts/SourceSansPro-SemiBold.ttf")
     .fontSize(25)
     .text("Guia Rosa - Agendamento de Exame", 100, 100);
 
   pdf
-    .font("/fonts/SourceSansPro-Regular.ttf")
+    .font("public/fonts/SourceSansPro-Regular.ttf")
     .fontSize(14)
     .text("Guia Rosa - Agendamento de Exame", 100, 200);
 
