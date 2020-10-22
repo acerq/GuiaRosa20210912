@@ -193,41 +193,47 @@ export default class CtrlSolicitacao {
       alert("Erro - pagamento não processado");
       return;
     }
-    if(resposta.Payment.ReasonCode == 0) {
+    if (resposta.Payment.ReasonCode == 0) {
       let MerchantOrderId = resposta.MerchantOrderId;
       let ProofOfSale = resposta.ProofOfSale;
       let PaymentId = resposta.PaymentId;
       alert("Pagamento Processado com Sucesso");
-    }
-    else {
-      switch(resposta.Payment.ReasonCode) {
-        case  7 : alert("Pagamento Recusado: Não Autorizado");
+    } else {
+      switch (resposta.Payment.ReasonCode) {
+        case 7:
+          alert("Pagamento Recusado: Não Autorizado");
           return;
-        case 12 : alert("Pagamento Recusado: Problemas com o Cartão de Crédito");
+        case 12:
+          alert("Pagamento Recusado: Problemas com o Cartão de Crédito");
           return;
-        case 13 : alert("Pagamento Recusado: Cartão Cancelado");
+        case 13:
+          alert("Pagamento Recusado: Cartão Cancelado");
           return;
-        case 14 : alert("Pagamento Recusado: Cartão de Crédito Bloqueado");
+        case 14:
+          alert("Pagamento Recusado: Cartão de Crédito Bloqueado");
           return;
-        case 15 : alert("Pagamento Recusado: Cartão Expirado");
+        case 15:
+          alert("Pagamento Recusado: Cartão Expirado");
           return;
-        case 4  :
-        case 22 : alert("Pagamento não realizado: Tempo Expirado");
+        case 4:
+        case 22:
+          alert("Pagamento não realizado: Tempo Expirado");
           return;
-        default : alert("Pagamento Recusado");
+        default:
+          alert("Pagamento Recusado");
           return;
       }
     }
-      //
-      // Status: representa o status atual da transação.
-      // ReasonCode: representa o status da requisição.
-      // ProviderReturnCode: representa o código de resposta da transação da adquirente.
-      // Por exemplo, uma requisição de autorização poderá ter o retorno com ReasonCode=0 (Sucessfull), 
-      // ou seja, a requisição finalizou com sucesso, porém, o Status poderá ser 0-Denied, por ter a 
-      // transação não autorizada pela adquirente, por exemplo, ProviderReturnCode 57 (um dos códigos de negada da Cielo)
-      //
-      //
-    
+    //
+    // Status: representa o status atual da transação.
+    // ReasonCode: representa o status da requisição.
+    // ProviderReturnCode: representa o código de resposta da transação da adquirente.
+    // Por exemplo, uma requisição de autorização poderá ter o retorno com ReasonCode=0 (Sucessfull),
+    // ou seja, a requisição finalizou com sucesso, porém, o Status poderá ser 0-Denied, por ter a
+    // transação não autorizada pela adquirente, por exemplo, ProviderReturnCode 57 (um dos códigos de negada da Cielo)
+    //
+    //
+
     // Agendamento
     requisicao =
       "/solicitacao/" +
@@ -260,19 +266,27 @@ export default class CtrlSolicitacao {
     console.log("(app.js) renderSolicitacao -> ", response);
     if (resposta.mensagem == "Ok") {
       alert("Exame agendado com sucesso");
-      
-      const PDFKit = require('pdfkit');
-const fs = require('fs');
 
-const pdf = new PDFKit();
+      // npm install pdfkit
+      const PDFKit = require("pdfkit");
+      const fs = require("fs");
+      const pdf = new PDFKit();
 
-pdf.text('Hello Rocketseat PDF');
+      pdf.text("");
 
-pdf.pipe(fs.createWriteStream('output.pdf'));
-pdf.end();
+      pdf.pipe(fs.createWriteStream("output.pdf"));
       
-      
-      
+      pdf.font('/fonts/SourceSansPro-SemiBold.ttf')   
+        .fontSize(25)
+         .text('Guia Rosa - Agendamento de Exame', 100, 100);
+
+      pdf.font('/fonts/SourceSansPro-Regular.ttf')   
+        .fontSize(14)
+         .text('Guia Rosa - Agendamento de Exame', 100, 200);
+
+      pdf.text('Data: ' + dataExame);
+      pdf.end();
+
       window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
