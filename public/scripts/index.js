@@ -16,6 +16,7 @@ const tfSenha = document.getElementById("tfSenha");
 const btOk = document.getElementById("btOk");
 const btNovo = document.getElementById("btNovo");
 const labelLogin = document.getElementById("lbLogin");
+const pdf = require('pdfkit');
 
 var fnMD5 = new Function('a', 'return md5(a)');
 var estadoBtNovo = "Conta";
