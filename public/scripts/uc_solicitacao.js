@@ -293,17 +293,17 @@ export default class CtrlSolicitacao {
         "/" +
         bandeira +
         "/" +
-        nomeExame,
+        nomeExame +
         "/" +
-        nomeExecutante,
+        nomeExecutante +
         "/" +
-        endereco,
+        endereco +
         "/" +
-        valor
+        valor +
         "/" +
-        merchantOrderId 
+        merchantOrderId +
         "/" +
-        proofOfSale
+        proofOfSale +
         "/" +
         paymentId;
 
