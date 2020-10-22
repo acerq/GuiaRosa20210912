@@ -260,6 +260,19 @@ export default class CtrlSolicitacao {
     console.log("(app.js) renderSolicitacao -> ", response);
     if (resposta.mensagem == "Ok") {
       alert("Exame agendado com sucesso");
+      
+      const PDFKit = require('pdfkit');
+const fs = require('fs');
+
+const pdf = new PDFKit();
+
+pdf.text('Hello Rocketseat PDF');
+
+pdf.pipe(fs.createWriteStream('output.pdf'));
+pdf.end();
+      
+      
+      
       window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
