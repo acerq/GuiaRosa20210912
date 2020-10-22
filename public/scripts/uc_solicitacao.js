@@ -236,7 +236,7 @@ export default class CtrlSolicitacao {
 
     // Agendamento
     requisicao =
-      "/solicitacao/" +
+      "/agendamento/" +
       codExecutante +
       "/" +
       this.usrApp.login +
@@ -254,7 +254,7 @@ export default class CtrlSolicitacao {
       "S";
     //faturar;
 
-    console.log("(app.js) Executando solicitacao");
+    console.log("(app.js) Executando agendamento");
     response = await fetch(requisicao);
     resposta = await response.json();
 
@@ -263,10 +263,33 @@ export default class CtrlSolicitacao {
       alert("Erro no agendamento do exame.");
       return;
     }
-    console.log("(app.js) renderSolicitacao -> ", response);
+    console.log("(app.js) renderAgendamento -> ", response);
     if (resposta.mensagem == "Ok") {
       alert("Exame agendado com sucesso");
 
+        requisicao =
+      "/gerarConfirmacao/" +
+      codExecutante +
+      "/" +
+      this.usrApp.login +
+      "/" +
+      nomePaciente +
+      "/" +
+      cpfPaciente.replace(/\.|-/g, "") +
+      "/" +
+      codExame +
+      "/" +
+      dataExame +
+      "/" +
+      this.dtPeriodo +
+      "/" +
+      "S";
+    //faturar;
+      
+    let response = await fetch(requisicao);
+    let resposta = await response.json();
+
+      
       window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));

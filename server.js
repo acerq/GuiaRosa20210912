@@ -385,7 +385,7 @@ function doObterExames(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
-function doSolicitacao(req, resp) {
+function doAgendamento(req, resp) {
   guiaRosaApp.tempoCorrente = new Date();
 
   let soap = require("soap");
@@ -399,13 +399,13 @@ function doSolicitacao(req, resp) {
   let periodo = req.params.periodo;
   let faturar = req.params.faturar;
 
-  console.log("Solicitação - " + guiaRosaApp.login);
+  console.log("Agendamento - " + guiaRosaApp.login);
   if (guiaRosaApp.ehMedico) {
     solicitante = guiaRosaApp.login;
   } else {
     solicitante = "0000"; //TODO
   }
-  console.log("executando doSolicitacao");
+  console.log("executando doAgendamento");
   if (
     typeof executante === "undefined" ||
     typeof solicitante === "undefined" ||
@@ -453,9 +453,9 @@ function doSolicitacao(req, resp) {
     client.Importacaoguiarosaimportarincluirregistromobws(
       { Dados: dados },
       function(err, result) {
-        console.log("doSolicitacao webservice");
+        console.log("doAgendamento webservice");
         if (err) {
-          console.log("dodoSolicitacao Err -> ", err.response.body);
+          console.log("dados Agendamento Err -> ", err.response.body);
           resp.json(
             JSON.parse('{"erro" : "[Erro:#0009] Solicitação Inválida"}')
           );
@@ -465,7 +465,7 @@ function doSolicitacao(req, resp) {
         let resposta =
           result.ImportacaoguiarosaimportarincluirregistromobwsReturn.multiRef
             .$value;
-        console.log("doSolicitacao Resposta 1->" + resposta);
+        console.log("doAgendamento Resposta 1->" + resposta);
         resp.json(JSON.parse('{"mensagem":"Ok"}'));
       }
     );
@@ -487,8 +487,8 @@ async function doPgtoCC(req, resp) {
   let anoValidade = req.params.anoValidade;
   let cvv = req.params.cvv;
   let valor = req.params.valor;
-  
-  console.log("executando doPgtoCC" + nome );
+
+  console.log("executando doPgtoCC" + nome);
   if (
     typeof nome === "undefined" ||
     typeof cpf === "undefined" ||
@@ -511,48 +511,51 @@ async function doPgtoCC(req, resp) {
   let agora = new Date();
   let timeMillis = agora.getTime().toString();
   let id = guiaRosaApp.login + "_" + timeMillis;
-  
+
   const myHeaders = {
-      "Content-Type": "application/json",
-      "MerchantId"  : "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
-      "MerchantKey" : "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
-    };
-  
-  const myBody =    {
-    "MerchantOrderId": id,
-    "Customer":{
-      "Name"         : nome,
-      "Identity"     : cpf,
-      "IdentityType" : "CPF",
-      "Email"        : email,
+    "Content-Type": "application/json",
+    MerchantId: "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
+    MerchantKey: "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
+  };
+
+  const myBody = {
+    MerchantOrderId: id,
+    Customer: {
+      Name: nome,
+      Identity: cpf,
+      IdentityType: "CPF",
+      Email: email
     },
-    "Payment":{
-      "Provider"       : "Simulado",
-      "Type"           : "CreditCard",
-      "Amount"         : valor,
-      "Currency"       : "BRL",
-      "Country"        : "BRA",
-      "SoftDescriptor" : "GuiaRosa",
-      "Capture"        : true,
-      "Installments"   : 1,
-      "CreditCard":{
-         "CardNumber"     : numeroCartao,
-         "Holder"         : nomeCartao,
-         "ExpirationDate" : mesValidade + "/" + anoValidade,
-         "SecurityCode"   : cvv,
-         "Brand"          : bandeira
+    Payment: {
+      Provider: "Simulado",
+      Type: "CreditCard",
+      Amount: valor,
+      Currency: "BRL",
+      Country: "BRA",
+      SoftDescriptor: "GuiaRosa",
+      Capture: true,
+      Installments: 1,
+      CreditCard: {
+        CardNumber: numeroCartao,
+        Holder: nomeCartao,
+        ExpirationDate: mesValidade + "/" + anoValidade,
+        SecurityCode: cvv,
+        Brand: bandeira
       }
     }
   };
-      
+
   const requisicao = {
     method: "POST",
     headers: myHeaders,
     body: JSON.stringify(myBody)
   };
-  
+
   console.log("doPgtoCC --> " + JSON.stringify(requisicao));
-  const responseBraspag = await fetch("https://apisandbox.braspag.com.br/v2/sales/", requisicao);
+  const responseBraspag = await fetch(
+    "https://apisandbox.braspag.com.br/v2/sales/",
+    requisicao
+  );
   console.log("fetch doPgtoCC");
   const myJson = await responseBraspag.json();
   console.log("json doPgtoCC");
@@ -588,7 +591,6 @@ function doVerificarSenhaUsuarioCorrente(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
-
 async function doGerarConfirmacao(req, resp) {
   guiaRosaApp.tempoCorrente = new Date();
 
@@ -602,8 +604,8 @@ async function doGerarConfirmacao(req, resp) {
   let anoValidade = req.params.anoValidade;
   let cvv = req.params.cvv;
   let valor = req.params.valor;
-  
-  console.log("executando doPgtoCC" + nome );
+
+  console.log("executando doPgtoCC" + nome);
   if (
     typeof nome === "undefined" ||
     typeof cpf === "undefined" ||
@@ -622,29 +624,39 @@ async function doGerarConfirmacao(req, resp) {
   }
 
   console.log("parâmetros ok doGerarConfirmacao");
- 
+
   // npm install pdfkit
-  let PDFKit = require("pdfkit");
+  let PDFDocument = require("pdfkit");
   let fs = require("fs");
-  let pdf = new PDFKit();
+  let pdf = new PDFDocument({ bufferPages: true });
 
-  pdf.pipe(resp);
-      
-  pdf.font('/fonts/SourceSansPro-SemiBold.ttf')   
-      .fontSize(25)
-      .text('Guia Rosa - Agendamento de Exame', 100, 100);
+  let buffers = [];
+  pdf.on("data", buffers.push.bind(buffers));
+  pdf.on("end", () => {
+    let pdfData = Buffer.concat(buffers);
+    resp
+      .writeHead(200, {
+        "Content-Length": Buffer.byteLength(pdfData),
+        "Content-Type": "application/pdf",
+        "Content-disposition": "attachment;filename=confirmacao.pdf"
+      })
+      .end(pdfData);
+  });
 
-  pdf.font('/fonts/SourceSansPro-Regular.ttf')   
-        .fontSize(14)
-         .text('Guia Rosa - Agendamento de Exame', 100, 200);
+  pdf
+    .font("/fonts/SourceSansPro-SemiBold.ttf")
+    .fontSize(25)
+    .text("Guia Rosa - Agendamento de Exame", 100, 100);
 
-  pdf.text('Nome: ' + nome);
+  pdf
+    .font("/fonts/SourceSansPro-Regular.ttf")
+    .fontSize(14)
+    .text("Guia Rosa - Agendamento de Exame", 100, 200);
+
+  pdf.text("Nome: " + nome);
   pdf.end();
 
-
-  console.log("json doPgtoCC");
-
-  resp.json(myJson);
+  console.log("enviar");
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -694,17 +706,23 @@ function startServer() {
     doIncluirPaciente
   );
 
-  // Envio de Solicitação de Exame
+  // Envio de Solicitação de Agendamento de Exame
   app.get(
-    "/solicitacao/:executante/:solicitante/:paciente/:cpf/:exame/:data/:periodo/:faturar",
-    doSolicitacao
+    "/agendamento/:executante/:solicitante/:paciente/:cpf/:exame/:data/:periodo/:faturar",
+    doAgendamento
   );
 
   // Pagamento por cartão
-  app.get("/pgtocc/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor", doPgtoCC);
+  app.get(
+    "/pgtocc/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor",
+    doPgtoCC
+  );
 
   // Gerar PDF de resposta
-  app.get("/gerarConfirmacao/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor", doGerarConfirmacao);
+  app.get(
+    "/gerarConfirmacao/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor",
+    doGerarConfirmacao
+  );
 
   // Obter Locais
   app.get("/obterLocais/", doObterLocais);
