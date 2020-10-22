@@ -603,7 +603,13 @@ async function doGerarConfirmacao(req, resp) {
   let mesValidade = req.params.mesValidade;
   let anoValidade = req.params.anoValidade;
   let cvv = req.params.cvv;
+  let nomeExame = req.params.nomeExame;
+  let nomeExecutante = req.params.nomeExecutante;
+  let endereco = req.params.endereco;
   let valor = req.params.valor;
+  let merchantOrderId = req.params.merchantOrderId;
+  let proofOfSale = req.params.proofOfSale;
+  let paymentId = req.params.paymentId;
 
   console.log("executando doPgtoCC" + nome);
   if (
@@ -616,7 +622,13 @@ async function doGerarConfirmacao(req, resp) {
     typeof mesValidade === "undefined" ||
     typeof anoValidade === "undefined" ||
     typeof cvv === "undefined" ||
-    typeof valor === "undefined"
+    typeof nomeExame === "undefined" ||
+    typeof nomeExecutante === "undefined" ||
+    typeof endereco === "undefined" ||
+    typeof valor === "undefined" ||
+    typeof merchantOrderId === "undefined" ||
+    typeof proofOfSale === "undefined" ||
+    typeof paymentId === "undefined"
   ) {
     console.log("undefined 0012");
     resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
@@ -629,33 +641,47 @@ async function doGerarConfirmacao(req, resp) {
   let PDFDocument = require("pdfkit");
   let fs = require("fs");
   let pdf = new PDFDocument({ bufferPages: true });
-
-  console.log("1 RESP -> " + resp);
   let buffers = [];
   pdf.on("data", buffers.push.bind(buffers));
   pdf.on("end", () => {
     let pdfData = Buffer.concat(buffers);
-    console.log("2 RESP -> " + resp);
-    resp.setHeader('Content-type', 'application/pdf');
+    resp.setHeader("Content-type", "application/pdf");
     resp.setHeader("Content-Length", Buffer.byteLength(pdfData));
-    resp.setHeader("Content-disposition","attachment;filename=confirmacao.pdf");
-    console.log("4 RESP -> " + resp);
+    resp.setHeader("Content-disposition","attachment;filename=confirmacao.pdf"
+    );
     resp.send(pdfData);
-    console.log("3 RESP -> " + resp);
     resp.end();
   });
 
   pdf
     .font("public/fonts/SourceSansPro-SemiBold.ttf")
     .fontSize(25)
-    .text("Guia Rosa - Agendamento de Exame", 100, 100);
+    .text("Guia Rosa - Agendamento de Exame", 150, 100);
 
   pdf
     .font("public/fonts/SourceSansPro-Regular.ttf")
-    .fontSize(14)
-    .text("Guia Rosa - Agendamento de Exame", 100, 200);
+    .fontSize(14);
 
-  pdf.text("Nome: " + nome);
+  pdf.text(nomeExame + "\n");
+  pdf.text(nomeExecutante + "\n");
+  pdf.text(enderec+ "\n");
+  pdf.text("Cpf: " + nome);
+  pdf.text("Cpf: " + nome);
+  let email = req.params.email;
+  let numeroCartao = req.params.numeroCartao;
+  let nomeCartao = req.params.nomeCartao;
+  let bandeira = req.params.bandeira;
+  let mesValidade = req.params.mesValidade;
+  let anoValidade = req.params.anoValidade;
+  let cvv = req.params.cvv;
+  let nomeExame = req.params.nomeExame;
+  let nomeExecutante = req.params.nomeExecutante;
+  let endereco = req.params.endereco;
+  let valor = req.params.valor;
+  let merchantOrderId = req.params.merchantOrderId;
+  let proofOfSale = req.params.proofOfSale;
+  let paymentId = req.params.paymentId;
+
   pdf.end();
 
   console.log("enviar");
@@ -722,7 +748,8 @@ function startServer() {
 
   // Gerar PDF de resposta
   app.get(
-    "/gerarConfirmacao/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor",
+    "/gerarConfirmacao/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv" +
+      "/:nomeExame/:nomeExecutante/:endereco/:valor/:merchantOrderId/:proofOfSale/:paymentId",
     doGerarConfirmacao
   );
 

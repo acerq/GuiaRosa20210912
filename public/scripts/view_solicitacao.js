@@ -472,7 +472,10 @@ export default class ViewSolicitacao {
       mesValidade,
       anoValidade,
       cvv,
-      self.valorExameSelecionado.replace(/\./g, "")
+      nomeExame,
+      nomeExecutante,
+      endereco,
+      self.valorExameSelecionado.replace(/\./g, ""),
     );
     fnTirarEspera();
   }

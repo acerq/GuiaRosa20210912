@@ -163,6 +163,9 @@ export default class CtrlSolicitacao {
     mesValidade,
     anoValidade,
     cvv,
+    nomeExame,
+    nomeExecutante,
+    endereco,
     valor
   ) {
     this.view.colocarEspera();
@@ -298,15 +301,19 @@ export default class CtrlSolicitacao {
         "/" +
         cvv +
         "/" +
+        nomeExame,
+        "/" +
+        nomeExecutante,
+        "/" +
+        endereco,
+        "/" +
         valor
-      
         "/" +
         merchantOrderId 
         "/" +
         proofOfSale
         "/" +
-        paymentId 
-      ;
+        paymentId;
 
       let response = await fetch(requisicao);
       let blob = await response.blob();
