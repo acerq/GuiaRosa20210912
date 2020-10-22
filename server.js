@@ -3,7 +3,6 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
-const pdfkit = require("pdfkit");
 
 const BASE_URL =
   "http://sisp.e-sisp.org:8049/webrunstudio_73/webservices/GSIServices.jws?wsdl";
@@ -589,6 +588,67 @@ function doVerificarSenhaUsuarioCorrente(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
+
+async function doGerarConfirmacao(req, resp) {
+  guiaRosaApp.tempoCorrente = new Date();
+
+  let nome = req.params.nome;
+  let cpf = req.params.cpf;
+  let email = req.params.email;
+  let numeroCartao = req.params.numeroCartao;
+  let nomeCartao = req.params.nomeCartao;
+  let bandeira = req.params.bandeira;
+  let mesValidade = req.params.mesValidade;
+  let anoValidade = req.params.anoValidade;
+  let cvv = req.params.cvv;
+  let valor = req.params.valor;
+  
+  console.log("executando doPgtoCC" + nome );
+  if (
+    typeof nome === "undefined" ||
+    typeof cpf === "undefined" ||
+    typeof email === "undefined" ||
+    typeof numeroCartao === "undefined" ||
+    typeof nomeCartao === "undefined" ||
+    typeof bandeira === "undefined" ||
+    typeof mesValidade === "undefined" ||
+    typeof anoValidade === "undefined" ||
+    typeof cvv === "undefined" ||
+    typeof valor === "undefined"
+  ) {
+    console.log("undefined 0012");
+    resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
+    return;
+  }
+
+  console.log("parâmetros ok doGerarConfirmacao");
+ 
+  // npm install pdfkit
+  let PDFKit = require("pdfkit");
+  let fs = require("fs");
+  let pdf = new PDFKit();
+
+  pdf.pipe(resp);
+      
+  pdf.font('/fonts/SourceSansPro-SemiBold.ttf')   
+      .fontSize(25)
+      .text('Guia Rosa - Agendamento de Exame', 100, 100);
+
+  pdf.font('/fonts/SourceSansPro-Regular.ttf')   
+        .fontSize(14)
+         .text('Guia Rosa - Agendamento de Exame', 100, 200);
+
+  pdf.text('Nome: ' + nome);
+  pdf.end();
+
+
+  console.log("json doPgtoCC");
+
+  resp.json(myJson);
+}
+
+//-----------------------------------------------------------------------------------------//
+
 function startServer() {
   const app = express();
 
@@ -642,6 +702,9 @@ function startServer() {
 
   // Pagamento por cartão
   app.get("/pgtocc/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor", doPgtoCC);
+
+  // Gerar PDF de resposta
+  app.get("/gerarConfirmacao/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor", doGerarConfirmacao);
 
   // Obter Locais
   app.get("/obterLocais/", doObterLocais);

@@ -267,26 +267,6 @@ export default class CtrlSolicitacao {
     if (resposta.mensagem == "Ok") {
       alert("Exame agendado com sucesso");
 
-      // npm install pdfkit
-      const PDFKit = require("pdfkit");
-      const fs = require("fs");
-      const pdf = new PDFKit();
-
-      pdf.text("");
-
-      pdf.pipe(fs.createWriteStream("output.pdf"));
-      
-      pdf.font('/fonts/SourceSansPro-SemiBold.ttf')   
-        .fontSize(25)
-         .text('Guia Rosa - Agendamento de Exame', 100, 100);
-
-      pdf.font('/fonts/SourceSansPro-Regular.ttf')   
-        .fontSize(14)
-         .text('Guia Rosa - Agendamento de Exame', 100, 200);
-
-      pdf.text('Data: ' + dataExame);
-      pdf.end();
-
       window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
