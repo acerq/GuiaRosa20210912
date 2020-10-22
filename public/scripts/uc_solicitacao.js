@@ -206,8 +206,8 @@ export default class CtrlSolicitacao {
     }
     if (resposta.Payment.ReasonCode == 0) {
       merchantOrderId = resposta.MerchantOrderId;
-      proofOfSale = resposta.ProofOfSale;
-      paymentId = resposta.PaymentId;
+      proofOfSale = resposta.Payment.ProofOfSale;
+      paymentId = resposta.Payment.PaymentId;
     } else {
       this.view.tirarEspera();
       switch (resposta.Payment.ReasonCode) {

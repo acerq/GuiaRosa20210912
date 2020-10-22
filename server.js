@@ -611,13 +611,9 @@ async function doGerarConfirmacao(req, resp) {
   if (
     typeof nome === "undefined" ||
     typeof cpf === "undefined" ||
-    typeof email === "undefined" ||
     typeof numeroCartao === "undefined" ||
     typeof nomeCartao === "undefined" ||
     typeof bandeira === "undefined" ||
-    typeof mesValidade === "undefined" ||
-    typeof anoValidade === "undefined" ||
-    typeof cvv === "undefined" ||
     typeof nomeExame === "undefined" ||
     typeof nomeExecutante === "undefined" ||
     typeof endereco === "undefined" ||
