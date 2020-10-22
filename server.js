@@ -656,13 +656,14 @@ async function doGerarConfirmacao(req, resp) {
     .fontSize(14);
 
   pdf.text("ID Guia Rosa: " + merchantOrderId + "\n");
-  pdf.text(nomeExame + "\n",100, 300);
+  pdf.text(nomeExame + "\n",100, 200);
   pdf.text(nomeExecutante + "\n");
   pdf.text(endereco + "\n");
-  let tamValor = valor.length
+  let tamValor = valor.length;
+  valor = valor.substring(0,tamValor-2) + "," + valor.substring(tamValor-2);
   pdf.text("Valor: R$ " + valor + "\n\n");
   pdf.text("Agendado para " + nome + " (" + cpf + ")\n\n\n");
-  numeroCartao = numeroCartao.substring(0,4) + " " + numeroCartao.substring(4,6) + "XX XXXX XX" + numeroCartao.substring(15);
+  numeroCartao = numeroCartao.substring(0,4) + " " + numeroCartao.substring(4,6) + "XX XXXX XX" + numeroCartao.substring(14);
   pdf.text("Pagamento feito com  cartão de crédito " + numeroCartao + " (" + bandeira + ")\n");
   pdf.text("Número da Autorização: " +  proofOfSale + "\n")
   pdf.text("Identificação do Pagamento: " + paymentId);
