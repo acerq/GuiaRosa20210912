@@ -3,6 +3,8 @@
 import ViewSolicitacao from "./view_solicitacao.js";
 import DaoPaciente from "./dao_paciente.js";
 
+const download = new Function("blob", "download(blob)");
+
 export default class CtrlSolicitacao {
   constructor() {
     this.view = new ViewSolicitacao(this);
@@ -236,7 +238,8 @@ export default class CtrlSolicitacao {
 
     // Agendamento
     requisicao =
-      "/agendamento/" +
+      "/agendamento" +
+      "/" +
       codExecutante +
       "/" +
       this.usrApp.login +
@@ -267,29 +270,33 @@ export default class CtrlSolicitacao {
     if (resposta.mensagem == "Ok") {
       alert("Exame agendado com sucesso");
 
-        requisicao =
-      "/gerarConfirmacao/" +
-      codExecutante +
-      "/" +
-      this.usrApp.login +
-      "/" +
-      nomePaciente +
-      "/" +
-      cpfPaciente.replace(/\.|-/g, "") +
-      "/" +
-      codExame +
-      "/" +
-      dataExame +
-      "/" +
-      this.dtPeriodo +
-      "/" +
-      "S";
-    //faturar;
-      
-    let response = await fetch(requisicao);
-    let resposta = await response.json();
+      requisicao =
+        "/gerarConfirmacao" +
+        "/" +
+        cpfPaciente.replace(/\.|-/g, "") +
+        "/" +
+        nomePaciente +
+        "/" +
+        emailPaciente +
+        "/" +
+        numCartao.replace(/ /g, "") +
+        "/" +
+        nomeCartao +
+        "/" +
+        bandeira +
+        "/" +
+        mesValidade +
+        "/" +
+        anoValidade +
+        "/" +
+        cvv +
+        "/" +
+        valor.replace(/\.|\,/g, "");
 
-      
+      let response = await fetch(requisicao);
+      let blob = await response.blob();
+      await download(blob);
+      alert("Download");
       window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
