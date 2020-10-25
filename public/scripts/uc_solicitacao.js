@@ -43,9 +43,9 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterPacientes() {
-    this.arrayPacientes = await this.daoPaciente.obterPacientes();
     this.usrApp = window.retornarUsrApp();
     if (this.usrApp.ehMedico) {
+      this.arrayPacientes = await this.daoPaciente.obterPacientes();
       if (this.arrayPacientes.length > 0) {
         this.posAtual = 0;
       } else {
