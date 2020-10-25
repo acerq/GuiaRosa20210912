@@ -278,7 +278,7 @@ function doObterPeriodo(req, resp) {
         return;
       }
       let resposta = JSON.parse(result1.WsretornaperiodoReturn.$value);
-      console.log("doObterPeriodo Resposta ->", JSON.stringify(resposta));
+      console.log("doObterPeriodo Resposta -> " + JSON.stringify(resposta));
       resp.json(resposta);
     });
   });
