@@ -11,13 +11,19 @@ var usr = null;
 
 const divConteudo = document.getElementById("divConteudo");
 const divInstrucao = document.getElementById("divInstrucao");
+
 const tfCpf = document.getElementById("tfCpf");
 const tfNome = document.getElementById("tfNome");
 const tfSenha = document.getElementById("tfSenha");
 const tfReplay = document.getElementById("tfReplay");
 const tfCelular = document.getElementById("tfCelular");
 const tfEmail = document.getElementById("tfEmail");
-const tfEndereco = document.getElementById("tfEndereco");
+const tfRua = document.getElementById("tfRua");
+const tfNumero = document.getElementById("tfNumero");
+const tfComplemento = document.getElementById("tfComplemento");
+const tfBairro = document.getElementById("tfBairro");
+const tfCep = document.getElementById("tfCep");
+
 const btCancelar = document.getElementById("btCancelar");
 const btCriar = document.getElementById("btCriar");
 
@@ -27,7 +33,10 @@ var senha;
 var replay;
 var email;
 var celular;
-var endereco;
+var rua;
+var complemento;
+var bairro;
+var cep;
 
 var funcaoMD5 = new Function("a", "return md5(a)");
 
