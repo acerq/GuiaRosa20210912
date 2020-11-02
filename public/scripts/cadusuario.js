@@ -34,6 +34,7 @@ var replay;
 var email;
 var celular;
 var rua;
+var numero;
 var complemento;
 var bairro;
 var cep;
@@ -109,13 +110,11 @@ function abrirDbApp() {
     nome = tfNome.value;
     email = tfEmail.value;
     celular = tfCelular.value;
-    rua: tfRua.value;
-    numero: tfNumero.value;
-    complemento: tfComplemento.value;
+    rua = tfRua.value;
+    numero = tfNumero.value;
+    complemento = tfComplemento.value;
     bairro = tfBairro.value;
     cep = tfCep.value;
-
-
     incluirDbApp();
   };
 }
@@ -140,7 +139,11 @@ function incluirDbApp() {
       nome: nome,
       email: email,
       celular: celular,
-      endereco: celular,
+      rua: rua,
+      numero: numero,
+      complemento: complemento,
+      bairro: bairro,
+      cep: cep,
       ehMedico: false
     });
     objectStoreRequest.onsuccess = function(event) {
@@ -169,7 +172,15 @@ function doIncluirPaciente() {
       "/" +
       celular.replace(/\(|\)|\s|-/g, "") +
       "/" +
-      endereco
+      rua +
+      "/" +
+      numero +
+      "/" +
+      complemento +
+      "/" +
+      bairro +
+      "/" +
+      cep
   )
     .then(response => {
       console.log("(cadusuario.js) incluirPaciente response");
@@ -197,6 +208,23 @@ function doGuardarUsuarioCorrente() {
       "/" +
       celular +
       "/" +
+      rua +
+      "/" +
+      numero +
+      "/" +
+      complemento +
+      "/" +
+      bairro +
+      "/" +
+      cep +
+      "/" +
+
+    
+    
+        "/guardarUsuarioCorrente/:cpf/:senha/:nome/:email/:celular/:rua/:numero/:complemento/:bairro/:cep",
+
+    
+    
       endereco
   )
     .then(response => {
