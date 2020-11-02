@@ -11,8 +11,7 @@ export default class CtrlSolicitacao {
 
     this.daoPaciente = new DaoPaciente();
 
-    this.usrApp = window.retornarUsrApp();
-    
+    this.usrApp = null;
     this.arrayPacientes = [];
     this.dtPeriodo = null;
     this.arrayLocais = [];
@@ -25,6 +24,8 @@ export default class CtrlSolicitacao {
 
   async init() {
     this.view.colocarEspera();
+
+    this.usrApp = await window.retornarUsrApp();
 
     if(this.view.usuarioLogado) {
       await this.daoPaciente.abrirDB();
