@@ -109,7 +109,12 @@ function abrirDbApp() {
     nome = tfNome.value;
     email = tfEmail.value;
     celular = tfCelular.value;
-    endereco = tfEndereco.value;
+    rua: tfRua.value;
+    numero: tfNumero.value;
+    complemento: tfComplemento.value;
+    bairro = tfBairro.value;
+    cep = tfCep.value;
+
 
     incluirDbApp();
   };
