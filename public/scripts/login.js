@@ -2,7 +2,6 @@
 
 // -----------------------------------------------------------------------------------------//
 
-var instalando = false;
 var requestDB = null;
 var db = null;
 var store = null;
@@ -116,36 +115,32 @@ function incluirDbApp(login, senha, nome, email, celular, rua, numero, complemen
 // -----------------------------------------------------------------------------------------//
 
 function instalacaoApp() {
-  instalando = true;
   divInstrucao.innerHTML =
     "<center><b>Efetue seu Login ou Crie sua Conta</b></center>";
 }
 
 // -----------------------------------------------------------------------------------------//
 
-function renderEfetuarLogin(data) {
+function renderEfetuarLogin(re) {
   if (data == null) {
-    console.log("renderEfetuarLogin no data");
     alert("Problemas de Conexão com o Servidor");
     return;
   }
-  console.log("renderEfetuarLogin -> ", data);
   if (data.hasOwnProperty("erro")) {
     alert(data.erro);
-    retirarEspera();
+ 
     if(data.erro.includes("TIMEOUT")) {
       divInstrucao.innerHTML = "<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>";     
       return;
     }
     
     if(usrApp == null || tfLogin.value != usrApp.login || fnMD5(tfSenha.value) != usrApp.senha) {
-      alert(data.erro);
       divInstrucao.innerHTML = "<b>Login não autorizado</b>";     
       return;
     }
+    
     if(tfLogin.value == usrApp.login && fnMD5(tfSenha.value) == usrApp.senha) {
       doDeterminarUsuarioLocal().then(retorno => {
-        console.log("callbackCriarUsuario retorno", retorno);
         window.location.href = "inicio.html";
         return;
       });
@@ -201,32 +196,23 @@ function doDeterminarUsuarioLocal() {
 
 // -----------------------------------------------------------------------------------------//
 
-function doEfetuarLogin(login, senha) {
-  console.log("(app.js) Executando efetuarLogin " + login);
-  return fetch("/login/" + login + "/" + fnMD5(senha))
-    .then(response => {
-      console.log("(app.js) efetuarLogin response");
-      return response.json();
-    })
-    .catch(() => {
-      console.log("(app.js) efetuarLogin catch");
-      return null;
-    });
+async function doEfetuarLogin(login, senha) {
+  let response = await fetch("/login/" + login + "/" + fnMD5(senha));
+  return await response.json();
 }
 
 // -----------------------------------------------------------------------------------------//
 
-function callbackOk() {
+async function callbackOk() {
   console.log("(app.js) callbackOk");
   const login = tfLogin.value;
   const senha = tfSenha.value;
-
+  
   colocarEspera();
   // chama efetuarLogin e atualiza a tela
-  doEfetuarLogin(login, senha).then(retorno => {
-    console.log("callbackOk retorno", retorno);
-    renderEfetuarLogin(retorno);
-  });
+  let retorno = await doEfetuarLogin(login, senha);
+  renderEfetuarLogin(retorno);
+  retirarEspera();
 }
 
 // -----------------------------------------------------------------------------------------//
