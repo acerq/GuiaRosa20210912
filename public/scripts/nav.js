@@ -1,6 +1,6 @@
 const divConteudo = document.getElementById("divConteudo");
 var usrApp = null;
-var inicio = false;
+var inicioAposLogin = false;
 
 // -----------------------------------------------------------------------------------------//
 
@@ -116,7 +116,7 @@ function renderObterUsuarioCorrente(retorno) {
     $("#container-de-icones").load("icones_paciente.html");
   }
 
-  if (inicio) {
+  if (inicioAposLogin) {
     console.log(usrApp);
     divConteudo.innerHTML = "";
     if (usrApp.ehMedico)
@@ -238,7 +238,7 @@ function loginApp() {
 // -----------------------------------------------------------------------------------------//
 
 async function inicioAposLoginApp() {
-  inicio = true;  
+  inicioAposLogin = true;  
   let retorno = await doObterUsuarioCorrente();
   console.log("abrirApp retorno", retorno);
   renderObterUsuarioCorrente(retorno);
@@ -249,22 +249,26 @@ async function inicioAposLoginApp() {
 
 async function abrirApp() {
   return await fetch("/inicio");
-  inicio = true;
+  inicioAposLogin = false;
 }
 
 // -----------------------------------------------------------------------------------------//
 
 function fecharApp() {
+  inicioAposLogin = false;
   fetch("/inicio");
   closeMenu();
   try {
     navigator.app.exitApp();
   } catch (e) {
     var tamHistory = window.history.length;
-    while (tamHistory > 0) {
-      window.history.go(-1);
-      tamHistory--;
-    }
+    if(tamHistory == 0)
+        window.location.href='index.html';
+    else
+      while (tamHistory > 0) {
+        window.history.go(-1);
+        tamHistory--;
+      }
   }
 }
 
