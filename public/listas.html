@@ -22,7 +22,7 @@
     <header id="hdr" class="header"></header>
     <main class="main">
       <div id="menu"></div>
-      <div id="divConteudo" class="caixaDialog">
+      <div id="divConteudo">
         <div class="container-de-icones">
           <div
             class="icone-container"
@@ -46,7 +46,6 @@
               </div>
             </div>
           </div>
-
           <div
             class="icone-container"
             onclick="irPara('arquivos/CampoGrandeBangu.pdf')"
@@ -78,7 +77,6 @@
               </div>
             </div>
           </div>
-
           <div
             class="icone-container"
             onclick="irPara('arquivos/NiteroiCentroRJ.pdf')"
@@ -88,7 +86,6 @@
               <div class="texto">Centro do Rio<br />Niterói</div>
             </div>
           </div>
-
           <div
             class="icone-container"
             onclick="irPara('arquivos/NovaIguacuNilopolis.pdf')"
@@ -98,7 +95,6 @@
               <div class="texto">Nova Iguaçu<br />Nilópolis</div>
             </div>
           </div>
-
           <div
             class="icone-container"
             onclick="irPara('arquivos/TijucaZonaSul.pdf')"
@@ -115,4 +111,7 @@
     <footer class="footer"></footer>
   </body>
   <script src="scripts/nav.js"></script>
+  <script>
+      doObterUsuarioCorrente();
+  </script>
 </html>

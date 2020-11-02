@@ -96,6 +96,7 @@ function closeMenu() {
 async function doObterUsuarioCorrente() {
   console.log("(app.js) Executando doLoad ");
   let response = await fetch("/obterUsuarioCorrente");
+  renderObterUsuarioCorrente(response); 
   return await response.json();
 }
 
