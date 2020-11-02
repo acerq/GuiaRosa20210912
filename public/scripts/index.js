@@ -98,7 +98,7 @@ function obterAppUsr() {
 
 // -----------------------------------------------------------------------------------------//
 
-function incluirDbApp(login, senha, nome, email, celular, endereco, ehMedico) {
+function incluirDbApp(login, senha, nome, email, celular, rua, numero, complemento, bairro, cep, ehMedico) {
   transacao = db.transaction(["AppUsr"], "readwrite");
   transacao.oncomplete = event => {
     console.log("[AppUsr] Sucesso");
@@ -115,7 +115,11 @@ function incluirDbApp(login, senha, nome, email, celular, endereco, ehMedico) {
 		  nome: nome,
 		  email: email,
 		  celular : celular,
-		  endereco : endereco,
+      rua: rua,
+      numero : numero,
+      complemento : complemento,
+      bairro : bairro,
+      cep : cep,
 		  ehMedico: ehMedico
 	  });
 	  objectStoreRequest.onsuccess = function(event) {
@@ -169,6 +173,10 @@ function renderEfetuarLogin(data) {
           tfLogin.value,
           null,
           data.nome,
+          null,
+          null,
+          null,
+          null,
           null,
           null,
           null,
