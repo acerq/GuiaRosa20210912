@@ -22,21 +22,6 @@ var estadoBtNovo = "Conta";
 
 // -----------------------------------------------------------------------------------------//
 
-function initApp() {
-  console.log("init");
-  // Registrando o service worker.
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/service-worker.js").then(reg => {
-        console.log("Service worker registrado", reg);
-      });
-    });
-  }
-  abrirDbApp();
-}
-
-// -----------------------------------------------------------------------------------------//
-
 function abrirDbApp() {
   requestDB = window.indexedDB.open("AppUsr", 1);
 

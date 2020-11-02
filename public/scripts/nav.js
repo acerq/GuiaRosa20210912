@@ -94,7 +94,6 @@ function closeMenu() {
 // -----------------------------------------------------------------------------------------//
 
 async function doObterUsuarioCorrente() {
-  console.log("(app.js) Executando doLoad ");
   let response = await fetch("/obterUsuarioCorrente");
   usrApp = await response.json();
   renderObterUsuarioCorrente(); 
@@ -118,7 +117,6 @@ function renderObterUsuarioCorrente() {
   }
 
   if (inicioAposLogin) {
-    console.log(usrApp);
     divConteudo.innerHTML = "";
     if (usrApp.ehMedico)
       divConteudo.innerHTML +=
@@ -136,10 +134,8 @@ function renderObterUsuarioCorrente() {
 // -----------------------------------------------------------------------------------------//
 
 function cadastroDePacientes() {
-  console.log("(nav.js) Verificando Timeout ");
   return fetch("/verificarTimeout")
     .then(async response => {
-      console.log("(nav.js) VerificarTimeout response");
       let msg = await response.json();
       if (msg.hasOwnProperty("erro")) {
         alert(msg.erro);
@@ -150,7 +146,6 @@ function cadastroDePacientes() {
       return response.json();
     })
     .catch(e => {
-      console.log("(nav.js) do catch", e);
       return null;
     });
 }
@@ -158,10 +153,8 @@ function cadastroDePacientes() {
 // -----------------------------------------------------------------------------------------//
 
 function solicitacaoDeExames() {
-  console.log("(nav.js) Verificando Timeout ");
   return fetch("/verificarTimeout")
     .then(async response => {
-      console.log("(nav.js) VerificarTimeout response");
       let msg = await response.json();
       if (msg.hasOwnProperty("erro")) {
         alert(msg.erro);
@@ -172,7 +165,6 @@ function solicitacaoDeExames() {
       return response.json();
     })
     .catch(e => {
-      console.log("(nav.js) do catch", e);
       return null;
     });
 }
@@ -180,10 +172,8 @@ function solicitacaoDeExames() {
 // -----------------------------------------------------------------------------------------//
 
 function apresentarListas() {
-  console.log("(nav.js) Verificando Timeout ");
   return fetch("/verificarTimeout")
     .then(async response => {
-      console.log("(nav.js) VerificarTimeout response");
       let msg = await response.json();
       if (msg.hasOwnProperty("erro")) {
         alert(msg.erro);
@@ -194,7 +184,6 @@ function apresentarListas() {
       return response.json();
     })
     .catch(e => {
-      console.log("(nav.js) do catch", e);
       return null;
     });
 }
@@ -202,10 +191,8 @@ function apresentarListas() {
 // -----------------------------------------------------------------------------------------//
 
 function paginaInicial() {
-  console.log("(nav.js) Verificando Timeout ");
   return fetch("/verificarTimeout")
     .then(async response => {
-      console.log("(nav.js) VerificarTimeout response");
       let msg = await response.json();
       if (msg.hasOwnProperty("erro")) {
         alert(msg.erro);
@@ -216,7 +203,6 @@ function paginaInicial() {
       return response.json();
     })
     .catch(e => {
-      console.log("(nav.js) do catch", e);
       return null;
     });
 }
@@ -224,8 +210,8 @@ function paginaInicial() {
 // -----------------------------------------------------------------------------------------//
 
 window.retornarUsrApp = async function() {
-  let retorno = await doObterUsuarioCorrente();
-  console.log("retornarUsrApp ", retorno);
+  if(usrApp == null)
+     await doObterUsuarioCorrente();
   renderObterUsuarioCorrente();
   return usrApp;
 };
@@ -240,15 +226,20 @@ function loginApp() {
 
 async function inicioAposLoginApp() {
   inicioAposLogin = true;  
-  let retorno = await doObterUsuarioCorrente();
-  console.log("abrirApp retorno", retorno);
-  renderObterUsuarioCorrente(retorno);
+  await doObterUsuarioCorrente();
+  renderObterUsuarioCorrente();
   return usrApp;
 }
 
 // -----------------------------------------------------------------------------------------//
 
 async function abrirApp() {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/service-worker.js").then(reg => {
+      });
+    });
+  }
   let response = await fetch("/inicio");
   usrApp = await response.json();
   renderObterUsuarioCorrente(); 
