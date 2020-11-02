@@ -223,12 +223,12 @@ function paginaInicial() {
 
 // -----------------------------------------------------------------------------------------//
 
-//window.retornarUsrApp = async function() {
-//  let retorno = await doObterUsuarioCorrente();
-//  console.log("abrirApp retorno", retorno);
-//  renderObterUsuarioCorrente(retorno);
-//  return usrApp;
-//};
+window.retornarUsrApp = async function() {
+  let retorno = await doObterUsuarioCorrente();
+  console.log("retornarUsrApp ", retorno);
+  renderObterUsuarioCorrente(retorno);
+  return usrApp;
+};
 
 // -----------------------------------------------------------------------------------------//
 
