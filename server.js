@@ -40,6 +40,28 @@ function acertaData(data) {
 
 //-----------------------------------------------------------------------------------------//
 
+function doInicio(req, resp) {
+  guiaRosaApp = {
+    tempoCorrente: null,
+    login: null,
+    senha: null,
+    nome: null,
+    celular: null,
+    email: null,
+    rua: null,
+    numero: null,
+    complemento: null,
+    bairro: null,
+    cep: null,
+    ehMedico: false
+  };
+  resp.json(guiaRosaApp);
+  resp.end();
+  return;
+}
+
+//-----------------------------------------------------------------------------------------//
+
 function doObterUsuarioCorrente(req, resp) {
   guiaRosaApp.tempoCorrente = new Date();
   console.log("retornarUsuario --> ", JSON.stringify(guiaRosaApp));
@@ -639,36 +661,53 @@ async function doGerarConfirmacao(req, resp) {
     let pdfData = Buffer.concat(buffers);
     resp.setHeader("Content-type", "application/pdf");
     resp.setHeader("Content-Length", Buffer.byteLength(pdfData));
-    resp.setHeader("Content-disposition","attachment;filename=confirmacao_" + merchantOrderId + ".pdf"
+    resp.setHeader(
+      "Content-disposition",
+      "attachment;filename=confirmacao_" + merchantOrderId + ".pdf"
     );
     resp.send(pdfData);
     resp.end();
   });
 
-  pdf.image('public/images/icons/android/android-launchericon-144-144.png', 100, 75, {fit: [100, 100]});
+  pdf.image(
+    "public/images/icons/android/android-launchericon-144-144.png",
+    100,
+    75,
+    { fit: [100, 100] }
+  );
   pdf
     .font("public/fonts/SourceSansPro-SemiBold.ttf")
     .fontSize(25)
     .text("Agendamento de Exame", 210, 100);
 
-  pdf
-    .font("public/fonts/SourceSansPro-Regular.ttf")
-    .fontSize(14);
+  pdf.font("public/fonts/SourceSansPro-Regular.ttf").fontSize(14);
 
   pdf.text("ID Guia Rosa: " + merchantOrderId + "\n");
-  pdf.text(nomeExame + "\n",100, 200);
+  pdf.text(nomeExame + "\n", 100, 200);
   pdf.text(nomeExecutante + "\n");
   pdf.text(endereco + "\n");
   let tamValor = valor.length;
-  valor = valor.substring(0,tamValor-2) + "," + valor.substring(tamValor-2);
+  valor =
+    valor.substring(0, tamValor - 2) + "," + valor.substring(tamValor - 2);
   pdf.text("Valor: R$ " + valor + "\n\n");
   pdf.text("Agendado para " + nome + " (" + cpf + ")\n\n\n");
-  numeroCartao = numeroCartao.substring(0,4) + " " + numeroCartao.substring(4,6) + "XX XXXX XX" + numeroCartao.substring(14);
-  pdf.text("Pagamento feito com  cartão de crédito " + numeroCartao + " (" + bandeira + ")\n");
-  pdf.text("Número da Autorização: " +  proofOfSale + "\n")
+  numeroCartao =
+    numeroCartao.substring(0, 4) +
+    " " +
+    numeroCartao.substring(4, 6) +
+    "XX XXXX XX" +
+    numeroCartao.substring(14);
+  pdf.text(
+    "Pagamento feito com  cartão de crédito " +
+      numeroCartao +
+      " (" +
+      bandeira +
+      ")\n"
+  );
+  pdf.text("Número da Autorização: " + proofOfSale + "\n");
   pdf.text("Identificação do Pagamento: " + paymentId);
   pdf.end();
-} 
+}
 
 //-----------------------------------------------------------------------------------------//
 
@@ -692,6 +731,9 @@ function startServer() {
   // Chamadas aos Serviços Remotos
   //
 
+  // Iniciar
+  app.get("/inicio", doInicio);
+
   // Login
   app.get("/login/:login/:senha", doLoginMedico);
   app.get("/login/:login", doLoginMedico);
@@ -708,7 +750,6 @@ function startServer() {
   app.get("/verificarSenha/:senha", doVerificarSenhaUsuarioCorrente);
 
   // Obter Usuário Corrente
-  app.get("/inicio", doObterUsuarioCorrente);
   app.get("/obterUsuarioCorrente", doObterUsuarioCorrente);
 
   // Incluir Paciente
@@ -732,10 +773,10 @@ function startServer() {
   // Gerar PDF de resposta
   app.get(
     "/gerarConfirmacao/:cpf/:nome/:numeroCartao/:nomeCartao/:bandeira/:nomeExame/:nomeExecutante/:endereco" +
-    "/:valor/:merchantOrderId/:proofOfSale/:paymentId",
+      "/:valor/:merchantOrderId/:proofOfSale/:paymentId",
     doGerarConfirmacao
   );
-  
+
   // Obter Locais
   app.get("/obterLocais/", doObterLocais);
 
