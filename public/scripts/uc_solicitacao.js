@@ -26,8 +26,10 @@ export default class CtrlSolicitacao {
   async init() {
     this.view.colocarEspera();
 
-    await this.daoPaciente.abrirDB();
-    await this.obterPacientes();
+    if(this.view.usuarioLogado) {
+      await this.daoPaciente.abrirDB();
+      await this.obterPacientes();
+    }
     await this.obterPeriodo();
     await this.obterLocais();
 

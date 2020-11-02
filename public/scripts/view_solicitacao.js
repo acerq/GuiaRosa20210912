@@ -2,7 +2,7 @@
 
 const SEPARADOR = "##";
 const funcaoMD5 = new Function("a", "return md5(a)");
-const funcaoObterUsuario = new Function("b", "return usrApp.login");
+//---- const funcaoObterUsuario = new Function("b", "return usrApp.login");
 const fnTirarEspera = new Function("tirarEspera()");
 const fnColocarEspera = new Function("colocarEspera()");
 
@@ -32,12 +32,15 @@ export default class ViewSolicitacao {
     this.btConsultar = document.getElementById("btConsultar");
     this.btEnviar = document.getElementById("btEnviar");
     this.btSair = document.getElementById("btSair");
+    this.usuarioLogado = true;
 
     this.divResposta = document.getElementById("divResposta");
 
     this.btSair.onclick = this.sair;
     this.btEnviar.onclick = this.irParaCheckout;
-    this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
+    if (this.btPacientes != null)
+      this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
+    else this.usuarioLogado = false;
     this.btConsultar.onclick = this.obterExames;
 
     //---- Elementos da página de pagamento
@@ -69,34 +72,37 @@ export default class ViewSolicitacao {
       }
     });
 
-    this.pwSenha.addEventListener("keyup", function(event) {
-      if (event.keyCode === 13) {
-        this.irParaCheckout();
-      }
-    });
+    if (this.usuarioLogado)
+      this.pwSenha.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+          this.irParaCheckout();
+        }
+      });
   }
 
   //-----------------------------------------------------------------------------------------//
 
   async atualizarInterface(ehMedico, arrayPacientes, arrayLocais) {
     //---- Formata a combobox de pacientes ----//
-    if (ehMedico) {
-      let i,
-        tam = this.cbPaciente.options.length - 1;
-      for (i = tam; i > 0; i--) {
-        this.cbPaciente.remove(i);
+    if (this.usuarioLogado) {
+      if (ehMedico) {
+        let i,
+          tam = this.cbPaciente.options.length - 1;
+        for (i = tam; i > 0; i--) {
+          this.cbPaciente.remove(i);
+        }
+        await arrayPacientes.forEach(e => {
+          var elem = document.createElement("option");
+          elem.value = e.nome + SEPARADOR + e.cpf + SEPARADOR + e.email;
+          elem.text = e.nome;
+          this.cbPaciente.add(elem);
+        });
+      } else {
+        this.cbPaciente.remove(this.cbPaciente.selectedIndex);
+        this.btPacientes.hidden = true;
+        this.cbPaciente.style =
+          "width:100%;-webkit-appearance:none;-moz-appearance:none;text-indent:1px;text-overflow: '';";
       }
-      await arrayPacientes.forEach(e => {
-        var elem = document.createElement("option");
-        elem.value = e.nome + SEPARADOR + e.cpf + SEPARADOR + e.email;
-        elem.text = e.nome;
-        this.cbPaciente.add(elem);
-      });
-    } else {
-      this.cbPaciente.remove(this.cbPaciente.selectedIndex);
-      this.btPacientes.hidden = true;
-      this.cbPaciente.style =
-        "width:100%;-webkit-appearance:none;-moz-appearance:none;text-indent:1px;text-overflow: '';";
     }
     this.dtExame.value = this.dataParaInput();
 
@@ -259,7 +265,6 @@ export default class ViewSolicitacao {
         if (index === array.length - 1) res(retorno);
       });
     }).then(retorno => {
-      
       const divExame = document.getElementById("divExame");
 
       divExame.style = "height:66px";
@@ -363,7 +368,7 @@ export default class ViewSolicitacao {
       $("#tfNumCartao").mask("9999 9999 9999 9999");
       $("#tfMesValidade").mask("99");
       $("#tfAnoValidade").mask("9999");
-      
+
       let selecao = self.dadosExame.text.split(SEPARADOR);
       let msg =
         "<center><b>Exame Solicitado:</b><br/>" +
@@ -387,7 +392,7 @@ export default class ViewSolicitacao {
 
   enviarSolicitacao() {
     fnColocarEspera();
-    
+
     let numCartao = self.tfNumCartao.value;
     if (numCartao == null || numCartao == "") {
       fnTirarEspera();
@@ -400,7 +405,7 @@ export default class ViewSolicitacao {
       alert("O número do cartão não foi informado corretamente!");
       return;
     }
-    
+
     let nomeCartao = self.tfNomeCartao.value;
     if (nomeCartao == null || nomeCartao == "") {
       fnTirarEspera();
@@ -409,12 +414,12 @@ export default class ViewSolicitacao {
     }
 
     let bandeira = self.cbBandeira.value;
-    if (bandeira == null || bandeira == "" ) {
+    if (bandeira == null || bandeira == "") {
       fnTirarEspera();
       alert("A Bandeira não foi selecionada.");
       return;
     }
-    
+
     let mesValidade = self.tfMesValidade.value;
     if (mesValidade == null || mesValidade == "") {
       fnTirarEspera();
@@ -441,7 +446,12 @@ export default class ViewSolicitacao {
       alert("Cartão com validade expirada!");
       return;
     }
-    if(anoValidade == parseInt(agora.getFullYear() && mesValidade < parseInt(agora.getMonth())+1)) {
+    if (
+      anoValidade ==
+      parseInt(
+        agora.getFullYear() && mesValidade < parseInt(agora.getMonth()) + 1
+      )
+    ) {
       fnTirarEspera();
       alert("Cartão com validade expirada!");
       return;
@@ -453,7 +463,7 @@ export default class ViewSolicitacao {
       alert("CVV inválido!");
       return;
     }
-    
+
     let selecao = self.dadosExame.text.split(SEPARADOR);
     let nomeExame = tiraEspacos(selecao[0]);
     let nomeExecutante = tiraEspacos(selecao[1]);
@@ -475,7 +485,7 @@ export default class ViewSolicitacao {
       nomeExame,
       nomeExecutante,
       endereco,
-      self.valorExameSelecionado.replace(/\./g, ""),
+      self.valorExameSelecionado.replace(/\./g, "")
     );
     fnTirarEspera();
   }
