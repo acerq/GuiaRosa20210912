@@ -254,6 +254,7 @@ async function abrirApp() {
 
 function fecharApp() {
   fetch("/inicio");
+  closeMenu();
   try {
     navigator.app.exitApp();
   } catch (e) {
