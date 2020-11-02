@@ -2,7 +2,6 @@ const divConteudo = document.getElementById("divConteudo");
 var usrApp = null;
 var inicio = false;
 
-$("#hdr").load("burger.html");
 
 // -----------------------------------------------------------------------------------------//
 
@@ -11,6 +10,7 @@ doObterUsuarioCorrente().then(retorno => {
   renderObterUsuarioCorrente(retorno);
 });
 
+$("#hdr").load("burger.html");
 // -----------------------------------------------------------------------------------------//
 
 setTimeout(function() {
@@ -110,6 +110,7 @@ async function doObterUsuarioCorrente() {
 
 function renderObterUsuarioCorrente(retorno) {
   usrApp = retorno;
+  if(usrApp.login != null) { 
   if (usrApp.ehMedico) {
 	  $("#menu").load("menu_medico.html");
     $("#container-de-icones").load("icones_medico.html");
@@ -117,6 +118,11 @@ function renderObterUsuarioCorrente(retorno) {
   else {
 	  $("#menu").load("menu_paciente.html");
     $("#container-de-icones").load("icones_paciente.html");
+  }
+  } else {
+    	  $("#menu").load("menu_paciente.html");
+    $("#container-de-icones").load("icones_paciente.html");
+
   }
   
   if (inicio) {
