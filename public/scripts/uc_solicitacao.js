@@ -4,6 +4,7 @@ import ViewSolicitacao from "./view_solicitacao.js";
 import DaoPaciente from "./dao_paciente.js";
 
 const download = new Function("blob", "download(blob)");
+const doObterUsuarioCorrente = new Function("doObterUsuarioCorrente()");
 
 export default class CtrlSolicitacao {
   constructor() {
@@ -11,7 +12,7 @@ export default class CtrlSolicitacao {
 
     this.daoPaciente = new DaoPaciente();
 
-    this.usrApp = window.retornarUsrApp();
+    this.usrApp = doObterUsuarioCorrente();
     
     this.arrayPacientes = [];
     this.dtPeriodo = null;

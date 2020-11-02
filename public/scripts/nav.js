@@ -96,14 +96,14 @@ function closeMenu() {
 async function doObterUsuarioCorrente() {
   console.log("(app.js) Executando doLoad ");
   let response = await fetch("/obterUsuarioCorrente");
-  renderObterUsuarioCorrente(response); 
-  return await response.json();
+  usrApp = await response.json();
+  renderObterUsuarioCorrente(); 
+  return usrApp;
 }
 
 // -----------------------------------------------------------------------------------------//
 
 function renderObterUsuarioCorrente(retorno) {
-  usrApp = retorno;
   if (usrApp.login != null) {
     if (usrApp.ehMedico) {
       $("#menu").load("menu_medico.html");
@@ -223,12 +223,12 @@ function paginaInicial() {
 
 // -----------------------------------------------------------------------------------------//
 
-window.retornarUsrApp = async function() {
-  let retorno = await doObterUsuarioCorrente();
-  console.log("abrirApp retorno", retorno);
-  renderObterUsuarioCorrente(retorno);
-  return usrApp;
-};
+//window.retornarUsrApp = async function() {
+//  let retorno = await doObterUsuarioCorrente();
+//  console.log("abrirApp retorno", retorno);
+//  renderObterUsuarioCorrente(retorno);
+//  return usrApp;
+//};
 
 // -----------------------------------------------------------------------------------------//
 
