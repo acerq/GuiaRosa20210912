@@ -4,11 +4,6 @@ var inicio = false;
 
 // -----------------------------------------------------------------------------------------//
 
-doObterUsuarioCorrente().then(retorno => {
-  console.log("abrirApp retorno", retorno);
-  renderObterUsuarioCorrente(retorno);
-});
-
 $("#hdr").load("burger.html");
 
 // -----------------------------------------------------------------------------------------//
@@ -227,7 +222,10 @@ function paginaInicial() {
 
 // -----------------------------------------------------------------------------------------//
 
-window.retornarUsrApp = function() {
+window.retornarUsrApp = async function() {
+  let retorno = await doObterUsuarioCorrente();
+  console.log("abrirApp retorno", retorno);
+  renderObterUsuarioCorrente(retorno);
   return usrApp;
 };
 
@@ -239,8 +237,12 @@ function loginApp() {
 
 // -----------------------------------------------------------------------------------------//
 
-function inicioAposLoginApp() {
+async function inicioAposLoginApp() {
   inicio = true;  
+  let retorno = await doObterUsuarioCorrente();
+  console.log("abrirApp retorno", retorno);
+  renderObterUsuarioCorrente(retorno);
+  return usrApp;
 }
 
 // -----------------------------------------------------------------------------------------//
