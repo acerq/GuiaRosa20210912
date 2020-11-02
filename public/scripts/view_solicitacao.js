@@ -324,6 +324,9 @@ export default class ViewSolicitacao {
       alert("A data não foi escolhida.");
       return;
     }
+    
+    
+    
     let faturar = self.cbFaturar.value;
     if (faturar == null) {
       fnTirarEspera();
