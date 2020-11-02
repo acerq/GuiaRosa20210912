@@ -36,11 +36,13 @@ export default class ViewSolicitacao {
     this.divResposta = document.getElementById("divResposta");
 
     this.btSair.onclick = this.sair;
-    this.btEnviar.onclick = this.irParaCheckout;
-    if (this.btPacientes != null)
-      this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
-    else this.usuarioLogado = false;
     this.btConsultar.onclick = this.obterExames;
+
+    if (this.btPacientes != null) {
+      this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
+      this.btEnviar.onclick = this.irParaCheckout;
+    }
+    else this.usuarioLogado = false;
 
     //---- Elementos da página de pagamento
     this.tfNomeCartao = null;

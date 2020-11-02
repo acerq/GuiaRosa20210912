@@ -2,7 +2,6 @@ const divConteudo = document.getElementById("divConteudo");
 var usrApp = null;
 var inicio = false;
 
-
 // -----------------------------------------------------------------------------------------//
 
 doObterUsuarioCorrente().then(retorno => {
@@ -11,6 +10,7 @@ doObterUsuarioCorrente().then(retorno => {
 });
 
 $("#hdr").load("burger.html");
+
 // -----------------------------------------------------------------------------------------//
 
 setTimeout(function() {
@@ -26,7 +26,7 @@ setTimeout(function() {
 // -----------------------------------------------------------------------------------------//
 
 if ("ontouchstart" in window) {
-//  var click = "click";
+  //  var click = "click";
 }
 
 $("div.burger").on("click", function() {
@@ -45,10 +45,8 @@ $("div.menu ul li a").on("click", function(e) {
 // -----------------------------------------------------------------------------------------//
 
 function irPara(ref) {
-  if(!ref.includes(".pdf"))
-    window.location.href = ref;
-  else
-    window.open(ref);
+  if (!ref.includes(".pdf")) window.location.href = ref;
+  else window.open(ref);
 }
 
 // -----------------------------------------------------------------------------------------//
@@ -110,21 +108,19 @@ async function doObterUsuarioCorrente() {
 
 function renderObterUsuarioCorrente(retorno) {
   usrApp = retorno;
-  if(usrApp.login != null) { 
-  if (usrApp.ehMedico) {
-	  $("#menu").load("menu_medico.html");
-    $("#container-de-icones").load("icones_medico.html");
-  }
-  else {
-	  $("#menu").load("menu_paciente.html");
-    $("#container-de-icones").load("icones_paciente.html");
-  }
+  if (usrApp.login != null) {
+    if (usrApp.ehMedico) {
+      $("#menu").load("menu_medico.html");
+      $("#container-de-icones").load("icones_medico.html");
+    } else {
+      $("#menu").load("menu_paciente.html");
+      $("#container-de-icones").load("icones_paciente.html");
+    }
   } else {
-    	  $("#menu").load("menu_paciente.html");
+    $("#menu").load("menu_sem_usuario.html");
     $("#container-de-icones").load("icones_paciente.html");
-
   }
-  
+
   if (inicio) {
     console.log(usrApp);
     divConteudo.innerHTML = "";
@@ -246,10 +242,9 @@ function abrirApp() {
 function fecharApp() {
   try {
     navigator.app.exitApp();
-  }
-  catch(e) {
-	  var tamHistory = window.history.length;
-    while(tamHistory > 0) {
+  } catch (e) {
+    var tamHistory = window.history.length;
+    while (tamHistory > 0) {
       window.history.go(-1);
       tamHistory--;
     }
