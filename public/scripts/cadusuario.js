@@ -156,7 +156,7 @@ function incluirDbApp() {
 //-----------------------------------------------------------------------------------------//
 
 function renderCriarUsuario(data) {
-    if (data == null) {
+  if (data == null) {
     console.log("(cadusuario.js) renderCriarUsuario no data");
     alert("Problemas de Conexão com o servidor.");
     return;
@@ -165,9 +165,9 @@ function renderCriarUsuario(data) {
 
 //-----------------------------------------------------------------------------------------//
 
-function doIncluirPaciente() {
+async function doIncluirPaciente() {
   console.log("(cadusuario.js) Executando Incluir Paciente " + cpf);
-  return fetch(
+  let response = await fetch(
     "/incluirPaciente/" +
       cpf.replace(/\.|-/g, "") +
       "/" +
@@ -188,15 +188,9 @@ function doIncluirPaciente() {
       bairro +
       "/" +
       cep
-  )
-    .then(response => {
-      console.log("(cadusuario.js) incluirPaciente response");
-      return response.json();
-    })
-    .catch(() => {
-      console.log("(cadusuario.js) incluirPaciente catch");
-      return null;
-    });
+  );
+  console.log("(cadusuario.js) incluirPaciente response");
+  return await response.json();
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -247,7 +241,7 @@ function callbackCancelar() {
 
 //-----------------------------------------------------------------------------------------//
 
-function callbackCriar() {
+async function callbackCriar() {
   console.log("(cadusuario.js) callbackCriar");
   // Verificando o Cpf
   cpf = tfCpf.value;
@@ -342,21 +336,20 @@ function callbackCriar() {
   colocarEspera();
 
   // Solicita ao server.js para que execute o WS para inclusão de paciente
-  doIncluirPaciente().then(retorno => {
-    console.log("(cadusuario.js) callbackCriar retorno", retorno);
-    if (retorno.hasOwnProperty("status")) {
-      if (retorno.status == "success") {
-        // Guarda os dados no banco local
-        abrirDbApp();
-        // Solicita ao server.js para guardar os dados do usuário
-        doGuardarUsuarioCorrente().then(retorno => {
-          console.log("(cadusuario.js) callbackCriar retorno", retorno);
-          renderCriarUsuario(retorno);
-        });
-      } else alert(retorno.msg);
-    } else alert(retorno.erro);
-    tirarEspera();
-  });
+  let retorno = await doIncluirPaciente();
+  console.log("(cadusuario.js) callbackCriar retorno", retorno);
+  if (retorno.hasOwnProperty("status")) {
+    if (retorno.status == "success") {
+      // Guarda os dados no banco local
+      abrirDbApp();
+      // Solicita ao server.js para guardar os dados do usuário
+      doGuardarUsuarioCorrente().then(retorno => {
+        console.log("(cadusuario.js) callbackCriar retorno", retorno);
+        renderCriarUsuario(retorno);
+      });
+    } else alert(retorno.msg);
+  } else alert(retorno.erro);
+  tirarEspera();
 }
 
 //-----------------------------------------------------------------------------------------//

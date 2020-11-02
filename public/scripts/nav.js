@@ -257,9 +257,10 @@ async function abrirApp() {
 
 // -----------------------------------------------------------------------------------------//
 
-function fecharApp() {
+async function fecharApp() {
   inicioAposLogin = false;
-  fetch("/inicio");
+  let response = await fetch("/inicio");
+  usrApp = await response.json();
   closeMenu();
   try {
     navigator.app.exitApp();
