@@ -45,6 +45,7 @@ $(document).ready(function() {
   tirarEspera();
   $("#tfCpf").mask("999.999.999-99");
   $("#tfCelular").mask("(99) 9999-9999?9");
+  $("#tfCep").mask("99999-999");
 });
 
 //-----------------------------------------------------------------------------------------//
@@ -216,16 +217,7 @@ function doGuardarUsuarioCorrente() {
       "/" +
       bairro +
       "/" +
-      cep +
-      "/" +
-
-    
-    
-        "/guardarUsuarioCorrente/:cpf/:senha/:nome/:email/:celular/:rua/:numero/:complemento/:bairro/:cep",
-
-    
-    
-      endereco
+      cep
   )
     .then(response => {
       console.log("(cadusuario.js) doGuardarUsuarioCorrente response");
@@ -306,10 +298,34 @@ function callbackCriar() {
   }
 
   // Verificando o endereço
-  endereco = tfEndereco.value;
-  if (endereco == null || endereco == "") {
-    alert("O endereço deve ser preenchido.");
-    return;
+  if (rua == null || rua == "") {
+    alert("A rua do endereço deve ser preenchida.");
+    return false;
+  }
+
+  if (numero == null || numero == "") {
+    alert("O número do endereço deve ser preenchido.");
+    return false;
+  }
+
+  const padraoNum = /[0-9]/;
+  if (!padraoNum.test(numero)) {
+    alert("O número do endereço é inválido.");
+    return false;
+  }
+
+  if (complemento == null) {
+    complemento = "";
+  }
+
+  if (bairro == null || bairro == "") {
+    alert("O bairro deve ser preenchido.");
+    return false;
+  }
+
+  if (cep == null || cep == "") {
+    alert("O CEP deve ser preenchido.");
+    return false;
   }
 
   colocarEspera();
