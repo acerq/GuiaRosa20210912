@@ -103,7 +103,7 @@ async function doObterUsuarioCorrente() {
 
 // -----------------------------------------------------------------------------------------//
 
-function renderObterUsuarioCorrente(retorno) {
+function renderObterUsuarioCorrente() {
   if (usrApp.login != null) {
     if (usrApp.ehMedico) {
       $("#menu").load("menu_medico.html");
@@ -226,7 +226,7 @@ function paginaInicial() {
 window.retornarUsrApp = async function() {
   let retorno = await doObterUsuarioCorrente();
   console.log("retornarUsrApp ", retorno);
-  renderObterUsuarioCorrente(retorno);
+  renderObterUsuarioCorrente();
   return usrApp;
 };
 
@@ -249,7 +249,9 @@ async function inicioAposLoginApp() {
 // -----------------------------------------------------------------------------------------//
 
 async function abrirApp() {
-  return await fetch("/inicio");
+  let response = await fetch("/inicio");
+  usrApp = await response.json();
+  renderObterUsuarioCorrente(); 
   inicioAposLogin = false;
 }
 

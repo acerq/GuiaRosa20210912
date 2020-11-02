@@ -217,7 +217,7 @@ function doDeterminarUsuarioLocal() {
 // -----------------------------------------------------------------------------------------//
 
 function doEfetuarLogin(login, senha) {
-  console.log("(app.js) Executando efetuarLogin " + login + " " + senha);
+  console.log("(app.js) Executando efetuarLogin " + login);
   return fetch("/login/" + login + "/" + fnMD5(senha))
     .then(response => {
       console.log("(app.js) efetuarLogin response");
