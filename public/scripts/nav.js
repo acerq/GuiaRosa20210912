@@ -233,7 +233,13 @@ window.retornarUsrApp = function() {
 
 // -----------------------------------------------------------------------------------------//
 
-function abrirApp() {
+function loginApp() {
+  window.location.href='login.html';
+}
+
+// -----------------------------------------------------------------------------------------//
+async function abrirApp() {
+  return await fetch("/inicio");
   inicio = true;
 }
 

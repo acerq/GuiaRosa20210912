@@ -41,20 +41,18 @@ function acertaData(data) {
 //-----------------------------------------------------------------------------------------//
 
 function doInicio(req, resp) {
-  guiaRosaApp = {
-    tempoCorrente: null,
-    login: null,
-    senha: null,
-    nome: null,
-    celular: null,
-    email: null,
-    rua: null,
-    numero: null,
-    complemento: null,
-    bairro: null,
-    cep: null,
-    ehMedico: false
-  };
+  guiaRosaApp.tempoCorrente = new Date();
+  guiaRosaApp.login = null;
+  guiaRosaApp.senha = null;
+  guiaRosaApp.nome = null;
+  guiaRosaApp.email = null;
+  guiaRosaApp.celular = null;
+  guiaRosaApp.rua = null;
+  guiaRosaApp.numero = null;
+  guiaRosaApp.complemento = null;
+  guiaRosaApp.bairro = null;
+  guiaRosaApp.cep = null;
+  guiaRosaApp.ehMedico = false;
   resp.json(guiaRosaApp);
   resp.end();
   return;
