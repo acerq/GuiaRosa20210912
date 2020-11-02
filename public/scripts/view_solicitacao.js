@@ -13,6 +13,18 @@ function tiraEspacos(item) {
   return item.substr(0, pos + 1);
 }
 
+function amanha() {
+      return new Date().getTime() + 24 * 60 * 60 * 1000;
+  }
+
+function obterDataFormatada(data) {
+    return data.getFullYear()
+        + "-"
+        + ("0" + (data.getMonth() + 1)).slice(-2)
+        + "-"
+        + ("0" + data.getDate()).slice(-2);
+}
+
 var self;
 
 export default class ViewSolicitacao {
@@ -33,6 +45,11 @@ export default class ViewSolicitacao {
     this.btSair = document.getElementById("btSair");
     this.usuarioLogado = true;
 
+          
+    $("#dtExame").val(getFormattedDate(tomorrow()));
+
+    
+      
     this.divResposta = document.getElementById("divResposta");
 
     this.btSair.onclick = this.sair;
@@ -150,7 +167,7 @@ export default class ViewSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   dataParaInput() {
-    const agora = new Date();
+    const agora = new Date().getTime() + 24 * 60 * 60 * 1000; // Data para Amanhã
     var d = agora.getDate();
     var m = agora.getMonth() + 1;
     var y = agora.getFullYear();
@@ -324,8 +341,12 @@ export default class ViewSolicitacao {
       alert("A data não foi escolhida.");
       return;
     }
-    
-    
+    const dataIndicada = new Date(data);
+    if(dataIndicada < new Date()) {
+      fnTirarEspera();
+      alert("Data do exame é anterior a hoje.");
+      return;
+    }
     
     let faturar = self.cbFaturar.value;
     if (faturar == null) {
