@@ -298,11 +298,13 @@ function callbackCriar() {
   }
 
   // Verificando o endereço
+  rua = tfRua.value;
   if (rua == null || rua == "") {
     alert("A rua do endereço deve ser preenchida.");
     return false;
   }
 
+  numero = tfNumero.value;
   if (numero == null || numero == "") {
     alert("O número do endereço deve ser preenchido.");
     return false;
@@ -314,15 +316,18 @@ function callbackCriar() {
     return false;
   }
 
+  complemento = tfComplemento.value;
   if (complemento == null) {
     complemento = "";
   }
 
+  bairro = tfBairro.value;
   if (bairro == null || bairro == "") {
     alert("O bairro deve ser preenchido.");
     return false;
   }
 
+  cep = tfCep.value;
   if (cep == null || cep == "") {
     alert("O CEP deve ser preenchido.");
     return false;
@@ -381,10 +386,30 @@ tfCelular.addEventListener("keyup", function(event) {
 });
 tfEmail.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
-    tfEndereco.focus();
+    tfCep.focus();
   }
 });
-tfEmail.addEventListener("keyup", function(event) {
+tfCep.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    tfRua.focus();
+  }
+});
+tfRua.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    tfNumero.focus();
+  }
+});
+tfNumero.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    tfComplemento.focus();
+  }
+});
+tfComplemento.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    tfBairro.focus();
+  }
+});
+tfBairro.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
     tfSenha.focus();
   }
