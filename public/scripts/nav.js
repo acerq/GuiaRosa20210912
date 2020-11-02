@@ -238,6 +238,13 @@ function loginApp() {
 }
 
 // -----------------------------------------------------------------------------------------//
+
+function inicioAposLoginApp() {
+  inicio = true;  
+}
+
+// -----------------------------------------------------------------------------------------//
+
 async function abrirApp() {
   return await fetch("/inicio");
   inicio = true;
@@ -246,6 +253,7 @@ async function abrirApp() {
 // -----------------------------------------------------------------------------------------//
 
 function fecharApp() {
+  fetch("/inicio");
   try {
     navigator.app.exitApp();
   } catch (e) {
