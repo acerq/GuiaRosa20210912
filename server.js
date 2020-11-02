@@ -237,6 +237,7 @@ function doLoginPaciente(req, resp) {
       if (resposta.status == "error") {
       //TODO  resp.json(JSON.parse('{"erro" : "[Erro:#0006] Login Inválido"}'));
       //TODO  return;
+        resposta = { status : "success", login : login, nome : ""};
       }
       console.log("doLoginPaciente Resposta ->", wsResposta);
       guiaRosaApp.tempoCorrente = new Date();
