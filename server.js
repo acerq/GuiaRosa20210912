@@ -23,7 +23,7 @@ const guiaRosaApp = {
   complemento: null,
   bairro: null,
   cep: null,
-  ehMedico: null
+  ehMedico: false
 };
 
 //-----------------------------------------------------------------------------------------//

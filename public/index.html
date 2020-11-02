@@ -20,26 +20,68 @@
   <body>
     <header id="hdr" class="header">Guia Rosa App</header>
     <main class="main">
-        <div class="icone-container" onclick="window.location.href='consultar_exames.html'">
-          <div class="icone">
-            <img src="images/icons/agendar.png" />
-            <div class="texto">Consultar Exames</div>
+      <div id="divConteudo" class="caixaDialog">
+        <div class="grade">
+          <div class="rotulo">
+            Local:
           </div>
-        </div>
-        <div class="icone-container" onclick="window.location.href='login.html'">
-          <div class="icone">
-            <img src="images/icons/paciente.png" />
-            <div class="texto">Efetuar Login</div>
+          <div id="divLocal"></div>
+          <div class="rotulo">Data do Exame:</div>
+          <div>
+            <input type="date" id="dtExame" />
           </div>
-        </div>
-        <div class="icone-container" onclick="window.location.href='cadusuario.html'">
-          <div class="icone">
-            <img src="images/icons/paciente.png" />
-            <div class="texto">Criar Login</div>
+          <div class="rotulo">Exame:</div>
+          <div id="divTfExame">
+            <input
+              id="tfExame"
+              style="width:75%"
+              type="text"
+              size="20"
+              placeholder="Digite parte do nome do exame"
+            />&nbsp;
+            <button id="btConsultar" style="height:20px">
+              Consultar
+            </button>
           </div>
+          <div class="rotulo"></div>
+          <div id="divExame"></div>
         </div>
+        <div class="caixaBotoes">
+          <button id="btEnviar">
+            Enviar
+          </button>
+          <button id="btSair">
+            Sair
+          </button>
+        </div>
+      </div>
+
+      <div class="icone-container" onclick="window.location.href='login.html'">
+        <div class="icone">
+          <img src="images/icons/paciente.png" />
+          <div class="texto">Efetuar Login</div>
+        </div>
+      </div>
+      <div
+        class="icone-container"
+        onclick="window.location.href='cadusuario.html'"
+      >
+        <div class="icone">
+          <img src="images/icons/paciente.png" />
+          <div class="texto">Criar Login</div>
+        </div>
+      </div>
+
+      <div id="logo"></div>
+      <footer class="footer"></footer>
     </main>
-    <div id="logo"></div>
-    <footer class="footer"></footer>
+    <script src="scripts/md5.min.js"></script>
+    <script type="module" src="scripts/uc_solicitacao.js"></script>
+    <script src="scripts/nav.js"></script>
+    <script src="scripts/select2.js"></script>
+    <script src="scripts/download.js"></script>
+    <script>
+      doObterUsuarioCorrente();
+    </script>
   </body>
 </html>

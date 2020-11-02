@@ -11,8 +11,8 @@ export default class CtrlSolicitacao {
 
     this.daoPaciente = new DaoPaciente();
 
-    this.usrApp = null;
-
+    this.usrApp = window.retornarUsrApp();
+    
     this.arrayPacientes = [];
     this.dtPeriodo = null;
     this.arrayLocais = [];
@@ -45,7 +45,6 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterPacientes() {
-    this.usrApp = window.retornarUsrApp();
     if (this.usrApp.ehMedico) {
       this.arrayPacientes = await this.daoPaciente.obterPacientes();
       if (this.arrayPacientes.length > 0) {

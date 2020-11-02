@@ -19,7 +19,6 @@ export default class ViewSolicitacao {
   constructor(ctrlSolicitacao) {
     this.ctrl = ctrlSolicitacao;
 
-    this.usrApp = null;
     self = this;
 
     this.tfExame = document.getElementById("tfExame");
