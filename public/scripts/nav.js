@@ -209,9 +209,9 @@ function paginaInicial() {
 
 // -----------------------------------------------------------------------------------------//
 
-window.retornarUsrApp = async function() {
+window.retornarUsrApp = function() {
   if(usrApp == null)
-     await doObterUsuarioCorrente();
+     doObterUsuarioCorrente();
   renderObterUsuarioCorrente();
   return usrApp;
 };
