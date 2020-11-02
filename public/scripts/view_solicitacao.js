@@ -2,7 +2,7 @@
 
 const SEPARADOR = "##";
 const funcaoMD5 = new Function("a", "return md5(a)");
-//---- const funcaoObterUsuario = new Function("b", "return usrApp.login");
+
 const fnTirarEspera = new Function("tirarEspera()");
 const fnColocarEspera = new Function("colocarEspera()");
 

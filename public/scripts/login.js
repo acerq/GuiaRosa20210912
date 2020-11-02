@@ -25,7 +25,6 @@ function abrirDbApp() {
   requestDB = window.indexedDB.open("AppUsr", 1);
 
   requestDB.onupgradeneeded = event => {
-    console.log("[app usr] Criando IndexedDB AppUsr");
     db = event.target.result;
     store = db.createObjectStore("AppUsr", {
       autoIncrement: true
@@ -34,12 +33,10 @@ function abrirDbApp() {
   };
 
   requestDB.onerror = event => {
-    console.log("Erro [AppUsr]: " + event.target.errorCode);
     alert("Erro [AppUsr]: " + event.target.errorCode);
   };
 
   requestDB.onsuccess = event => {
-    console.log("[AppUsr] Sucesso");
     db = event.target.result;
     obterAppUsr();
   };
@@ -52,7 +49,6 @@ function obterAppUsr() {
     transacao = db.transaction(["AppUsr"], "readonly");
     store = transacao.objectStore("AppUsr");
   } catch (e) {
-    console.log("[AppUsr] Erro");
     instalacaoApp();
     return;
   }
@@ -84,11 +80,8 @@ function obterAppUsr() {
 
 function incluirDbApp(login, senha, nome, email, celular, rua, numero, complemento, bairro, cep, ehMedico) {
   transacao = db.transaction(["AppUsr"], "readwrite");
-  transacao.oncomplete = event => {
-    console.log("[AppUsr] Sucesso");
-  };
   transacao.onerror = event => {
-    console.log("[AppUsr] Erro");
+    alert("Erro [AppUsr]: " + event.target.errorCode);
   };
   store = transacao.objectStore("AppUsr");
   var objectStoreRequest = store.clear();
@@ -121,15 +114,15 @@ function instalacaoApp() {
 
 // -----------------------------------------------------------------------------------------//
 
-function renderEfetuarLogin(re) {
-  if (data == null) {
+function renderEfetuarLogin(resposta) {
+  if (resposta == null) {
     alert("Problemas de Conexão com o Servidor");
     return;
   }
-  if (data.hasOwnProperty("erro")) {
-    alert(data.erro);
+  if (resposta.hasOwnProperty("erro")) {
+    alert(resposta.erro);
  
-    if(data.erro.includes("TIMEOUT")) {
+    if(resposta.erro.includes("TIMEOUT")) {
       divInstrucao.innerHTML = "<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>";     
       return;
     }
@@ -147,12 +140,12 @@ function renderEfetuarLogin(re) {
     } 
   }
 
-  if (data.hasOwnProperty("status")) {
-    if (data.status == "success") {
+  if (resposta.hasOwnProperty("status")) {
+    if (resposta.status == "success") {
         incluirDbApp(
           tfLogin.value,
           null,
-          data.nome,
+          resposta.nome,
           null,
           null,
           null,
@@ -169,7 +162,6 @@ function renderEfetuarLogin(re) {
 // -----------------------------------------------------------------------------------------//
 
 function doDeterminarUsuarioLocal() {
-  console.log("(app.js) Executando Determinar Usuário Local ");
   return fetch(
     "/determinarUsuarioLocal/" +
       usrApp.login +
@@ -185,11 +177,9 @@ function doDeterminarUsuarioLocal() {
       usrApp.endereco
   )
     .then(response => {
-      console.log("(app.js) determinarUsuarioLocal response");
       return response.json();
     })
     .catch(() => {
-      console.log("(app.js) determinarUsuarioLocal catch");
       return null;
     });
 }
@@ -204,7 +194,6 @@ async function doEfetuarLogin(login, senha) {
 // -----------------------------------------------------------------------------------------//
 
 async function callbackOk() {
-  console.log("(app.js) callbackOk");
   const login = tfLogin.value;
   const senha = tfSenha.value;
   
