@@ -41,8 +41,7 @@ export default class ViewSolicitacao {
     if (this.btPacientes != null) {
       this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
       this.btEnviar.onclick = this.irParaCheckout;
-    }
-    else this.usuarioLogado = false;
+    } else this.usuarioLogado = false;
 
     //---- Elementos da página de pagamento
     this.tfNomeCartao = null;
@@ -92,19 +91,18 @@ export default class ViewSolicitacao {
         for (i = tam; i > 0; i--) {
           this.cbPaciente.remove(i);
         }
-        await arrayPacientes.forEach(e => {
-          var elem = document.createElement("option");
-          elem.value = e.nome + SEPARADOR + e.cpf + SEPARADOR + e.email;
-          elem.text = e.nome;
-          this.cbPaciente.add(elem);
-        });
       } else {
         this.cbPaciente.remove(this.cbPaciente.selectedIndex);
         this.btPacientes.hidden = true;
         this.cbPaciente.style =
           "width:100%;-webkit-appearance:none;-moz-appearance:none;text-indent:1px;text-overflow: '';";
-        this.cbPaciente.value = 
       }
+      await arrayPacientes.forEach(e => {
+        var elem = document.createElement("option");
+        elem.value = e.nome + SEPARADOR + e.cpf + SEPARADOR + e.email;
+        elem.text = e.nome;
+        this.cbPaciente.add(elem);
+      });
     }
     this.dtExame.value = this.dataParaInput();
 
@@ -326,12 +324,12 @@ export default class ViewSolicitacao {
       return;
     }
     const dataIndicada = new Date(data);
-    if(dataIndicada < new Date()) {
+    if (dataIndicada < new Date()) {
       fnTirarEspera();
       alert("Data do exame deve ser posterior a hoje.");
       return;
     }
-    
+
     let faturar = self.cbFaturar.value;
     if (faturar == null) {
       fnTirarEspera();

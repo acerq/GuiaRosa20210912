@@ -133,7 +133,7 @@ function renderEfetuarLogin(resposta) {
     }
     
     if(tfLogin.value == usrApp.login && fnMD5(tfSenha.value) == usrApp.senha) {
-      doDeterminarUsuarioLocal().then(retorno => {
+      doGuardarUsuarioCorrente().then(retorno => {
         window.location.href = "inicio.html";
         return;
       });
@@ -161,9 +161,9 @@ function renderEfetuarLogin(resposta) {
 
 // -----------------------------------------------------------------------------------------//
 
-function doDeterminarUsuarioLocal() {
+function doGuardarUsuarioCorrente() {
   return fetch(
-    "/determinarUsuarioLocal/" +
+    "/guardarUsuarioCorrente/" +
       usrApp.login +
       "/" +
       usrApp.senha +
@@ -174,7 +174,17 @@ function doDeterminarUsuarioLocal() {
       "/" +
       usrApp.celular +
       "/" +
-      usrApp.endereco
+      usrApp.rua
+      "/" +
+      usrApp.numero
+          "/" +
+      usrApp.rua
+
+    
+    
+    :cpf/:senha/:nome/:email/:celular/:rua/:numero/:complemento/:bairro/:cep",
+    
+    
   )
     .then(response => {
       return response.json();
