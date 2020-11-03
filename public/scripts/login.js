@@ -212,8 +212,10 @@ function doGuardarUsuarioCorrente() {
 
 async function doEfetuarLogin(login, senha) {
   if(usrApp != null && login == usrApp.login) {
-    if(senha == usrApp.senha)
+    if(senha == usrApp.senha) {
+      usrApp.push({status:'success'});
       return usrApp;
+    }
   }
   let response = await fetch("/login/" + login + "/" + senha);
   return await response.json();

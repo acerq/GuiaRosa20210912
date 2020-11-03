@@ -83,12 +83,9 @@ function validarCpf(strCpf) {
 
 function abrirDbApp() {
   // Verificações
-  console.log("(cadusuario.js) abrirDbApp iniciando...");
-
   requestDB = window.indexedDB.open("AppUsr", 1);
 
   requestDB.onupgradeneeded = event => {
-    console.log("(cadusuario.js) Criando IndexedDB AppUsr");
     db = event.target.result;
     store = db.createObjectStore("AppUsr", {
       autoIncrement: true
@@ -98,13 +95,11 @@ function abrirDbApp() {
 
   requestDB.onerror = event => {
     tirarEspera();
-    console.log("(cadusuario.js) Erro [AppUsr]: " + event.target.errorCode);
-    alert("(cadusuario.js) Erro [AppUsr]: " + event.target.errorCode);
+    alert("Erro [abrirBD]: " + event.target.errorCode);
   };
 
   requestDB.onsuccess = event => {
     tirarEspera();
-    console.log("(cadusuario.js) [AppUsr] Sucesso");
     db = event.target.result;
     senha = tfSenha.value;
     cpf = tfCpf.value;
@@ -124,11 +119,9 @@ function abrirDbApp() {
 
 function incluirDbApp() {
   transacao = db.transaction(["AppUsr"], "readwrite");
-  transacao.oncomplete = event => {
-    console.log("(cadusuario.js) [AppUsr] Sucesso");
-  };
+  transacao.oncomplete = event => {};
   transacao.onerror = event => {
-    console.log("(cadusuario.js) [AppUsr] Erro");
+    alert("Problemas de Conexão com o servidor: " + event.target.errorCode);
   };
   store = transacao.objectStore("AppUsr");
   var objectStoreRequest = store.clear();
@@ -165,7 +158,6 @@ function renderCriarUsuario(data) {
 //-----------------------------------------------------------------------------------------//
 
 async function doIncluirPaciente() {
-  console.log("(cadusuario.js) Executando Incluir Paciente " + cpf);
   let response = await fetch(
     "/incluirPaciente/" +
       cpf.replace(/\.|-/g, "") +
@@ -188,14 +180,12 @@ async function doIncluirPaciente() {
       "/" +
       cep
   );
-  console.log("(cadusuario.js) incluirPaciente response");
   return await response.json();
 }
 
 //-----------------------------------------------------------------------------------------//
 
 function doGuardarUsuarioCorrente() {
-  console.log("(cadusuario.js) Executando Guardar Usuário Corrente " + cpf);
   return fetch(
     "/guardarUsuarioCorrente/" +
       cpf +
@@ -219,11 +209,9 @@ function doGuardarUsuarioCorrente() {
       cep
   )
     .then(response => {
-      console.log("(cadusuario.js) doGuardarUsuarioCorrente response");
       return response.json();
     })
     .catch(() => {
-      console.log("(cadusuario.js) doGuardarUsuarioCorrente catch");
       return null;
     });
 }
@@ -241,7 +229,6 @@ function callbackCancelar() {
 //-----------------------------------------------------------------------------------------//
 
 async function callbackCriar() {
-  console.log("(cadusuario.js) callbackCriar");
   // Verificando o Cpf
   cpf = tfCpf.value;
   if (cpf == null || cpf == "") {
@@ -336,7 +323,6 @@ async function callbackCriar() {
 
   // Solicita ao server.js para que execute o WS para inclusão de paciente
   let retorno = await doIncluirPaciente();
-  console.log("(cadusuario.js) callbackCriar retorno", retorno);
   if (retorno.hasOwnProperty("status")) {
     if (retorno.status == "success") {
       // Guarda os dados no banco local
