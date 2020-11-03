@@ -16,7 +16,7 @@ const btOk = document.getElementById("btOk");
 const btNovo = document.getElementById("btNovo");
 const labelLogin = document.getElementById("lbLogin");
 
-var fnMD5 = new Function('a', 'return md5(a)');
+var fnMD5 = new Function("a", "return md5(a)");
 var estadoBtNovo = "Conta";
 
 // -----------------------------------------------------------------------------------------//
@@ -60,13 +60,12 @@ function obterAppUsr() {
       tfLogin.disabled = true;
       btNovo.textContent = "Novo Login";
       estadoBtNovo = "Login";
-      
-      if(usrApp.ehMedico == true) {
+
+      if (usrApp.ehMedico == true) {
         labelLogin.innerHTML = "Login (Médico):";
       } else {
         labelLogin.innerHTML = "CPF:";
       }
-      
     } else {
       tfLogin.disabled = false;
       btNovo.textContent = "Nova Conta";
@@ -78,7 +77,19 @@ function obterAppUsr() {
 
 // -----------------------------------------------------------------------------------------//
 
-function incluirDbApp(login, senha, nome, email, celular, rua, numero, complemento, bairro, cep, ehMedico) {
+function incluirDbApp(
+  login,
+  senha,
+  nome,
+  email,
+  celular,
+  rua,
+  numero,
+  complemento,
+  bairro,
+  cep,
+  ehMedico
+) {
   transacao = db.transaction(["AppUsr"], "readwrite");
   transacao.onerror = event => {
     alert("Erro [AppUsr]: " + event.target.errorCode);
@@ -86,23 +97,23 @@ function incluirDbApp(login, senha, nome, email, celular, rua, numero, complemen
   store = transacao.objectStore("AppUsr");
   var objectStoreRequest = store.clear();
   objectStoreRequest.onsuccess = function(event) {
-	  objectStoreRequest = store.add({
-		  login: login,
-		  senha: fnMD5(senha),
-		  nome: nome,
-		  email: email,
-		  celular : celular,
+    objectStoreRequest = store.add({
+      login: login,
+      senha: fnMD5(senha),
+      nome: nome,
+      email: email,
+      celular: celular,
       rua: rua,
-      numero : numero,
-      complemento : complemento,
-      bairro : bairro,
-      cep : cep,
-		  ehMedico: ehMedico
-	  });
-	  objectStoreRequest.onsuccess = function(event) {
-		  window.location.href = 'inicio.html';
-	  }
-   };
+      numero: numero,
+      complemento: complemento,
+      bairro: bairro,
+      cep: cep,
+      ehMedico: ehMedico
+    });
+    objectStoreRequest.onsuccess = function(event) {
+      window.location.href = "inicio.html";
+    };
+  };
 }
 
 // -----------------------------------------------------------------------------------------//
@@ -121,40 +132,45 @@ function renderEfetuarLogin(resposta) {
   }
   if (resposta.hasOwnProperty("erro")) {
     alert(resposta.erro);
- 
-    if(resposta.erro.includes("TIMEOUT")) {
-      divInstrucao.innerHTML = "<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>";     
+
+    if (resposta.erro.includes("TIMEOUT")) {
+      divInstrucao.innerHTML =
+        "<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>";
       return;
     }
-    
-    if(usrApp == null || tfLogin.value != usrApp.login || fnMD5(tfSenha.value) != usrApp.senha) {
-      divInstrucao.innerHTML = "<b>Login não autorizado</b>";     
+
+    if (
+      usrApp == null ||
+      tfLogin.value != usrApp.login ||
+      fnMD5(tfSenha.value) != usrApp.senha
+    ) {
+      divInstrucao.innerHTML = "<b>Login não autorizado</b>";
       return;
     }
-    
-    if(tfLogin.value == usrApp.login && fnMD5(tfSenha.value) == usrApp.senha) {
+
+    if (tfLogin.value == usrApp.login && fnMD5(tfSenha.value) == usrApp.senha) {
       doGuardarUsuarioCorrente().then(retorno => {
         window.location.href = "inicio.html";
         return;
       });
-    } 
+    }
   }
 
   if (resposta.hasOwnProperty("status")) {
     if (resposta.status == "success") {
-        incluirDbApp(
-          tfLogin.value,
-          null,
-          resposta.nome,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          null,
-          true 
-        );
+      incluirDbApp(
+        tfLogin.value,
+        null,
+        resposta.nome,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        true
+      );
     }
   }
 }
@@ -174,17 +190,15 @@ function doGuardarUsuarioCorrente() {
       "/" +
       usrApp.celular +
       "/" +
-      usrApp.rua
+      usrApp.rua +
       "/" +
-      usrApp.numero
-          "/" +
-      usrApp.rua
-
-    
-    
-    :cpf/:senha/:nome/:email/:celular/:rua/:numero/:complemento/:bairro/:cep",
-    
-    
+      usrApp.numero +
+      "/" +
+      usrApp.complemento +
+      "/" +
+      usrApp.bairro +
+      "/" +
+      usrApp.cep
   )
     .then(response => {
       return response.json();
@@ -197,6 +211,10 @@ function doGuardarUsuarioCorrente() {
 // -----------------------------------------------------------------------------------------//
 
 async function doEfetuarLogin(login, senha) {
+  if(usrApp != null && login == usrApp.login) {
+    if(senha == usrApp.senha)
+      return usrApp;
+  }
   let response = await fetch("/login/" + login + "/" + fnMD5(senha));
   return await response.json();
 }
@@ -206,7 +224,7 @@ async function doEfetuarLogin(login, senha) {
 async function callbackOk() {
   const login = tfLogin.value;
   const senha = tfSenha.value;
-  
+
   colocarEspera();
   // chama efetuarLogin e atualiza a tela
   let retorno = await doEfetuarLogin(login, senha);
@@ -217,16 +235,16 @@ async function callbackOk() {
 // -----------------------------------------------------------------------------------------//
 
 function callbackCriar() {
-  if(estadoBtNovo == "Conta") 
-	  window.location.href = "cadusuario.html";
+  if (estadoBtNovo == "Conta") window.location.href = "cadusuario.html";
   else {
-	  // estadoBtNovo == "Login";
-	  labelLogin.innerHTML = "Login:";
-      tfLogin.value = "";
-      tfLogin.disabled = false;
-      btNovo.textContent = "Nova Conta";
-      estadoBtNovo = "Conta";
-      divInstrucao.innerHTML = "<center><b>Efetue seu Login ou Crie sua Conta</b></center>";
+    // estadoBtNovo == "Login";
+    labelLogin.innerHTML = "Login:";
+    tfLogin.value = "";
+    tfLogin.disabled = false;
+    btNovo.textContent = "Nova Conta";
+    estadoBtNovo = "Conta";
+    divInstrucao.innerHTML =
+      "<center><b>Efetue seu Login ou Crie sua Conta</b></center>";
   }
 }
 
@@ -246,4 +264,8 @@ function retirarEspera() {
 
 btOk.addEventListener("click", callbackOk);
 btNovo.addEventListener("click", callbackCriar);
-tfSenha.addEventListener("keyup", function(event){if(event.keyCode === 13){callbackOk();}});
+tfSenha.addEventListener("keyup", function(event) {
+  if (event.keyCode === 13) {
+    callbackOk();
+  }
+});
