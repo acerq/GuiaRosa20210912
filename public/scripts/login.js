@@ -215,7 +215,7 @@ async function doEfetuarLogin(login, senha) {
     if(senha == usrApp.senha)
       return usrApp;
   }
-  let response = await fetch("/login/" + login + "/" + fnMD5(senha));
+  let response = await fetch("/login/" + login + "/" + senha);
   return await response.json();
 }
 
@@ -223,7 +223,7 @@ async function doEfetuarLogin(login, senha) {
 
 async function callbackOk() {
   const login = tfLogin.value;
-  const senha = tfSenha.value;
+  const senha = fnMD5(tfSenha.value);
 
   colocarEspera();
   // chama efetuarLogin e atualiza a tela

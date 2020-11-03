@@ -157,7 +157,6 @@ function incluirDbApp() {
 
 function renderCriarUsuario(data) {
   if (data == null) {
-    console.log("(cadusuario.js) renderCriarUsuario no data");
     alert("Problemas de Conexão com o servidor.");
     return;
   }
@@ -344,7 +343,6 @@ async function callbackCriar() {
       abrirDbApp();
       // Solicita ao server.js para guardar os dados do usuário
       doGuardarUsuarioCorrente().then(retorno => {
-        console.log("(cadusuario.js) callbackCriar retorno", retorno);
         renderCriarUsuario(retorno);
       });
     } else alert(retorno.msg);
