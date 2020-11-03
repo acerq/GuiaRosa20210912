@@ -147,13 +147,12 @@ function renderEfetuarLogin(resposta) {
       divInstrucao.innerHTML = "<b>Login não autorizado</b>";
       return;
     }
-
-    if (tfLogin.value == usrApp.login && fnMD5(tfSenha.value) == usrApp.senha) {
-      doGuardarUsuarioCorrente().then(retorno => {
-        window.location.href = "inicio.html";
-        return;
-      });
-    }
+  }
+  if (tfLogin.value == usrApp.login && fnMD5(tfSenha.value) == usrApp.senha) {
+    doGuardarUsuarioCorrente().then(retorno => {
+      window.location.href = "inicio.html";
+      return;
+    });
   }
 
   if (resposta.hasOwnProperty("status")) {
@@ -211,9 +210,8 @@ function doGuardarUsuarioCorrente() {
 // -----------------------------------------------------------------------------------------//
 
 async function doEfetuarLogin(login, senha) {
-  if(usrApp != null && login == usrApp.login) {
-    if(senha == usrApp.senha) {
-      usrApp.push({status:'success'});
+  if (usrApp != null && login == usrApp.login) {
+    if (senha == usrApp.senha) {
       return usrApp;
     }
   }
