@@ -87,8 +87,8 @@ export default class ViewSolicitacao {
     //---- Formata a combobox de pacientes ----//
     if (this.usuarioLogado) {
       if (ehMedico) {
-        let i,
-          tam = this.cbPaciente.options.length - 1;
+        let i;
+        let tam = this.cbPaciente.options.length - 1;
         for (i = tam; i > 0; i--) {
           this.cbPaciente.remove(i);
         }
@@ -103,6 +103,7 @@ export default class ViewSolicitacao {
         this.btPacientes.hidden = true;
         this.cbPaciente.style =
           "width:100%;-webkit-appearance:none;-moz-appearance:none;text-indent:1px;text-overflow: '';";
+        this.cbPaciente.value = 
       }
     }
     this.dtExame.value = this.dataParaInput();
