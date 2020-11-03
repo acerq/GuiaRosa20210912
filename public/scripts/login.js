@@ -148,6 +148,7 @@ function renderEfetuarLogin(resposta) {
       return;
     }
   }
+  
   if (tfLogin.value == usrApp.login && fnMD5(tfSenha.value) == usrApp.senha) {
     doGuardarUsuarioCorrente().then(retorno => {
       window.location.href = "inicio.html";
