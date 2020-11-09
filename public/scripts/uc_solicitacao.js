@@ -655,8 +655,6 @@ async enviarAgendamentoPgtoBoleto(
         "/" +
         forma +
         "/" +
-        "Boleto" +
-        "/" +
         merchantOrderId +
         "/" +
         proofOfSale +
