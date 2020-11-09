@@ -796,7 +796,7 @@ async function doGerarConfirmacao(req, resp) {
     "XX XXXX XX" +
     numeroCartao.substring(14);
   pdf.text(
-    "Pagamento feito com  " + forma + 
+    "Pagamento feito com  " + forma + " " +
       numeroCartao +
       " (" +
       bandeira +
