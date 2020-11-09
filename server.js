@@ -746,8 +746,12 @@ async function doPgtoBoleto(req, resp) {
     },
     Payment: {
       Provider: "Simulado",
-      Type: "DebitCard",
+      Type: "Boleto",
       Amount: valor,
+      BoletoNumber: id.replace("_",""),
+      Assignor: "Interclínicas ...",
+      "Demonstrative": "Pagamento referente ao Exame " ,
+
       Currency: "BRL",
       Country: "BRA",
       Installments: 1,
