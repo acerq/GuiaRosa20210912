@@ -966,7 +966,7 @@ function startServer() {
   // Pagamento por boleto
   app.get(
     "/pgtoboleto/:cpf/:nome/:email/:valor/:exame/:dataPgto",
-    doPgtoDebito
+    doPgtoBoleto
   );
   
   // Gerar PDF de resposta

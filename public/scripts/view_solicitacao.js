@@ -359,30 +359,29 @@ export default class ViewSolicitacao {
     let nomeExecutante = tiraEspacos(selecao[1]);
     let endereco = tiraEspacos(selecao[2]);
 
-    
     fnTirarEspera();
     let formaPgto = self.cbFaturar.value;
-    if(formaPgto == "Crédito" || formaPgto == "Débito")
-    {
-      alert("Procedendo checkout por " + forma + " para o pedido de exame");
+    if (formaPgto == "Crédito" || formaPgto == "Débito") {
+      alert("Procedendo checkout por " + formaPgto + " para o pedido de exame");
       self.colocarFormPgto();
     }
-    if(formaPgto == "Boleto") {
+    if (formaPgto == "Boleto") {
       alert("Procedendo checkout do pedido de exame - Geração do Boleto");
+      fnColocarEspera();
       self.ctrl.enviarAgendamentoPgtoBoleto(
-     
-    self.codExecutanteSelecionado,
-    self.cpfPaciente,
-    self.nomePaciente,
-    self.emailPaciente,
-    self.codExameSelecionado,
-    data,
-    nomeExame,
-    nomeExecutante,
-    endereco,
-    valor,
-    forma
-  ) {
+        self.codExecutanteSelecionado,
+        self.cpfPaciente,
+        self.nomePaciente,
+        self.emailPaciente,
+        self.codExameSelecionado,
+        data,
+        nomeExame,
+        nomeExecutante,
+        endereco,
+        self.valorExameSelecionado.replace(/\./g, ""),
+        formaPgto
+      );
+      fnTirarEspera();
     }
   }
 
@@ -524,28 +523,28 @@ export default class ViewSolicitacao {
         self.valorExameSelecionado.replace(/\./g, ""),
         forma
       );
-    } else if(forma == "Débito") {
+    } else if (forma == "Débito") {
       {
-      self.ctrl.enviarAgendamentoPgtoDebito(
-        self.codExecutanteSelecionado,
-        self.cpfPaciente.replace(/\.|-/g, ""),
-        self.nomePaciente,
-        self.emailPaciente,
-        self.codExameSelecionado,
-        self.dtExame.value,
-        numCartao,
-        nomeCartao,
-        bandeira,
-        mesValidade,
-        anoValidade,
-        cvv,
-        nomeExame,
-        nomeExecutante,
-        endereco,
-        self.valorExameSelecionado.replace(/\./g, ""),
-        forma
-      );
-    } 
+        self.ctrl.enviarAgendamentoPgtoDebito(
+          self.codExecutanteSelecionado,
+          self.cpfPaciente.replace(/\.|-/g, ""),
+          self.nomePaciente,
+          self.emailPaciente,
+          self.codExameSelecionado,
+          self.dtExame.value,
+          numCartao,
+          nomeCartao,
+          bandeira,
+          mesValidade,
+          anoValidade,
+          cvv,
+          nomeExame,
+          nomeExecutante,
+          endereco,
+          self.valorExameSelecionado.replace(/\./g, ""),
+          forma
+        );
+      }
     }
     fnTirarEspera();
   }

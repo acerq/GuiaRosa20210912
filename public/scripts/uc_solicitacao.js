@@ -540,7 +540,7 @@ async enviarAgendamentoPgtoBoleto(
       "/" +
       nomeExame
       "/" +
-      valor.replace(/\.|\,/g, "");
+      dataExame;
       
     let response = await fetch(requisicao);
     let resposta = await response.json();
@@ -639,11 +639,11 @@ async enviarAgendamentoPgtoBoleto(
         "/" +
         nomePaciente +
         "/" +
-        numCartao +
+        "BOLETO" +
         "/" +
-        nomeCartao +
+        "BOLETO" +
         "/" +
-        bandeira +
+        "BOLETO" +
         "/" +
         nomeExame +
         "/" +
@@ -655,7 +655,7 @@ async enviarAgendamentoPgtoBoleto(
         "/" +
         forma +
         "/" +
-        "Cartão de Débito" +
+        "Boleto" +
         "/" +
         merchantOrderId +
         "/" +
