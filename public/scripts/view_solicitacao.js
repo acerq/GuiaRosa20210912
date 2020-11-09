@@ -471,29 +471,55 @@ export default class ViewSolicitacao {
       return;
     }
 
+    let forma = self.cbFaturar.value;
     let selecao = self.dadosExame.text.split(SEPARADOR);
     let nomeExame = tiraEspacos(selecao[0]);
     let nomeExecutante = tiraEspacos(selecao[1]);
     let endereco = tiraEspacos(selecao[2]);
 
-    self.ctrl.enviarPagamentoAgendamento(
-      self.codExecutanteSelecionado,
-      self.cpfPaciente.replace(/\.|-/g, ""),
-      self.nomePaciente,
-      self.emailPaciente,
-      self.codExameSelecionado,
-      self.dtExame.value,
-      numCartao,
-      nomeCartao,
-      bandeira,
-      mesValidade,
-      anoValidade,
-      cvv,
-      nomeExame,
-      nomeExecutante,
-      endereco,
-      self.valorExameSelecionado.replace(/\./g, "")
-    );
+    if (forma == "Crédito") {
+      self.ctrl.enviarAgendamentoPgtoCC(
+        self.codExecutanteSelecionado,
+        self.cpfPaciente.replace(/\.|-/g, ""),
+        self.nomePaciente,
+        self.emailPaciente,
+        self.codExameSelecionado,
+        self.dtExame.value,
+        numCartao,
+        nomeCartao,
+        bandeira,
+        mesValidade,
+        anoValidade,
+        cvv,
+        nomeExame,
+        nomeExecutante,
+        endereco,
+        self.valorExameSelecionado.replace(/\./g, ""),
+        forma
+      );
+    } else if(forma == "Débito") {
+      {
+      self.ctrl.enviarAgendamentoPgtoDebito(
+        self.codExecutanteSelecionado,
+        self.cpfPaciente.replace(/\.|-/g, ""),
+        self.nomePaciente,
+        self.emailPaciente,
+        self.codExameSelecionado,
+        self.dtExame.value,
+        numCartao,
+        nomeCartao,
+        bandeira,
+        mesValidade,
+        anoValidade,
+        cvv,
+        nomeExame,
+        nomeExecutante,
+        endereco,
+        self.valorExameSelecionado.replace(/\./g, ""),
+        forma
+      );
+    } 
+    }
     fnTirarEspera();
   }
 

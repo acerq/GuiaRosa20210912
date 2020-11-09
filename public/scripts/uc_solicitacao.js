@@ -152,7 +152,7 @@ export default class CtrlSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  async enviarPagamentoAgendamento(
+  async enviarAgendamentoPgtoCC(
     codExecutante,
     cpfPaciente,
     nomePaciente,
@@ -168,7 +168,8 @@ export default class CtrlSolicitacao {
     nomeExame,
     nomeExecutante,
     endereco,
-    valor
+    valor,
+    forma
   ) {
     this.view.colocarEspera();
     let merchantOrderId = "";
@@ -198,6 +199,7 @@ export default class CtrlSolicitacao {
       cvv +
       "/" +
       valor.replace(/\.|\,/g, "");
+      
     let response = await fetch(requisicao);
     let resposta = await response.json();
     if (!resposta) {
@@ -304,6 +306,182 @@ export default class CtrlSolicitacao {
         valor +
         "/" +
         "Cartão de Crédito" +
+        "/" +
+        merchantOrderId +
+        "/" +
+        proofOfSale +
+        "/" +
+        paymentId;
+
+      let response = await fetch(requisicao);
+      let blob = await response.blob();
+      await download(blob);
+      this.view.tirarEspera();
+      alert("Download de documento de confirmação realizado.");
+      window.history.go(-1);
+    } else {
+      alert("Erro no agendamento\n" + JSON.stringify(resposta));
+    }
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
+  async enviarAgendamentoPgtoDebito(
+    codExecutante,
+    cpfPaciente,
+    nomePaciente,
+    emailPaciente,
+    codExame,
+    dataExame,
+    numCartao,
+    nomeCartao,
+    bandeira,
+    mesValidade,
+    anoValidade,
+    cvv,
+    nomeExame,
+    nomeExecutante,
+    endereco,
+    valor,
+    forma
+  ) {
+    this.view.colocarEspera();
+    let merchantOrderId = "";
+    let proofOfSale = "";
+    let paymentId = "";
+
+    // Processando o pagamento
+    let requisicao =
+      "/pgtodebito" +
+      "/" +
+      cpfPaciente.replace(/\.|-/g, "") +
+      "/" +
+      nomePaciente +
+      "/" +
+      emailPaciente +
+      "/" +
+      numCartao.replace(/ /g, "") +
+      "/" +
+      nomeCartao +
+      "/" +
+      bandeira +
+      "/" +
+      mesValidade +
+      "/" +
+      anoValidade +
+      "/" +
+      cvv +
+      "/" +
+      valor.replace(/\.|\,/g, "");
+      
+    let response = await fetch(requisicao);
+    let resposta = await response.json();
+    if (!resposta) {
+      console.log("Erro no pagamento");
+      this.view.tirarEspera();
+      alert("Erro - pagamento não processado");
+      return;
+    }
+    if (resposta.Payment.ReasonCode == 0) {
+      merchantOrderId = resposta.MerchantOrderId;
+      proofOfSale = resposta.Payment.ProofOfSale;
+      paymentId = resposta.Payment.PaymentId;
+    } else {
+      this.view.tirarEspera();
+      switch (resposta.Payment.ReasonCode) {
+        case 7:
+          alert("Pagamento Recusado: Não Autorizado");
+          return;
+        case 12:
+          alert("Pagamento Recusado: Problemas com o Cartão de Débito");
+          return;
+        case 13:
+          alert("Pagamento Recusado: Cartão Cancelado");
+          return;
+        case 14:
+          alert("Pagamento Recusado: Cartão de Débito Bloqueado");
+          return;
+        case 15:
+          alert("Pagamento Recusado: Cartão Expirado");
+          return;
+        case 4:
+        case 22:
+          alert("Pagamento não realizado: Tempo Expirado");
+          return;
+        default:
+          alert("Pagamento Recusado");
+          return;
+      }
+    }
+    //
+    // Status: representa o status atual da transação.
+    // ReasonCode: representa o status da requisição.
+    // ProviderReturnCode: representa o código de resposta da transação da adquirente.
+    // Por exemplo, uma requisição de autorização poderá ter o retorno com ReasonCode=0 (Sucessfull),
+    // ou seja, a requisição finalizou com sucesso, porém, o Status poderá ser 0-Denied, por ter a
+    // transação não autorizada pela adquirente, por exemplo, ProviderReturnCode 57 (um dos códigos de negada da Cielo)
+    //
+    //
+
+    // Agendamento
+    requisicao =
+      "/agendamento" +
+      "/" +
+      codExecutante +
+      "/" +
+      this.usrApp.login +
+      "/" +
+      nomePaciente +
+      "/" +
+      cpfPaciente.replace(/\.|-/g, "") +
+      "/" +
+      codExame +
+      "/" +
+      dataExame +
+      "/" +
+      this.dtPeriodo +
+      "/" +
+      "S";
+    //faturar;
+    console.log("(app.js) Executando agendamento");
+    response = await fetch(requisicao);
+    resposta = await response.json();
+
+    if (!resposta) {
+      console.log(" erro no agendamento");
+      this.view.tirarEspera();
+      alert("Erro no agendamento do exame.");
+      return;
+    }
+    console.log("(app.js) renderAgendamento -> ", response);
+    if (resposta.mensagem == "Ok") {
+      this.view.tirarEspera();
+      alert("Exame agendado com sucesso!\nAguarde download de confirmação.");
+      this.view.colocarEspera();
+      requisicao =
+        "/gerarConfirmacao" +
+        "/" +
+        cpfPaciente +
+        "/" +
+        nomePaciente +
+        "/" +
+        numCartao +
+        "/" +
+        nomeCartao +
+        "/" +
+        bandeira +
+        "/" +
+        nomeExame +
+        "/" +
+        nomeExecutante +
+        "/" +
+        endereco +
+        "/" +
+        valor +
+        "/" +
+        forma +
+        "/" +
+        "Cartão de Débito" +
         "/" +
         merchantOrderId +
         "/" +
