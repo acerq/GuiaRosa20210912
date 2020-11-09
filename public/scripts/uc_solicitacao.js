@@ -538,7 +538,7 @@ async enviarAgendamentoPgtoBoleto(
       "/" +
       valor.replace(/\.|\,/g, "") +
       "/" +
-      nomeExame
+      nomeExame +
       "/" +
       dataExame;
       
