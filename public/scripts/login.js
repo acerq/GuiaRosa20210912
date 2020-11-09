@@ -217,7 +217,9 @@ async function doEfetuarLogin(login, senha) {
     }
   }
   let response = await fetch("/login/" + login + "/" + senha);
-  return await response.json();
+  let respJson = await response.json();
+  usrApp = 
+  doObterUsuarioCorrente
 }
 
 // -----------------------------------------------------------------------------------------//
