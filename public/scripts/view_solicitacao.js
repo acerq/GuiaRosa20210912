@@ -354,15 +354,35 @@ export default class ViewSolicitacao {
     self.cpfPaciente = dadosPaciente[1];
     self.emailPaciente = dadosPaciente[2];
 
+    let selecao = self.dadosExame.text.split(SEPARADOR);
+    let nomeExame = tiraEspacos(selecao[0]);
+    let nomeExecutante = tiraEspacos(selecao[1]);
+    let endereco = tiraEspacos(selecao[2]);
+
+    
     fnTirarEspera();
     let formaPgto = self.cbFaturar.value;
     if(formaPgto == "Crédito" || formaPgto == "Débito")
     {
-      alert("Procedendo checkout do pedido de exame");
+      alert("Procedendo checkout por " + forma + " para o pedido de exame");
       self.colocarFormPgto();
     }
     if(formaPgto == "Boleto") {
-      
+      alert("Procedendo checkout do pedido de exame - Geração do Boleto");
+      self.ctrl.enviarAgendamentoPgtoBoleto(
+     
+    self.codExecutanteSelecionado,
+    self.cpfPaciente,
+    self.nomePaciente,
+    self.emailPaciente,
+    self.codExameSelecionado,
+    data,
+    nomeExame,
+    nomeExecutante,
+    endereco,
+    valor,
+    forma
+  ) {
     }
   }
 
