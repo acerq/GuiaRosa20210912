@@ -399,7 +399,7 @@ export default class CtrlSolicitacao {
           paymentId = resposta.Payment.PaymentId;
           authenticationUrl = resposta.Payment.AuthenticationUrl;
           alert("Redirecionando para autenticação");
-          window.location.url = authenticationUrl;
+          window.location.href = authenticationUrl;
 
           return;
         case 12:
