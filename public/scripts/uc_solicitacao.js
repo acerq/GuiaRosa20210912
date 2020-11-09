@@ -485,8 +485,6 @@ export default class CtrlSolicitacao {
         "/" +
         valor +
         "/" +
-        forma +
-        "/" +
         "Cartão de Débito" +
         "/" +
         merchantOrderId +
@@ -554,6 +552,7 @@ async enviarAgendamentoPgtoBoleto(
       merchantOrderId = resposta.MerchantOrderId;
       proofOfSale = resposta.Payment.ProofOfSale;
       paymentId = resposta.Payment.PaymentId;
+      url = resposta.Payment.Url;
     } else {
       this.view.tirarEspera();
       switch (resposta.Payment.ReasonCode) {
@@ -653,7 +652,7 @@ async enviarAgendamentoPgtoBoleto(
         "/" +
         valor +
         "/" +
-        forma +
+        "Boleto" +
         "/" +
         merchantOrderId +
         "/" +
