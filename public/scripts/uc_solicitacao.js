@@ -303,6 +303,8 @@ export default class CtrlSolicitacao {
         "/" +
         valor +
         "/" +
+        "Cartão de Crédito" +
+        "/" +
         merchantOrderId +
         "/" +
         proofOfSale +

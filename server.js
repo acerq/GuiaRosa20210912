@@ -587,6 +587,103 @@ async function doPgtoCC(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
+async function doPgtoDebito(req, resp) {
+  guiaRosaApp.tempoCorrente = new Date();
+
+  let nome = req.params.nome;
+  let cpf = req.params.cpf;
+  let email = req.params.email;
+  let numeroCartao = req.params.numeroCartao;
+  let nomeCartao = req.params.nomeCartao;
+  let bandeira = req.params.bandeira;
+  let mesValidade = req.params.mesValidade;
+  let anoValidade = req.params.anoValidade;
+  let cvv = req.params.cvv;
+  let valor = req.params.valor;
+
+  console.log("executando doPgtoCC" + nome);
+  if (
+    typeof nome === "undefined" ||
+    typeof cpf === "undefined" ||
+    typeof email === "undefined" ||
+    typeof numeroCartao === "undefined" ||
+    typeof nomeCartao === "undefined" ||
+    typeof bandeira === "undefined" ||
+    typeof mesValidade === "undefined" ||
+    typeof anoValidade === "undefined" ||
+    typeof cvv === "undefined" ||
+    typeof valor === "undefined"
+  ) {
+    console.log("undefined 0012");
+    resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
+    return;
+  }
+
+  console.log("parâmetros ok doPgtoCC");
+
+  let agora = new Date();
+  let timeMillis = agora.getTime().toString();
+  let id = guiaRosaApp.login + "_" + timeMillis;
+
+  const myHeaders = {
+    "Content-Type": "application/json",
+    MerchantId: "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
+    MerchantKey: "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
+  };
+
+  const myBody = {
+    MerchantOrderId: id,
+    Customer: {
+      Name: nome,
+      Identity: cpf,
+      IdentityType: "CPF",
+      Email: email,
+      Birthdate: "1970-06-24"
+    },
+    Payment: {
+      Provider: "Simulado",
+      Type: "DebitCard",
+      Amount: valor,
+      Currency: "BRL",
+      Country: "BRA",
+      SoftDescriptor: "GuiaRosa",
+      Capture: true,
+      Installments: 1,
+      Authenticate: true,
+      Interest: "ByMerchant",
+      Recurrent: false,
+      ReturnUrl: "https://guia-rosa.glitch.me/solicitacao.html",
+      DebitCard: {
+        CardNumber: numeroCartao,
+        Holder: nomeCartao,
+        ExpirationDate: mesValidade + "/" + anoValidade,
+        SecurityCode: cvv,
+        Brand: bandeira
+      }
+    }
+  };
+
+  const requisicao = {
+    method: "POST",
+    headers: myHeaders,
+    body: JSON.stringify(myBody)
+  };
+
+  console.log("doPgtoDebito --> " + JSON.stringify(requisicao));
+  const responseBraspag = await fetch(
+    "https://apisandbox.braspag.com.br/v2/sales/",
+    requisicao
+  );
+  console.log("fetch doPgtoDebito");
+  const myJson = await responseBraspag.json();
+  console.log("json doPgtoDebito");
+  console.log(myJson);
+
+  resp.json(myJson);
+}
+
+//-----------------------------------------------------------------------------------------//
+
 function doVerificarSenhaUsuarioCorrente(req, resp) {
   guiaRosaApp.tempoCorrente = new Date();
   let senha = req.params.senha;
@@ -624,6 +721,7 @@ async function doGerarConfirmacao(req, resp) {
   let nomeExecutante = req.params.nomeExecutante;
   let endereco = req.params.endereco;
   let valor = req.params.valor;
+  let forma = req.params.forma;
   let merchantOrderId = req.params.merchantOrderId;
   let proofOfSale = req.params.proofOfSale;
   let paymentId = req.params.paymentId;
@@ -639,6 +737,7 @@ async function doGerarConfirmacao(req, resp) {
     typeof nomeExecutante === "undefined" ||
     typeof endereco === "undefined" ||
     typeof valor === "undefined" ||
+    typeof forma === "undefined" ||
     typeof merchantOrderId === "undefined" ||
     typeof proofOfSale === "undefined" ||
     typeof paymentId === "undefined"
@@ -697,7 +796,7 @@ async function doGerarConfirmacao(req, resp) {
     "XX XXXX XX" +
     numeroCartao.substring(14);
   pdf.text(
-    "Pagamento feito com  cartão de crédito " +
+    "Pagamento feito com  " + forma + 
       numeroCartao +
       " (" +
       bandeira +
@@ -763,16 +862,22 @@ function startServer() {
     doAgendamento
   );
 
-  // Pagamento por cartão
+  // Pagamento por cartão de crédito
   app.get(
     "/pgtocc/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor",
     doPgtoCC
   );
 
+  // Pagamento por cartão de debito
+  app.get(
+    "/pgtodebito/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor",
+    doPgtoDebito
+  );
+
   // Gerar PDF de resposta
   app.get(
     "/gerarConfirmacao/:cpf/:nome/:numeroCartao/:nomeCartao/:bandeira/:nomeExame/:nomeExecutante/:endereco" +
-      "/:valor/:merchantOrderId/:proofOfSale/:paymentId",
+      "/:valor/:forma/:merchantOrderId/:proofOfSale/:paymentId",
     doGerarConfirmacao
   );
 
