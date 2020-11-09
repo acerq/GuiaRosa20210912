@@ -349,6 +349,7 @@ export default class CtrlSolicitacao {
     let merchantOrderId = "";
     let proofOfSale = "";
     let paymentId = "";
+    let authenticationUrl = "";
 
     // Processando o pagamento
     let requisicao =
@@ -393,10 +394,13 @@ export default class CtrlSolicitacao {
           alert("Pagamento Recusado: Não Autorizado");
           return;
         case 9:
-          alert("Aguardando o processamento do cartão de débito.");
           merchantOrderId = resposta.MerchantOrderId;
           proofOfSale = resposta.Payment.ProofOfSale;
           paymentId = resposta.Payment.PaymentId;
+          authenticationUrl = resposta.Payment.AuthenticationUrl;
+          alert("Redirecionando para autenticação");
+          window.location.url = authenticationUrl;
+
           return;
         case 12:
           alert("Pagamento Recusado: Problemas com o Cartão de Débito");
@@ -523,6 +527,7 @@ async enviarAgendamentoPgtoBoleto(
     let merchantOrderId = "";
     let proofOfSale = "";
     let paymentId = "";
+    let url = ""; 
 
     // Processando o pagamento
     let requisicao =
@@ -665,7 +670,8 @@ async enviarAgendamentoPgtoBoleto(
       await download(blob);
       this.view.tirarEspera();
       alert("Download de documento de confirmação realizado.");
-      window.history.go(-1);
+      window.location.href = url;
+      //window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
     }
