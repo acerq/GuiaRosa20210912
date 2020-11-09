@@ -646,12 +646,12 @@ async function doPgtoDebito(req, resp) {
       Amount: valor,
       Currency: "BRL",
       Country: "BRA",
-      SoftDescriptor: "GuiaRosa",
-      Capture: true,
       Installments: 1,
-      Authenticate: true,
       Interest: "ByMerchant",
+      Capture: true,
+      Authenticate: true,
       Recurrent: false,
+      SoftDescriptor: "GuiaRosa",
       ReturnUrl: "https://guia-rosa.glitch.me/solicitacao.html",
       DebitCard: {
         CardNumber: numeroCartao,
@@ -660,6 +660,13 @@ async function doPgtoDebito(req, resp) {
         SecurityCode: cvv,
         Brand: bandeira
       }
+    },
+    "Credentials": {
+      "code": "9999999",
+      "key": "D8888888",
+      "password": "LOJA9999999",
+      "username": "#Braspag2018@NOMEDALOJA#",
+      "signature": "001"
     }
   };
 
@@ -796,7 +803,7 @@ async function doGerarConfirmacao(req, resp) {
     "XX XXXX XX" +
     numeroCartao.substring(14);
   pdf.text(
-    "Pagamento feito com  " + forma + " " +
+    "Pagamento feito com  " + forma + " - " +
       numeroCartao +
       " (" +
       bandeira +
