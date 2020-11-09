@@ -515,12 +515,6 @@ async enviarAgendamentoPgtoBoleto(
     emailPaciente,
     codExame,
     dataExame,
-    numCartao,
-    nomeCartao,
-    bandeira,
-    mesValidade,
-    anoValidade,
-    cvv,
     nomeExame,
     nomeExecutante,
     endereco,
@@ -532,9 +526,12 @@ async enviarAgendamentoPgtoBoleto(
     let proofOfSale = "";
     let paymentId = "";
 
+            "/pgtoboleto/:cpf/:nome/:email/:valor/:exame/:dataPgto",
+
+
     // Processando o pagamento
     let requisicao =
-      "/pgtodebito" +
+      "/pgtoboleto" +
       "/" +
       cpfPaciente.replace(/\.|-/g, "") +
       "/" +
@@ -542,17 +539,9 @@ async enviarAgendamentoPgtoBoleto(
       "/" +
       emailPaciente +
       "/" +
-      numCartao.replace(/ /g, "") +
+      valor.replace(/\.|\,/g, "") +
       "/" +
-      nomeCartao +
-      "/" +
-      bandeira +
-      "/" +
-      mesValidade +
-      "/" +
-      anoValidade +
-      "/" +
-      cvv +
+      nomeExame
       "/" +
       valor.replace(/\.|\,/g, "");
       

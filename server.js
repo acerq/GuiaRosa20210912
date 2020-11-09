@@ -697,33 +697,25 @@ async function doPgtoBoleto(req, resp) {
   let nome = req.params.nome;
   let cpf = req.params.cpf;
   let email = req.params.email;
-  let numeroCartao = req.params.numeroCartao;
-  let nomeCartao = req.params.nomeCartao;
-  let bandeira = req.params.bandeira;
-  let mesValidade = req.params.mesValidade;
-  let anoValidade = req.params.anoValidade;
-  let cvv = req.params.cvv;
   let valor = req.params.valor;
+  let exame = req.params.exame;
+  let dataPgto = req.params.dataPgto;
 
-  console.log("executando doPgtoCC" + nome);
+  console.log("executando doPgtoBoleto" + nome);
   if (
     typeof nome === "undefined" ||
     typeof cpf === "undefined" ||
     typeof email === "undefined" ||
-    typeof numeroCartao === "undefined" ||
-    typeof nomeCartao === "undefined" ||
-    typeof bandeira === "undefined" ||
-    typeof mesValidade === "undefined" ||
-    typeof anoValidade === "undefined" ||
-    typeof cvv === "undefined" ||
-    typeof valor === "undefined"
+    typeof valor === "undefined" ||
+    typeof exame === "undefined" ||
+    typeof dataPgto === "undefined" 
   ) {
     console.log("undefined 0012");
     resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
     return;
   }
 
-  console.log("parâmetros ok doPgtoCC");
+  console.log("parâmetros ok doPgtoBoleto");
 
   let agora = new Date();
   let timeMillis = agora.getTime().toString();
@@ -750,31 +742,13 @@ async function doPgtoBoleto(req, resp) {
       Amount: valor,
       BoletoNumber: id.replace("_",""),
       Assignor: "Interclínicas ...",
-      "Demonstrative": "Pagamento referente ao Exame " ,
-
+      Demonstrative: "Pagamento referente ao Exame " + exame,
+      ExpirationDate: dataPgto,
+      Identification: cpf,
+      Instructions: "Aceitar somente até a data de vencimento.",
       Currency: "BRL",
       Country: "BRA",
-      Installments: 1,
-      Interest: "ByMerchant",
-      Capture: true,
-      Authenticate: true,
-      Recurrent: false,
-      SoftDescriptor: "GuiaRosa",
-      ReturnUrl: "https://guia-rosa.glitch.me/solicitacao.html",
-      DebitCard: {
-        CardNumber: numeroCartao,
-        Holder: nomeCartao,
-        ExpirationDate: mesValidade + "/" + anoValidade,
-        SecurityCode: cvv,
-        Brand: bandeira
-      },
-      "Credentials": {
-        "code": "9999999",
-        "key": "D8888888",
-        "password": "LOJA9999999",
-        "username": "#Braspag2018@NOMEDALOJA#",
-        "signature": "001"
-      }
+      SoftDescriptor: "GuiaRosa"
     }
   };
 
@@ -784,14 +758,14 @@ async function doPgtoBoleto(req, resp) {
     body: JSON.stringify(myBody)
   };
 
-  console.log("doPgtoDebito --> " + JSON.stringify(requisicao));
+  console.log("doPgtoBoleto --> " + JSON.stringify(requisicao));
   const responseBraspag = await fetch(
     "https://apisandbox.braspag.com.br/v2/sales/",
     requisicao
   );
-  console.log("fetch doPgtoDebito");
+  console.log("fetch doPgtoBoleto");
   const myJson = await responseBraspag.json();
-  console.log("json doPgtoDebito");
+  console.log("json doPgtoBoleto");
   console.log(myJson);
 
   resp.json(myJson);
@@ -989,6 +963,12 @@ function startServer() {
     doPgtoDebito
   );
 
+  // Pagamento por boleto
+  app.get(
+    "/pgtoboleto/:cpf/:nome/:email/:valor/:exame/:dataPgto",
+    doPgtoDebito
+  );
+  
   // Gerar PDF de resposta
   app.get(
     "/gerarConfirmacao/:cpf/:nome/:numeroCartao/:nomeCartao/:bandeira/:nomeExame/:nomeExecutante/:endereco" +
