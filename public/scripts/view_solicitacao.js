@@ -355,8 +355,15 @@ export default class ViewSolicitacao {
     self.emailPaciente = dadosPaciente[2];
 
     fnTirarEspera();
-    alert("Procedendo checkout do pedido de exame");
-    self.colocarFormPgto();
+    let formaPgto = self.cbFaturar.value;
+    if(formaPgto == "Crédito" || formaPgto == "Débito")
+    {
+      alert("Procedendo checkout do pedido de exame");
+      self.colocarFormPgto();
+    }
+    if(formaPgto == "Boleto") {
+      
+    }
   }
 
   //-----------------------------------------------------------------------------------------//

@@ -526,9 +526,6 @@ async enviarAgendamentoPgtoBoleto(
     let proofOfSale = "";
     let paymentId = "";
 
-            "/pgtoboleto/:cpf/:nome/:email/:valor/:exame/:dataPgto",
-
-
     // Processando o pagamento
     let requisicao =
       "/pgtoboleto" +
