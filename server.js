@@ -659,14 +659,14 @@ async function doPgtoDebito(req, resp) {
         ExpirationDate: mesValidade + "/" + anoValidade,
         SecurityCode: cvv,
         Brand: bandeira
+      },
+      "Credentials": {
+        "code": "9999999",
+        "key": "D8888888",
+        "password": "LOJA9999999",
+        "username": "#Braspag2018@NOMEDALOJA#",
+        "signature": "001"
       }
-    },
-    "Credentials": {
-      "code": "9999999",
-      "key": "D8888888",
-      "password": "LOJA9999999",
-      "username": "#Braspag2018@NOMEDALOJA#",
-      "signature": "001"
     }
   };
 
