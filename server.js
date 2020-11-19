@@ -44,7 +44,7 @@ function acertaData(data) {
 //-----------------------------------------------------------------------------------------//
 
 function recuperarSessao(req, resp) {
-  let session_id = req.cookies[SESSION_ID];
+  let session_id = req.cookies[SESSION_ID].toString();
   console.log("session_id --> ", session_id, " ", usuariosAtivos);
 
   if(session_id == null || session_id == undefined) {
@@ -97,7 +97,7 @@ function doInicio(req, resp) {
   sessao.cep = null;
   sessao.ehMedico = false;
   
-  //let session_id = sessao.tempoCorrente.getTime();
+  //let session_id = sessao.tempoCorrente.getTime().toString();
   //usuariosAtivos.set(session_id, sessao);
   //resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
@@ -165,7 +165,7 @@ function doGuardarUsuarioCorrente(req, resp) {
   sessao.cep = cep;
   sessao.ehMedico = false;
   
-  let session_id = sessao.tempoCorrente.getTime();
+  let session_id = sessao.tempoCorrente.getTime().toString();
   usuariosAtivos.set(session_id, sessao);
   resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
@@ -262,7 +262,7 @@ function doLoginMedico(req, resp) {
         sessao.cep = "";
         sessao.ehMedico = true;
 
-        let session_id = sessao.tempoCorrente.getTime();
+        let session_id = sessao.tempoCorrente.getTime().toString();
         usuariosAtivos.set(session_id, sessao);
         resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
@@ -327,7 +327,7 @@ function doLoginPaciente(req, resp) {
       sessao.cep = "";
       sessao.ehMedico = false;
       
-      let session_id = sessao.tempoCorrente.getTime();
+      let session_id = sessao.tempoCorrente.getTime().toString();
       usuariosAtivos.set(session_id, sessao);
       resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
