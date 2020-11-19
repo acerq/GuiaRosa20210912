@@ -2,6 +2,7 @@
 
 const express = require("express");
 const fetch = require("node-fetch");
+const cookieParser = require('cookie-parser');
 const redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
 
 const BASE_URL = "http://sisp.e-sisp.org:8049/webrunstudio_73/webservices/GSIServices.jws?wsdl";
@@ -964,7 +965,7 @@ async function doGerarConfirmacao(req, resp) {
 
 function startServer() {
   const app = express();
-  app.use(express.cookieParser());
+  app.use(cookieParser());
   
   // Redirect HTTP to HTTPS,
   app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
