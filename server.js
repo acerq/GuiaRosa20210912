@@ -1,6 +1,7 @@
 "use strict";
 
 const express = require("express");
+const cookieParser = require('cookie-parser');
 const fetch = require("node-fetch");
 const redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
 
@@ -11,7 +12,9 @@ const TEMPO_MAXIMO_REQUISICAO = 60 * 1000; // 60 segundos
 
 //-----------------------------------------------------------------------------------------//
 
-const guiaRosaApp = {
+const usuariosAtivos = new Map();
+
+const sessaoGuiaRosa = {
   tempoCorrente: null,
   login: null,
   senha: null,
@@ -61,6 +64,9 @@ function doInicio(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doObterUsuarioCorrente(req, resp) {
+  let session_id = req.cookies['session_id'];
+  let guiaRosaApp = usuariosAtivos.get(session_id)
+  
   guiaRosaApp.tempoCorrente = new Date();
   console.log("retornarUsuario --> ", JSON.stringify(guiaRosaApp));
   resp.json(guiaRosaApp);
@@ -900,7 +906,8 @@ async function doGerarConfirmacao(req, resp) {
 
 function startServer() {
   const app = express();
-
+  app.use(cookieParser());
+  
   // Redirect HTTP to HTTPS,
   app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
 
@@ -913,6 +920,8 @@ function startServer() {
     console.log(m);
     next();
   });
+
+  usuariosAtivos = new Map();
 
   //
   // Chamadas aos Serviços Remotos
