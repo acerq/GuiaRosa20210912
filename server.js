@@ -12,7 +12,7 @@ const TEMPO_MAXIMO_REQUISICAO = 60 * 1000; // 60 segundos
 
 //-----------------------------------------------------------------------------------------//
 
-const usuariosAtivos = new Map();
+var usuariosAtivos = new Map();
 
 function sessaoGuiaRosa() {
   this.tempoCorrente = null;
@@ -44,7 +44,9 @@ function acertaData(data) {
 //-----------------------------------------------------------------------------------------//
 
 function recuperarSessao(req, resp) {
-  let session_id = req.cookies['session_id'];
+  let session_id = req.cookies[SESSION_ID];
+  console.log("doInicio --> ", JSON.stringify(sessao));
+
   if(session_id == null || session_id == undefined) {
     resp.json(JSON.parse('{"erro" : "Sessão Não Definida"}'));
     resp.end();
@@ -88,7 +90,7 @@ function doInicio(req, resp) {
   sessao.cep = null;
   sessao.ehMedico = false;
   
-  usuariosAtivos.put(sessao.tempoCorrente.getTime(), sessao);
+  usuariosAtivos.set(sessao.tempoCorrente.getTime(), sessao);
   resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
   resp.json(sessao);
@@ -154,7 +156,7 @@ function doGuardarUsuarioCorrente(req, resp) {
   sessao.cep = cep;
   sessao.ehMedico = false;
   
-  usuariosAtivos.put(sessao.tempoCorrente.getTime(), sessao);
+  usuariosAtivos.set(sessao.tempoCorrente.getTime(), sessao);
   resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
   console.log("doGuardarUsuarioCorrente --> ", JSON.stringify(sessao));
@@ -247,7 +249,7 @@ function doLoginMedico(req, resp) {
         sessao.cep = "";
         sessao.ehMedico = true;
 
-        usuariosAtivos.put(sessao.tempoCorrente.getTime(), sessao);
+        usuariosAtivos.set(sessao.tempoCorrente.getTime(), sessao);
         resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
         console.log("doLogin Resposta ->", resposta);
@@ -304,7 +306,7 @@ function doLoginPaciente(req, resp) {
       sessao.cep = "";
       sessao.ehMedico = false;
       
-      usuariosAtivos.put(sessao.tempoCorrente.getTime(), sessao);
+      usuariosAtivos.set(sessao.tempoCorrente.getTime(), sessao);
       resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
       console.log("doLoginPaciente Resposta ->", resposta);
