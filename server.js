@@ -54,8 +54,11 @@ function recuperarSessao(req, resp) {
   }
   
   for (let k of usuariosAtivos.keys()) {
-    console.log("-->", k);
+    console.log("-->", k, ":", session_id, ":", k === session_id);
+    console.log("-->", usuariosAtivos.get(k));
+    console.log("-->", usuariosAtivos.get(session_id));
   }
+  
   let sessao = usuariosAtivos.get(session_id);
   console.log("sessao --> ", sessao);
   if(sessao == null || sessao == undefined) {
