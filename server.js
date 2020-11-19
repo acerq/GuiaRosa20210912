@@ -43,14 +43,30 @@ function acertaData(data) {
 
 //-----------------------------------------------------------------------------------------//
 
-function recuperarSessao(req) {
+function recuperarSessao(req, resp) {
   let session_id = req.cookies['session_id'];
-  if(session_id == null || session_id == undefined)
+  if(session_id == null || session_id == undefined) {
+    resp.json(JSON.parse('{"erro" : "Sessão Não Definida"}'));
+    resp.end();
     return null;
+  }
   
-  let sessao = usuariosAtivos.get(session_id)
-  if(sessao == null || sessao == undefined)
-    return null;
+  let sessao = usuariosAtivos.get(session_id);
+  if(sessao == null || sessao == undefined) {
+    resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
+    resp.end();
+    return null;    
+  }
+  
+  let diferenca = new Date() - sessao.tempoCorrente;
+  if (diferenca > TEMPO_MAXIMO_SESSAO) {
+    usuariosAtivos.delete(session_id);
+    resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
+    resp.end();
+    return;
+  }
+  sessao.tempoCorrente = new Date();
+  resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
   return sessao;
 }
   
@@ -78,13 +94,10 @@ function doInicio(req, resp) {
 
 function doObterUsuarioCorrente(req, resp) {
   let sessao = recuperarSessao(req, resp);
-  if(sessao == null) {
-    resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
-    resp.end();
-  }
-  sessao.tempoCorrente = new Date();
-  console.log("retornarUsuario --> ", JSON.stringify(guiaRosaApp));
-  resp.json(guiaRosaApp);
+  if(sessao == null) 
+    return;
+  console.log("retornarUsuario --> ", JSON.stringify(sessao));
+  resp.json(sessao);
   resp.end();
   return;
 }
@@ -92,17 +105,10 @@ function doObterUsuarioCorrente(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doVerificarTimeout(req, resp) {
-  let diferenca = new Date() - guiaRosaApp.tempoCorrente;
-
-  console.log("Tempo: " + diferenca);
-  if (diferenca > TEMPO_MAXIMO_SESSAO) {
-    resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
-    resp.end();
-    console.log("Sessão expirada!");
+  let sessao = recuperarSessao(req, resp);
+  if(sessao == null) 
     return;
-  }
-  guiaRosaApp.tempoCorrente = new Date();
-  resp.json(JSON.parse('{"ok" : "' + diferenca + '"}'));
+  resp.json(JSON.parse('{"ok" : "ok"}'));
   resp.end();
   console.log("Sessão ok!");
 }
@@ -111,7 +117,7 @@ function doVerificarTimeout(req, resp) {
 
 function doGuardarUsuarioCorrente(req, resp) {
   console.log("doGuardarUsuarioCorrente");
-
+XXXXX
   let sessao = new sessaoGuiaRosa();
   
   sessao.tempoCorrente = new Date();
@@ -321,8 +327,6 @@ function doObterLocais(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doObterPeriodo(req, resp) {
-  guiaRosaApp.tempoCorrente = new Date();
-
   let soap = require("soap");
   console.log("executando doObterPeriodo ");
 
