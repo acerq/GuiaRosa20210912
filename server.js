@@ -54,13 +54,13 @@ function recuperarSessao(req, resp) {
   }
   
   for (let k of usuariosAtivos.keys()) {
-    console.log("-->", k, ":", session_id, ":", k === session_id);
-    console.log("-->", usuariosAtivos.get(k));
-    console.log("-->", usuariosAtivos.get(session_id));
+    console.log("#-->", k, ":", session_id, ":", k === session_id);
+    console.log("#-->", usuariosAtivos.get(k));
+    console.log("#-->", usuariosAtivos.get(session_id));
   }
   
   let sessao = usuariosAtivos.get(session_id);
-  console.log("sessao --> ", sessao);
+  console.log("#### sessao --> ", sessao);
   if(sessao == null || sessao == undefined) {
     resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
     resp.end();
@@ -82,6 +82,10 @@ function recuperarSessao(req, resp) {
 //-----------------------------------------------------------------------------------------//
   
 function doInicio(req, resp) {
+  console.log("+---------- ");
+  console.log("| doInicio");
+  console.log("+---------- ");
+
   let sessao = new sessaoGuiaRosa();
 
   sessao.tempoCorrente = new Date();
@@ -113,10 +117,14 @@ function doInicio(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doObterUsuarioCorrente(req, resp) {
+  console.log("+------------------------- ");
+  console.log("| doObterUsuarioCorrente");
+  console.log("+------------------------- ");
+  
   let sessao = recuperarSessao(req, resp);
   if(sessao == null) 
     return;
-  console.log("retornarUsuario --> ", JSON.stringify(sessao));
+  console.log("@retornarUsuario --> ", JSON.stringify(sessao));
   resp.json(sessao);
   resp.end();
   return;
@@ -136,7 +144,9 @@ function doVerificarTimeout(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doGuardarUsuarioCorrente(req, resp) {
-  console.log("doGuardarUsuarioCorrente");
+  console.log("+------------------------- ");
+  console.log("| doGuardarUsuarioCorrente ");
+  console.log("+------------------------- ");
 
   let sessao = new sessaoGuiaRosa();
   
@@ -181,6 +191,10 @@ function doGuardarUsuarioCorrente(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doLoginMedico(req, resp) {
+  console.log("+------------------------- ");
+  console.log("| doLoginMedico ");
+  console.log("+------------------------- ");
+
   // Retirando '.' e '-' do login --> caso onde recebemos cpf.
   let login = req.params.login.replace(/\.|-/g, "");
   let senha = req.params.senha;
@@ -283,6 +297,10 @@ function doLoginMedico(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doLoginPaciente(req, resp) {
+  console.log("+------------------------- ");
+  console.log("| doLoginPaciente ");
+  console.log("+------------------------- ");
+
   let login = req.params.login;
   let senha = req.params.senha;
   let strJson = '{"login": "' + login + '", "senha": "' + senha + '"}';
@@ -343,8 +361,11 @@ function doLoginPaciente(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doObterLocais(req, resp) {
+  console.log("+------------------------- ");
+  console.log("| doObterLocais ");
+  console.log("+------------------------- ");
+
   let soap = require("soap");
-  console.log("executando doObterLocais ");
 
   soap.createClient(BASE_URL, function(err, client) {
     console.log("createClient");
@@ -458,6 +479,10 @@ function doIncluirPaciente(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doObterExames(req, resp) {
+  console.log("+------------------------- ");
+  console.log("| doObterExames ");
+  console.log("+------------------------- ");
+
   let soap = require("soap");
 
   let local = req.params.local;
