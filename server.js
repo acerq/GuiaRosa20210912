@@ -44,8 +44,8 @@ function acertaData(data) {
 //-----------------------------------------------------------------------------------------//
 
 function recuperarSessao(req, resp) {
-  let session_id = req.cookies[SESSION_ID].valueOf();
-  console.log("session_id --> ", session_id, " ", usuariosAtivos);
+  let session_id = parseInt(req.cookies[SESSION_ID]);
+  console.log("session_id --> ", session_id, " ", typeof session_id, " ",usuariosAtivos);
 
   if(session_id == null || session_id == undefined) {
     resp.json(JSON.parse('{"erro" : "Sessão Não Definida"}'));
@@ -54,7 +54,7 @@ function recuperarSessao(req, resp) {
   }
   
   for (let k of usuariosAtivos.keys()) {
-    console.log("#-->", k, ":", session_id, ":", k === session_id);
+    console.log("#-->", k, ":", typeof k, ":", session_id, ":", typeof session_id, ":", k === session_id);
     console.log("#-->", usuariosAtivos.get(k));
     console.log("#-->", usuariosAtivos.get(session_id));
   }
@@ -345,7 +345,7 @@ function doLoginPaciente(req, resp) {
       sessao.cep = "";
       sessao.ehMedico = false;
       
-      let session_id = sessao.tempoCorrente.getTime().toString();
+      let session_id = sessao.tempoCorrente.getTime().valueOf();
       usuariosAtivos.set(session_id, sessao);
       resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
