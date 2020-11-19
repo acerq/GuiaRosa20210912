@@ -45,7 +45,7 @@ function acertaData(data) {
 
 function recuperarSessao(req, resp) {
   let session_id = req.cookies[SESSION_ID];
-  console.log("session_id --> ", session_id);
+  console.log("session_id --> ", session_id, " ", usuariosAtivos);
 
   if(session_id == null || session_id == undefined) {
     resp.json(JSON.parse('{"erro" : "Sessão Não Definida"}'));
@@ -53,6 +53,9 @@ function recuperarSessao(req, resp) {
     return null;
   }
   
+  for (let k of usuariosAtivos.keys()) {
+    console.log("-->", k);
+  }
   let sessao = usuariosAtivos.get(session_id);
   console.log("sessao --> ", sessao);
   if(sessao == null || sessao == undefined) {
@@ -263,7 +266,10 @@ function doLoginMedico(req, resp) {
         console.log("doLogin ------------ ");
         console.log("doLogin session_id: ", session_id);
         console.log("doLogin Resposta ->", resposta);
-        console.log("doLogin ------------ ", usuariosAtivos.get(session_id));
+        console.log("doLogin get  ", usuariosAtivos.get(session_id));
+        console.log("doLogin ------------ ");
+        console.log("doLogin ------------ ");
+        console.log("doLogin ------------ ");
         
         resp.json(resposta);
       });
