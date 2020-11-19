@@ -45,7 +45,7 @@ function acertaData(data) {
 
 function recuperarSessao(req, resp) {
   let session_id = req.cookies[SESSION_ID];
-  console.log("doInicio --> ", JSON.stringify(sessao));
+  console.log("session_id --> ", session_id);
 
   if(session_id == null || session_id == undefined) {
     resp.json(JSON.parse('{"erro" : "Sessão Não Definida"}'));
@@ -54,6 +54,7 @@ function recuperarSessao(req, resp) {
   }
   
   let sessao = usuariosAtivos.get(session_id);
+  console.log("sessao --> ", sessao);
   if(sessao == null || sessao == undefined) {
     resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
     resp.end();
@@ -90,14 +91,16 @@ function doInicio(req, resp) {
   sessao.cep = null;
   sessao.ehMedico = false;
   
-  usuariosAtivos.set(sessao.tempoCorrente.getTime(), sessao);
-  resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
+  let session_id = sessao.tempoCorrente.getTime();
+  usuariosAtivos.set(session_id, sessao);
+  resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
   resp.json(sessao);
   resp.end();
   
+  console.log("doInicio ");
   console.log("doInicio --> ", JSON.stringify(sessao));
-
+  console.log("doInicio  ");
   return;
 }
 
@@ -156,10 +159,14 @@ function doGuardarUsuarioCorrente(req, resp) {
   sessao.cep = cep;
   sessao.ehMedico = false;
   
-  usuariosAtivos.set(sessao.tempoCorrente.getTime(), sessao);
-  resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
+  let session_id = sessao.tempoCorrente.getTime();
+  usuariosAtivos.set(session_id, sessao);
+  resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
+  console.log("doGuardarUsuarioCorrente --> session_id: ", session_id);
   console.log("doGuardarUsuarioCorrente --> ", JSON.stringify(sessao));
+  console.log("doGuardarUsuarioCorrente --> session_id: ", session_id);
+
   resp.json(sessao);
   resp.end();
   return;
@@ -249,9 +256,15 @@ function doLoginMedico(req, resp) {
         sessao.cep = "";
         sessao.ehMedico = true;
 
-        usuariosAtivos.set(sessao.tempoCorrente.getTime(), sessao);
-        resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
+        let session_id = sessao.tempoCorrente.getTime();
+        usuariosAtivos.set(session_id, sessao);
+        resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
+        console.log("doLogin session_id:", resposta);
+        console.log("doLogin Resposta ->", resposta);
+        console.log("doLogin Resposta ->", resposta);
+
+        
         console.log("doLogin Resposta ->", resposta);
         resp.json(resposta);
       });
@@ -306,8 +319,9 @@ function doLoginPaciente(req, resp) {
       sessao.cep = "";
       sessao.ehMedico = false;
       
-      usuariosAtivos.set(sessao.tempoCorrente.getTime(), sessao);
-      resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
+      let session_id = sessao.tempoCorrente.getTime();
+      usuariosAtivos.set(session_id, sessao);
+      resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
       console.log("doLoginPaciente Resposta ->", resposta);
       resp.json(resposta);
@@ -981,6 +995,10 @@ function startServer() {
     console.log(m);
     next();
   });
+
+  console.log("+----------------- ");
+  console.log("| START SERVER ");
+  console.log("+----------------- ");
 
   usuariosAtivos = new Map();
 
