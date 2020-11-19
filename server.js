@@ -14,20 +14,20 @@ const TEMPO_MAXIMO_REQUISICAO = 60 * 1000; // 60 segundos
 
 const usuariosAtivos = new Map();
 
-const sessaoGuiaRosa = {
-  tempoCorrente: null,
-  login: null,
-  senha: null,
-  nome: null,
-  celular: null,
-  email: null,
-  rua: null,
-  numero: null,
-  complemento: null,
-  bairro: null,
-  cep: null,
-  ehMedico: false
-};
+function sessaoGuiaRosa() {
+  this.tempoCorrente = null;
+  this.login = null;
+  this.senha = null;
+  this.nome = null;
+  this.celular = null;
+  this.email = null;
+  this.rua = null;
+  this.numero = null;
+  this.complemento = null;
+  this.bairro = null;
+  this.cep = null;
+  this.ehMedico = false;
+}
 
 //-----------------------------------------------------------------------------------------//
 
@@ -97,7 +97,10 @@ function doVerificarTimeout(req, resp) {
 function doGuardarUsuarioCorrente(req, resp) {
   console.log("doGuardarUsuarioCorrente");
 
-  guiaRosaApp.tempoCorrente = new Date();
+  
+  let sessao = new sessaoGuiaRosa();
+  
+  sessao.tempoCorrente = new Date();
   let cpf = req.params.cpf;
   let senha = req.params.senha;
   let nome = req.params.nome;
@@ -109,21 +112,21 @@ function doGuardarUsuarioCorrente(req, resp) {
   let bairro = req.params.bairro;
   let cep = req.params.cep;
 
-  guiaRosaApp.tempoCorrente = new Date();
-  guiaRosaApp.login = cpf;
-  guiaRosaApp.senha = senha;
-  guiaRosaApp.nome = nome;
-  guiaRosaApp.email = email;
-  guiaRosaApp.celular = celular;
-  guiaRosaApp.rua = rua;
-  guiaRosaApp.numero = numero;
-  guiaRosaApp.complemento = complemento;
-  guiaRosaApp.bairro = bairro;
-  guiaRosaApp.cep = cep;
-  guiaRosaApp.ehMedico = false;
+  sessao.tempoCorrente = new Date();
+  sessao.login = cpf;
+  sessao.senha = senha;
+  sessao.nome = nome;
+  sessao.email = email;
+  sessao.celular = celular;
+  sessao.rua = rua;
+  sessao.numero = numero;
+  sessao.complemento = complemento;
+  sessao.bairro = bairro;
+  sessao.cep = cep;
+  sessao.ehMedico = false;
 
-  console.log("doGuardarUsuarioCorrente --> ", JSON.stringify(guiaRosaApp));
-  resp.json(guiaRosaApp);
+  console.log("doGuardarUsuarioCorrente --> ", JSON.stringify(sessao));
+  resp.json(sessao);
   resp.end();
   return;
 }
@@ -196,18 +199,25 @@ function doLoginMedico(req, resp) {
           return;
         }
         console.log("doLogin Resposta ->", wsResposta);
-        guiaRosaApp.tempoCorrente = new Date();
-        guiaRosaApp.login = login;
-        guiaRosaApp.senha = senha;
-        guiaRosaApp.nome = resposta.nome;
-        guiaRosaApp.email = "";
-        guiaRosaApp.celular = "";
-        guiaRosaApp.rua = "";
-        guiaRosaApp.numero = "";
-        guiaRosaApp.complemento = "";
-        guiaRosaApp.bairro = "";
-        guiaRosaApp.cep = "";
-        guiaRosaApp.ehMedico = true;
+        
+        let sessao = new sessaoGuiaRosa();
+
+        sessao.tempoCorrente = new Date();
+        sessao.login = login;
+        sessao.senha = senha;
+        sessao.nome = resposta.nome;
+        sessao.email = "";
+        sessao.celular = "";
+        sessao.rua = "";
+        sessao.numero = "";
+        sessao.complemento = "";
+        sessao.bairro = "";
+        sessao.cep = "";
+        sessao.ehMedico = true;
+
+        usuariosAtivos.put(sessao.tempoCorrente.getTime(), sessao);
+        resp.cookie('session_id', sessao, { maxAge: 900000, httpOnly: true });
+
         console.log("doLogin Resposta ->", resposta);
         resp.json(resposta);
       });
