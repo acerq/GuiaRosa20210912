@@ -5,8 +5,8 @@ const cookieParser = require('cookie-parser');
 const fetch = require("node-fetch");
 const redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
 
-const BASE_URL =
-  "http://sisp.e-sisp.org:8049/webrunstudio_73/webservices/GSIServices.jws?wsdl";
+const BASE_URL = "http://sisp.e-sisp.org:8049/webrunstudio_73/webservices/GSIServices.jws?wsdl";
+const SESSION_ID = "session_id"; 
 const TEMPO_MAXIMO_SESSAO = 20 * 60 * 1000; // 20 minutos
 const TEMPO_MAXIMO_REQUISICAO = 60 * 1000; // 60 segundos
 
@@ -43,6 +43,19 @@ function acertaData(data) {
 
 //-----------------------------------------------------------------------------------------//
 
+function recuperarSessao(req) {
+  let session_id = req.cookies['session_id'];
+  if(session_id == null || session_id == undefined)
+    return null;
+  
+  let sessao = usuariosAtivos.get(session_id)
+  if(sessao == null || sessao == undefined)
+    return null;
+  return sessao;
+}
+  
+//-----------------------------------------------------------------------------------------//
+  
 function doInicio(req, resp) {
   guiaRosaApp.tempoCorrente = new Date();
   guiaRosaApp.login = null;
@@ -64,10 +77,12 @@ function doInicio(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doObterUsuarioCorrente(req, resp) {
-  let session_id = req.cookies['session_id'];
-  let guiaRosaApp = usuariosAtivos.get(session_id)
-  
-  guiaRosaApp.tempoCorrente = new Date();
+  let sessao = recuperarSessao(req, resp);
+  if(sessao == null) {
+    resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
+    resp.end();
+  }
+  sessao.tempoCorrente = new Date();
   console.log("retornarUsuario --> ", JSON.stringify(guiaRosaApp));
   resp.json(guiaRosaApp);
   resp.end();
@@ -97,7 +112,6 @@ function doVerificarTimeout(req, resp) {
 function doGuardarUsuarioCorrente(req, resp) {
   console.log("doGuardarUsuarioCorrente");
 
-  
   let sessao = new sessaoGuiaRosa();
   
   sessao.tempoCorrente = new Date();
@@ -216,7 +230,7 @@ function doLoginMedico(req, resp) {
         sessao.ehMedico = true;
 
         usuariosAtivos.put(sessao.tempoCorrente.getTime(), sessao);
-        resp.cookie('session_id', sessao, { maxAge: 900000, httpOnly: true });
+        resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
         console.log("doLogin Resposta ->", resposta);
         resp.json(resposta);
@@ -256,18 +270,25 @@ function doLoginPaciente(req, resp) {
         resposta = { status : "success", login : login, nome : ""};
       }
       console.log("doLoginPaciente Resposta ->", wsResposta);
-      guiaRosaApp.tempoCorrente = new Date();
-      guiaRosaApp.login = login;
-      guiaRosaApp.senha = senha;
-      guiaRosaApp.nome = resposta.nome;
-      guiaRosaApp.email = "";
-      guiaRosaApp.celular = "";
-      guiaRosaApp.rua = "";
-      guiaRosaApp.numero = "";
-      guiaRosaApp.complemento = "";
-      guiaRosaApp.bairro = "";
-      guiaRosaApp.cep = "";
-      guiaRosaApp.ehMedico = false;
+      
+      let sessao = new sessaoGuiaRosa();
+
+      sessao.tempoCorrente = new Date();
+      sessao.login = login;
+      sessao.senha = senha;
+      sessao.nome = resposta.nome;
+      sessao.email = "";
+      sessao.celular = "";
+      sessao.rua = "";
+      sessao.numero = "";
+      sessao.complemento = "";
+      sessao.bairro = "";
+      sessao.cep = "";
+      sessao.ehMedico = false;
+      
+      usuariosAtivos.put(sessao.tempoCorrente.getTime(), sessao);
+      resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
+
       console.log("doLoginPaciente Resposta ->", resposta);
       resp.json(resposta);
     });
