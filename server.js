@@ -1,7 +1,6 @@
 "use strict";
 
 const express = require("express");
-const cookieParser = require('cookie-parser');
 const fetch = require("node-fetch");
 const redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
 
@@ -73,20 +72,29 @@ function recuperarSessao(req, resp) {
 //-----------------------------------------------------------------------------------------//
   
 function doInicio(req, resp) {
-  guiaRosaApp.tempoCorrente = new Date();
-  guiaRosaApp.login = null;
-  guiaRosaApp.senha = null;
-  guiaRosaApp.nome = null;
-  guiaRosaApp.email = null;
-  guiaRosaApp.celular = null;
-  guiaRosaApp.rua = null;
-  guiaRosaApp.numero = null;
-  guiaRosaApp.complemento = null;
-  guiaRosaApp.bairro = null;
-  guiaRosaApp.cep = null;
-  guiaRosaApp.ehMedico = false;
-  resp.json(guiaRosaApp);
+  let sessao = new sessaoGuiaRosa();
+
+  sessao.tempoCorrente = new Date();
+  sessao.login = null;
+  sessao.senha = null;
+  sessao.nome = null;
+  sessao.email = null;
+  sessao.celular = null;
+  sessao.rua = null;
+  sessao.numero = null;
+  sessao.complemento = null;
+  sessao.bairro = null;
+  sessao.cep = null;
+  sessao.ehMedico = false;
+  
+  usuariosAtivos.put(sessao.tempoCorrente.getTime(), sessao);
+  resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
+
+  resp.json(sessao);
   resp.end();
+  
+  console.log("doInicio --> ", JSON.stringify(sessao));
+
   return;
 }
 
@@ -117,7 +125,7 @@ function doVerificarTimeout(req, resp) {
 
 function doGuardarUsuarioCorrente(req, resp) {
   console.log("doGuardarUsuarioCorrente");
-XXXXX
+
   let sessao = new sessaoGuiaRosa();
   
   sessao.tempoCorrente = new Date();
@@ -144,6 +152,9 @@ XXXXX
   sessao.bairro = bairro;
   sessao.cep = cep;
   sessao.ehMedico = false;
+  
+  usuariosAtivos.put(sessao.tempoCorrente.getTime(), sessao);
+  resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
 
   console.log("doGuardarUsuarioCorrente --> ", JSON.stringify(sessao));
   resp.json(sessao);
@@ -349,8 +360,10 @@ function doObterPeriodo(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doIncluirPaciente(req, resp) {
-  guiaRosaApp.tempoCorrente = new Date();
-
+  let sessao = recuperarSessao(req, resp);
+  if(sessao == null) 
+    return;
+  
   let soap = require("soap");
 
   let cpf = req.params.cpf.replace(/\.|-/g, "");
@@ -417,8 +430,6 @@ function doIncluirPaciente(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doObterExames(req, resp) {
-  guiaRosaApp.tempoCorrente = new Date();
-
   let soap = require("soap");
 
   let local = req.params.local;
@@ -448,8 +459,10 @@ function doObterExames(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doAgendamento(req, resp) {
-  guiaRosaApp.tempoCorrente = new Date();
-
+  let sessao = recuperarSessao(req, resp);
+  if(sessao == null) 
+    return;
+  
   let soap = require("soap");
 
   let executante = req.params.executante;
@@ -461,9 +474,9 @@ function doAgendamento(req, resp) {
   let periodo = req.params.periodo;
   let faturar = req.params.faturar;
 
-  console.log("Agendamento - " + guiaRosaApp.login);
-  if (guiaRosaApp.ehMedico) {
-    solicitante = guiaRosaApp.login;
+  console.log("Agendamento - " + sessao.login);
+  if (sessao.ehMedico) {
+    solicitante = sessao.login;
   } else {
     solicitante = "0000"; //TODO
   }
@@ -537,8 +550,10 @@ function doAgendamento(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 async function doPgtoCC(req, resp) {
-  guiaRosaApp.tempoCorrente = new Date();
-
+  let sessao = recuperarSessao(req, resp);
+  if(sessao == null) 
+    return;
+  
   let nome = req.params.nome;
   let cpf = req.params.cpf;
   let email = req.params.email;
@@ -572,7 +587,7 @@ async function doPgtoCC(req, resp) {
 
   let agora = new Date();
   let timeMillis = agora.getTime().toString();
-  let id = guiaRosaApp.login + "_" + timeMillis;
+  let id = sessao.login + "_" + timeMillis;
 
   const myHeaders = {
     "Content-Type": "application/json",
@@ -629,8 +644,10 @@ async function doPgtoCC(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 async function doPgtoDebito(req, resp) {
-  guiaRosaApp.tempoCorrente = new Date();
-
+  let sessao = recuperarSessao(req, resp);
+  if(sessao == null) 
+    return;
+  
   let nome = req.params.nome;
   let cpf = req.params.cpf;
   let email = req.params.email;
@@ -664,7 +681,7 @@ async function doPgtoDebito(req, resp) {
 
   let agora = new Date();
   let timeMillis = agora.getTime().toString();
-  let id = guiaRosaApp.login + "_" + timeMillis;
+  let id = sessao.login + "_" + timeMillis;
 
   const myHeaders = {
     "Content-Type": "application/json",
@@ -733,8 +750,10 @@ async function doPgtoDebito(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 async function doPgtoBoleto(req, resp) {
-  guiaRosaApp.tempoCorrente = new Date();
-
+  let sessao = recuperarSessao(req, resp);
+  if(sessao == null) 
+    return;
+  
   let nome = req.params.nome;
   let cpf = req.params.cpf;
   let email = req.params.email;
@@ -760,7 +779,7 @@ async function doPgtoBoleto(req, resp) {
 
   let agora = new Date();
   let timeMillis = agora.getTime().toString();
-  let id = guiaRosaApp.login + "_" + timeMillis;
+  let id = sessao.login + "_" + timeMillis;
 
   const myHeaders = {
     "Content-Type": "application/json",
@@ -815,12 +834,14 @@ async function doPgtoBoleto(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doVerificarSenhaUsuarioCorrente(req, resp) {
-  guiaRosaApp.tempoCorrente = new Date();
+  let sessao = recuperarSessao(req, resp);
+  if(sessao == null) 
+    return;
   let senha = req.params.senha;
 
-  console.log("verificarSenhaUsuarioCorrente - " + guiaRosaApp.login);
+  console.log("verificarSenhaUsuarioCorrente - " + sessao.login);
   console.log(
-    "verificarSenhaUsuarioCorrente - " + guiaRosaApp.senha + " - " + senha
+    "verificarSenhaUsuarioCorrente - " + sessao.senha + " - " + senha
   );
   if (typeof senha === "undefined") {
     console.log("undefined 0010");
@@ -828,7 +849,7 @@ function doVerificarSenhaUsuarioCorrente(req, resp) {
     return;
   }
 
-  if (guiaRosaApp.senha != senha) {
+  if (sessao.senha != senha) {
     console.log("verificarSenhaUsuarioCorrente - erro na senha");
     resp.json(JSON.parse('{"erro" : "[Erro:#0011] Senha Não Confere."}'));
   } else {
@@ -840,8 +861,10 @@ function doVerificarSenhaUsuarioCorrente(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 async function doGerarConfirmacao(req, resp) {
-  guiaRosaApp.tempoCorrente = new Date();
-
+  let sessao = recuperarSessao(req, resp);
+  if(sessao == null) 
+    return;
+  
   let nome = req.params.nome;
   let cpf = req.params.cpf;
   let numeroCartao = req.params.numeroCartao;
@@ -941,7 +964,7 @@ async function doGerarConfirmacao(req, resp) {
 
 function startServer() {
   const app = express();
-  app.use(cookieParser());
+  app.use(express.cookieParser());
   
   // Redirect HTTP to HTTPS,
   app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
