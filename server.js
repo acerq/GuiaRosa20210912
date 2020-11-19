@@ -288,7 +288,7 @@ function doLoginMedico(req, resp) {
         console.log("doLogin ------------ ");
         console.log("doLogin ------------ ");
         
-        resp.json(resposta);
+        resp.json(sessao);
       });
     }
   );
@@ -353,7 +353,7 @@ function doLoginPaciente(req, resp) {
       console.log("doLoginPaciente Resposta ->", resposta);
       console.log("doLoginPaciente session_id: ", session_id);
 
-      resp.json(resposta);
+      resp.json(sessao);
     });
   });
 }
