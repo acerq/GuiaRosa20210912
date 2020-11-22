@@ -44,6 +44,13 @@ function acertaData(data) {
 
 //-----------------------------------------------------------------------------------------//
 
+function removerSessoesFinalizadas() {
+  let chaves = usuariosAtivos.keys();
+  
+}
+
+//-----------------------------------------------------------------------------------------//
+
 function recuperarSessao(req, resp) {
   let session_id = parseInt(req.cookies[SESSION_ID]);
   console.log("session_id --> ", session_id, " ", typeof session_id, " ",usuariosAtivos);
@@ -76,7 +83,7 @@ function recuperarSessao(req, resp) {
     return;
   }
   sessao.tempoCorrente = new Date();
-  resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
+  resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
   return sessao;
 }
   
