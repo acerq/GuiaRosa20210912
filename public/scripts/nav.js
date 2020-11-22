@@ -240,7 +240,7 @@ async function abrirApp() {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("/service-worker.js").then(reg => {
-        alert("nav.js - abrirApp")
+        alert("nav.js - abrirApp");
       });
     });
   }

@@ -44,7 +44,7 @@ const FILES_TO_CACHE = [
   "/styles/inline.css"
 ];
 
-self.addEventListener("install", evt => {
+self.addEventListener("install", evt =>  {
   console.log("[SW] Instalação");
   caches.keys().then(keyList => {
     return Promise.all(
