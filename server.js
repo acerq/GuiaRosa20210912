@@ -7,7 +7,7 @@ const redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
 
 const BASE_URL = "http://sisp.e-sisp.org:8049/webrunstudio_73/webservices/GSIServices.jws?wsdl";
 const SESSION_ID = "session_id"; 
-const TEMPO_MAXIMO_SESSAO = 20 * 60 * 1000; // 20 minutos
+const TEMPO_MAXIMO_SESSAO_SEGUNDOS = 20 * 60 ; // 20 minutos
 const TEMPO_MAXIMO_REQUISICAO = 60 * 1000; // 60 segundos
 
 //-----------------------------------------------------------------------------------------//
@@ -67,15 +67,15 @@ function recuperarSessao(req, resp) {
     return null;    
   }
   
-  let diferenca = new Date() - sessao.tempoCorrente;
-  if (diferenca > TEMPO_MAXIMO_SESSAO) {
+  let diferenca = (new Date().getTime()/1000) - sessao.tempoCorrente;
+  if (diferenca > TEMPO_MAXIMO_SESSAO_SEGUNDOS) {
     usuariosAtivos.delete(session_id);
     resp.json(JSON.parse('{"erro" : "Sessão Expirada"}'));
     resp.end();
     return;
   }
   sessao.tempoCorrente = new Date();
-  resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
+  resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO_SEGUNDOS, httpOnly: true });
   return sessao;
 }
   
@@ -103,7 +103,7 @@ function doInicio(req, resp) {
   
   //let session_id = sessao.tempoCorrente.getTime().valueOf();
   //usuariosAtivos.set(session_id, sessao);
-  //resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
+  //resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO_SEGUNDOS, httpOnly: true });
 
   resp.json(sessao);
   resp.end();
@@ -177,7 +177,7 @@ function doGuardarUsuarioCorrente(req, resp) {
   
   let session_id = sessao.tempoCorrente.getTime().valueOf();
   usuariosAtivos.set(session_id, sessao);
-  resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
+  resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO_SEGUNDOS, httpOnly: true });
 
   console.log("doGuardarUsuarioCorrente --> session_id: ", session_id);
   console.log("doGuardarUsuarioCorrente --> ", JSON.stringify(sessao));
@@ -278,7 +278,7 @@ function doLoginMedico(req, resp) {
 
         let session_id = sessao.tempoCorrente.getTime().valueOf();
         usuariosAtivos.set(session_id, sessao);
-        resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
+        resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO_SEGUNDOS, httpOnly: true });
 
         console.log("doLogin ------------ ");
         console.log("doLogin session_id: ", session_id);
@@ -347,7 +347,7 @@ function doLoginPaciente(req, resp) {
       
       let session_id = sessao.tempoCorrente.getTime().valueOf();
       usuariosAtivos.set(session_id, sessao);
-      resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO, httpOnly: true });
+      resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO_SEGUNDOS, httpOnly: true });
 
       console.log("doLoginPaciente session_id: ", session_id);
       console.log("doLoginPaciente Resposta ->", resposta);
