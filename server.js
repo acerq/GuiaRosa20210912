@@ -2,7 +2,6 @@
 
 const express = require("express");
 const fetch = require("node-fetch");
-const cookieParser = require('cookie-parser');
 const redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
 
 const BASE_URL = "http://sisp.e-sisp.org:8049/webrunstudio_73/webservices/GSIServices.jws?wsdl";
@@ -15,6 +14,7 @@ const TEMPO_MAXIMO_REQUISICAO = 60 * 1000; // 60 segundos
 var usuariosAtivos;
 
 function sessaoGuiaRosa() {
+  this.session_id = null;
   this.tempoCorrente = null;
   this.login = null;
   this.senha = null;
@@ -101,10 +101,6 @@ function doInicio(req, resp) {
   sessao.cep = null;
   sessao.ehMedico = false;
   
-  //let session_id = sessao.tempoCorrente.getTime().valueOf();
-  //usuariosAtivos.set(session_id, sessao);
-  //resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO_SEGUNDOS, httpOnly: true });
-
   resp.json(sessao);
   resp.end();
   
@@ -148,9 +144,6 @@ function doGuardarUsuarioCorrente(req, resp) {
   console.log("| doGuardarUsuarioCorrente ");
   console.log("+------------------------- ");
 
-  let sessao = new sessaoGuiaRosa();
-  
-  sessao.tempoCorrente = new Date();
   let cpf = req.params.cpf;
   let senha = req.params.senha;
   let nome = req.params.nome;
@@ -162,7 +155,10 @@ function doGuardarUsuarioCorrente(req, resp) {
   let bairro = req.params.bairro;
   let cep = req.params.cep;
 
+  let sessao = new sessaoGuiaRosa();
+  
   sessao.tempoCorrente = new Date();
+  sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
   sessao.login = cpf;
   sessao.senha = senha;
   sessao.nome = nome;
@@ -175,13 +171,11 @@ function doGuardarUsuarioCorrente(req, resp) {
   sessao.cep = cep;
   sessao.ehMedico = false;
   
-  let session_id = sessao.tempoCorrente.getTime().valueOf();
-  usuariosAtivos.set(session_id, sessao);
-  resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO_SEGUNDOS, httpOnly: true });
+  usuariosAtivos.set(sessao.session_id, sessao);
 
-  console.log("doGuardarUsuarioCorrente --> session_id: ", session_id);
+  console.log("doGuardarUsuarioCorrente --> session_id: ", sessao.session_id);
   console.log("doGuardarUsuarioCorrente --> ", JSON.stringify(sessao));
-  console.log("doGuardarUsuarioCorrente --> session_id: ", session_id);
+  console.log("doGuardarUsuarioCorrente --> session_id: ", sessao.session_id);
 
   resp.json(sessao);
   resp.end();
@@ -264,6 +258,7 @@ function doLoginMedico(req, resp) {
         let sessao = new sessaoGuiaRosa();
 
         sessao.tempoCorrente = new Date();
+        sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
         sessao.login = login;
         sessao.senha = senha;
         sessao.nome = resposta.nome;
@@ -276,14 +271,12 @@ function doLoginMedico(req, resp) {
         sessao.cep = "";
         sessao.ehMedico = true;
 
-        let session_id = sessao.tempoCorrente.getTime().valueOf();
-        usuariosAtivos.set(session_id, sessao);
-        resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO_SEGUNDOS, httpOnly: true });
+        usuariosAtivos.set(sessao.session_id, sessao);
 
         console.log("doLogin ------------ ");
-        console.log("doLogin session_id: ", session_id);
+        console.log("doLogin session_id: ", sessao.session_id);
         console.log("doLogin Resposta ->", resposta);
-        console.log("doLogin get  ", usuariosAtivos.get(session_id));
+        console.log("doLogin get  ", usuariosAtivos.get(sessao.session_id));
         console.log("doLogin ------------ ");
         console.log("doLogin ------------ ");
         console.log("doLogin ------------ ");
@@ -333,6 +326,7 @@ function doLoginPaciente(req, resp) {
       let sessao = new sessaoGuiaRosa();
 
       sessao.tempoCorrente = new Date();
+      sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
       sessao.login = login;
       sessao.senha = senha;
       sessao.nome = resposta.nome;
@@ -345,13 +339,11 @@ function doLoginPaciente(req, resp) {
       sessao.cep = "";
       sessao.ehMedico = false;
       
-      let session_id = sessao.tempoCorrente.getTime().valueOf();
-      usuariosAtivos.set(session_id, sessao);
-      resp.cookie(SESSION_ID, session_id , { maxAge: TEMPO_MAXIMO_SESSAO_SEGUNDOS, httpOnly: true });
+      usuariosAtivos.set(sessao.session_id, sessao);
 
-      console.log("doLoginPaciente session_id: ", session_id);
+      console.log("doLoginPaciente session_id: ", sessao.session_id);
       console.log("doLoginPaciente Resposta ->", resposta);
-      console.log("doLoginPaciente session_id: ", session_id);
+      console.log("doLoginPaciente session_id: ", sessao.session_id);
 
       resp.json(sessao);
     });
@@ -1017,7 +1009,6 @@ async function doGerarConfirmacao(req, resp) {
 
 function startServer() {
   const app = express();
-  app.use(cookieParser());
   
   // Redirect HTTP to HTTPS,
   app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
