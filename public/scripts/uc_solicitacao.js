@@ -69,7 +69,7 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterLocais() {
-    let response = await fetch("/obterLocais/");
+    let response = await fetch("/obterLocais/", { credentials : "include" });
     this.arrayLocais = await response.json();
     if (!this.arrayLocais) {
       console.log("obterLocais sem conteúdo");
@@ -96,7 +96,7 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterPeriodo() {
-    let response = await fetch("/obterPeriodo/");
+    let response = await fetch("/obterPeriodo/", { credentials : "include" });
     console.log("obterPeriodo retorno", response);
     if (!response) {
       console.log("(app.js) renderObterPeriodo sem conteúdo");
@@ -120,7 +120,7 @@ export default class CtrlSolicitacao {
 
   async obterExames(local, exame) {
     if (exame == null || exame == "") exame = "*";
-    let response = await fetch("/obterExames/" + local + "/" + exame);
+    let response = await fetch("/obterExames/" + local + "/" + exame, { credentials : "include" });
     if (!response) {
       console.log("(app.js) obterExames sem conteúdo");
       return;
@@ -139,7 +139,7 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async verificarSenha(senha) {
-    let response = await fetch("/verificarSenha/" + senha);
+    let response = await fetch("/verificarSenha/" + senha, { credentials : "include" });
     if (!response) {
       return false;
     }
@@ -200,7 +200,7 @@ export default class CtrlSolicitacao {
       "/" +
       valor.replace(/\.|\,/g, "");
       
-    let response = await fetch(requisicao);
+    let response = await fetch(requisicao, { credentials : "include" });
     let resposta = await response.json();
     if (!resposta) {
       console.log("Erro no pagamento");
@@ -270,7 +270,7 @@ export default class CtrlSolicitacao {
       "S";
     //faturar;
     console.log("(app.js) Executando agendamento");
-    response = await fetch(requisicao);
+    response = await fetch(requisicao, { credentials : "include" });
     resposta = await response.json();
 
     if (!resposta) {
@@ -313,7 +313,7 @@ export default class CtrlSolicitacao {
         "/" +
         paymentId;
 
-      let response = await fetch(requisicao);
+      let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
       await download(blob);
       this.view.tirarEspera();
@@ -375,7 +375,7 @@ export default class CtrlSolicitacao {
       "/" +
       valor.replace(/\.|\,/g, "");
       
-    let response = await fetch(requisicao);
+    let response = await fetch(requisicao, { credentials : "include" });
     let resposta = await response.json();
     if (!resposta) {
       console.log("Erro no pagamento");
@@ -454,7 +454,7 @@ export default class CtrlSolicitacao {
       "S";
     //faturar;
     console.log("(app.js) Executando agendamento");
-    response = await fetch(requisicao);
+    response = await fetch(requisicao, { credentials : "include" });
     resposta = await response.json();
 
     if (!resposta) {
@@ -497,7 +497,7 @@ export default class CtrlSolicitacao {
         "/" +
         paymentId;
 
-      let response = await fetch(requisicao);
+      let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
       await download(blob);
       this.view.tirarEspera();
@@ -545,7 +545,7 @@ async enviarAgendamentoPgtoBoleto(
       "/" +
       dataExame;
       
-    let response = await fetch(requisicao);
+    let response = await fetch(requisicao, { credentials : "include" });
     let resposta = await response.json();
     if (!resposta) {
       console.log("Erro no pagamento");
@@ -622,7 +622,7 @@ async enviarAgendamentoPgtoBoleto(
       "S";
     //faturar;
     console.log("(app.js) Executando agendamento");
-    response = await fetch(requisicao);
+    response = await fetch(requisicao, { credentials : "include" });
     resposta = await response.json();
 
     if (!resposta) {
@@ -665,7 +665,7 @@ async enviarAgendamentoPgtoBoleto(
         "/" +
         paymentId;
 
-      let response = await fetch(requisicao);
+      let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
       await download(blob);
       this.view.tirarEspera();

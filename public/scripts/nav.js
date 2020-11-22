@@ -94,7 +94,7 @@ function closeMenu() {
 // -----------------------------------------------------------------------------------------//
 
 async function doObterUsuarioCorrente() {
-  let response = await fetch("/obterUsuarioCorrente");
+  let response = await fetch("/obterUsuarioCorrente", { credentials : "include" });
   usrApp = await response.json();
   renderObterUsuarioCorrente(); 
   return usrApp;
@@ -134,7 +134,7 @@ function renderObterUsuarioCorrente() {
 // -----------------------------------------------------------------------------------------//
 
 function cadastroDePacientes() {
-  return fetch("/verificarTimeout")
+  return fetch("/verificarTimeout", { credentials : "include" })
     .then(async response => {
       let msg = await response.json();
       if (msg.hasOwnProperty("erro")) {
@@ -153,7 +153,7 @@ function cadastroDePacientes() {
 // -----------------------------------------------------------------------------------------//
 
 function solicitacaoDeExames() {
-  return fetch("/verificarTimeout")
+  return fetch("/verificarTimeout", { credentials : "include" })
     .then(async response => {
       let msg = await response.json();
       if (msg.hasOwnProperty("erro")) {
@@ -172,7 +172,7 @@ function solicitacaoDeExames() {
 // -----------------------------------------------------------------------------------------//
 
 function apresentarListas() {
-  return fetch("/verificarTimeout")
+  return fetch("/verificarTimeout", { credentials : "include" })
     .then(async response => {
       let msg = await response.json();
       if (msg.hasOwnProperty("erro")) {
@@ -191,7 +191,7 @@ function apresentarListas() {
 // -----------------------------------------------------------------------------------------//
 
 function paginaInicial() {
-  return fetch("/verificarTimeout")
+  return fetch("/verificarTimeout", { credentials : "include" })
     .then(async response => {
       let msg = await response.json();
       if (msg.hasOwnProperty("erro")) {
@@ -240,7 +240,7 @@ async function abrirApp() {
       });
     });
   }
-  let response = await fetch("/inicio");
+  let response = await fetch("/inicio", { credentials : "include" });
   usrApp = await response.json();
   renderObterUsuarioCorrente(); 
   inicioAposLogin = false;
@@ -250,7 +250,7 @@ async function abrirApp() {
 
 async function fecharApp() {
   inicioAposLogin = false;
-  let response = await fetch("/inicio");
+  let response = await fetch("/inicio", { credentials : "include" });
   usrApp = await response.json();
   closeMenu();
   try {
