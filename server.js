@@ -273,6 +273,7 @@ function doLoginMedico(req, resp) {
         sessao.ehMedico = true;
 
         usuariosAtivos.set(sessao.session_id, sessao);
+        resp.cookie(SESSION_ID, sessao, { maxAge: TEMPO_MAXIMO_SESSAO_SEGUNDOS, httpOnly: true });
 
         console.log("doLogin ------------ ");
         console.log("doLogin session_id: ", sessao.session_id);
@@ -1010,7 +1011,8 @@ async function doGerarConfirmacao(req, resp) {
 
 function startServer() {
   const app = express();
-  
+  app.use(cookieParser());
+
   // Redirect HTTP to HTTPS,
   app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
 
@@ -1018,8 +1020,9 @@ function startServer() {
   app.use((req, resp, next) => {
     const now = new Date();
     const time = `${now.toLocaleDateString()} - ${now.toLocaleTimeString()}`;
-    const path = `"${req.method} ${req.path}"`;
-    const m = `${req.ip} - ${time} - ${path}`;
+    const path = `${req.method} ${req.path}`;
+    const biscoitos = `JSON.strigify(${req.cookies})`; 
+    const m = `${req.ip} - cookies: ${biscoitos} - ${time} - ${path}`;
     console.log(m);
     next();
   });
