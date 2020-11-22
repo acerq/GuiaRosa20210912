@@ -46,12 +46,26 @@ function acertaData(data) {
 
 function removerSessoesFinalizadas() {
   let chaves = usuariosAtivos.keys();
+  let horaAtual = new Date().getTime();
   
+  while(true) {
+    let ch = chaves.next().value;
+    if(ch == null)
+      break;
+    let sessao = usuariosAtivos.get(ch);
+    if(sessao.tempoCorrente < horaAtual)  {
+      usuariosAtivos.delete(ch);    
+      console.log('removeu ' + ch);
+    }
+  }
 }
 
 //-----------------------------------------------------------------------------------------//
 
 function recuperarSessao(req, resp) {
+  
+  new Promise((res,rej) => { removerSessoesFinalizadas(); });
+  
   let session_id = parseInt(req.cookies[SESSION_ID]);
   console.log("session_id --> ", session_id, " ", typeof session_id, " ",usuariosAtivos);
 
