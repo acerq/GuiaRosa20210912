@@ -148,11 +148,23 @@ function renderEfetuarLogin(resposta) {
       return;
     }
   }
-  
+
   if (tfLogin.value == usrApp.login && fnMD5(tfSenha.value) == usrApp.senha) {
-    incluirDbApp(usrApp.login, usrApp.senha, usrApp.nome, usrApp.email, usrApp.celular, usrApp.rua, usrApp.numero, null, null, null, true);
+    incluirDbApp(
+      usrApp.login,
+      usrApp.senha,
+      usrApp.nome,
+      usrApp.email,
+      usrApp.celular,
+      usrApp.rua,
+      usrApp.numero,
+      null,
+      null,
+      null,
+      true
+    );
     window.location.href = "inicio.html";
-    //doGuardarUsuarioCorrente().then(retorno => {      
+    //doGuardarUsuarioCorrente().then(retorno => {
     //  return;
     //});
   }
@@ -181,7 +193,10 @@ function doGuardarUsuarioCorrente() {
       "/" +
       usrApp.bairro +
       "/" +
-      usrApp.cep
+      usrApp.cep,
+    {
+      credentials: "same-origin"
+    }
   )
     .then(response => {
       return response.json();
@@ -199,7 +214,7 @@ async function doEfetuarLogin(login, senha) {
       return usrApp;
     }
   }
-  let response = await fetch("/login/" + login + "/" + senha);
+  let response = await fetch("/login/" + login + "/" + senha,{credentials: "same-origin"});
   let respJson = await response.json();
   usrApp = respJson;
   return respJson;
