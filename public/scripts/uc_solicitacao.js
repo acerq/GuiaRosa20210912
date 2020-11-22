@@ -25,22 +25,23 @@ export default class CtrlSolicitacao {
   async init() {
     this.view.colocarEspera();
 
+    await this.obterLocais();
+
     this.usrApp = await window.retornarUsrApp();
 
     if(this.view.usuarioLogado) {
       await this.daoPaciente.abrirDB();
       await this.obterPacientes();
     }
-    await this.obterLocais();
-
     this.view.atualizarInterface(
       this.usrApp.ehMedico,
       this.arrayPacientes,
       this.arrayLocais
     );
 
-    await this.obterPeriodo();
     this.view.tirarEspera();
+
+    await this.obterPeriodo();
   }
 
   //-----------------------------------------------------------------------------------------//
