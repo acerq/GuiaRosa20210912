@@ -70,7 +70,7 @@ function recuperarSessao(req, resp) {
   console.log("session_id --> ", session_id, " ", typeof session_id, " ",usuariosAtivos);
 
   if(session_id == null || session_id == undefined) {
-    resp.json(JSON.parse('{"erro" : "Sessão Não Definida"}'));
+    resp.json(JSON.parse('{"erro" : "Sessão Não Iniciada"}'));
     resp.end();
     return null;
   }

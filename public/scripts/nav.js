@@ -118,7 +118,7 @@ function renderObterUsuarioCorrente() {
 
   if (inicioAposLogin) {
     if(usrApp.login == null) {
-      
+      loginApp();
     }
     divConteudo.innerHTML = "";
     if (usrApp.ehMedico)
