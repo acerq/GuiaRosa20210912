@@ -214,9 +214,9 @@ async function doEfetuarLogin(login, senha) {
       return usrApp;
     }
   }
-  let response = await fetch("/login/" + login + "/" + senha,{credentials: "same-origin"});
+  let response = await fetch("/login/" + login + "/" + senha, { credentials : "include" } );
   let respJson = await response.json();
-  alert(JSON.stringify(respJson));
+  alert(JSON.stringify(response.headers));
   usrApp = respJson;
   return respJson;
 }
