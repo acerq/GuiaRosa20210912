@@ -31,7 +31,6 @@ export default class CtrlSolicitacao {
       await this.daoPaciente.abrirDB();
       await this.obterPacientes();
     }
-    await this.obterPeriodo();
     await this.obterLocais();
 
     this.view.atualizarInterface(
@@ -40,6 +39,7 @@ export default class CtrlSolicitacao {
       this.arrayLocais
     );
 
+    await this.obterPeriodo();
     this.view.tirarEspera();
   }
 
