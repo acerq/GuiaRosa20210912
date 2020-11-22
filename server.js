@@ -1019,10 +1019,9 @@ function startServer() {
   // Efetuando o log para cada requisição
   app.use((req, resp, next) => {
     const now = new Date();
-    const time = `${now.toLocaleDateString()} - ${now.toLocaleTimeString()}`;
-    const path = `${req.method} ${req.path}`;
-    const biscoitos = `JSON.strigify(${req.cookies})`; 
-    const m = `${req.ip} - cookies: ${biscoitos} - ${time} - ${path}`;
+    const time = now.toLocaleDateString() + ' - ' + now.toLocaleTimeString();
+    const path = req.method + ' ' + req.path;
+    const m = req.ip + ' - ' + time + ' - ' + path +  ' - ' +JSON.stringify(req.cookies);
     console.log(m);
     next();
   });

@@ -216,6 +216,7 @@ async function doEfetuarLogin(login, senha) {
   }
   let response = await fetch("/login/" + login + "/" + senha,{credentials: "same-origin"});
   let respJson = await response.json();
+  alert(JSON.stringify(respJson));
   usrApp = respJson;
   return respJson;
 }
