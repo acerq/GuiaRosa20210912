@@ -151,27 +151,29 @@ function renderEfetuarLogin(resposta) {
   
   if (tfLogin.value == usrApp.login && fnMD5(tfSenha.value) == usrApp.senha) {
     doGuardarUsuarioCorrente().then(retorno => {
+      
+      
+            usrApp.login +
+      "/" +
+      usrApp.senha +
+      "/" +
+      usrApp.nome +
+      "/" +
+      usrApp.email +
+      "/" +
+      usrApp.celular +
+      "/" +
+      usrApp.rua +
+      "/" +
+      usrApp.numero +
+      "/" +
+      usrApp.complemento +
+      
+      
+      incluirDbApp(usrApp.login, null, usrApp.nome, null, null, null, null, null, null, null, true);
       window.location.href = "inicio.html";
       return;
     });
-  }
-
-  if (resposta.hasOwnProperty("status")) {
-    if (resposta.status == "success") {
-      incluirDbApp(
-        tfLogin.value,
-        null,
-        resposta.nome,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        true
-      );
-    }
   }
 }
 
