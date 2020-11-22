@@ -244,10 +244,6 @@ async function abrirApp() {
       });
     });
   }
-  let response = await fetch("/inicio", { credentials : "include" });
-  usrApp = await response.json();
-  renderObterUsuarioCorrente(); 
-  inicioAposLogin = false;
 }
 
 // -----------------------------------------------------------------------------------------//
