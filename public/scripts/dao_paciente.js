@@ -218,7 +218,7 @@ export default class DAOPaciente {
         "/" +
         bairroNovo +
         "/" +
-        cepNovo
+        cepNovo, { credentials : "include" }
     )
       .then(response => {
         console.log("(app.js) incluirPaciente response");
@@ -325,7 +325,7 @@ export default class DAOPaciente {
         "/" +
         bairroNovo +
         "/" +
-        cepNovo
+        cepNovo, { credentials : "include" }
     )
       .then(response => {
         console.log("(app.js) incluirPaciente response");

@@ -195,7 +195,7 @@ function doGuardarUsuarioCorrente() {
       "/" +
       usrApp.cep,
     {
-      credentials: "same-origin"
+      credentials: "include"
     }
   )
     .then(response => {

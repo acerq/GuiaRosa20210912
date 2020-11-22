@@ -178,7 +178,7 @@ async function doIncluirPaciente() {
       "/" +
       bairro +
       "/" +
-      cep
+      cep, { credentials : "include" }
   );
   return await response.json();
 }
@@ -206,7 +206,7 @@ function doGuardarUsuarioCorrente() {
       "/" +
       bairro +
       "/" +
-      cep
+      cep, { credentials : "include" }
   )
     .then(response => {
       return response.json();
