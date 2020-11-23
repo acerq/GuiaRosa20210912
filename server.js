@@ -7,8 +7,8 @@ const cookieParser = require('cookie-parser');
  
 const BASE_URL = "http://sisp.e-sisp.org:8049/webrunstudio_73/webservices/GSIServices.jws?wsdl";
 const SESSION_ID = "session_id"; 
-const TEMPO_MAXIMO_SESSAO = 60 * 1000; // 20 minutos
-const TEMPO_PERMANENCIA_SESSAO_FINALIZADA = 20 * 60 * 1000; // 20 minutos
+const TEMPO_MAXIMO_SESSAO = 20 * 60 * 1000; // 20 minutos
+const TEMPO_COOKIE_APOS_SESSAO_FINALIZADA = 20 * 60 * 1000; // 20 minutos
 const TEMPO_MAXIMO_REQUISICAO = 60 * 1000; // 60 segundos
 
 //-----------------------------------------------------------------------------------------//
@@ -71,7 +71,7 @@ function recuperarSessao(req, resp) {
   console.log("session_id --> ", session_id, " ", typeof session_id, " ",usuariosAtivos);
 
   if(session_id == null || session_id == undefined) {
-    resp.json(JSON.parse('{"erro" : "Sessão Não Definida"}'));
+    resp.json(JSON.parse('{"erro" : "Sessão não aberta"}'));
     resp.end();
     return null;
   }
@@ -85,7 +85,7 @@ function recuperarSessao(req, resp) {
   let sessao = usuariosAtivos.get(session_id);
   console.log("#### sessao --> ", sessao);
   if(sessao == null || sessao == undefined) {
-    resp.json(JSON.parse('{"erro" : "Sessão Não Iniciada"}'));
+    resp.json(JSON.parse('{"erro" : "Sessão não iniciada ou expirada"}'));
     resp.end();
     return null;    
   }
@@ -99,7 +99,7 @@ function recuperarSessao(req, resp) {
     return;
   }
   sessao.tempoCorrente = new Date();
-  resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_PERMANENCIA_SESSAO_FINALIZADA, httpOnly: true });
+  resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
   return sessao;
 }
   
@@ -296,7 +296,7 @@ function doLoginMedico(req, resp) {
         sessao.ehMedico = true;
 
         usuariosAtivos.set(sessao.session_id, sessao);
-        resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_PERMANENCIA_SESSAO_FINALIZADA, httpOnly: true });
+        resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
 
         console.log("doLogin ------------ ");
         console.log("doLogin session_id: ", sessao.session_id);
