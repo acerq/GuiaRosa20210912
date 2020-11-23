@@ -1,6 +1,5 @@
 const divConteudo = document.getElementById("divConteudo");
 var usrApp = null;
-var inicioApp = false;
 
 // -----------------------------------------------------------------------------------------//
 
@@ -119,7 +118,7 @@ function renderObterUsuarioCorrente() {
       divConteudo.innerHTML += "<center><b>Bem-vindo(a)</b> " + usrApp.nome +
                              "&nbsp;&nbsp;(" + usrApp.login + ")</center>";
   } else {
-    if(inicioApp) {
+    if(!exigirLogin()) {
       $("#menu").load("menu_sem_usuario.html");
       $("#container-de-icones").load("icones_paciente.html");
     } else {
@@ -223,7 +222,7 @@ function loginApp() {
 
 // -----------------------------------------------------------------------------------------//
 
-async function verificarLogin() {
+async function obterUsrApp() {
   await doObterUsuarioCorrente();
   renderObterUsuarioCorrente();
   return usrApp;
@@ -232,11 +231,10 @@ async function verificarLogin() {
 // -----------------------------------------------------------------------------------------//
 
 async function abrirApp() {
-  inicioApp = true;
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("/service-worker.js").then(reg => {
-        alert("nav.js - abrirApp");
+        alert(JSON.stringify(reg));
       });
     });
   }
@@ -277,8 +275,12 @@ function tirarEspera() {
 // -----------------------------------------------------------------------------------------//
 
 function exigirLogin() {
-   if(document.URL.includes("inicio.html"))
-
+  let url = document.URL;
+  if(url.charAt(url.length - 1) == '/' || url.includes("cadusuario.html") || url.includes("login.html"))
+    return false;
+  return true;
 }
 
- verificarLogin();
+// -----------------------------------------------------------------------------------------//
+
+obterUsrApp();
