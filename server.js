@@ -366,7 +366,8 @@ function doLoginPaciente(req, resp) {
       sessao.cep = "";
       sessao.ehMedico = false;
       
-      usuariosAtivos.set(sessao.session_id, sessao);
+        usuariosAtivos.set(sessao.session_id, sessao);
+        resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
 
       console.log("doLoginPaciente session_id: ", sessao.session_id);
       console.log("doLoginPaciente Resposta ->", resposta);
@@ -428,9 +429,9 @@ function doObterPeriodo(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doIncluirPaciente(req, resp) {
-  let sessao = recuperarSessao(req, resp);
-  if(sessao == null) 
-    return;
+  //let sessao = recuperarSessao(req, resp);
+  //if(sessao == null) 
+  //  return;
   
   let soap = require("soap");
 
@@ -505,13 +506,14 @@ function doIncluirPaciente(req, resp) {
       sessao.ehMedico = false;
       
       usuariosAtivos.set(sessao.session_id, sessao);
+      resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
 
       console.log("doLoginPaciente session_id: ", sessao.session_id);
       console.log("doLoginPaciente Resposta ->", resposta);
       console.log("doLoginPaciente session_id: ", sessao.session_id);
 
       
-      resp.json(resposta);
+      resp.json(sessao);
       resp.end();
     });
   });

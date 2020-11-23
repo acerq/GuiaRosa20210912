@@ -322,16 +322,14 @@ async function callbackCriar() {
 
   // Solicita ao server.js para que execute o WS para inclusão de paciente
   let retorno = await doIncluirPaciente();
-  if (retorno.hasOwnProperty("status")) {
-    if (retorno.status == "success") {
+  if (retorno.hasOwnProperty("session_id")) {
       // Guarda os dados no banco local
       abrirDbApp();
       // Solicita ao server.js para guardar os dados do usuário
       doGuardarUsuarioCorrente().then(retorno => {
         renderCriarUsuario(retorno);
       });
-    } else alert(retorno.msg);
-  } else alert(retorno.erro);
+    }  else alert(retorno.erro);
   tirarEspera();
 }
 
