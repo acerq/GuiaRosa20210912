@@ -130,7 +130,7 @@ export default class DAOPaciente {
       return false;
     }
 
-    if (complementoNovo == null) {
+    if(complementoNovo == null) {
       complementoNovo = "";
     }
 
@@ -196,6 +196,9 @@ export default class DAOPaciente {
         cep: cepNovo
       });
     });
+      
+    if(complementoNovo == null || complementoNovo == "")
+      complementoNovo = "null";
 
     // md5('@@MedicoNoApp@@') --> 5759494f25129de6d0bd71f41a582a8c
     let retorno = fetch(
@@ -303,7 +306,9 @@ export default class DAOPaciente {
         }
       };
     });
-
+      
+    if(complementoNovo == null || complementoNovo == "")
+      complementoNovo = "null";
     // md5('@@MedicoNoApp@@') --> 5759494f25129de6d0bd71f41a582a8c
     let retorno = fetch(
       "/incluirPaciente/" +

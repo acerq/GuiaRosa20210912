@@ -276,4 +276,9 @@ function tirarEspera() {
 
 // -----------------------------------------------------------------------------------------//
 
+function exigirLogin() {
+   if(document.URL.includes("inicio.html"))
+
+}
+
  verificarLogin();

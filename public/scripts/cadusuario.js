@@ -9,7 +9,6 @@ var store = null;
 var transacao = null;
 var usr = null;
 
-const divConteudo = document.getElementById("divConteudo");
 const divInstrucao = document.getElementById("divInstrucao");
 
 const tfCpf = document.getElementById("tfCpf");

@@ -176,6 +176,8 @@ function doGuardarUsuarioCorrente(req, resp) {
   let rua = req.params.rua;
   let numero = req.params.numero;
   let complemento = req.params.complemento;
+  if(complemento == "null")
+    complemento = "";
   let bairro = req.params.bairro;
   let cep = req.params.cep;
 
@@ -437,12 +439,15 @@ function doIncluirPaciente(req, resp) {
   let senhaMD5 = req.params.senhaMD5;
   let email = req.params.email;
   let celular = req.params.celular;
+  let complemento = req.params.complemento;
+  if(complemento == "null")
+    complemento = "";
   let endereco =
     req.params.rua +
     " " +
     req.params.numero +
     " " +
-    req.params.complemento +
+    complemento +
     "-" +
     req.params.bairro +
     "," +
