@@ -1,5 +1,4 @@
 const divConteudo = document.getElementById("divConteudo");
-const divInicio   = document.getElementById("divInicio");
 var usrApp = null;
 var inicioApp = false;
 
@@ -105,21 +104,24 @@ async function doObterUsuarioCorrente() {
 
 function renderObterUsuarioCorrente() {
   if (usrApp.login != null) {
-    divConteudo.innerHTML = "";
     if (usrApp.ehMedico) {
       $("#menu").load("menu_medico.html");
       $("#container-de-icones").load("icones_medico.html");
-      divInicio.innerHTML += "<center><b>Atendimento a Médicos</center></b><br/>";
+      if(document.URL.includes("inicio.html"))
+        divConteudo.innerHTML = "<center><b>Atendimento a Médicos</center></b><br/>";
     } else {
       $("#menu").load("menu_paciente.html");
       $("#container-de-icones").load("icones_paciente.html");
+      if(document.URL.includes("inicio.html"))
+        divConteudo.innerHTML = "";
     }
-    divInicio.innerHTML += "<center><b>Bem-vindo(a)</b> " + usrApp.nome +
-      "&nbsp;&nbsp;(" + usrApp.login + ")</center>";
+    if(document.URL.includes("inicio.html"))
+      divConteudo.innerHTML += "<center><b>Bem-vindo(a)</b> " + usrApp.nome +
+                             "&nbsp;&nbsp;(" + usrApp.login + ")</center>";
   } else {
     if(inicioApp) {
-    $("#menu").load("menu_sem_usuario.html");
-    $("#container-de-icones").load("icones_paciente.html");
+      $("#menu").load("menu_sem_usuario.html");
+      $("#container-de-icones").load("icones_paciente.html");
     } else {
       loginApp();
     }
@@ -220,7 +222,7 @@ function loginApp() {
 
 // -----------------------------------------------------------------------------------------//
 
-async function inicioAposLoginApp() {
+async function verificarLogin() {
   await doObterUsuarioCorrente();
   renderObterUsuarioCorrente();
   return usrApp;
@@ -273,4 +275,4 @@ function tirarEspera() {
 
 // -----------------------------------------------------------------------------------------//
 
-doObterUsuarioCorrente();
+ verificarLogin();
