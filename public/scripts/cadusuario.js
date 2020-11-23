@@ -303,8 +303,8 @@ async function callbackCriar() {
   }
 
   complemento = tfComplemento.value;
-  if (complemento == null) {
-    complemento = "";
+  if (complemento == null || complemento == "") {
+    complemento = "null";
   }
 
   bairro = tfBairro.value;
