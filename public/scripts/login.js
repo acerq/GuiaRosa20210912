@@ -216,7 +216,6 @@ async function doEfetuarLogin(login, senha) {
   }
   let response = await fetch("/login/" + login + "/" + senha, { credentials : "include" } );
   let respJson = await response.json();
-  alert(JSON.stringify(response.headers));
   usrApp = respJson;
   return respJson;
 }
@@ -271,3 +270,5 @@ tfSenha.addEventListener("keyup", function(event) {
     callbackOk();
   }
 });
+
+abrirDbApp();
