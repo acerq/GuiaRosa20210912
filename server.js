@@ -428,10 +428,106 @@ function doObterPeriodo(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
+function doIncluirUsuarioPaciente(req, resp) {
+  console.log("+------------------------- ");
+  console.log("| doIncluirUsuarioPaciente ");
+  console.log("+------------------------- ");
+
+  let soap = require("soap");
+
+  let cpf = req.params.cpf.replace(/\.|-/g, "");
+  let nome = req.params.nome;
+  let senhaMD5 = req.params.senhaMD5;
+  let email = req.params.email;
+  let celular = req.params.celular;
+  let rua = req.params.rua;
+  let numero = req.params.numero;
+  let complemento = req.params.complemento;
+  if(complemento == "null")
+    complemento = "";
+  let bairro = req.params.bairro;
+  let cep = req.params.cep;
+  let endereco = rua + " " + numero + " " + complemento + "-" + bairro + "," + cep;
+
+  let strJson =
+    '{"nome": "' +
+    nome +
+    '","cpf":"' +
+    cpf +
+    '","senha":"' +
+    senhaMD5 +
+    '","email":"' +
+    email +
+    '","celular":"' +
+    celular +
+    '","endereco":"' +
+    endereco +
+    '"}';
+
+  console.log("executando doIncluirUsuarioPaciente ", strJson);
+
+  soap.createClient(BASE_URL, function(err, client) {
+    console.log("createClient");
+    client.Wsincluipaciente({ TXTjson: strJson }, function(err, result1) {
+      console.log("Wsincluipaciente webservice");
+      if (err) {
+        let erro = err.response.body;
+        console.log("Wsincluipaciente Err -> ", erro);
+        let posInicial = erro.indexOf("<faultstring>") + "<faultstring>".length;
+        let posFinal = erro.indexOf("</faultstring>");
+        let msg = erro.substring(posInicial, posFinal);
+        resp.json(
+          JSON.parse(
+            '{"erro" : "[Erro:#0007] Erro na conexão com o servidor - ' +
+              msg +
+              '"}'
+          )
+        );
+        return;
+      }
+      console.log(result1.WsincluipacienteReturn.$value);
+      let resposta = JSON.parse(result1.WsincluipacienteReturn.$value);
+      console.log("doIncluirUsuarioPaciente Resposta ->", resposta);
+      
+      let sessao = new sessaoGuiaRosa();
+
+      sessao.tempoCorrente = new Date();
+      sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
+      sessao.login = cpf;
+      sessao.senha = senhaMD5;
+      sessao.nome = nome;
+      sessao.email = email;
+      sessao.celular = celular;
+      sessao.rua = rua;
+      sessao.numero = numero;
+      sessao.complemento = complemento;
+      sessao.bairro = bairro;
+      sessao.cep = cep;
+      sessao.ehMedico = false;
+      
+      usuariosAtivos.set(sessao.session_id, sessao);
+      resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
+
+      console.log("doIncluirUsuarioPaciente session_id: ", sessao.session_id);
+      console.log("doIncluirUsuarioPaciente Resposta ->", resposta);
+      console.log("doIncluirUsuarioPaciente session_id: ", sessao.session_id);
+      
+      resp.json(sessao);
+      resp.end();
+    });
+  });
+}
+
+//-----------------------------------------------------------------------------------------//
+
 function doIncluirPaciente(req, resp) {
-  //let sessao = recuperarSessao(req, resp);
-  //if(sessao == null) 
-  //  return;
+  console.log("+------------------------- ");
+  console.log("| doIncluirPaciente ");
+  console.log("+------------------------- ");
+
+  let sessao = recuperarSessao(req, resp);
+  if(sessao == null) 
+    return;
   
   let soap = require("soap");
 
@@ -489,31 +585,11 @@ function doIncluirPaciente(req, resp) {
       let resposta = JSON.parse(result1.WsincluipacienteReturn.$value);
       console.log("doIncluirPaciente Resposta ->", resposta);
       
-      let sessao = new sessaoGuiaRosa();
-
-      sessao.tempoCorrente = new Date();
-      sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
-      sessao.login = cpf;
-      sessao.senha = senhaMD5;
-      sessao.nome = nome;
-      sessao.email = email;
-      sessao.celular = celular;
-      sessao.rua = rua;
-      sessao.numero = numero;
-      sessao.complemento = complemento;
-      sessao.bairro = bairro;
-      sessao.cep = cep;
-      sessao.ehMedico = false;
-      
-      usuariosAtivos.set(sessao.session_id, sessao);
-      resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
-
       console.log("doLoginPaciente session_id: ", sessao.session_id);
       console.log("doLoginPaciente Resposta ->", resposta);
       console.log("doLoginPaciente session_id: ", sessao.session_id);
 
-      
-      resp.json(sessao);
+      resp.json(resposta);
       resp.end();
     });
   });
@@ -1105,6 +1181,12 @@ function startServer() {
 
   // Obter Usuário Corrente
   app.get("/obterUsuarioCorrente", doObterUsuarioCorrente);
+
+  // Incluir Usuario Paciente
+  app.get(
+    "/incluirUsuarioPaciente/:cpf/:nome/:senhaMD5/:email/:celular/:rua/:numero/:complemento/:bairro/:cep",
+    doIncluirUsuarioPaciente
+  );
 
   // Incluir Paciente
   app.get(

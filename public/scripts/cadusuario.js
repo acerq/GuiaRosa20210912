@@ -147,18 +147,9 @@ function incluirDbApp() {
 
 //-----------------------------------------------------------------------------------------//
 
-function renderCriarUsuario(data) {
-  if (data == null) {
-    alert("Problemas de Conexão com o servidor.");
-    return;
-  }
-}
-
-//-----------------------------------------------------------------------------------------//
-
-async function doIncluirPaciente() {
+async function doIncluirUsuarioPaciente() {
   let response = await fetch(
-    "/incluirPaciente/" +
+    "/incluirUsuarioPaciente/" +
       cpf.replace(/\.|-/g, "") +
       "/" +
       nome +
@@ -321,15 +312,13 @@ async function callbackCriar() {
   colocarEspera();
 
   // Solicita ao server.js para que execute o WS para inclusão de paciente
-  let retorno = await doIncluirPaciente();
+  let retorno = await doIncluirUsuarioPaciente();
   if (retorno.hasOwnProperty("session_id")) {
-      // Guarda os dados no banco local
-      abrirDbApp();
-      // Solicita ao server.js para guardar os dados do usuário
-      doGuardarUsuarioCorrente().then(retorno => {
-        renderCriarUsuario(retorno);
-      });
-    }  else alert(retorno.erro);
+    // Guarda os dados no banco local
+    abrirDbApp();
+  }  
+  else 
+    alert(retorno.erro);
   tirarEspera();
 }
 
