@@ -439,19 +439,14 @@ function doIncluirPaciente(req, resp) {
   let senhaMD5 = req.params.senhaMD5;
   let email = req.params.email;
   let celular = req.params.celular;
+  let rua = req.params.rua;
+  let numero = req.params.numero;
   let complemento = req.params.complemento;
   if(complemento == "null")
     complemento = "";
-  let endereco =
-    req.params.rua +
-    " " +
-    req.params.numero +
-    " " +
-    complemento +
-    "-" +
-    req.params.bairro +
-    "," +
-    req.params.cep;
+  let bairro = req.params.bairro;
+  let cep = req.params.cep;
+  let endereco = rua + " " + numero + " " + complemento + "-" + bairro + "," + cep;
 
   let strJson =
     '{"nome": "' +
@@ -492,6 +487,30 @@ function doIncluirPaciente(req, resp) {
       console.log(result1.WsincluipacienteReturn.$value);
       let resposta = JSON.parse(result1.WsincluipacienteReturn.$value);
       console.log("doIncluirPaciente Resposta ->", resposta);
+      
+      let sessao = new sessaoGuiaRosa();
+
+      sessao.tempoCorrente = new Date();
+      sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
+      sessao.login = cpf;
+      sessao.senha = senhaMD5;
+      sessao.nome = nome;
+      sessao.email = email;
+      sessao.celular = celular;
+      sessao.rua = rua;
+      sessao.numero = numero;
+      sessao.complemento = complemento;
+      sessao.bairro = bairro;
+      sessao.cep = cep;
+      sessao.ehMedico = false;
+      
+      usuariosAtivos.set(sessao.session_id, sessao);
+
+      console.log("doLoginPaciente session_id: ", sessao.session_id);
+      console.log("doLoginPaciente Resposta ->", resposta);
+      console.log("doLoginPaciente session_id: ", sessao.session_id);
+
+      
       resp.json(resposta);
       resp.end();
     });
