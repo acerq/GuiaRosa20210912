@@ -1,6 +1,6 @@
 const divConteudo = document.getElementById("divConteudo");
 var usrApp = null;
-var inicioAposLogin = false;
+var inicioApp = false;
 
 // -----------------------------------------------------------------------------------------//
 
@@ -237,6 +237,7 @@ async function inicioAposLoginApp() {
 // -----------------------------------------------------------------------------------------//
 
 async function abrirApp() {
+  inicioApp = true;
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker.register("/service-worker.js").then(reg => {
@@ -249,7 +250,6 @@ async function abrirApp() {
 // -----------------------------------------------------------------------------------------//
 
 async function fecharApp() {
-  inicioAposLogin = false;
   let response = await fetch("/inicio", { credentials : "include" });
   usrApp = await response.json();
   closeMenu();
