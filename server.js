@@ -1094,19 +1094,19 @@ async function doGerarConfirmacao(req, resp) {
 
   pdf.image(
     "public/images/interclinicas.png",
-    100,
-    75,
+    150,
+    50,
     { fit: [300, 100] }
   );
   pdf
     .font("public/fonts/SourceSansPro-SemiBold.ttf")
     .fontSize(25)
-    .text("Agendamento de Exame", 210, 100);
+    .text("Agendamento de Exame", 210, 150);
 
   pdf.font("public/fonts/SourceSansPro-Regular.ttf").fontSize(14);
 
   pdf.text("ID Guia Rosa: " + merchantOrderId + "\n");
-  pdf.text(nomeExame + "\n", 100, 200);
+  pdf.text(nomeExame + "\n", 100, 250);
   pdf.text(nomeExecutante + "\n");
   pdf.text(endereco + "\n");
   let tamValor = valor.length;
