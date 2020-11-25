@@ -1093,10 +1093,10 @@ async function doGerarConfirmacao(req, resp) {
   });
 
   pdf.image(
-    "public/images/icons/android/android-launchericon-144-144.png",
+    "public/images/interclinicas.png",
     100,
     75,
-    { fit: [100, 100] }
+    { fit: [300, 100] }
   );
   pdf
     .font("public/fonts/SourceSansPro-SemiBold.ttf")
