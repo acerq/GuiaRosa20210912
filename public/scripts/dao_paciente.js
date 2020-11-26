@@ -319,8 +319,8 @@ export default class DAOPaciente {
             updateData.complemento = complementoNovo;
             updateData.bairro = bairroNovo;
             updateData.cep = cepNovo;
-           cidade: cidadeNovo,
-        uf: ufNovo
+            updateData.cidade = cidadeNovo;
+            updateData.uf = ufNovo;
             const request = cursor.update(updateData);
             request.onsuccess = () => {
               console.log("[DAOPaciente.alterar] Cursor update - Sucesso ");

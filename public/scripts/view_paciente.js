@@ -38,6 +38,11 @@ export default class ViewPaciente {
     this.inputUf = document.getElementById("tfUf");
     this.inputCep = document.getElementById("tfCep");
 
+    //
+    // Pegando cada elemento de interface e acrescentando um atributo
+    // chamado 'viewer' que referenciará o objeto ViewPaciente. É necessário
+    // para tratamento das callbacks
+    //
     this.btSalvar.onclick = this.salvar;
     this.btSalvar.viewer = this;
     this.btCancelar.onclick = this.cancelar;
@@ -63,6 +68,47 @@ export default class ViewPaciente {
       $("#tfCpf").mask("999.999.999-99");
       $("#tfCelular").mask("(99) 9999-9999?9");
       $("#tfCep").mask("99999-999");
+    });
+
+    this.tfCpf.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.tfNome.focus();
+      }
+    });
+    this.tfNome.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.tfCelular.focus();
+      }
+    });
+    this.tfCelular.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.tfEmail.focus();
+      }
+    });
+    this.tfEmail.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.tfCep.focus();
+      }
+    });
+    this.tfCep.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.getEnderecoPeloCep(this.viewer.tfCep.value);
+        this.viewer.tfNumero.focus();
+      }
+    });
+    this.tfCep.addEventListener("blur", function(event) {
+      this.viewer.getEnderecoPeloCep(this.viewer.tfCep.value);
+      this.viewer.tfNumero.focus();
+    });
+    this.tfNumero.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.tfComplemento.focus();
+      }
+    });
+    this.tfComplemento.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) {
+        this.viewer.tfSenha.focus();
+      }
     });
   }
 
@@ -235,8 +281,7 @@ export default class ViewPaciente {
     this.inputComplemento.disabled = true;
     this.inputBairro.disabled = true;
     this.inputCep.disabled = true;
-    this.inputCidade.disable = true,
-    this.inputUf.disable = true;
+    (this.inputCidade.disable = true), (this.inputUf.disable = true);
 
     this.btAlterar.hidden = false;
     this.btIncluir.hidden = false;
@@ -280,17 +325,16 @@ export default class ViewPaciente {
     this.inputCelular.disabled = false;
     this.inputEmail.disabled = false;
 
-    this.inputRua.disabled = false;
+    this.inputRua.disabled = true;
     this.inputNumero.disabled = false;
     this.inputComplemento.disabled = false;
-    this.inputBairro.disabled = false;
-    this.inputCep.disabled = false;
-    this.inputCidade.disable = false,
-    this.inputUf.disable = false;
+    this.inputBairro.disabled = true;
+    this.inputCep.disabled = true;
+    (this.inputCidade.disable = true), (this.inputUf.disable = true);
   }
 
   //-----------------------------------------------------------------------------------------//
-  
+
   atualizarInterface() {
     var mostrarDivNavegacao = false;
 
@@ -353,17 +397,15 @@ export default class ViewPaciente {
   //-----------------------------------------------------------------------------------------//
 
   async getEnderecoPeloCep(cep) {
-    let response = await fetch('/obterEnderecoPeloCep/' + cep);
+    let response = await fetch("/obterEnderecoPeloCep/" + cep);
     let dados = await response.json();
-    if(dados.resultado == "1") {
+    if (dados.resultado == "1") {
       this.inputRua.value = dados.tipo_logradouro + " " + dados.logradouro;
       this.inputBairro.value = dados.bairro;
       this.inputCidade.value = dados.cidade;
       this.inputUf.value = dados.uf;
-    } else
-      alert("CEP Não Encontrado: " + cep);
+    } else alert("CEP Não Encontrado: " + cep);
   }
 
   //-----------------------------------------------------------------------------------------//
-
 }
