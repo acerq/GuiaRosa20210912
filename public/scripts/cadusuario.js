@@ -147,6 +147,21 @@ function incluirDbApp() {
 
 //-----------------------------------------------------------------------------------------//
 
+async function getEnderecoPeloCep(cep) {
+  colocarEspera();
+  let response = await fetch('/obterEnderecoPeloCep/' + cep);
+  let dados = await response.json();
+  if(dados.resultado == "1") {
+    tfRua.value = dados.tipo_logradouro + " " + dados.logradouro;
+    tfBairro.value = dados.bairro;
+    //tfUf.value = dados.uf;
+    //tfCidade.value = dados.cidade;
+  } else
+    alert("CEP Não Encontrado: " + cep);
+  tirarEspera();
+}
+
+//-----------------------------------------------------------------------------------------//
 async function doIncluirUsuarioPaciente() {
   let response = await fetch(
     "/incluirUsuarioPaciente/" +
@@ -334,7 +349,9 @@ function tirarEspera() {
   $("div.circle").removeClass("wait");
 }
 
-// -----------------------------------------------------------------------------------------//btCancelar.addEventListener("click", callbackCancelar);
+// -----------------------------------------------------------------------------------------//
+
+btCancelar.addEventListener("click", callbackCancelar);
 btCriar.addEventListener("click", callbackCriar);
 btCancelar.addEventListener("click", callbackCancelar);
 
@@ -363,6 +380,9 @@ tfCep.addEventListener("keyup", function(event) {
     getEnderecoPeloCep(tfCep.value);
     tfRua.focus();
   }
+});
+tfCep.addEventListener("blur", function(event) {
+    getEnderecoPeloCep(tfCep.value);
 });
 tfRua.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
@@ -394,12 +414,3 @@ tfReplay.addEventListener("keyup", function(event) {
     callbackCriar();
   }
 });
-
-
-async function getEnderecoPeloCep(cep) {
-  let response = await fetch('/obterEnderecoPeloCep/' + cep);
-
-  let 
-  {"resultado":"1","resultado_txt":"sucesso - cep completo","uf":"RJ","cidade":"Niterói","bairro":"Piratininga","tipo_logradouro":"Rua","logradouro":"Farmaceutico Abel de Oliveira"}
-  alert(JSON.stringify(response));
-}
