@@ -1136,6 +1136,17 @@ async function doGerarConfirmacao(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
+async function doObterEnderecoPeloCep(req, resp) {
+  let cep = req.params.cep;
+  let response =  await fetch('http://cep.republicavirtual.com.br/web_cep.php?cep=' + cep + '&formato=jsonp');
+  let myJson = await response.json();
+  console.log("doObterCep " + JSON.stringify(myJson));
+  resp.json(myJson);
+}
+
+//-----------------------------------------------------------------------------------------//
+
+
 function startServer() {
   const app = express();
   app.use(cookieParser());
@@ -1226,6 +1237,11 @@ function startServer() {
       "/:valor/:forma/:merchantOrderId/:proofOfSale/:paymentId",
     doGerarConfirmacao
   );
+
+  // obter dados pelo CEP
+  app.get(
+    "/obterEnderecoPeloCep/:cep", 
+    doObterEnderecoPeloCep);
 
   // Obter Locais
   app.get("/obterLocais/", doObterLocais);

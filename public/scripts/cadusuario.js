@@ -397,9 +397,9 @@ tfReplay.addEventListener("keyup", function(event) {
 
 
 async function getEnderecoPeloCep(cep) {
-  let response = await fetch('http://cep.republicavirtual.com.br/web_cep.php?cep=' + cep + '&formato=jsonp', { credentials : "include" });
-  if (!response) {
-    return false;
-  }
+  let response = await fetch('/obterEnderecoPeloCep/' + cep);
+
+  let 
+  {"resultado":"1","resultado_txt":"sucesso - cep completo","uf":"RJ","cidade":"Niterói","bairro":"Piratininga","tipo_logradouro":"Rua","logradouro":"Farmaceutico Abel de Oliveira"}
   alert(JSON.stringify(response));
 }
