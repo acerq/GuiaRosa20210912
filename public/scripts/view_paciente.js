@@ -34,6 +34,8 @@ export default class ViewPaciente {
     this.inputNumero = document.getElementById("tfNumero");
     this.inputComplemento = document.getElementById("tfComplemento");
     this.inputBairro = document.getElementById("tfBairro");
+    this.inputCidade = document.getElementById("tfCidade");
+    this.inputUf = document.getElementById("tfUf");
     this.inputCep = document.getElementById("tfCep");
 
     this.btSalvar.onclick = this.salvar;
@@ -100,6 +102,8 @@ export default class ViewPaciente {
       viewer.inputComplemento.value = "";
       viewer.inputBairro.value = "";
       viewer.inputCep.value = "";
+      viewer.inputCidade.value = "";
+      viewer.inputUf.value = "";
       viewer.divMensagem.innerHTML = "<center>Incluindo...</center><hr/>";
       viewer.operacao = "Incluir";
     }
@@ -144,7 +148,9 @@ export default class ViewPaciente {
         viewer.inputNumero.value,
         viewer.inputComplemento.value,
         viewer.inputBairro.value,
-        viewer.inputCep.value
+        viewer.inputCep.value,
+        viewer.inputCidade.value,
+        viewer.inputUf.value
       );
     } else if (viewer.operacao == "Alterar") {
       commit = viewer.daoPaciente.alterar(
@@ -157,7 +163,9 @@ export default class ViewPaciente {
         viewer.inputNumero.value,
         viewer.inputComplemento.value,
         viewer.inputBairro.value,
-        viewer.inputCep.value
+        viewer.inputCep.value,
+        viewer.inputCidade.value,
+        viewer.inputUf.value
       );
     } else if (viewer.operacao == "Excluir") {
       commit = viewer.daoPaciente.excluir(viewer.cpfAtual);
@@ -227,6 +235,8 @@ export default class ViewPaciente {
     this.inputComplemento.disabled = true;
     this.inputBairro.disabled = true;
     this.inputCep.disabled = true;
+    this.inputCidade.disable = true,
+    this.inputUf.disable = true;
 
     this.btAlterar.hidden = false;
     this.btIncluir.hidden = false;
@@ -275,9 +285,12 @@ export default class ViewPaciente {
     this.inputComplemento.disabled = false;
     this.inputBairro.disabled = false;
     this.inputCep.disabled = false;
+    this.inputCidade.disable = false,
+    this.inputUf.disable = false;
   }
 
   //-----------------------------------------------------------------------------------------//
+  
   atualizarInterface() {
     var mostrarDivNavegacao = false;
 
@@ -312,6 +325,8 @@ export default class ViewPaciente {
       ].complemento;
       this.inputBairro.value = this.arrayPacientes[this.posAtual].bairro;
       this.inputCep.value = this.arrayPacientes[this.posAtual].cep;
+      this.inputCidade.value = this.arrayPacientes[this.posAtual].cidade;
+      this.inputUf.value = this.arrayPacientes[this.posAtual].uf;
       this.btAlterar.disabled = false;
       this.btExcluir.disabled = false;
     } else {
@@ -324,6 +339,8 @@ export default class ViewPaciente {
       this.inputComplemento.value = "";
       this.inputBairro.value = "";
       this.inputCep.value = "";
+      this.inputCidade.value = "";
+      this.inputUf.value = "";
       this.btAlterar.disabled = true;
       this.btExcluir.disabled = true;
     }
@@ -334,4 +351,19 @@ export default class ViewPaciente {
   }
 
   //-----------------------------------------------------------------------------------------//
+
+  async getEnderecoPeloCep(cep) {
+    let response = await fetch('/obterEnderecoPeloCep/' + cep);
+    let dados = await response.json();
+    if(dados.resultado == "1") {
+      this.inputRua.value = dados.tipo_logradouro + " " + dados.logradouro;
+      this.inputBairro.value = dados.bairro;
+      this.inputCidade.value = dados.cidade;
+      this.inputUf.value = dados.uf;
+    } else
+      alert("CEP Não Encontrado: " + cep);
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
 }
