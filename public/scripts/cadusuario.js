@@ -360,6 +360,7 @@ tfEmail.addEventListener("keyup", function(event) {
 });
 tfCep.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
+    getEnderecoPeloCep(tfCep.value);
     tfRua.focus();
   }
 });
@@ -395,31 +396,10 @@ tfReplay.addEventListener("keyup", function(event) {
 });
 
 
-/* 
-
-
-function getEnderecoPeloCep(){
-	var req = new XMLHttpRequest(); 
-	req.onreadystatechange = function() { 
-			if (req.readyState == 4 && req.status == 200) { 
-				eval(funcao+"(req.responseText)");
-			} 
-		}
-		req.open('GET', 'http://cep.republicavirtual.com.br/web_cep.php?cep=' + CEP + '&formato=jsonp&callback=minhaFuncaoJS); 
-		req.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
-		req.send((req_post)?postString:null);
-    
-    
-    oReq.open("GET", url, true);
-oReq.responseType = "arraybuffer";
-oReq.onload = function(e) {
-  var arraybuffer = oReq.response; // não é responseText
-
+async function getEnderecoPeloCep(cep) {
+  let response = await fetch('http://cep.republicavirtual.com.br/web_cep.php?cep=' + cep + '&formato=jsonp', { credentials : "include" });
+  if (!response) {
+    return false;
+  }
+  alert(JSON.stringify(response));
 }
-oReq.send();
-
-
-	}
-}
-
-*/
