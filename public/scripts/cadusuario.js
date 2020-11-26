@@ -21,6 +21,8 @@ const tfRua = document.getElementById("tfRua");
 const tfNumero = document.getElementById("tfNumero");
 const tfComplemento = document.getElementById("tfComplemento");
 const tfBairro = document.getElementById("tfBairro");
+const tfCidade = document.getElementById("tfCidade");
+const tfUf = document.getElementById("tfUf");
 const tfCep = document.getElementById("tfCep");
 
 const btCancelar = document.getElementById("btCancelar");
@@ -154,8 +156,8 @@ async function getEnderecoPeloCep(cep) {
   if(dados.resultado == "1") {
     tfRua.value = dados.tipo_logradouro + " " + dados.logradouro;
     tfBairro.value = dados.bairro;
-    //tfUf.value = dados.uf;
-    //tfCidade.value = dados.cidade;
+    tfUf.value = dados.uf;
+    tfCidade.value = dados.cidade;
   } else
     alert("CEP Não Encontrado: " + cep);
   tirarEspera();
@@ -378,16 +380,12 @@ tfEmail.addEventListener("keyup", function(event) {
 tfCep.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
     getEnderecoPeloCep(tfCep.value);
-    tfRua.focus();
+    tfNumero.focus();
   }
 });
 tfCep.addEventListener("blur", function(event) {
     getEnderecoPeloCep(tfCep.value);
-});
-tfRua.addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
     tfNumero.focus();
-  }
 });
 tfNumero.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
@@ -395,11 +393,6 @@ tfNumero.addEventListener("keyup", function(event) {
   }
 });
 tfComplemento.addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
-    tfBairro.focus();
-  }
-});
-tfBairro.addEventListener("keyup", function(event) {
   if (event.keyCode === 13) {
     tfSenha.focus();
   }
