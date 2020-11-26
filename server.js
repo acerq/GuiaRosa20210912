@@ -240,7 +240,7 @@ function doLoginMedico(req, resp) {
     BASE_URL,
     { wsdl_options: { timeout: TEMPO_MAXIMO_REQUISICAO } },
     function(err, client) {
-      console.log("doLoginMedico soap: " + JSON.stringify(client) + " - " + err);
+      console.log("doLoginMedico soap: " + client + " - " + err);
 
       if (client == null || typeof client === "undefined") {
         console.log("doLogin Err -> " + JSON.stringify(err));
@@ -322,7 +322,7 @@ function doLoginPaciente(req, resp) {
   console.log("| doLoginPaciente ");
   console.log("+------------------------- ");
 
-  let login = req.params.login;
+  let login = req.params.login.replace(/\.|-/g, "");
   let senha = req.params.senha;
   let strJson = '{"login": "' + login + '", "senha": "' + senha + '"}';
 
