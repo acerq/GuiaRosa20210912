@@ -240,7 +240,7 @@ function doLoginMedico(req, resp) {
     BASE_URL,
     { wsdl_options: { timeout: TEMPO_MAXIMO_REQUISICAO } },
     function(err, client) {
-      console.log("createClient: " + client + " - " + err);
+      console.log("doLoginMedico soap: " + JSON.stringify(client) + " - " + err);
 
       if (client == null || typeof client === "undefined") {
         console.log("doLogin Err -> " + JSON.stringify(err));
@@ -276,10 +276,11 @@ function doLoginMedico(req, resp) {
         }
         let resposta = JSON.parse(wsResposta.WsloginReturn.$value);
         if (resposta.status == "error") {
+          console.log("doLoginMedico error ->" + wsResposta.WsloginReturn.$value);
           doLoginPaciente(req, resp);
           return;
         }
-        console.log("doLogin Resposta ->", wsResposta);
+        console.log("doLogin Resposta ->", wsResposta.WsloginReturn.$value);
         
         let sessao = new sessaoGuiaRosa();
 
@@ -344,6 +345,7 @@ function doLoginPaciente(req, resp) {
       }
       let resposta = JSON.parse(wsResposta.WsvalidapacienteReturn.$value);
       if (resposta.status == "error") {
+        console.log("-----> " + wsResposta.WsvalidapacienteReturn.$value);
       //TODO  resp.json(JSON.parse('{"erro" : "[Erro:#0006] Login Inválido"}'));
       //TODO  return;
         resposta = { status : "success", login : login, nome : ""};
