@@ -393,3 +393,33 @@ tfReplay.addEventListener("keyup", function(event) {
     callbackCriar();
   }
 });
+
+
+/* 
+
+
+function getEnderecoPeloCep(){
+	var req = new XMLHttpRequest(); 
+	req.onreadystatechange = function() { 
+			if (req.readyState == 4 && req.status == 200) { 
+				eval(funcao+"(req.responseText)");
+			} 
+		}
+		req.open('GET', 'http://cep.republicavirtual.com.br/web_cep.php?cep=' + CEP + '&formato=jsonp&callback=minhaFuncaoJS); 
+		req.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+		req.send((req_post)?postString:null);
+    
+    
+    oReq.open("GET", url, true);
+oReq.responseType = "arraybuffer";
+oReq.onload = function(e) {
+  var arraybuffer = oReq.response; // não é responseText
+
+}
+oReq.send();
+
+
+	}
+}
+
+*/
