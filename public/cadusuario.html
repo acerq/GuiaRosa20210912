@@ -49,26 +49,30 @@
           <div>
             <input id="tfEmail" type="text" />
           </div>
-          <div class="rotulo">
-            <spam style="width:25%">Cep:</spam>
-            <spam style="width:73%">Logradouro:</spam>
+          <div style="display:grid;grid-template-columns: 25% 75%;">
+            <div>Cep</div>
+            <div>Logradouro</div>
           </div>
-          <div>
-            <input id="tfCep" type="text" class="trinta" />
-            <input id="tfRua" type="text" class="setenta"/>
+          <div style="display:grid;grid-template-columns: 25% 75%;">
+            <input id="tfCep" type="text" />
+            <input id="tfRua" type="text" />
           </div>
-          <div class="rotulo">Número | Complemento | Bairro</div>
-          <div>
-            <input id="tfNumero" type="text" class="trinta"  />
-            <input id="tfComplemento" type="text" class="trinta"  />
-            <input id="tfBairro" type="text" class="trinta"  />
+          <div style="display:grid;grid-template-columns: 20% 35% 45%;">
+            <div>Número</div>
+            <div>Complemento</div>
+            <div style="background-color:lightgray;">Bairro</div>
           </div>
-          <div class="rotulo">Senha:</div>
-          <div>
+          <div style="display:grid;grid-template-columns: 20% 35% 45%">
+            <input id="tfNumero" type="text" />
+            <input id="tfComplemento" type="text" />
+            <input id="tfBairro" type="text" />
+          </div>
+          <div style="display:grid;grid-template-columns: 50% 50%">
+            <div>Senha:</div>
+            <div class="rotulo">Repita a Senha:</div>
+          </div>
+          <div style="display:grid;grid-template-columns: 50% 50%">
             <input id="tfSenha" type="password" />
-          </div>
-          <div class="rotulo">Repita a Senha:</div>
-          <div>
             <input id="tfReplay" type="password" />
           </div>
         </div>
