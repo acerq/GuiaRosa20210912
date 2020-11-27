@@ -63,6 +63,7 @@ export default class ViewPaciente {
     this.btExcluir.viewer = this;
     this.btSair.onclick = this.sair;
     this.btSair.viewer = this;
+    this.inputCpf.viewer = this;
 
     $(document).ready(function() {
       $("#tfCpf").mask("999.999.999-99");
@@ -70,42 +71,42 @@ export default class ViewPaciente {
       $("#tfCep").mask("99999-999");
     });
 
-    this.tfCpf.addEventListener("keyup", function(event) {
+    this.inputCpf.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
         this.viewer.tfNome.focus();
       }
     });
-    this.tfNome.addEventListener("keyup", function(event) {
+    this.inputNome.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
         this.viewer.tfCelular.focus();
       }
     });
-    this.tfCelular.addEventListener("keyup", function(event) {
+    this.inputCelular.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
         this.viewer.tfEmail.focus();
       }
     });
-    this.tfEmail.addEventListener("keyup", function(event) {
+    this.inputEmail.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
         this.viewer.tfCep.focus();
       }
     });
-    this.tfCep.addEventListener("keyup", function(event) {
+    this.inputCep.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
         this.viewer.getEnderecoPeloCep(this.viewer.tfCep.value);
         this.viewer.tfNumero.focus();
       }
     });
-    this.tfCep.addEventListener("blur", function(event) {
+    this.inputCep.addEventListener("blur", function(event) {
       this.viewer.getEnderecoPeloCep(this.viewer.tfCep.value);
       this.viewer.tfNumero.focus();
     });
-    this.tfNumero.addEventListener("keyup", function(event) {
+    this.inputNumero.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
         this.viewer.tfComplemento.focus();
       }
     });
-    this.tfComplemento.addEventListener("keyup", function(event) {
+    this.inputComplemento.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
         this.viewer.tfSenha.focus();
       }
@@ -281,7 +282,8 @@ export default class ViewPaciente {
     this.inputComplemento.disabled = true;
     this.inputBairro.disabled = true;
     this.inputCep.disabled = true;
-    (this.inputCidade.disable = true), (this.inputUf.disable = true);
+    this.inputCidade.disable = true;
+    this.inputUf.disable = true;
 
     this.btAlterar.hidden = false;
     this.btIncluir.hidden = false;
@@ -325,12 +327,13 @@ export default class ViewPaciente {
     this.inputCelular.disabled = false;
     this.inputEmail.disabled = false;
 
-    this.inputRua.disabled = true;
+    this.inputCep.disabled = false;
     this.inputNumero.disabled = false;
     this.inputComplemento.disabled = false;
+    this.inputRua.disabled = true;
     this.inputBairro.disabled = true;
-    this.inputCep.disabled = true;
-    (this.inputCidade.disable = true), (this.inputUf.disable = true);
+    this.inputCidade.disable = true;
+    this.inputUf.disable = true;
   }
 
   //-----------------------------------------------------------------------------------------//
