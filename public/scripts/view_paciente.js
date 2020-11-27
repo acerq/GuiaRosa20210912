@@ -63,7 +63,7 @@ export default class ViewPaciente {
     this.btExcluir.viewer = this;
     this.btSair.onclick = this.sair;
     this.btSair.viewer = this;
-    this.inputCpf.viewer = this;
+    this.inputCep.viewer = this;
 
     $(document).ready(function() {
       $("#tfCpf").mask("999.999.999-99");
@@ -73,42 +73,42 @@ export default class ViewPaciente {
 
     this.inputCpf.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
-        this.viewer.tfNome.focus();
+        this.viewer.inputNome.focus();
       }
     });
     this.inputNome.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
-        this.viewer.tfCelular.focus();
+        this.viewer.inputCelular.focus();
       }
     });
     this.inputCelular.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
-        this.viewer.tfEmail.focus();
+        this.viewer.inputEmail.focus();
       }
     });
     this.inputEmail.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
-        this.viewer.tfCep.focus();
+        this.viewer.inputCep.focus();
       }
     });
     this.inputCep.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
-        this.viewer.getEnderecoPeloCep(this.viewer.tfCep.value);
-        this.viewer.tfNumero.focus();
+        this.viewer.getEnderecoPeloCep(this.viewer.inputCep.value);
+        this.viewer.inputNumero.focus();
       }
     });
     this.inputCep.addEventListener("blur", function(event) {
-      this.viewer.getEnderecoPeloCep(this.viewer.tfCep.value);
-      this.viewer.tfNumero.focus();
+      this.viewer.getEnderecoPeloCep(this.viewer.inputCep.value);
+      this.viewer.inputNumero.focus();
     });
     this.inputNumero.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
-        this.viewer.tfComplemento.focus();
+        this.viewer.inputComplemento.focus();
       }
     });
     this.inputComplemento.addEventListener("keyup", function(event) {
       if (event.keyCode === 13) {
-        this.viewer.tfSenha.focus();
+        this.viewer.inputSenha.focus();
       }
     });
   }
