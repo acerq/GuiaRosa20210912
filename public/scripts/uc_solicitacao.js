@@ -359,10 +359,13 @@ export default class CtrlSolicitacao {
     forma
   ) {
     this.view.colocarEspera();
-    let merchantOrderId = "";
     let proofOfSale = "";
     let paymentId = "";
     let authenticationUrl = "";
+
+    let agora = new Date();
+    let timeMillis = agora.getTime().toString();
+    let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
 
     // Processando o pagamento
     let requisicao =
@@ -374,6 +377,8 @@ export default class CtrlSolicitacao {
       "/" +
       emailPaciente +
       "/" +
+      merchantOrderId +
+      "/" + 
       numCartao.replace(/ /g, "") +
       "/" +
       nomeCartao +
@@ -494,6 +499,8 @@ export default class CtrlSolicitacao {
         "/" +
         bandeira +
         "/" +
+        dataExame +
+        "/" +
         nomeExame +
         "/" +
         nomeExecutante +
@@ -537,10 +544,13 @@ async enviarAgendamentoPgtoBoleto(
     forma
   ) {
     this.view.colocarEspera();
-    let merchantOrderId = "";
     let proofOfSale = "";
     let paymentId = "";
     let url = ""; 
+      
+    let agora = new Date();
+    let timeMillis = agora.getTime().toString();
+    let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
 
     // Processando o pagamento
     let requisicao =
@@ -551,6 +561,8 @@ async enviarAgendamentoPgtoBoleto(
       nomePaciente +
       "/" +
       emailPaciente +
+      "/" +
+      merchantOrderId +
       "/" +
       valor.replace(/\.|\,/g, "") +
       "/" +
@@ -661,6 +673,8 @@ async enviarAgendamentoPgtoBoleto(
         "BOLETO" +
         "/" +
         "BOLETO" +
+        "/" +
+        dataExame +
         "/" +
         nomeExame +
         "/" +
