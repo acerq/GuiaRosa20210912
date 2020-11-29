@@ -326,8 +326,9 @@ export default class CtrlSolicitacao {
 
       let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
+      alert(JSON.stringify(blob));
       let pdf = await download(blob);
-      alert(JSON.stringify(pdf));
+      alert(pdf);
       this.view.tirarEspera();
       alert("Download de documento de confirmação realizado.");
       window.history.go(-1);
