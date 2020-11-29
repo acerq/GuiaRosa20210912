@@ -173,7 +173,10 @@ export default class CtrlSolicitacao {
     forma
   ) {
     this.view.colocarEspera();
-    let merchantOrderId = "";
+    let agora = new Date();
+    let timeMillis = agora.getTime().toString();
+    let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
+
     let proofOfSale = "";
     let paymentId = "";
 
@@ -186,6 +189,8 @@ export default class CtrlSolicitacao {
       nomePaciente +
       "/" +
       emailPaciente +
+      "/" +
+      merchantOrderId +
       "/" +
       numCartao.replace(/ /g, "") +
       "/" +
@@ -251,8 +256,8 @@ export default class CtrlSolicitacao {
     //
 
     // Agendamento
-    requisicao =
-      "/agendamento" +
+    requisicao =   //TODO ACRESCENTAR O merchantOrderId
+      "/agendamento" +   
       "/" +
       codExecutante +
       "/" +
@@ -316,7 +321,8 @@ export default class CtrlSolicitacao {
 
       let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
-      await download(blob);
+      let pdf = await download(blob);
+      alert(JSON.stringify(pdf));
       this.view.tirarEspera();
       alert("Download de documento de confirmação realizado.");
       window.history.go(-1);

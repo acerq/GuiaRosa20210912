@@ -731,6 +731,7 @@ async function doPgtoCC(req, resp) {
   let nome = req.params.nome;
   let cpf = req.params.cpf;
   let email = req.params.email;
+  let id = req.params.id;
   let numeroCartao = req.params.numeroCartao;
   let nomeCartao = req.params.nomeCartao;
   let bandeira = req.params.bandeira;
@@ -744,6 +745,7 @@ async function doPgtoCC(req, resp) {
     typeof nome === "undefined" ||
     typeof cpf === "undefined" ||
     typeof email === "undefined" ||
+    typeof id === "undefined" ||
     typeof numeroCartao === "undefined" ||
     typeof nomeCartao === "undefined" ||
     typeof bandeira === "undefined" ||
@@ -758,10 +760,6 @@ async function doPgtoCC(req, resp) {
   }
 
   console.log("parâmetros ok doPgtoCC");
-
-  let agora = new Date();
-  let timeMillis = agora.getTime().toString();
-  let id = sessao.login + "_" + timeMillis;
 
   const myHeaders = {
     "Content-Type": "application/json",
