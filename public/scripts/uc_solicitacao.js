@@ -211,7 +211,10 @@ export default class CtrlSolicitacao {
     if (!resposta || !resposta.Payment) {
       console.log("Erro no pagamento");
       this.view.tirarEspera();
-      alert("Erro - pagamento não processado");
+      let mensagem = "Erro - pagamento não processado";
+      if(resposta.Code)
+        mensagem += ": #" + resposta.Code;
+      alert("");
       return;
     }
     if (resposta.Payment.ReasonCode == 0) {

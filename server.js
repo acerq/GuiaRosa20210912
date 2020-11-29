@@ -346,8 +346,8 @@ function doLoginPaciente(req, resp) {
       let resposta = JSON.parse(wsResposta.WsvalidapacienteReturn.$value);
       if (resposta.status == "error") {
         console.log("-----> " + wsResposta.WsvalidapacienteReturn.$value);
-        resp.json(JSON.parse('{"erro" : "[Erro:#0006] Login Inválido"}'));
-        return;
+        // resp.json(JSON.parse('{"erro" : "[Erro:#0006] Login Inválido"}'));
+        // return;
       }
       console.log("doLoginPaciente Resposta ->", wsResposta);
       
@@ -762,8 +762,8 @@ async function doPgtoCC(req, resp) {
 
   const myHeaders = {
     "Content-Type": "application/json",
-    MerchantId: "85012692-b03b-437d-990c-1f0be4a2a377",
-    MerchantKey: "fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o"
+    "ClientId": "85012692-b03b-437d-990c-1f0be4a2a377",
+    "ClientSecret": "fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o="
   };
 
   const myBody = {
