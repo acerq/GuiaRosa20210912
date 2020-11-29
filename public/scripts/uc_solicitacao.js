@@ -266,7 +266,7 @@ export default class CtrlSolicitacao {
       "/" +
       this.usrApp.login +
       "/" +
-      nomePaciente +
+      nomePaciente.replace(/\//g, "") +
       "/" +
       cpfPaciente.replace(/\.|-/g, "") +
       "/" +
@@ -277,7 +277,7 @@ export default class CtrlSolicitacao {
       this.dtPeriodo +
       "/" +
       "S";
-    //faturar;
+    //TODO faturar;
     console.log("(app.js) Executando agendamento");
     response = await fetch(requisicao, { credentials : "include" });
     resposta = await response.json();
@@ -298,7 +298,7 @@ export default class CtrlSolicitacao {
         "/" +
         cpfPaciente +
         "/" +
-        nomePaciente +
+        nomePaciente.replace(/\//g, "") + 
         "/" +
         numCartao +
         "/" +
@@ -312,7 +312,7 @@ export default class CtrlSolicitacao {
         "/" +
         nomeExecutante +
         "/" +
-        endereco +
+        endereco.replace(/\//g, " ") +
         "/" +
         valor +
         "/" +

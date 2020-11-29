@@ -75,7 +75,7 @@ export default class ViewSolicitacao {
     if (this.usuarioLogado)
       this.pwSenha.addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
-          this.irParaCheckout();
+          self.irParaCheckout();
         }
       });
   }
