@@ -1101,23 +1101,23 @@ async function doGerarConfirmacao(req, resp) {
   );
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .fontSize(25)
-     .text("Agendamento de Exame", 210, 100);
+     .text("Agendamento de Exame", 100, 120);
 
   pdf.font("public/fonts/SourceSansPro-Regular.ttf").fontSize(14)
      .text("ID Guia Rosa: #" + merchantOrderId + "\n");
 
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
     .fontSize(25)
-    .text("\nExame");
+    .text("\nExame Agendado");
 
   pdf.font("public/fonts/SourceSansPro-Regular.ttf").fontSize(14)
-     .text("Data do Exame: " + dataExame + "\n")
      .text(nomeExame + "\n")
      .text(nomeExecutante + "\n")
      .text(endereco + "\n");
   let tamValor = valor.length;
   valor = valor.substring(0, tamValor - 2) + "," + valor.substring(tamValor - 2);
-  pdf.text("Valor: R$ " + valor + "\n\n");
+  pdf.text("Valor: R$ " + valor + "\n")
+     .text("Data: " + dataExame + "\n\n")
   
   pdf.text("Agendado para " + nome + " (" + cpf + ")\n\n\n");
   numeroCartao =
