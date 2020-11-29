@@ -762,8 +762,8 @@ async function doPgtoCC(req, resp) {
 
   const myHeaders = {
     "Content-Type": "application/json",
-    "MerchantId": "85012692-b03b-437d-990c-1f0be4a2a377",
-    "ClientSecret": "fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o="
+    "MerchantId": "0c476fc2-f8f5-4e85-a60c-366463f210e2",
+    "ClientSecret": "HHNUGBUVGJFMKHGMLWEWJIOEYFAXAKAJAWQCKAFB"
   };
 
   const myBody = {
