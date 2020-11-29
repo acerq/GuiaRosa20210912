@@ -303,6 +303,8 @@ export default class CtrlSolicitacao {
         "/" +
         bandeira +
         "/" +
+        dataExame +
+        "/" +
         nomeExame +
         "/" +
         nomeExecutante +

@@ -1042,6 +1042,7 @@ async function doGerarConfirmacao(req, resp) {
   let numeroCartao = req.params.numeroCartao;
   let nomeCartao = req.params.nomeCartao;
   let bandeira = req.params.bandeira;
+  let dataExame = req.params.dataExame;
   let nomeExame = req.params.nomeExame;
   let nomeExecutante = req.params.nomeExecutante;
   let endereco = req.params.endereco;
@@ -1058,6 +1059,7 @@ async function doGerarConfirmacao(req, resp) {
     typeof numeroCartao === "undefined" ||
     typeof nomeCartao === "undefined" ||
     typeof bandeira === "undefined" ||
+    typeof dataExame === "undefined" ||
     typeof nomeExame === "undefined" ||
     typeof nomeExecutante === "undefined" ||
     typeof endereco === "undefined" ||
@@ -1098,21 +1100,26 @@ async function doGerarConfirmacao(req, resp) {
     50,
     { fit: [300, 100] }
   );
-  pdf
-    .font("public/fonts/SourceSansPro-SemiBold.ttf")
+  pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
+     .fontSize(25)
+     .text("Agendamento de Exame", 210, 100);
+
+  pdf.font("public/fonts/SourceSansPro-Regular.ttf").fontSize(14)
+     .text("ID Guia Rosa: #" + merchantOrderId + "\n");
+
+  pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
     .fontSize(25)
-    .text("Agendamento de Exame", 210, 150);
+    .text("\nExame");
 
-  pdf.font("public/fonts/SourceSansPro-Regular.ttf").fontSize(14);
-
-  pdf.text("ID Guia Rosa: " + merchantOrderId + "\n");
-  pdf.text(nomeExame + "\n", 100, 250);
-  pdf.text(nomeExecutante + "\n");
-  pdf.text(endereco + "\n");
+  pdf.font("public/fonts/SourceSansPro-Regular.ttf").fontSize(14)
+     .text("Data do Exame: " + dataExame + "\n")
+     .text(nomeExame + "\n")
+     .text(nomeExecutante + "\n")
+     .text(endereco + "\n");
   let tamValor = valor.length;
-  valor =
-    valor.substring(0, tamValor - 2) + "," + valor.substring(tamValor - 2);
+  valor = valor.substring(0, tamValor - 2) + "," + valor.substring(tamValor - 2);
   pdf.text("Valor: R$ " + valor + "\n\n");
+  
   pdf.text("Agendado para " + nome + " (" + cpf + ")\n\n\n");
   numeroCartao =
     numeroCartao.substring(0, 4) +
@@ -1213,25 +1220,25 @@ function startServer() {
 
   // Pagamento por cartão de crédito
   app.get(
-    "/pgtocc/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor",
+    "/pgtocc/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor",
     doPgtoCC
   );
 
   // Pagamento por cartão de debito
   app.get(
-    "/pgtodebito/:cpf/:nome/:email/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor",
+    "/pgtodebito/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor",
     doPgtoDebito
   );
 
   // Pagamento por boleto
   app.get(
-    "/pgtoboleto/:cpf/:nome/:email/:valor/:exame/:dataPgto",
+    "/pgtoboleto/:cpf/:nome/:email/:id/:valor/:exame/:dataPgto",
     doPgtoBoleto
   );
   
   // Gerar PDF de resposta
   app.get(
-    "/gerarConfirmacao/:cpf/:nome/:numeroCartao/:nomeCartao/:bandeira/:nomeExame/:nomeExecutante/:endereco" +
+    "/gerarConfirmacao/:cpf/:nome/:numeroCartao/:nomeCartao/:bandeira/:dataExame/:nomeExame/:nomeExecutante/:endereco" +
       "/:valor/:forma/:merchantOrderId/:proofOfSale/:paymentId",
     doGerarConfirmacao
   );
