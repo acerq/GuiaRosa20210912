@@ -763,8 +763,8 @@ async function doPgtoCC(req, resp) {
 
   const myHeaders = {
     "Content-Type": "application/json",
-    MerchantId: "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
-    MerchantKey: "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
+    MerchantId: "85012692-b03b-437d-990c-1f0be4a2a377",
+    MerchantKey: "fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o"
   };
 
   const myBody = {
@@ -857,8 +857,8 @@ async function doPgtoDebito(req, resp) {
 
   const myHeaders = {
     "Content-Type": "application/json",
-    MerchantId: "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
-    MerchantKey: "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
+    MerchantId: "85012692-b03b-437d-990c-1f0be4a2a377",
+    MerchantKey: "fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o"
   };
 
   const myBody = {
@@ -955,8 +955,8 @@ async function doPgtoBoleto(req, resp) {
 
   const myHeaders = {
     "Content-Type": "application/json",
-    MerchantId: "6ad5e5f0-0c0b-4ccf-a5d2-edc0c8ab9b2c",
-    MerchantKey: "MCWSCKUOGYWXBGOWLUMXGKVHKTECEQSMQYCUWTAB"
+    MerchantId: "85012692-b03b-437d-990c-1f0be4a2a377",
+    MerchantKey: "fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o"
   };
 
   const myBody = {

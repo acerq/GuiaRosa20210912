@@ -208,7 +208,7 @@ export default class CtrlSolicitacao {
       
     let response = await fetch(requisicao, { credentials : "include" });
     let resposta = await response.json();
-    if (!resposta) {
+    if (!resposta || !resposta.Payment) {
       console.log("Erro no pagamento");
       this.view.tirarEspera();
       alert("Erro - pagamento não processado");
