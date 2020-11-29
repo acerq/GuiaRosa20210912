@@ -149,7 +149,7 @@ function renderEfetuarLogin(resposta) {
     }
   }
 
-  if (tfLogin.value.replace(/\.|-/g, "") == usrApp.login && fnMD5(tfSenha.value) == usrApp.senha) {
+  if (tfLogin.value.replace(/\.|-/g, "") == usrApp.login.replace(/\.|-/g, "") && fnMD5(tfSenha.value) == usrApp.senha) {
     incluirDbApp(
       usrApp.login,
       usrApp.senha,
