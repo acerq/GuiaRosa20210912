@@ -1150,7 +1150,6 @@ async function doObterEnderecoPeloCep(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
-
 function startServer() {
   const app = express();
   app.use(cookieParser());
