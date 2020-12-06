@@ -332,9 +332,8 @@ export default class CtrlSolicitacao {
       alert("Documento de confirmação " + nomeArq + " salvo na pasta de downloads");
       
       var file = window.URL.createObjectURL(blob);
-      document.querySelector("iframe").src = file;
       
-      this.view.exibirPdfConfirmacao(nomeArq);
+      this.view.exibirPdfConfirmacao(file);
       // window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
