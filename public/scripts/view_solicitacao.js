@@ -421,6 +421,14 @@ export default class ViewSolicitacao {
     });
   }
 
+//-----------------------------------------------------------------------------------------//
+
+  exibirPdfConfirmacao(nomeArq) {
+    $("#divConteudo").load("visaopdf.html", function(nomeArq) {
+      alert(nomeArq);
+    });
+  }
+
   //-----------------------------------------------------------------------------------------//
 
   enviarSolicitacao() {

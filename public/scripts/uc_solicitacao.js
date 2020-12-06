@@ -325,12 +325,17 @@ export default class CtrlSolicitacao {
 
       let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
-      alert(JSON.stringify(blob));
-      let pdf = await download(blob,); 
-      alert(pdf);
+      
+      let nomeArq = merchantOrderId + ".pdf";
+      await download(blob, nomeArq);
       this.view.tirarEspera();
-      alert("Download de documento de confirmação realizado.");
-      window.history.go(-1);
+      alert("Documento de confirmação " + nomeArq + " salvo na pasta de downloads");
+      
+      var file = window.URL.createObjectURL(blob);
+      document.querySelector("iframe").src = file;
+      
+      this.view.exibirPdfConfirmacao(nomeArq);
+      // window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
     }
