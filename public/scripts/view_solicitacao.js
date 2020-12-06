@@ -425,7 +425,7 @@ export default class ViewSolicitacao {
 
 exibirPdfConfirmacao(arq) {
   $("#divConteudo").empty();
-  $("#divConteudo").html("<iframe src='" + arq +"' type='application/pdf' width='100%' height='100%' style='overflow: auto;'></iframe>");
+  $("#divConteudo").html("<iframe src='" + arq +"#zoom=30' type='application/pdf' width='100%' height='100%' style='overflow: auto;'></iframe>");
 }
 
 //-----------------------------------------------------------------------------------------//
