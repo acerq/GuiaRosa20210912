@@ -3,7 +3,7 @@
 import ViewSolicitacao from "./view_solicitacao.js";
 import DaoPaciente from "./dao_paciente.js";
 
-const download = new Function("blob", "download(blob)");
+const download = new Function("blob,nomeArq", "download(blob,nomeArq)");
 
 export default class CtrlSolicitacao {
   constructor() {
@@ -329,7 +329,7 @@ export default class CtrlSolicitacao {
       let nomeArq = merchantOrderId + ".pdf";
       await download(blob, nomeArq);
       this.view.tirarEspera();
-      alert("Documento de confirmação " + nomeArq + " salvo na pasta de downloads");
+      alert("Documento de confirmação '" + nomeArq + "'\nsalvo na pasta de downloads");
       
       var file = window.URL.createObjectURL(blob);
       

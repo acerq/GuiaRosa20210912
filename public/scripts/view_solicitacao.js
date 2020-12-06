@@ -423,13 +423,10 @@ export default class ViewSolicitacao {
 
 //-----------------------------------------------------------------------------------------//
 
-  exibirPdfConfirmacao(arq) {
-    alert("-->" + arq);
-    $("#divConteudo").load("visaopdf.html", function(arq) {
-      alert(arq);
-      document.querySelector("iframe").src = arq;
-
+  async exibirPdfConfirmacao(arq) {
+    await $("#divConteudo").load("visaopdf.html", await function() {
     });
+    document.querySelector("iframe").src = arq;
   }
 
   //-----------------------------------------------------------------------------------------//
