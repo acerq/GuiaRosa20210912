@@ -214,7 +214,6 @@ export default class CtrlSolicitacao {
       let mensagem = "Erro - pagamento não processado";
       if(resposta.Code)
         mensagem += ": #" + resposta.Code;
-      alert("");
       return;
     }
     if (resposta.Payment.ReasonCode == 0) {
