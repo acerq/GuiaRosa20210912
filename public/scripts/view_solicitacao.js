@@ -424,14 +424,9 @@ export default class ViewSolicitacao {
 //-----------------------------------------------------------------------------------------//
 
 exibirPdfConfirmacao(arq) {
-  
-   document.getElementById(elementID).innerHTML = "";
-    $("#divConteudo").empty();
-    load("visaopdf.html", function() {
-      document.getElementById("tfNomeCartao");
-      document.querySelector("iframe").src = arq;
-    });
-  }
+  $("#divConteudo").empty();
+  $("#divConteudo").html("<iframe src='" + arq +"' type='application/pdf' width='100%' height='100%' style='overflow: auto;'></iframe>");
+}
 
 //-----------------------------------------------------------------------------------------//
 
