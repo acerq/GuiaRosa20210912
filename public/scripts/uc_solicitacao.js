@@ -326,7 +326,7 @@ export default class CtrlSolicitacao {
       let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
       alert(JSON.stringify(blob));
-      let pdf = await download(blob);
+      let pdf = await download(blob,); 
       alert(pdf);
       this.view.tirarEspera();
       alert("Download de documento de confirmação realizado.");
@@ -518,9 +518,10 @@ export default class CtrlSolicitacao {
 
       let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
-      await download(blob);
+      let nomeArq = merchantOrderId + ".pdf";
+      await download(blob, nomeArq);
       this.view.tirarEspera();
-      alert("Download de documento de confirmação realizado.");
+      alert("Documento de confirmação " + nomeArq + " salvo na pasta de downloads");
       window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
