@@ -423,13 +423,17 @@ export default class ViewSolicitacao {
 
 //-----------------------------------------------------------------------------------------//
 
-  async exibirPdfConfirmacao(arq) {
-    await $("#divConteudo").load("visaopdf.html", await function() {
+exibirPdfConfirmacao(arq) {
+  
+   document.getElementById(elementID).innerHTML = "";
+    $("#divConteudo").empty();
+    load("visaopdf.html", function() {
+      document.getElementById("tfNomeCartao");
+      document.querySelector("iframe").src = arq;
     });
-    document.querySelector("iframe").src = arq;
   }
 
-  //-----------------------------------------------------------------------------------------//
+//-----------------------------------------------------------------------------------------//
 
   enviarSolicitacao() {
     fnColocarEspera();

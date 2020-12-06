@@ -3,7 +3,7 @@
 import ViewSolicitacao from "./view_solicitacao.js";
 import DaoPaciente from "./dao_paciente.js";
 
-const download = new Function("blob,nomeArq", "download(blob,nomeArq)");
+const download = new Function("blob,nomeArq", "download(blob,nomeArq,'application/pdf')");
 
 export default class CtrlSolicitacao {
   constructor() {
