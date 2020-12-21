@@ -429,19 +429,8 @@ exibirConfirmacao(cpfPaciente, nomePaciente, numCartao, nomeCartao, bandeira, da
   $("#divConteudo").empty();
   // $("#divConteudo").html("<div id='pdfId'></div><script>PDFObject.embed('" + arq +"#zoom=30', '#pdfId');</script><button onclick='window.history.go(-1)' style='width:100%;'>Fechar</button>");
   $("#divConteudo").load("comprovante.html", function() {
-      let lbNome = document.getElementById("lbNomePaciente");
-      self.tfNumCartao = document.getElementById("tfNumCartao");
-      self.tfMesValidade = document.getElementById("tfMesValidade");
-      self.tfAnoValidade = document.getElementById("tfAnoValidade");
-      self.cbBandeira = document.getElementById("cbBandeira");
-      self.tfCvv = document.getElementById("tfCvv");
-      self.btOk = document.getElementById("btOk");
-      self.btCancelar = document.getElementById("btCancelar");
-
-      $("#tfNumCartao").mask("9999 9999 9999 9999");
-      $("#tfMesValidade").mask("99");
-      $("#tfAnoValidade").mask("9999");
-  }
+    $("#nomePaciente").html(nomePaciente);
+  });
 }
 
 //-----------------------------------------------------------------------------------------//
