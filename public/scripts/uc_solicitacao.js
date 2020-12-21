@@ -333,7 +333,10 @@ export default class CtrlSolicitacao {
       
       var file = window.URL.createObjectURL(blob);
       
-      this.view.exibirPdfConfirmacao(file);
+      this.view.exibirConfirmacao(cpfPaciente, nomePaciente, numCartao, nomeCartao, bandeira, dataExame, 
+                                  nomeExame, nomeExecutante, endereco, valor, "Cartão de Crédito", 
+                                  merchantOrderId, proofOfSale, paymentId);
+      
       // window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));

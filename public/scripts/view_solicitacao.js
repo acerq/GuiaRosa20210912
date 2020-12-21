@@ -423,9 +423,12 @@ export default class ViewSolicitacao {
 
 //-----------------------------------------------------------------------------------------//
 
-exibirPdfConfirmacao(arq) {
+exibirConfirmacao(cpfPaciente, nomePaciente, numCartao, nomeCartao, bandeira, dataExame,  
+                  nomeExame, nomeExecutante, endereco, valor, formaPgto, 
+                  merchantOrderId, proofOfSale, paymentId) {
   $("#divConteudo").empty();
-  $("#divConteudo").html("<div id='pdfId'></div><script>PDFObject.embed('" + arq +"#zoom=30', '#pdfId');</script><button onclick='window.history.go(-1)' style='width:100%;'>Fechar</button>");
+  // $("#divConteudo").html("<div id='pdfId'></div><script>PDFObject.embed('" + arq +"#zoom=30', '#pdfId');</script><button onclick='window.history.go(-1)' style='width:100%;'>Fechar</button>");
+
 }
 
 //-----------------------------------------------------------------------------------------//
