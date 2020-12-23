@@ -424,7 +424,7 @@ export default class ViewSolicitacao {
 //-----------------------------------------------------------------------------------------//
 
 exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutante, endereco, valor, formaPgto, 
-                  merchantOrderId, proofOfSale, paymentId) {
+                  merchantOrderId, url) {
   $("#divConteudo").empty();
   // $("#divConteudo").html("<div id='pdfId'></div><script>PDFObject.embed('" + arq +"#zoom=30', '#pdfId');</script><button onclick='window.history.go(-1)' style='width:100%;'>Fechar</button>");
   $("#divConteudo").load("comprovante.html", function() {
@@ -438,8 +438,8 @@ exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutant
     $("#valor").html(valor);
     $("#formaPgto").html(formaPgto);
     $("#merchantOrderId").html(merchantOrderId);
-    $("#proofOfSale").html(proofOfSale);
-    $("#paymentId").html(paymentId);
+    if(url != null)
+    $("#boleto").load(url, function() {});
   });
 }
 

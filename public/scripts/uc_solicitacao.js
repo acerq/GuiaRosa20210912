@@ -337,7 +337,7 @@ export default class CtrlSolicitacao {
       var file = window.URL.createObjectURL(blob);
       
       this.view.exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutante, endereco, 
-                                  valor, "Cartão de Crédito", merchantOrderId, proofOfSale, paymentId);      
+                                  valor, "Cartão de Crédito", merchantOrderId, null);      
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
     }
@@ -668,7 +668,7 @@ async enviarAgendamentoPgtoBoleto(
       this.view.tirarEspera();
       alert("Exame agendado com sucesso!\nAguarde download de confirmação.");
       this.view.colocarEspera();
-      cpfPaciente = cpfPaciente.substring(0, 3) + "." + cpfPaciente.substring(3, 6) + "." + cpfPaciente.substring(6, 9) + "-" + cpfPaciente.substring(cpfPaciente.length-2);
+      //TODO cpfPaciente = cpfPaciente.substring(0, 3) + "." + cpfPaciente.substring(3, 6) + "." + cpfPaciente.substring(6, 9) + "-" + cpfPaciente.substring(cpfPaciente.length-2);
       valor = valor.substring(0, valor.length - 2) + "," + valor.substring(valor.length - 2);
       dataExame = dataExame.substring(dataExame.length - 2) + "-" + dataExame.substring(5,7) + "-" + dataExame.substring(0,4);  
 
@@ -705,10 +705,12 @@ async enviarAgendamentoPgtoBoleto(
 
       let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
-      await download(blob);
+      let nomeArq = merchantOrderId + ".pdf";
+      await download(blob, nomeArq);
       this.view.tirarEspera();
-      alert("Download de documento de confirmação realizado.");
-      response = await fetch(url, { credentials : "include" });
+      alert("Documento de confirmação '" + nomeArq + "'\nsalvo na pasta de downloads");
+
+      response = await fetch(url);
       let texto = await response.text();
       await download(texto);
       alert("Download de boleto realizado.");
@@ -716,7 +718,7 @@ async enviarAgendamentoPgtoBoleto(
       
       this.view.exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, 
                                   nomeExame, nomeExecutante, endereco, valor, "Boleto", 
-                                  merchantOrderId, proofOfSale, paymentId);
+                                  merchantOrderId, url);
 
       //window.history.go(-1);
     } else {
