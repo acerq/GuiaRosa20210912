@@ -709,17 +709,12 @@ async enviarAgendamentoPgtoBoleto(
       await download(blob, nomeArq);
       this.view.tirarEspera();
       alert("Documento de confirmação '" + nomeArq + "'\nsalvo na pasta de downloads");
-
-      response = await fetch(url);
-      let texto = await response.text();
-      await download(texto);
-      alert("Download de boleto realizado.");
-      window.location.href = url;
       
       this.view.exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, 
                                   nomeExame, nomeExecutante, endereco, valor, "Boleto", 
                                   merchantOrderId, url);
 
+      //window.location.href = url;
       //window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
