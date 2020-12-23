@@ -292,6 +292,9 @@ export default class CtrlSolicitacao {
       this.view.tirarEspera();
       alert("Exame agendado com sucesso!\nAguarde download de confirmação.");
       this.view.colocarEspera();
+      cpfPaciente = cpfPaciente.substring(0, 3) + "." + cpfPaciente.substring(3, 6) + "." + cpfPaciente.substring(6, 9) + "-" + cpfPaciente.substring(10, 11);
+      valor = valor.substring(0, valor.length - 2) + "," + valor.substring(valor.length - 2);
+      dataExame = dataExame.substring(9) + "-" + dataExame.substring(5,6) + "-" + dataExame.substring(0,4);  
       requisicao =
         "/gerarConfirmacao" +
         "/" +

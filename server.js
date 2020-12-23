@@ -1115,7 +1115,6 @@ async function doGerarConfirmacao(req, resp) {
      .text(nomeExecutante + "\n")
      .text(endereco + "\n");
   let tamValor = valor.length;
-  valor = valor.substring(0, tamValor - 2) + "," + valor.substring(tamValor - 2);
   pdf.text("Valor: R$ " + valor + "\n")
      .text("Data: " + dataExame + "\n\n")
   

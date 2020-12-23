@@ -430,13 +430,13 @@ exibirConfirmacao(cpfPaciente, nomePaciente, numCartao, nomeCartao, bandeira, da
   // $("#divConteudo").html("<div id='pdfId'></div><script>PDFObject.embed('" + arq +"#zoom=30', '#pdfId');</script><button onclick='window.history.go(-1)' style='width:100%;'>Fechar</button>");
   $("#divConteudo").load("comprovante.html", function() {
 
-    $("#cpfPaciente").html(cpfPaciente.substring(0, 2) + "." + cpfPaciente.substring(3, 5) + "." + cpfPaciente.substring(6, 8) + "-" + cpfPaciente.substring(9, 10));
+    $("#cpfPaciente").html(cpfPaciente);
     $("#nomePaciente").html(nomePaciente);
     $("#nomeExame").html(nomeExame);
     $("#nomeExecutante").html(nomeExecutante);
     $("#dataExame").html(dataExame);
     $("#endereco").html(endereco);
-    $("#valor").html(valor.substring(0, valor.length-3) + "," + valor.substring(valor.length-2, valor.length-1) );
+    $("#valor").html(valor);
     $("#formaPgto").html(formaPgto);
     $("#merchantOrderId").html(merchantOrderId);
     $("#proofOfSale").html(proofOfSale);
