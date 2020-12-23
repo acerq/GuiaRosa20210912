@@ -324,7 +324,7 @@ export default class ViewSolicitacao {
       return;
     }
     const dataIndicada = new Date(data);
-    if (dataIndicada < new Date()) {
+    if (dataIndicada < new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"})) {
       fnTirarEspera();
       alert("Data do exame deve ser posterior a hoje.");
       return;
@@ -429,14 +429,14 @@ exibirConfirmacao(cpfPaciente, nomePaciente, numCartao, nomeCartao, bandeira, da
   $("#divConteudo").empty();
   // $("#divConteudo").html("<div id='pdfId'></div><script>PDFObject.embed('" + arq +"#zoom=30', '#pdfId');</script><button onclick='window.history.go(-1)' style='width:100%;'>Fechar</button>");
   $("#divConteudo").load("comprovante.html", function() {
-    $("#cpfPaciente").mask("999.999.999-99");
-    $("#cpfPaciente").html(cpfPaciente);
+
+    $("#cpfPaciente").html(cpfPaciente.substring(0, 2) + "." + cpfPaciente.substring(3, 5) + "." + cpfPaciente.substring(6, 8) + "-" + cpfPaciente.substring(9, 10));
     $("#nomePaciente").html(nomePaciente);
     $("#nomeExame").html(nomeExame);
     $("#nomeExecutante").html(nomeExecutante);
     $("#dataExame").html(dataExame);
     $("#endereco").html(endereco);
-    $("#valor").html(valor);
+    $("#valor").html(valor.substring(0, valor.length-3) + "," + valor.substring(valor.length-2, valor.length-1) );
     $("#formaPgto").html(formaPgto);
     $("#merchantOrderId").html(merchantOrderId);
     $("#proofOfSale").html(proofOfSale);

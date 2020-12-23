@@ -1119,7 +1119,7 @@ async function doGerarConfirmacao(req, resp) {
   pdf.text("Valor: R$ " + valor + "\n")
      .text("Data: " + dataExame + "\n\n")
   
-  pdf.text("Agendado para " + nome + " (" + cpf + ")\n\n\n");
+  pdf.text("Agendado para " + nome + " (" + cpf + ")\n\n");
   numeroCartao =
     numeroCartao.substring(0, 4) +
     " " +
