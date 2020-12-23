@@ -429,6 +429,7 @@ exibirConfirmacao(cpfPaciente, nomePaciente, numCartao, nomeCartao, bandeira, da
   $("#divConteudo").empty();
   // $("#divConteudo").html("<div id='pdfId'></div><script>PDFObject.embed('" + arq +"#zoom=30', '#pdfId');</script><button onclick='window.history.go(-1)' style='width:100%;'>Fechar</button>");
   $("#divConteudo").load("comprovante.html", function() {
+    $("#cpfPaciente").mask("999.999.999-99");
     $("#cpfPaciente").html(cpfPaciente);
     $("#nomePaciente").html(nomePaciente);
     $("#nomeExame").html(nomeExame);
