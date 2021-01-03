@@ -308,7 +308,7 @@ export default class ViewSolicitacao {
       return;
     }
 
-    let dataIndicada = new Date(data).toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"});
+    let dataIndicada = new Date(data + " 00:00:00 GMT-03:00");
     dataIndicada = new Date(dataIndicada);
     let hoje = new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"});
     hoje = new Date(hoje);
@@ -320,7 +320,7 @@ export default class ViewSolicitacao {
 
     // Data Para Boleto
     let tresDiasDepoisDeHoje = new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"});
-    tresDiasDepoisDeHoje = tresDiasDepoisDeHoje + 3;
+    tresDiasDepoisDeHoje = new  + 3;
     if (dataIndicada < tresDiasDepoisDeHoje) {
       fnTirarEspera();
       alert("Com pagamento por boleto, a data do agendamento deve ser para três dias a frente, no mínimo.");
