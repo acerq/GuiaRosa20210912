@@ -1112,12 +1112,12 @@ async function doGerarConfirmacao(req, resp) {
      .text(merchantOrderId + "\n");
 
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
-     .text("Exame Agendado\n");
+     .text("Exame Agendado:\n");
 
   pdf.font("public/fonts/SourceSansPro-Regular.ttf")
-     .text(nomeExame + "\n")
-     .text(nomeExecutante + "\n")
-     .text(endereco + "\n");
+     .text("    " + nomeExame + "\n")
+     .text("    " + nomeExecutante + "\n")
+     .text("    " + endereco + "\n");
 
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .text("Valor: ", {continued: true})
