@@ -1139,6 +1139,8 @@ async function doGerarConfirmacao(req, resp) {
   if(url != "null") {
     pdf.addPage();
     console.log(url);
+    url = url.replace(/%2F/g, "/");
+    console.log(url);
     let response =  await fetch(url);
     pdf.text(await response.text());
   }
