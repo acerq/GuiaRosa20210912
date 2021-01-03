@@ -144,8 +144,8 @@ export default class CtrlSolicitacao {
     if (!response) {
       return false;
     }
-    if (response.hasOwnProperty("erro")) {
-      alert(response.erro);
+    let msg = await response.json();
+    if (msg.hasOwnProperty("erro")) {
       return false;
     }
     return true;
