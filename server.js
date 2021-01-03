@@ -1102,8 +1102,8 @@ async function doGerarConfirmacao(req, resp) {
     { fit: [300, 100] }
   );
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
-     .fontSize(18)
-     .text("Agendamento de Exame", 150, 120);
+     .fontSize(25)
+     .text("Agendamento de Exame", 160, 120);
 
   pdf.font("public/fonts/SourceSansPro-Regular.ttf")
      .fontSize(14)
@@ -1120,18 +1120,18 @@ async function doGerarConfirmacao(req, resp) {
      .text(endereco + "\n");
   let tamValor = valor.length;
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
-     .text("Valor: ");
-  pdf.font("public/fonts/SourceSansPro-Regular.ttf")
-     .text("R$ " + valor + "\n")
+     .text("Valor: ", {continued: true})
+     .font("public/fonts/SourceSansPro-Regular.ttf")
+     .text("R$ " + valor + "\n");
 
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
-     .text("Data: ");
-  pdf.font("public/fonts/SourceSansPro-Regular.ttf")
-    .text(dataExame + "\n")
+     .text("Data: ", {continued: true})
+     .font("public/fonts/SourceSansPro-Regular.ttf")
+     .text(dataExame + "\n");
   
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
-     .text("Agendado para: ");
-  pdf.font("public/fonts/SourceSansPro-Regular.ttf")
+     .text("Agendado para: ", {continued: true})
+     .font("public/fonts/SourceSansPro-Regular.ttf")
      .text(nome + " (" + cpf + ")\n\n");
   
   if(forma == "Cartão de Crédito") {
@@ -1143,28 +1143,28 @@ async function doGerarConfirmacao(req, resp) {
       numeroCartao.substring(14);
 
     pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
-       .text("Pagamento efetuado com cartão de crédito: ");
-    pdf.font("public/fonts/SourceSansPro-Regular.ttf")
+       .text("Pagamento efetuado com cartão de crédito: ", {continued: true})
+       .font("public/fonts/SourceSansPro-Regular.ttf")
        .text(numeroCartao + " (" + bandeira + ")\n");
   
     pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
-       .text("Número da Autorização: ");
-    pdf.font("public/fonts/SourceSansPro-Regular.ttf")
+       .text("Número da Autorização: ", {continued: true})
+       .font("public/fonts/SourceSansPro-Regular.ttf")
        .text( proofOfSale + "\n");
   
   }
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
-     .text("Identificação do Pagamento: ");
-  pdf.font("public/fonts/SourceSansPro-Regular.ttf")
+     .text("Identificação do Pagamento: ", {continued: true})
+     .font("public/fonts/SourceSansPro-Regular.ttf")
      .text( paymentId + "\n");
   
   if(url != "null") {
     url = url.replace(/%2F/g, "/");
-  pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
-     .text("Endereço para download do boleto: \n");
-  pdf.font("public/fonts/SourceSansPro-Regular.ttf")
-     .fontSize(11)
-     .text( + url + "\n");
+    pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
+       .text("Endereço para download do boleto: \n")
+       .font("public/fonts/SourceSansPro-Regular.ttf")
+       .fontSize(11)
+       .text( + url + "\n", { link: url, underline: true });
   }
   pdf.end();
 }
