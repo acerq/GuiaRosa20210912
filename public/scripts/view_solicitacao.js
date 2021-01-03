@@ -379,7 +379,7 @@ export default class ViewSolicitacao {
     fnTirarEspera();
     if (formaPgto == "Crédito" || formaPgto == "Débito") {
       alert("Procedendo checkout por " + formaPgto + " para o pedido de exame");
-      self.colocarFormPgto();
+      self.colocarFormPgto(formaPgto);
     }
     if (formaPgto == "Boleto") {
       alert("Procedendo checkout do pedido de exame - Geração do Boleto");
@@ -403,8 +403,11 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  colocarFormPgto() {
-    $("#divConteudo").load("pgto.html", function() {
+  colocarFormPgto(forma) {
+    let endereco = "pgto_credito.html";
+    if(forma != "Crédito")
+      endereco = "pgto_debito.html"
+    $("#divConteudo").load(endereco, function() {
       self.tfNomeCartao = document.getElementById("tfNomeCartao");
       self.tfNumCartao = document.getElementById("tfNumCartao");
       self.tfMesValidade = document.getElementById("tfMesValidade");
