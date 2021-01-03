@@ -1102,20 +1102,20 @@ async function doGerarConfirmacao(req, resp) {
     { fit: [300, 100] }
   );
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
-     .fontSize(25)
-     .text("Agendamento de Exame", 140, 120);
+     .fontSize(18)
+     .text("Agendamento de Exame", 150, 120);
 
   pdf.font("public/fonts/SourceSansPro-Regular.ttf")
      .fontSize(14)
-     .text("ID Guia Rosa: #" + merchantOrderId + "\n");
+     .text("ID Guia Rosa: #" + merchantOrderId + "\n", 100, 140);
 
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
     .fontSize(25)
-    .text("\nExame Agendado", 140, 200);
+    .text("\nExame Agendado", 150, 170);
 
   pdf.font("public/fonts/SourceSansPro-Regular.ttf")
      .fontSize(14)
-     .text(nomeExame + "\n")
+     .text(nomeExame + "\n", 100, 190)
      .text(nomeExecutante + "\n")
      .text(endereco + "\n");
   let tamValor = valor.length;
@@ -1127,7 +1127,7 @@ async function doGerarConfirmacao(req, resp) {
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .text("Data: ");
   pdf.font("public/fonts/SourceSansPro-Regular.ttf")
-    .text("R$ " + dataExame + "\n")
+    .text(dataExame + "\n")
   
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .text("Agendado para: ");
