@@ -330,6 +330,14 @@ export default class ViewSolicitacao {
       return;
     }
 
+    // Data Para Boleto
+    let tresDiasDepoisDeHoje = new Date()
+    if (dataIndicada < new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"})) {
+      fnTirarEspera();
+      alert("Data do exame deve ser posterior a hoje.");
+      return;
+    }
+
     let faturar = self.cbFaturar.value;
     if (faturar == null) {
       fnTirarEspera();

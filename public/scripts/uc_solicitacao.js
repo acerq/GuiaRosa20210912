@@ -377,7 +377,7 @@ export default class CtrlSolicitacao {
     let requisicao =
       "/pgtodebito" +
       "/" +
-      cpfPaciente.replace(/\.|-/g, "") +
+      cpfPaciente +
       "/" +
       nomePaciente +
       "/" +
@@ -563,7 +563,7 @@ async enviarAgendamentoPgtoBoleto(
     let requisicao =
       "/pgtoboleto" +
       "/" +
-      cpfPaciente.replace(/\.|-/g, "") +
+      cpfPaciente +
       "/" +
       nomePaciente +
       "/" +
