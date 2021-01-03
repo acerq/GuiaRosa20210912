@@ -299,30 +299,15 @@ export default class ViewSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async irParaCheckout() {
-    fnColocarEspera();
-    if (self.codExecutanteSelecionado == null) {
-      fnTirarEspera();
-      alert("O exame não foi escolhido.");
-      return;
-    }
-    if (self.codExameSelecionado == null) {
-      fnTirarEspera();
-      alert("O exame não foi escolhido.");
-      return;
-    }
-    let solicitante = "XXXX";
-    let pacienteValue = self.cbPaciente.value;
-    if (pacienteValue == null || pacienteValue == "") {
-      fnTirarEspera();
-      alert("O paciente não foi escolhido.");
-      return;
-    }
+
+    
     let data = self.dtExame.value;
     if (data == null) {
       fnTirarEspera();
       alert("A data não foi escolhida.");
       return;
     }
+
     let dataIndicada = new Date(data).toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"});
     dataIndicada = new Date(dataIndicada);
     let hoje = new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"});
@@ -342,6 +327,29 @@ export default class ViewSolicitacao {
       return;
     }
 
+    
+    
+    
+    
+    fnColocarEspera();
+    if (self.codExecutanteSelecionado == null) {
+      fnTirarEspera();
+      alert("O exame não foi escolhido.");
+      return;
+    }
+    if (self.codExameSelecionado == null) {
+      fnTirarEspera();
+      alert("O exame não foi escolhido.");
+      return;
+    }
+    let solicitante = "XXXX";
+    let pacienteValue = self.cbPaciente.value;
+    if (pacienteValue == null || pacienteValue == "") {
+      fnTirarEspera();
+      alert("O paciente não foi escolhido.");
+      return;
+    }
+    
     let faturar = self.cbFaturar.value;
     if (faturar == null) {
       fnTirarEspera();
