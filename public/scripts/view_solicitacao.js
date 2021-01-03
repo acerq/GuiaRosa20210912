@@ -528,21 +528,18 @@ exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutant
     let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
     let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
 
-    
-    
     self.cpfPaciente = self.cpfPaciente.replace(/\.|-/g, "");
     self.valorExameSelecionado = self.valorExameSelecionado.replace(/\./g, "");
-    
-    
     
     if (forma == "Crédito") {
       self.ctrl.enviarAgendamentoPgtoCC(
         self.codExecutanteSelecionado,
-self.cpfPaciente,
-          self.nomePaciente,
+        self.cpfPaciente,
+        self.nomePaciente,
         self.emailPaciente,
+        self.codExameSelecionado,
         self.dtExame.value,
-        numCarta
+        numCartao,
         nomeCartao,
         bandeira,
         mesValidade,
