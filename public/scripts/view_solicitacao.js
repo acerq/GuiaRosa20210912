@@ -299,38 +299,6 @@ export default class ViewSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async irParaCheckout() {
-
-    
-    let data = self.dtExame.value;
-    if (data == null) {
-      fnTirarEspera();
-      alert("A data não foi escolhida.");
-      return;
-    }
-
-    let dataIndicada = new Date(data + " 00:00:00 GMT-03:00");
-    dataIndicada = new Date(dataIndicada);
-    let hoje = new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"});
-    hoje = new Date(hoje);
-    if (dataIndicada < hoje) {
-      fnTirarEspera();
-      alert("Data do exame deve ser posterior a hoje.");
-      return;
-    }
-
-    // Data Para Boleto
-    let tresDiasDepoisDeHoje = new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"});
-    tresDiasDepoisDeHoje = new  + 3;
-    if (dataIndicada < tresDiasDepoisDeHoje) {
-      fnTirarEspera();
-      alert("Com pagamento por boleto, a data do agendamento deve ser para três dias a frente, no mínimo.");
-      return;
-    }
-
-    
-    
-    
-    
     fnColocarEspera();
     if (self.codExecutanteSelecionado == null) {
       fnTirarEspera();
@@ -342,7 +310,6 @@ export default class ViewSolicitacao {
       alert("O exame não foi escolhido.");
       return;
     }
-    let solicitante = "XXXX";
     let pacienteValue = self.cbPaciente.value;
     if (pacienteValue == null || pacienteValue == "") {
       fnTirarEspera();
@@ -356,6 +323,32 @@ export default class ViewSolicitacao {
       alert("Não foi indicado se o exame será faturado ou não.");
       return;
     }
+    let data = self.dtExame.value;
+    if (data == null) {
+      fnTirarEspera();
+      alert("A data não foi escolhida.");
+      return;
+    }
+
+    let dataIndicada = new Date(data + " 00:00:00 GMT-03:00");
+    dataIndicada = new Date(dataIndicada);
+    let hoje = new Date();
+    hoje = new Date(hoje);
+    if (dataIndicada < hoje) {
+      fnTirarEspera();
+      alert("Data do exame deve ser posterior a hoje.");
+      return;
+    }
+
+    // Data Para Boleto
+    let tresDiasDepoisDeHoje = new Date();
+    tresDiasDepoisDeHoje.setDate(tresDiasDepoisDeHoje.getDate() + 3);
+    if (dataIndicada <= tresDiasDepoisDeHoje) {
+      fnTirarEspera();
+      alert("Com pagamento por boleto, a data do agendamento deve ser para três dias a frente, no mínimo.");
+      return;
+    }
+
     let senha = funcaoMD5(self.pwSenha.value);
     if (senha == null) {
       fnTirarEspera();
