@@ -1139,7 +1139,7 @@ async function doGerarConfirmacao(req, resp) {
   if(url != "null") {
     pdf.addPage();
     let response =  await fetch(url);
-    pdf.text(await response.)
+    pdf.text(await response.text());
   }
   pdf.end();
 }
