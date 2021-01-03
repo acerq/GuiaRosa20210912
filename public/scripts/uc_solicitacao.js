@@ -314,7 +314,7 @@ export default class CtrlSolicitacao {
         "/" +
         nomeExecutante +
         "/" +
-        endereco.replace(/\//g, " ") +
+        endereco +
         "/" +
         valor +
         "/" +

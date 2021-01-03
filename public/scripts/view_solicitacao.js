@@ -358,7 +358,7 @@ export default class ViewSolicitacao {
     let selecao = self.dadosExame.text.split(SEPARADOR);
     let nomeExame = tiraEspacos(selecao[0]).replace(/\//g, " ");
     let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
-    let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");;
+    let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
     
     fnTirarEspera();
     let formaPgto = self.cbFaturar.value;
@@ -524,19 +524,25 @@ exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutant
 
     let forma = self.cbFaturar.value;
     let selecao = self.dadosExame.text.split(SEPARADOR);
-    let nomeExame = tiraEspacos(selecao[0]);
-    let nomeExecutante = tiraEspacos(selecao[1]);
-    let endereco = tiraEspacos(selecao[2]);
+    let nomeExame = tiraEspacos(selecao[0]).replace(/\//g, " ");
+    let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
+    let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
 
+    
+    
+    self.cpfPaciente = self.cpfPaciente.replace(/\.|-/g, "");
+    self.valorExameSelecionado = self.valorExameSelecionado.replace(/\./g, "");
+    
+    
+    
     if (forma == "Crédito") {
       self.ctrl.enviarAgendamentoPgtoCC(
         self.codExecutanteSelecionado,
-        self.cpfPaciente.replace(/\.|-/g, ""),
-        self.nomePaciente,
+self.cpfPaciente,
+          self.nomePaciente,
         self.emailPaciente,
-        self.codExameSelecionado,
         self.dtExame.value,
-        numCartao,
+        numCarta
         nomeCartao,
         bandeira,
         mesValidade,
@@ -552,7 +558,7 @@ exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutant
       {
         self.ctrl.enviarAgendamentoPgtoDebito(
           self.codExecutanteSelecionado,
-          self.cpfPaciente.replace(/\.|-/g, ""),
+          self.cpfPaciente,
           self.nomePaciente,
           self.emailPaciente,
           self.codExameSelecionado,
