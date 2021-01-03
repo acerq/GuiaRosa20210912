@@ -1103,14 +1103,14 @@ async function doGerarConfirmacao(req, resp) {
   );
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .fontSize(25)
-     .text("Agendamento de Exame", 100, 120);
+     .text("Agendamento de Exame", 140, 120);
 
   pdf.font("public/fonts/SourceSansPro-Regular.ttf").fontSize(14)
      .text("ID Guia Rosa: #" + merchantOrderId + "\n");
 
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
     .fontSize(25)
-    .text("\nExame Agendado");
+    .text("\nExame Agendado", 140, 200);
 
   pdf.font("public/fonts/SourceSansPro-Regular.ttf").fontSize(14)
      .text(nomeExame + "\n")
@@ -1135,14 +1135,10 @@ async function doGerarConfirmacao(req, resp) {
       ")\n"
   );
   pdf.text("Número da Autorização: " + proofOfSale + "\n");
-  pdf.text("Identificação do Pagamento: " + paymentId);
+  pdf.text("Identificação do Pagamento: " + paymentId + "\n");
   if(url != "null") {
-    pdf.addPage();
-    console.log(url);
     url = url.replace(/%2F/g, "/");
-    console.log(url);
-    let response =  await fetch(url);
-    pdf.text(await response.text());
+    pdf.text("Endereço para download do boleto: " + url + "\n");
   }
   pdf.end();
 }
