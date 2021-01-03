@@ -347,18 +347,19 @@ export default class ViewSolicitacao {
     if (!(await self.ctrl.verificarSenha(senha))) {
       fnTirarEspera();
       alert("Senha não confere.");
+      return;
     }
 
     let dadosPaciente = self.cbPaciente.value.split(SEPARADOR);
     self.nomePaciente = dadosPaciente[0];
-    self.cpfPaciente = dadosPaciente[1];
+    self.cpfPaciente = dadosPaciente[1].replace(/\.|-/g, "");
     self.emailPaciente = dadosPaciente[2];
 
     let selecao = self.dadosExame.text.split(SEPARADOR);
-    let nomeExame = tiraEspacos(selecao[0]);
-    let nomeExecutante = tiraEspacos(selecao[1]);
-    let endereco = tiraEspacos(selecao[2]);
-
+    let nomeExame = tiraEspacos(selecao[0]).replace(/\//g, " ");
+    let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
+    let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");;
+    
     fnTirarEspera();
     let formaPgto = self.cbFaturar.value;
     if (formaPgto == "Crédito" || formaPgto == "Débito") {

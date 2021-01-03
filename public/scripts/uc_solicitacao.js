@@ -184,7 +184,7 @@ export default class CtrlSolicitacao {
     let requisicao =
       "/pgtocc" +
       "/" +
-      cpfPaciente.replace(/\.|-/g, "") +
+      cpfPaciente+
       "/" +
       nomePaciente +
       "/" +
@@ -265,9 +265,9 @@ export default class CtrlSolicitacao {
       "/" +
       this.usrApp.login +
       "/" +
-      nomePaciente.replace(/\//g, "") +
+      nomePaciente +
       "/" +
-      cpfPaciente.replace(/\.|-/g, "") +
+      cpfPaciente +
       "/" +
       codExame +
       "/" +
@@ -300,7 +300,7 @@ export default class CtrlSolicitacao {
         "/" +
         cpfPaciente +
         "/" +
-        nomePaciente.replace(/\//g, "") + 
+        nomePaciente + 
         "/" +
         numCartao +
         "/" +
