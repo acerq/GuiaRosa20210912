@@ -324,7 +324,9 @@ export default class CtrlSolicitacao {
         "/" +
         proofOfSale +
         "/" +
-        paymentId;
+        paymentId +
+        "/" +
+        "null";
 
       let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
@@ -521,7 +523,9 @@ export default class CtrlSolicitacao {
         "/" +
         proofOfSale +
         "/" +
-        paymentId;
+        paymentId +
+        "/" +
+        "null"; // URL 
 
       let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
@@ -701,7 +705,9 @@ async enviarAgendamentoPgtoBoleto(
         "/" +
         proofOfSale +
         "/" +
-        paymentId;
+        paymentId +
+        "/" +
+        url;
 
       let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();

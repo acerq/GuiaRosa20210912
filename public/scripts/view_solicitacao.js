@@ -453,9 +453,7 @@ exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutant
     $("#formaPgto").html(formaPgto);
     $("#merchantOrderId").html(merchantOrderId);
     if(url != null)
-      $("#boleto").load(url, function() {});
-    else
-      $("#boleto").html("...");
+      $("#boleto").html("<a href='" + url + "'>Clique aqui para visualizar o boleto</a>");
   });
 }
 

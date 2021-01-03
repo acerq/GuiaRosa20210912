@@ -1050,6 +1050,7 @@ async function doGerarConfirmacao(req, resp) {
   let merchantOrderId = req.params.merchantOrderId;
   let proofOfSale = req.params.proofOfSale;
   let paymentId = req.params.paymentId;
+  let url = req.params.url;
 
   console.log("executando doGerarConfirmação" + nome);
   if (
@@ -1066,7 +1067,8 @@ async function doGerarConfirmacao(req, resp) {
     typeof forma === "undefined" ||
     typeof merchantOrderId === "undefined" ||
     typeof proofOfSale === "undefined" ||
-    typeof paymentId === "undefined"
+    typeof paymentId === "undefined" ||
+    typeof url === "undefined" 
   ) {
     console.log("undefined 0012");
     resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
@@ -1134,6 +1136,11 @@ async function doGerarConfirmacao(req, resp) {
   );
   pdf.text("Número da Autorização: " + proofOfSale + "\n");
   pdf.text("Identificação do Pagamento: " + paymentId);
+  if(url != "null") {
+    pdf.addPage();
+    let response =  await fetch(url);
+    pdf.text(await response.)
+  }
   pdf.end();
 }
 
@@ -1236,7 +1243,7 @@ function startServer() {
   // Gerar PDF de resposta
   app.get(
     "/gerarConfirmacao/:cpf/:nome/:numeroCartao/:nomeCartao/:bandeira/:dataExame/:nomeExame/:nomeExecutante/:endereco" +
-      "/:valor/:forma/:merchantOrderId/:proofOfSale/:paymentId",
+      "/:valor/:forma/:merchantOrderId/:proofOfSale/:paymentId/:url",
     doGerarConfirmacao
   );
 
