@@ -707,7 +707,7 @@ async enviarAgendamentoPgtoBoleto(
         "/" +
         paymentId +
         "/" +
-        url;
+        url.replace(/\.|-/g, "") +;
 
       let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
