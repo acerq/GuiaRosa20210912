@@ -341,14 +341,17 @@ export default class ViewSolicitacao {
     }
 
     // Data Para Boleto
-    let tresDiasDepoisDeHoje = new Date();
-    tresDiasDepoisDeHoje.setDate(tresDiasDepoisDeHoje.getDate() + 3);
-    if (dataIndicada <= tresDiasDepoisDeHoje) {
-      fnTirarEspera();
-      alert("Com pagamento por boleto, a data do agendamento deve ser para três dias a frente, no mínimo.");
-      return;
+    let formaPgto = self.cbFaturar.value;
+    if (formaPgto == "Boleto") {
+      let tresDiasDepoisDeHoje = new Date();
+      tresDiasDepoisDeHoje.setDate(tresDiasDepoisDeHoje.getDate() + 3);
+      if (dataIndicada <= tresDiasDepoisDeHoje) {
+        fnTirarEspera();
+        alert("Com pagamento por boleto, a data do agendamento deve ser para três dias a frente, no mínimo.");
+        return;
+      }
     }
-
+    
     let senha = funcaoMD5(self.pwSenha.value);
     if (senha == null) {
       fnTirarEspera();
@@ -374,7 +377,6 @@ export default class ViewSolicitacao {
     let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
     
     fnTirarEspera();
-    let formaPgto = self.cbFaturar.value;
     if (formaPgto == "Crédito" || formaPgto == "Débito") {
       alert("Procedendo checkout por " + formaPgto + " para o pedido de exame");
       self.colocarFormPgto();
