@@ -881,7 +881,7 @@ async function doPgtoDebito(req, resp) {
       Authenticate: true,
       Recurrent: false,
       SoftDescriptor: "GuiaRosa",
-      ReturnUrl: "https://guia-rosa.glitch.me/solicitacao.html",
+      ReturnUrl: "https://guia-rosa.glitch.me/inicio.html",
       DebitCard: {
         CardNumber: numeroCartao,
         Holder: nomeCartao,
