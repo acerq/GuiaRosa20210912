@@ -1138,6 +1138,7 @@ async function doGerarConfirmacao(req, resp) {
   pdf.text("Identificação do Pagamento: " + paymentId);
   if(url != "null") {
     pdf.addPage();
+    console.log(url);
     let response =  await fetch(url);
     pdf.text(await response.text());
   }
