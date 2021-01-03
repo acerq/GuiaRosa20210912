@@ -1103,22 +1103,22 @@ async function doGerarConfirmacao(req, resp) {
   );
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .fontSize(25)
-     .text("Agendamento de Exame", 160, 120);
-
-  pdf.font("public/fonts/SourceSansPro-Regular.ttf")
-     .fontSize(14)
-     .text("ID Guia Rosa: #" + merchantOrderId + "\n", 100, 140);
+     .text("Agendamento de Exame", 170, 120);
 
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
-    .fontSize(25)
-    .text("\nExame Agendado", 150, 170);
+     .fontSize(14)
+     .text("ID Guia Rosa: #" , 100, 150, {continued: true})
+     .font("public/fonts/SourceSansPro-Regular.ttf")
+     .text(merchantOrderId + "\n");
+
+  pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
+     .text("Exame Agendado\n", 150, 170);
 
   pdf.font("public/fonts/SourceSansPro-Regular.ttf")
-     .fontSize(14)
-     .text(nomeExame + "\n", 100, 190)
+     .text(nomeExame + "\n")
      .text(nomeExecutante + "\n")
      .text(endereco + "\n");
-  let tamValor = valor.length;
+
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .text("Valor: ", {continued: true})
      .font("public/fonts/SourceSansPro-Regular.ttf")
@@ -1164,7 +1164,7 @@ async function doGerarConfirmacao(req, resp) {
        .text("Endereço para download do boleto: \n")
        .font("public/fonts/SourceSansPro-Regular.ttf")
        .fontSize(11)
-       .text( + url + "\n", { link: url, underline: true });
+       .text(url, { link: url, underline: true });
   }
   pdf.end();
 }
