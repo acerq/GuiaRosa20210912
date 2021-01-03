@@ -323,7 +323,8 @@ export default class ViewSolicitacao {
       alert("A data não foi escolhida.");
       return;
     }
-    const dataIndicada = new Date(data);
+    let dataIndicada = new Date(data).toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"});
+    dataIndicada = new Date(dataIndicada);
     let hoje = new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"});
     hoje = new Date(hoje);
     if (dataIndicada < hoje) {
