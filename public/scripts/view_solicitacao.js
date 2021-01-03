@@ -324,17 +324,19 @@ export default class ViewSolicitacao {
       return;
     }
     const dataIndicada = new Date(data);
-    if (dataIndicada < new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"})) {
+    const hoje = new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"});
+    if (dataIndicada < hoje) {
       fnTirarEspera();
       alert("Data do exame deve ser posterior a hoje.");
       return;
     }
 
     // Data Para Boleto
-    let tresDiasDepoisDeHoje = new Date()
-    if (dataIndicada < new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"})) {
+    let tresDiasDepoisDeHoje = new Date().toLocaleString("pt-BR", {timeZone: "America/Sao_Paulo"});
+    tresDiasDepoisDeHoje.setDate(tresDiasDepoisDeHoje.getDate() + 3);
+    if (dataIndicada < tresDiasDepoisDeHoje) {
       fnTirarEspera();
-      alert("Data do exame deve ser posterior a hoje.");
+      alert("Com pagamento por boleto, a data do agendamento deve ser para três dias a frente, no mínimo.");
       return;
     }
 
