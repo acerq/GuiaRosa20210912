@@ -1033,10 +1033,10 @@ async function doVerificarPgto(req, resp) {
   if(sessao == null) 
     return;
   
-  let merchantOrderId = req.params.merchantOrderId;
+  let paymentId = req.params.paymentId;
 
-  console.log("executando doVerificarPgto" + merchantOrderId);
-  if (typeof merchantOrderId === "undefined") {
+  console.log("executando doVerificarPgto" + paymentId);
+  if (typeof paymentId === "undefined") {
     console.log("undefined 0012");
     resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
     return;
@@ -1060,27 +1060,49 @@ async function doVerificarPgto(req, resp) {
 
   console.log("doVerificarPgto --> " + JSON.stringify(requisicao));
   const responseBraspag = await fetch(
-    "https://apisandbox.braspag.com.br/v2/sales/" + merchantOrderId,
+    "https://apisandbox.braspag.com.br/v2/sales/" + paymentId,
     requisicao
   );
   console.log("fetch doVerificarPgto");
-  const myJson = await responseBraspag.json();
+  const resposta = await responseBraspag.json();
   console.log("json doVerificarPgto");
-  console.log(myJson);
+  console.log(resposta);
 
   
+  switch (resposta.Payment.Status) {
+    case 0:
+      alert("Pagamento não finalizado");
+      break;
+    case 1:
+      alert("Pagamento por boleto autorizado");
+      break;
+    case 2:
+      alert("Pagamento confirmado e finalizado");
+      break;
+    case 3:
+      alert("Pagamento negado por autorizador");
+      return;
+    case 10:
+      alert("Pagamento Cancelado");
+      return;
+    case 11:
+      alert("Pagamento Cancelado/Estornado");
+      return;
+    case 12:
+      alert("Esperando retorno da instituição financeira");
+      return;
+    case 13:
+      alert("Pagamento cancelado por falha no processamento");
+      return;
+    case 20:
+      alert("Pagamento por crédito com recorrência agendada");
+      return;
+    default:
+      alert("indefinido");
+      return;
+    }
   
-  0	NotFinished	Todos	Falha ao processar o pagamento.
-1	Authorized	Todos	Meio de pagamento apto a ser capturado ou pago (boleto).
-2	PaymentConfirmed	Todos	Pagamento confirmado e finalizado.
-3	Denied	Cartões de crédito e débito (transferência eletrônica)	Pagamento negado por autorizador.
-10	Voided	Todos	Pagamento cancelado.
-11	Refunded	Cartões de crédito e débito	Pagamento cancelado/estornado.
-12	Pending	Cartões de crédito e débito (transferência eletrônica).	Esperando retorno da instituição financeira.
-13	Aborted	Todos	Pagamento cancelado por falha no processamento.
-20	Scheduled	Cartão de crédito	Recorrência agendada.
-  
-  resp.json(myJson);
+  resp.json({status : resposta.Payment.Status});
 }
 
 //-----------------------------------------------------------------------------------------//
