@@ -62,6 +62,11 @@ function removerSessoesFinalizadas() {
       console.log('removeu ' + ch);
     }
   }
+  
+  if(horaAtual > horaUltimaVerificacao + TEMPO_MAXIMO_SESSAO) {
+    setPeriodo();
+    setLocais();
+  }
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -235,6 +240,7 @@ function setPeriodo() {
       var ano = resposta.Periodo.substring(6, 10);
       dtPeriodo = ano + "-" + mes + "-" + dia;
       console.log("setPeriodo Resposta -> " + dtPeriodo);
+      horaUltimaVerificacao = new Date().getTime();
     });
   });
 }
@@ -255,6 +261,7 @@ function setLocais() {
       let resposta = JSON.parse(result1.WsretornalocaisReturn.$value);
       console.log("doObterLocais Resposta ->", JSON.stringify(resposta.locais));
       locais = resposta.locais;
+      horaUltimaVerificacao = new Date().getTime();
     });
   });
 }
@@ -934,9 +941,7 @@ async function doPgtoDebito(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 async function doFinalizarPgtoDebito(req, resp) {
-  console.log(req.body);
-  console.dir(req.cookies.name);
-  resp.redirect('inicio.html');
+  resp.redirect('solicitacao.html');
 }
 
 //-----------------------------------------------------------------------------------------//

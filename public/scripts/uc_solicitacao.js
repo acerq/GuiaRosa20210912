@@ -13,7 +13,6 @@ export default class CtrlSolicitacao {
 
     this.usrApp = null;
     this.arrayPacientes = [];
-    this.dtPeriodo = null;
     this.arrayLocais = [];
     this.arrayExames = [];
 
@@ -40,8 +39,6 @@ export default class CtrlSolicitacao {
     );
 
     this.view.tirarEspera();
-
-    await this.obterPeriodo();
   }
 
   //-----------------------------------------------------------------------------------------//
