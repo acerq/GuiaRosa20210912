@@ -14,6 +14,9 @@ const TEMPO_MAXIMO_REQUISICAO = 60 * 1000; // 60 segundos
 //-----------------------------------------------------------------------------------------//
 
 var usuariosAtivos;
+var horaUltimaVerificacao;
+var dtPeriodo;
+var locais;
 
 function SessaoGuiaRosa() {
   this.session_id = null;
@@ -29,8 +32,6 @@ function SessaoGuiaRosa() {
   this.bairro = null;
   this.cep = null;
   this.ehMedico = false;
-  this.dtPeriodo = null;
-  this.locais = null;
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -126,8 +127,7 @@ function doInicio(req, resp) {
   sessao.bairro = null;
   sessao.cep = null;
   sessao.ehMedico = false;
-  setPeriodo(sessao);
-  setLocais(sessao);
+
 
   
   resp.json(sessao);
@@ -215,7 +215,7 @@ function doGuardarUsuarioCorrente(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
-function setPeriodo(sessao) {
+function setPeriodo() {
   let soap = require("soap");
   console.log("executando obterPeriodo ");
 
@@ -225,7 +225,7 @@ function setPeriodo(sessao) {
       console.log("WSretornaperiodo webservice");
       if (err) {
         console.log("WSretornaperiodo Err -> ", err.response.body);
-        sessao.dtPeriodo = null;
+        dtPeriodo = null;
         return;
       }
       let resposta = JSON.parse(result1.WsretornaperiodoReturn.$value);
@@ -233,15 +233,15 @@ function setPeriodo(sessao) {
       var dia = resposta.Periodo.substring(0, 2);
       var mes = resposta.Periodo.substring(3, 5);
       var ano = resposta.Periodo.substring(6, 10);
-      sessao.dtPeriodo = ano + "-" + mes + "-" + dia;
-      console.log("setPeriodo Resposta -> " + sessao.dtPeriodo);
+      dtPeriodo = ano + "-" + mes + "-" + dia;
+      console.log("setPeriodo Resposta -> " + dtPeriodo);
     });
   });
 }
 
 //-----------------------------------------------------------------------------------------//
 
-function setLocais(sessao) {
+function setLocais() {
   let soap = require("soap");
 
   soap.createClient(BASE_URL, function(err, client) {
@@ -249,12 +249,12 @@ function setLocais(sessao) {
     client.Wsretornalocais(null, function(err, result1) {
       console.log("WSretornalocais webservice");
       if (err) {
-        sessao.locais = null;
+        locais = null;
         return;
       }
       let resposta = JSON.parse(result1.WsretornalocaisReturn.$value);
       console.log("doObterLocais Resposta ->", JSON.stringify(resposta.locais));
-      sessao.locais = resposta.locais;
+      locais = resposta.locais;
     });
   });
 }
@@ -348,8 +348,6 @@ function doLoginMedico(req, resp) {
         sessao.bairro = "";
         sessao.cep = "";
         sessao.ehMedico = true;
-        setPeriodo(sessao);
-        setLocais(sessao);
 
         usuariosAtivos.set(sessao.session_id, sessao);
         resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
@@ -419,8 +417,6 @@ function doLoginPaciente(req, resp) {
       sessao.bairro = "";
       sessao.cep = "";
       sessao.ehMedico = false;
-      setPeriodo(sessao);
-      setLocais(sessao);
 
       usuariosAtivos.set(sessao.session_id, sessao);
       resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
@@ -438,22 +434,14 @@ function doLoginPaciente(req, resp) {
 
 function doObterLocais(req, resp) {
   console.log("executando doObterLocais");
-  let sessao = recuperarSessao(req, resp);
-  if(sessao == null || sessao == undefined) {
-    sessao = new SessaoGuiaRosa();
-  }
-  resp.json(sessao.locais);
+  resp.json(locais);
 }
 
 //-----------------------------------------------------------------------------------------//
 
 function doObterPeriodo(req, resp) {
   console.log("executando doObterPeriodo ");
-  let sessao = recuperarSessao(req, resp);
-  if(sessao == null || sessao == undefined) {
-    sessao = new SessaoGuiaRosa();
-  }
-  resp.json(sessao.dtPeriodo);
+  resp.json(dtPeriodo);
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -1324,10 +1312,10 @@ function startServer() {
   // Verificar Tempo de Conexão
   app.get("/verificarTimeout/", doVerificarTimeout);
 
-  //
-  //
-  //
-
+  // Inicializando dataPeriodo e Locais
+  setPeriodo();
+  setLocais();
+  
   // Indicando ao express que os arquivos estáticos estão na pasta 'public'
   app.use(express.static("public"));
 
