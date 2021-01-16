@@ -531,14 +531,17 @@ exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutant
       return;
     }
 
+    let cvv = null;
+    let forma = self.cbFaturar.value;
+    if(forma == "Crédito") {
     let cvv = self.tfCvv.value;
     if (cvv == null || cvv == "" || cvv.length != 3) {
       fnTirarEspera();
       alert("CVV inválido!");
       return;
     }
+    }
 
-    let forma = self.cbFaturar.value;
     let selecao = self.dadosExame.text.split(SEPARADOR);
     let nomeExame = tiraEspacos(selecao[0]).replace(/\//g, " ");
     let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
@@ -581,7 +584,6 @@ exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutant
           bandeira,
           mesValidade,
           anoValidade,
-          cvv,
           nomeExame,
           nomeExecutante,
           endereco,

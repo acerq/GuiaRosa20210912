@@ -175,7 +175,8 @@ export default class CtrlSolicitacao {
     this.view.colocarEspera();
     let agora = new Date();
     let timeMillis = agora.getTime().toString();
-    let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
+    //let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
+    let merchantOrderId = timeMillis;
 
     let proofOfSale = "";
     let paymentId = "";
@@ -359,7 +360,6 @@ export default class CtrlSolicitacao {
     bandeira,
     mesValidade,
     anoValidade,
-    cvv,
     nomeExame,
     nomeExecutante,
     endereco,
@@ -373,7 +373,8 @@ export default class CtrlSolicitacao {
 
     let agora = new Date();
     let timeMillis = agora.getTime().toString();
-    let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
+    //let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
+    let merchantOrderId = timeMillis;
 
     // Processando o pagamento
     let requisicao =
@@ -396,8 +397,6 @@ export default class CtrlSolicitacao {
       mesValidade +
       "/" +
       anoValidade +
-      "/" +
-      cvv +
       "/" +
       valor.replace(/\.|\,/g, "");
       
@@ -561,7 +560,8 @@ async enviarAgendamentoPgtoBoleto(
       
     let agora = new Date();
     let timeMillis = agora.getTime().toString();
-    let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
+    // let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
+    let merchantOrderId = timeMillis;
 
     // Processando o pagamento
     let requisicao =
