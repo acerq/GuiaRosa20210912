@@ -1028,6 +1028,53 @@ async function doPgtoBoleto(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
+async function doVerificarPgto(req, resp) {
+  let sessao = recuperarSessao(req, resp);
+  if(sessao == null) 
+    return;
+  
+  let nome = req.params.nome;
+
+  console.log("executando doPgtoBoleto" + nome);
+  if (
+    typeof nome === "undefined" 
+  ) {
+    console.log("undefined 0012");
+    resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
+    return;
+  }
+
+  console.log("parâmetros ok doPgtoBoleto");
+
+  const myHeaders = {
+    "Content-Type": "application/json",
+    "MerchantId": "0c476fc2-f8f5-4e85-a60c-366463f210e2",
+    "MerchantKey": "HHNUGBUVGJFMKHGMLWEWJIOEYFAXAKAJAWQCKAFB"
+  };
+
+  const myBody = {};
+
+  const requisicao = {
+    method: "GET",
+    headers: myHeaders,
+    body: JSON.stringify(myBody)
+  };
+
+  console.log("doPgtoBoleto --> " + JSON.stringify(requisicao));
+  const responseBraspag = await fetch(
+    "https://apisandbox.braspag.com.br/v2/sales/",
+    requisicao
+  );
+  console.log("fetch doPgtoBoleto");
+  const myJson = await responseBraspag.json();
+  console.log("json doPgtoBoleto");
+  console.log(myJson);
+
+  resp.json(myJson);
+}
+
+//-----------------------------------------------------------------------------------------//
+
 function doVerificarSenhaUsuarioCorrente(req, resp) {
   let sessao = recuperarSessao(req, resp);
   if(sessao == null) 
