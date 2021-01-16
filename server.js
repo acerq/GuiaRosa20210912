@@ -1206,7 +1206,7 @@ function startServer() {
 
   // Iniciar
   app.get("/inicio", doInicio);
-  app.post("/finalizarDebito", doInicio);
+  app.post("/finalizarDebito", res.redirect('http://google.com'));
 
   // Login
   app.get("/login/:login/:senha", doLoginMedico);
