@@ -916,6 +916,14 @@ async function doPgtoDebito(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
+async function doFinalizarPgtoDebito(req, resp) {
+  console.log(req.body);
+  console.dir(req.cookies.name);
+  resp.redirect('inicio.html');
+}
+
+//-----------------------------------------------------------------------------------------//
+
 async function doPgtoBoleto(req, resp) {
   let sessao = recuperarSessao(req, resp);
   if(sessao == null) 
@@ -1206,7 +1214,6 @@ function startServer() {
 
   // Iniciar
   app.get("/inicio", doInicio);
-  app.post("/finalizarDebito", res.redirect('http://google.com'));
 
   // Login
   app.get("/login/:login/:senha", doLoginMedico);
@@ -1255,6 +1262,8 @@ function startServer() {
     "/pgtodebito/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:valor",
     doPgtoDebito
   );
+  app.post("/finalizarDebito", doFinalizarPgtoDebito );
+
 
   // Pagamento por boleto
   app.get(
