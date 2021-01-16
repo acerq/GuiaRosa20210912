@@ -668,7 +668,6 @@ function doAgendamento(req, resp) {
   let cpf = req.params.cpf;
   let exame = req.params.exame;
   let dataExame = req.params.data;
-  let periodo = req.params.periodo;
   let faturar = req.params.faturar;
 
   console.log("Agendamento - " + sessao.login);
@@ -683,7 +682,6 @@ function doAgendamento(req, resp) {
     typeof solicitante === "undefined" ||
     typeof paciente === "undefined" ||
     typeof exame === "undefined" ||
-    typeof periodo === "undefined" ||
     typeof dataExame === "undefined" ||
     typeof faturar === "undefined"
   ) {
@@ -712,7 +710,7 @@ function doAgendamento(req, resp) {
     acertaData(dataExame) +
     '",' +
     '"DT_PERIODO":"' +
-    acertaData(periodo) +
+    dtPeriodo.replace(/-/g, "/") +
     '",' +
     '"FAT_SN":"' +
     faturar +
@@ -1269,7 +1267,7 @@ function startServer() {
 
   // Envio de Solicitação de Agendamento de Exame
   app.get(
-    "/agendamento/:executante/:solicitante/:paciente/:cpf/:exame/:data/:periodo/:faturar",
+    "/agendamento/:executante/:solicitante/:paciente/:cpf/:exame/:data/:faturar",
     doAgendamento
   );
 

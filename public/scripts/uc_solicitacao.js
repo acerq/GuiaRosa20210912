@@ -93,26 +93,6 @@ export default class CtrlSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  async obterPeriodo() {
-    let response = await fetch("/obterPeriodo/", { credentials : "include" });
-    console.log("obterPeriodo retorno", response);
-    if (!response) {
-      console.log("(app.js) renderObterPeriodo sem conteúdo");
-      return;
-    }
-    let objPeriodo = await response.json();
-    if (objPeriodo.hasOwnProperty("erro")) {
-      alert(objPeriodo.erro);
-      this.dtPeriodo = null;
-      return;
-    } else {
-      console.log("obterPeriodo -> ", objPeriodo.Periodo);
-      
-    }
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
   async obterExames(local, exame) {
     if (exame == null || exame == "") exame = "*";
     let response = await fetch("/obterExames/" + local + "/" + exame, { credentials : "include" });
@@ -267,8 +247,6 @@ export default class CtrlSolicitacao {
       codExame +
       "/" +
       dataExame +
-      "/" +
-      this.dtPeriodo +
       "/" +
       "S";
     //TODO faturar;
@@ -568,8 +546,6 @@ export default class CtrlSolicitacao {
       "/" +
       dataExame +
       "/" +
-      this.dtPeriodo +
-      "/" +
       "S";
     //faturar;
     console.log("(app.js) Executando agendamento");
@@ -754,8 +730,6 @@ async enviarAgendamentoPgtoBoleto(
       codExame +
       "/" +
       dataExame +
-      "/" +
-      this.dtPeriodo +
       "/" +
       "S";
     //faturar;
