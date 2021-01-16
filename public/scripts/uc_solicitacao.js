@@ -415,17 +415,14 @@ export default class CtrlSolicitacao {
     } else {
       this.view.tirarEspera();
       switch (resposta.Payment.ReasonCode) {
-        case 7:
-          alert("Pagamento Recusado: Não Autorizado");
-          return;
         case 9:
           merchantOrderId = resposta.MerchantOrderId;
           proofOfSale = resposta.Payment.ProofOfSale;
           paymentId = resposta.Payment.PaymentId;
           authenticationUrl = resposta.Payment.AuthenticationUrl;
-          alert("Redirecionando para autenticação");
-          window.location.href = authenticationUrl;
-
+          break;
+        case 7:
+          alert("Pagamento Recusado: Não Autorizado");
           return;
         case 12:
           alert("Pagamento Recusado: Problemas com o Cartão de Débito");

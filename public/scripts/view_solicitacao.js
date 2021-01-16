@@ -533,13 +533,13 @@ exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutant
 
     let cvv = null;
     let forma = self.cbFaturar.value;
-    if(forma == "Crédito") {
-    let cvv = self.tfCvv.value;
-    if (cvv == null || cvv == "" || cvv.length != 3) {
-      fnTirarEspera();
-      alert("CVV inválido!");
-      return;
-    }
+    if(forma == "Crédito") { // Só verificamos o CVV no crédito
+      cvv = self.tfCvv.value;
+      if (cvv == null || cvv == "" || cvv.length != 3) {
+        fnTirarEspera();
+        alert("CVV inválido!");
+        return;
+      }
     }
 
     let selecao = self.dadosExame.text.split(SEPARADOR);

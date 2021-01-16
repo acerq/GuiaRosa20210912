@@ -822,12 +822,12 @@ async function doPgtoDebito(req, resp) {
   let nome = req.params.nome;
   let cpf = req.params.cpf;
   let email = req.params.email;
+  let id = req.params.id;
   let numeroCartao = req.params.numeroCartao;
   let nomeCartao = req.params.nomeCartao;
   let bandeira = req.params.bandeira;
   let mesValidade = req.params.mesValidade;
   let anoValidade = req.params.anoValidade;
-  let cvv = req.params.cvv;
   let valor = req.params.valor;
 
   console.log("executando doPgtoCC" + nome);
@@ -835,12 +835,12 @@ async function doPgtoDebito(req, resp) {
     typeof nome === "undefined" ||
     typeof cpf === "undefined" ||
     typeof email === "undefined" ||
+    typeof id === "undefined" ||
     typeof numeroCartao === "undefined" ||
     typeof nomeCartao === "undefined" ||
     typeof bandeira === "undefined" ||
     typeof mesValidade === "undefined" ||
     typeof anoValidade === "undefined" ||
-    typeof cvv === "undefined" ||
     typeof valor === "undefined"
   ) {
     console.log("undefined 0012");
@@ -848,11 +848,7 @@ async function doPgtoDebito(req, resp) {
     return;
   }
 
-  console.log("parâmetros ok doPgtoCC");
-
-  let agora = new Date();
-  let timeMillis = agora.getTime().toString();
-  let id = sessao.login + "_" + timeMillis;
+  console.log("parâmetros ok doPgtoDebito ");
 
   const myHeaders = {
     "Content-Type": "application/json",
@@ -886,7 +882,7 @@ async function doPgtoDebito(req, resp) {
         CardNumber: numeroCartao,
         Holder: nomeCartao,
         ExpirationDate: mesValidade + "/" + anoValidade,
-        SecurityCode: cvv,
+        // SecurityCode: cvv,
         Brand: bandeira
       },
       "Credentials": {
@@ -1255,7 +1251,7 @@ function startServer() {
 
   // Pagamento por cartão de debito
   app.get(
-    "/pgtodebito/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor",
+    "/pgtodebito/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:valor",
     doPgtoDebito
   );
 
