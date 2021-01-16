@@ -15,7 +15,7 @@ const TEMPO_MAXIMO_REQUISICAO = 60 * 1000; // 60 segundos
 
 var usuariosAtivos;
 
-function sessaoGuiaRosa() {
+function SessaoGuiaRosa() {
   this.session_id = null;
   this.tempoCorrente = null;
   this.login = null;
@@ -112,7 +112,7 @@ function doInicio(req, resp) {
   console.log("| doInicio");
   console.log("+---------- ");
 
-  let sessao = new sessaoGuiaRosa();
+  let sessao = new SessaoGuiaRosa();
 
   sessao.tempoCorrente = new Date();
   sessao.login = null;
@@ -126,6 +126,9 @@ function doInicio(req, resp) {
   sessao.bairro = null;
   sessao.cep = null;
   sessao.ehMedico = false;
+  setPeriodo(sessao);
+  setLocais(sessao);
+
   
   resp.json(sessao);
   resp.end();
@@ -183,7 +186,7 @@ function doGuardarUsuarioCorrente(req, resp) {
   let bairro = req.params.bairro;
   let cep = req.params.cep;
 
-  let sessao = new sessaoGuiaRosa();
+  let sessao = new SessaoGuiaRosa();
   
   sessao.tempoCorrente = new Date();
   sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
@@ -330,7 +333,7 @@ function doLoginMedico(req, resp) {
         }
         console.log("doLogin Resposta ->", wsResposta.WsloginReturn.$value);
         
-        let sessao = new sessaoGuiaRosa();
+        let sessao = new SessaoGuiaRosa();
 
         sessao.tempoCorrente = new Date();
         sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
@@ -401,7 +404,7 @@ function doLoginPaciente(req, resp) {
       }
       console.log("doLoginPaciente Resposta ->", wsResposta);
       
-      let sessao = new sessaoGuiaRosa();
+      let sessao = new SessaoGuiaRosa();
 
       sessao.tempoCorrente = new Date();
       sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
@@ -436,6 +439,9 @@ function doLoginPaciente(req, resp) {
 function doObterLocais(req, resp) {
   console.log("executando doObterLocais");
   let sessao = recuperarSessao(req, resp);
+  if(sessao == null || sessao == undefined) {
+    sessao = new SessaoGuiaRosa();
+  }
   resp.json(sessao.locais);
 }
 
@@ -444,6 +450,9 @@ function doObterLocais(req, resp) {
 function doObterPeriodo(req, resp) {
   console.log("executando doObterPeriodo ");
   let sessao = recuperarSessao(req, resp);
+  if(sessao == null || sessao == undefined) {
+    sessao = new SessaoGuiaRosa();
+  }
   resp.json(sessao.dtPeriodo);
 }
 
@@ -510,7 +519,7 @@ function doIncluirUsuarioPaciente(req, resp) {
       let resposta = JSON.parse(result1.WsincluipacienteReturn.$value);
       console.log("doIncluirUsuarioPaciente Resposta ->", resposta);
       
-      let sessao = new sessaoGuiaRosa();
+      let sessao = new SessaoGuiaRosa();
 
       sessao.tempoCorrente = new Date();
       sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
