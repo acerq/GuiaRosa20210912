@@ -486,6 +486,9 @@ export default class CtrlSolicitacao {
       return;
     }
     console.log("(app.js) renderAgendamento -> ", response);
+    cpfPaciente = cpfPaciente.substring(0, 3) + "." + cpfPaciente.substring(3, 6) + "." + cpfPaciente.substring(6, 9) + "-" + cpfPaciente.substring(cpfPaciente.length-2);
+    valor = valor.substring(0, valor.length - 2) + "," + valor.substring(valor.length - 2);
+    dataExame = dataExame.substring(dataExame.length - 2) + "-" + dataExame.substring(5,7) + "-" + dataExame.substring(0,4);  
     if (resposta.mensagem == "Ok") {
       this.view.tirarEspera();
       alert("Exame agendado com sucesso!\nAguarde download de confirmação.");
@@ -521,7 +524,7 @@ export default class CtrlSolicitacao {
         "/" +
         paymentId +
         "/" +
-        "null"; // URL 
+        authenticationUrl.replace(/\//g, "%2F"); // URL 
 
       let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
@@ -529,7 +532,12 @@ export default class CtrlSolicitacao {
       await download(blob, nomeArq);
       this.view.tirarEspera();
       alert("Documento de confirmação " + nomeArq + " salvo na pasta de downloads");
-      window.history.go(-1);
+      // alert("Redirecionando para autenticação");
+            
+      this.view.exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutante, endereco, 
+                                  valor, "Cartão de Débito", merchantOrderId, authenticationUrl);      
+
+      // window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
     }

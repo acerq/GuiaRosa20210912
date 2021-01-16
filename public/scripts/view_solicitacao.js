@@ -464,6 +464,28 @@ exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutant
 
 //-----------------------------------------------------------------------------------------//
 
+apresentarPgtoDebito(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutante, endereco, valor, formaPgto, 
+                  merchantOrderId, url) {
+  $("#divConteudo").empty();
+  // $("#divConteudo").html("<div id='pdfId'></div><script>PDFObject.embed('" + arq +"#zoom=30', '#pdfId');</script><button onclick='window.history.go(-1)' style='width:100%;'>Fechar</button>");
+  $("#divConteudo").load("comprovante.html", function() {
+
+    $("#cpfPaciente").html(cpfPaciente);
+    $("#nomePaciente").html(nomePaciente);
+    $("#nomeExame").html(nomeExame);
+    $("#nomeExecutante").html(nomeExecutante);
+    $("#dataExame").html(dataExame);
+    $("#endereco").html(endereco);
+    $("#valor").html(valor);
+    $("#formaPgto").html(formaPgto);
+    $("#merchantOrderId").html(merchantOrderId);
+    if(url != null)
+      $("#boleto").html("<a href='" + url + "'>Clique aqui para visualizar o boleto</a>");
+  });
+}
+
+//-----------------------------------------------------------------------------------------//
+
   enviarSolicitacao() {
     fnColocarEspera();
 
