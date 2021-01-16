@@ -29,6 +29,7 @@ function sessaoGuiaRosa() {
   this.bairro = null;
   this.cep = null;
   this.ehMedico = false;
+  this.dtPeriodo = null;
 }
 
 //-----------------------------------------------------------------------------------------//
