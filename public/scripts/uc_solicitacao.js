@@ -445,6 +445,109 @@ export default class CtrlSolicitacao {
           return;
       }
     }
+    alert("Você será redirecionado ao seu banco para completar o pagamento por Cartão de Débito");
+    window.location.href = authenticationUrl;
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
+  async completarPgtoDebito(
+    codExecutante,
+    cpfPaciente,
+    nomePaciente,
+    emailPaciente,
+    codExame,
+    dataExame,
+    numCartao,
+    nomeCartao,
+    bandeira,
+    mesValidade,
+    anoValidade,
+    nomeExame,
+    nomeExecutante,
+    endereco,
+    valor,
+    forma
+  ) {
+    this.view.colocarEspera();
+    let proofOfSale = "";
+    let paymentId = "";
+    let authenticationUrl = "";
+
+    let agora = new Date();
+    let timeMillis = agora.getTime().toString();
+    //let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
+    let merchantOrderId = timeMillis;
+
+    // Processando o pagamento
+    let requisicao =
+      "/pgtodebito" +
+      "/" +
+      cpfPaciente +
+      "/" +
+      nomePaciente +
+      "/" +
+      emailPaciente +
+      "/" +
+      merchantOrderId +
+      "/" + 
+      numCartao.replace(/ /g, "") +
+      "/" +
+      nomeCartao +
+      "/" +
+      bandeira +
+      "/" +
+      mesValidade +
+      "/" +
+      anoValidade +
+      "/" +
+      valor.replace(/\.|\,/g, "");
+      
+    let response = await fetch(requisicao, { credentials : "include" });
+    let resposta = await response.json();
+    if (!resposta) {
+      console.log("Erro no pagamento");
+      this.view.tirarEspera();
+      alert("Erro - pagamento não processado");
+      return;
+    }
+    if (resposta.Payment.ReasonCode == 0) {
+      merchantOrderId = resposta.MerchantOrderId;
+      proofOfSale = resposta.Payment.ProofOfSale;
+      paymentId = resposta.Payment.PaymentId;
+    } else {
+      this.view.tirarEspera();
+      switch (resposta.Payment.ReasonCode) {
+        case 9:
+          merchantOrderId = resposta.MerchantOrderId;
+          proofOfSale = resposta.Payment.ProofOfSale;
+          paymentId = resposta.Payment.PaymentId;
+          authenticationUrl = resposta.Payment.AuthenticationUrl;
+          break;
+        case 7:
+          alert("Pagamento Recusado: Não Autorizado");
+          return;
+        case 12:
+          alert("Pagamento Recusado: Problemas com o Cartão de Débito");
+          return;
+        case 13:
+          alert("Pagamento Recusado: Cartão Cancelado");
+          return;
+        case 14:
+          alert("Pagamento Recusado: Cartão de Débito Bloqueado");
+          return;
+        case 15:
+          alert("Pagamento Recusado: Cartão Expirado");
+          return;
+        case 4:
+        case 22:
+          alert("Pagamento não realizado: Tempo Expirado");
+          return;
+        default:
+          alert("Pagamento Recusado");
+          return;
+      }
+    }
     //
     // Status: representa o status atual da transação.
     // ReasonCode: representa o status da requisição.
@@ -725,7 +828,6 @@ async enviarAgendamentoPgtoBoleto(
                                   nomeExame, nomeExecutante, endereco, valor, "Boleto", 
                                   merchantOrderId, url);
 
-      //window.location.href = url;
       //window.history.go(-1);
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
