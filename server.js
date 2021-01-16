@@ -1033,18 +1033,16 @@ async function doVerificarPgto(req, resp) {
   if(sessao == null) 
     return;
   
-  let nome = req.params.nome;
+  let merchantOrderId = req.params.merchantOrderId;
 
-  console.log("executando doPgtoBoleto" + nome);
-  if (
-    typeof nome === "undefined" 
-  ) {
+  console.log("executando doVerificarPgto" + merchantOrderId);
+  if (typeof merchantOrderId === "undefined") {
     console.log("undefined 0012");
     resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
     return;
   }
 
-  console.log("parâmetros ok doPgtoBoleto");
+  console.log("parâmetros ok doVerificarPgto");
 
   const myHeaders = {
     "Content-Type": "application/json",
@@ -1060,16 +1058,28 @@ async function doVerificarPgto(req, resp) {
     body: JSON.stringify(myBody)
   };
 
-  console.log("doPgtoBoleto --> " + JSON.stringify(requisicao));
+  console.log("doVerificarPgto --> " + JSON.stringify(requisicao));
   const responseBraspag = await fetch(
-    "https://apisandbox.braspag.com.br/v2/sales/",
+    "https://apisandbox.braspag.com.br/v2/sales/" + merchantOrderId,
     requisicao
   );
-  console.log("fetch doPgtoBoleto");
+  console.log("fetch doVerificarPgto");
   const myJson = await responseBraspag.json();
-  console.log("json doPgtoBoleto");
+  console.log("json doVerificarPgto");
   console.log(myJson);
 
+  
+  
+  0	NotFinished	Todos	Falha ao processar o pagamento.
+1	Authorized	Todos	Meio de pagamento apto a ser capturado ou pago (boleto).
+2	PaymentConfirmed	Todos	Pagamento confirmado e finalizado.
+3	Denied	Cartões de crédito e débito (transferência eletrônica)	Pagamento negado por autorizador.
+10	Voided	Todos	Pagamento cancelado.
+11	Refunded	Cartões de crédito e débito	Pagamento cancelado/estornado.
+12	Pending	Cartões de crédito e débito (transferência eletrônica).	Esperando retorno da instituição financeira.
+13	Aborted	Todos	Pagamento cancelado por falha no processamento.
+20	Scheduled	Cartão de crédito	Recorrência agendada.
+  
   resp.json(myJson);
 }
 
