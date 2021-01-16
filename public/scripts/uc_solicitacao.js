@@ -110,10 +110,7 @@ export default class CtrlSolicitacao {
       return;
     } else {
       console.log("obterPeriodo -> ", objPeriodo.Periodo);
-      var dia = objPeriodo.Periodo.substring(0, 2);
-      var mes = objPeriodo.Periodo.substring(3, 5);
-      var ano = objPeriodo.Periodo.substring(6, 10);
-      this.dtPeriodo = ano + "-" + mes + "-" + dia;
+      
     }
   }
 

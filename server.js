@@ -30,6 +30,7 @@ function sessaoGuiaRosa() {
   this.cep = null;
   this.ehMedico = false;
   this.dtPeriodo = null;
+  this.locais = null;
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -225,8 +226,12 @@ function setPeriodo(sessao) {
         return;
       }
       let resposta = JSON.parse(result1.WsretornaperiodoReturn.$value);
-      console.log("setPeriodo Resposta -> " + JSON.stringify(resposta));
-      sessao.dtPeriodo = resposta;
+     
+      var dia = resposta.Periodo.substring(0, 2);
+      var mes = resposta.Periodo.substring(3, 5);
+      var ano = resposta.Periodo.substring(6, 10);
+      sessao.dtPeriodo = ano + "-" + mes + "-" + dia;
+      console.log("setPeriodo Resposta -> " + sessao.dtPeriodo);
     });
   });
 }
@@ -340,7 +345,8 @@ function doLoginMedico(req, resp) {
         sessao.bairro = "";
         sessao.cep = "";
         sessao.ehMedico = true;
-        sessao.dtPerior = obterPeriodo(sessao);
+        setPeriodo(sessao);
+        setLocais(sessao);
 
         usuariosAtivos.set(sessao.session_id, sessao);
         resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
@@ -410,9 +416,11 @@ function doLoginPaciente(req, resp) {
       sessao.bairro = "";
       sessao.cep = "";
       sessao.ehMedico = false;
-      
-        usuariosAtivos.set(sessao.session_id, sessao);
-        resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
+      setPeriodo(sessao);
+      setLocais(sessao);
+
+      usuariosAtivos.set(sessao.session_id, sessao);
+      resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
 
       console.log("doLoginPaciente session_id: ", sessao.session_id);
       console.log("doLoginPaciente Resposta ->", resposta);
@@ -426,49 +434,17 @@ function doLoginPaciente(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function doObterLocais(req, resp) {
-  console.log("+------------------------- ");
-  console.log("| doObterLocais ");
-  console.log("+------------------------- ");
-
-  let soap = require("soap");
-
-  soap.createClient(BASE_URL, function(err, client) {
-    console.log("createClient");
-    client.Wsretornalocais(null, function(err, result1) {
-      console.log("WSretornalocais webservice");
-      if (err) {
-        console.log("WSretornalocais Err -> ", err.response.body);
-        resp.json(JSON.parse('{"erro" : null}'));
-        return;
-      }
-      let resposta = JSON.parse(result1.WsretornalocaisReturn.$value);
-      let arrayLocais = resposta.locais;
-      console.log("doObterLocais Resposta ->", JSON.stringify(arrayLocais));
-      resp.json(arrayLocais);
-    });
-  });
+  console.log("executando doObterLocais");
+  let sessao = recuperarSessao(req, resp);
+  resp.json(sessao.locais);
 }
 
 //-----------------------------------------------------------------------------------------//
 
 function doObterPeriodo(req, resp) {
-  let soap = require("soap");
   console.log("executando doObterPeriodo ");
-
-  soap.createClient(BASE_URL, function(err, client) {
-    console.log("createClient");
-    client.Wsretornaperiodo(null, function(err, result1) {
-      console.log("WSretornaperiodo webservice");
-      if (err) {
-        console.log("WSretornaperiodo Err -> ", err.response.body);
-        resp.json(JSON.parse('{"erro" : null}'));
-        return;
-      }
-      let resposta = JSON.parse(result1.WsretornaperiodoReturn.$value);
-      console.log("doObterPeriodo Resposta -> " + JSON.stringify(resposta));
-      resp.json(resposta);
-    });
-  });
+  let sessao = recuperarSessao(req, resp);
+  resp.json(sessao.dtPeriodo);
 }
 
 //-----------------------------------------------------------------------------------------//
