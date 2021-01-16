@@ -211,6 +211,48 @@ function doGuardarUsuarioCorrente(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
+function setPeriodo(sessao) {
+  let soap = require("soap");
+  console.log("executando obterPeriodo ");
+
+  soap.createClient(BASE_URL, function(err, client) {
+    console.log("createClient");
+    client.Wsretornaperiodo(null, function(err, result1) {
+      console.log("WSretornaperiodo webservice");
+      if (err) {
+        console.log("WSretornaperiodo Err -> ", err.response.body);
+        sessao.dtPeriodo = null;
+        return;
+      }
+      let resposta = JSON.parse(result1.WsretornaperiodoReturn.$value);
+      console.log("setPeriodo Resposta -> " + JSON.stringify(resposta));
+      sessao.dtPeriodo = resposta;
+    });
+  });
+}
+
+//-----------------------------------------------------------------------------------------//
+
+function setLocais(sessao) {
+  let soap = require("soap");
+
+  soap.createClient(BASE_URL, function(err, client) {
+    console.log("createClient");
+    client.Wsretornalocais(null, function(err, result1) {
+      console.log("WSretornalocais webservice");
+      if (err) {
+        sessao.locais = null;
+        return;
+      }
+      let resposta = JSON.parse(result1.WsretornalocaisReturn.$value);
+      console.log("doObterLocais Resposta ->", JSON.stringify(resposta.locais));
+      sessao.locais = resposta.locais;
+    });
+  });
+}
+
+//-----------------------------------------------------------------------------------------//
+
 function doLoginMedico(req, resp) {
   console.log("+------------------------- ");
   console.log("| doLoginMedico ");
@@ -298,6 +340,7 @@ function doLoginMedico(req, resp) {
         sessao.bairro = "";
         sessao.cep = "";
         sessao.ehMedico = true;
+        sessao.dtPerior = obterPeriodo(sessao);
 
         usuariosAtivos.set(sessao.session_id, sessao);
         resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
