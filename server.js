@@ -830,7 +830,7 @@ async function doPgtoDebito(req, resp) {
   let anoValidade = req.params.anoValidade;
   let valor = req.params.valor;
 
-  console.log("executando doPgtoCC" + nome);
+  console.log("executando doPgtoDebito " + nome);
   if (
     typeof nome === "undefined" ||
     typeof cpf === "undefined" ||
@@ -1206,6 +1206,7 @@ function startServer() {
 
   // Iniciar
   app.get("/inicio", doInicio);
+  app.post("/inicio", doInicio);
 
   // Login
   app.get("/login/:login/:senha", doLoginMedico);
