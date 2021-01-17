@@ -942,7 +942,7 @@ async function doPgtoDebito(req, resp) {
   
   console.log("json doPgtoDebito sessão");
   console.log(sessao);
-  resp.json(sessao);
+  resp.json(respostaPgto);
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -1064,6 +1064,7 @@ async function doVerificarPgto(req, resp) {
   const requisicao = {
     method: "GET",
     headers: myHeaders,
+    body: null
   };
 
   console.log("doVerificarPgto --> " + JSON.stringify(requisicao));
