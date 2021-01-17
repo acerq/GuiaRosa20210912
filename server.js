@@ -681,7 +681,7 @@ function doAgendamento(req, resp) {
     return;
   }
 
-  let agendamento = new (executante, solicitante, paciente, cpf, exame, dataExame, faturar);
+  let agendamento = new Agendamento(executante, solicitante, paciente, cpf, exame, dataExame, faturar);
   sessao.agendamento = agendamento;
   
   let dados =

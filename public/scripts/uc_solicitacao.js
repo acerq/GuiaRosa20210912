@@ -504,17 +504,13 @@ export default class CtrlSolicitacao {
                 "-" + ses.agendamento.dataExame.substring(0,4);  
     alert("Exame agendado com sucesso!\nAguarde download de confirmação.");
 
-    requisicao =
+    let requisicao =
         "/gerarConfirmacao" +
         "/" +
         cpfPaciente +
         "/" +
         ses.agendamento.nome +
         "/" +
-      
-      
-      (id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, mesValidade, anoValidade, cvv, valor);
-      
         ses.pgto.numeroCartao +
         "/" +
         ses.pgto.nomeCartao +
@@ -543,14 +539,14 @@ export default class CtrlSolicitacao {
 
       response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
-      let nomeArq = merchantOrderId + ".pdf";
+      let nomeArq = ses.pgto.merchantOrderId + ".pdf";
       await download(blob, nomeArq);
       this.view.tirarEspera();
       alert("Documento de confirmação " + nomeArq + " salvo na pasta de downloads");
       // alert("Redirecionando para autenticação");
             
-      this.view.exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, nomeExame, nomeExecutante, endereco, 
-                                  valor, "Cartão de Débito", merchantOrderId, authenticationUrl);      
+      this.view.exibirConfirmacao(cpfPaciente, ses.agendamento.nome, dataExame, "nomeExame", "nomeExecutante", "endereco", 
+                                  valor, "Cartão de Débito", ses.pgto.merchantOrderId, null);      
 
       // window.history.go(-1);
   }
