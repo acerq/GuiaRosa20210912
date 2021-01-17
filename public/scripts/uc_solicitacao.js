@@ -26,14 +26,15 @@ export default class CtrlSolicitacao {
   async init() {
 
     await this.obterLocais();
+    
     this.usrApp = await window.retornarUsrApp();
     if(this.view.usuarioLogado) {
       await this.daoPaciente.abrirDB();
       await this.obterPacientes();
       if(this.usrApp.agendamento != null) 
+        alert(this.usrApp.agendamento);
         this.view.tirarEspera();
         await this.completarPgtoDebito();
-        return;  
     }
     this.view.atualizarInterface(
       this.usrApp.ehMedico,
