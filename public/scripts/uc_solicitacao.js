@@ -417,6 +417,36 @@ export default class CtrlSolicitacao {
           return;
       }
     }
+    // Agendamento
+    requisicao =
+      "/agendamento" +
+      "/" +
+      codExecutante +
+      "/" +
+      this.usrApp.login +
+      "/" +
+      nomePaciente +
+      "/" +
+      cpfPaciente.replace(/\.|-/g, "") +
+      "/" +
+      codExame +
+      "/" +
+      dataExame +
+      "/" +
+      "S";
+    //faturar;
+    console.log("(app.js) Executando agendamento");
+    response = await fetch(requisicao, { credentials : "include" });
+    resposta = await response.json();
+
+    if (!resposta) {
+      console.log(" erro no agendamento");
+      this.view.tirarEspera();
+      alert("Erro no agendamento do exame.");
+      return;
+    }
+    console.log("(app.js) renderAgendamento -> ", response);
+
     alert("Você será redirecionado ao seu banco para completar o pagamento por Cartão de Débito");
     window.location.href = authenticationUrl;
   }
@@ -466,79 +496,52 @@ export default class CtrlSolicitacao {
       alert("indefinido");
       return;
     } 
-      
-    this.view.colocarEspera();
+          
+    let cpfPaciente = ses.agendamento.cpf.substring(0, 3) + "." + ses.agendamento.cpf.substring(3, 6) + "." + 
+                      ses.agendamento.cpf.substring(6, 9) + "-" + ses.agendamento.cpf.substring(ses.agendamento.cpf.length-2);
+    let valor = ses.pgto.valor.substring(0, ses.pgto.valor.length - 2) + "," + ses.pgto.valor.substring(ses.pgto.valor.length - 2);
+    let dataExame = ses.agendamento.dataExame.substring(ses.agendamento.dataExame.length - 2) + "-" + ses.agendamento.dataExame.substring(5,7) + 
+                "-" + ses.agendamento.dataExame.substring(0,4);  
+    alert("Exame agendado com sucesso!\nAguarde download de confirmação.");
 
-    // Agendamento
-    let requisicao =
-      "/agendamento" +
-      "/" +
-      codExecutante +
-      "/" +
-      this.usrApp.login +
-      "/" +
-      ses. +
-      "/" +
-      cpfPaciente.replace(/\.|-/g, "") +
-      "/" +
-      codExame +
-      "/" +
-      dataExame +
-      "/" +
-      "S";
-    //faturar;
-    console.log("(app.js) Executando agendamento");
-    response = await fetch(requisicao, { credentials : "include" });
-    resposta = await response.json();
-
-    if (!resposta) {
-      console.log(" erro no agendamento");
-      this.view.tirarEspera();
-      alert("Erro no agendamento do exame.");
-      return;
-    }
-    console.log("(app.js) renderAgendamento -> ", response);
-    cpfPaciente = cpfPaciente.substring(0, 3) + "." + cpfPaciente.substring(3, 6) + "." + cpfPaciente.substring(6, 9) + "-" + cpfPaciente.substring(cpfPaciente.length-2);
-    valor = valor.substring(0, valor.length - 2) + "," + valor.substring(valor.length - 2);
-    dataExame = dataExame.substring(dataExame.length - 2) + "-" + dataExame.substring(5,7) + "-" + dataExame.substring(0,4);  
-    if (resposta.mensagem == "Ok") {
-      this.view.tirarEspera();
-      alert("Exame agendado com sucesso!\nAguarde download de confirmação.");
-      this.view.colocarEspera();
-      requisicao =
+    requisicao =
         "/gerarConfirmacao" +
         "/" +
         cpfPaciente +
         "/" +
-        nomePaciente +
+        ses.agendamento.nome +
         "/" +
-        numCartao +
+      
+      
+      (id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, mesValidade, anoValidade, cvv, valor);
+      
+        ses.pgto.numeroCartao +
         "/" +
-        nomeCartao +
+        ses.pgto.nomeCartao +
         "/" +
-        bandeira +
+        ses.pgto.bandeira +
         "/" +
         dataExame +
         "/" +
-        nomeExame +
+        "ses.agendamento.nomeExame" + //TODO
         "/" +
-        nomeExecutante +
+        "ses.agendamento.nomeExecutante" +
         "/" +
-        endereco +
+        "ses.pgto.endereco" +
         "/" +
         valor +
         "/" +
         "Cartão de Débito" +
         "/" +
-        merchantOrderId +
+        ses.pgto.merchantOrderId +
         "/" +
-        proofOfSale +
+        ses.pgto.proofOfSale +
         "/" +
-        paymentId +
+        ses.pgto.paymentId +
         "/" +
-        authenticationUrl.replace(/\//g, "%2F"); // URL 
+        ""; // URL 
 
-      let response = await fetch(requisicao, { credentials : "include" });
+      response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
       let nomeArq = merchantOrderId + ".pdf";
       await download(blob, nomeArq);
@@ -550,9 +553,6 @@ export default class CtrlSolicitacao {
                                   valor, "Cartão de Débito", merchantOrderId, authenticationUrl);      
 
       // window.history.go(-1);
-    } else {
-      alert("Erro no agendamento\n" + JSON.stringify(resposta));
-    }
   }
 
   //-----------------------------------------------------------------------------------------//

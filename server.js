@@ -215,12 +215,13 @@ function Agendamento(executante, solicitante, paciente, cpf, exame, dataExame, f
   this.executante = executante;
   this.solicitante = solicitante;
   this.paciente = paciente;
-  this.cpf = req.params.cpf;
-  this.exame = req.params.exame;
-  this.dataExame = req.params.data;
-  this.faturar = req.params.faturar;
+  this.cpf = cpf;
+  this.exame = exame;
+  this.dataExame = dataExame;
+  this.faturar = faturar;
 }
 
+//-----------------------------------------------------------------------------------------//
 
 function doInicio(req, resp) {
   console.log("+---------- ");
@@ -680,6 +681,9 @@ function doAgendamento(req, resp) {
     return;
   }
 
+  let agendamento = new (executante, solicitante, paciente, cpf, exame, dataExame, faturar);
+  sessao.agendamento = agendamento;
+  
   let dados =
     '[{"CD_EXECUTANTE":' +
     executante +
