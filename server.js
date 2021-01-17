@@ -18,20 +18,52 @@ var horaUltimaVerificacao;
 var dtPeriodo;
 var locais;
 
-function SessaoGuiaRosa() {
-  this.session_id = null;
-  this.tempoCorrente = null;
-  this.login = null;
-  this.senha = null;
-  this.nome = null;
-  this.celular = null;
-  this.email = null;
-  this.rua = null;
-  this.numero = null;
-  this.complemento = null;
-  this.bairro = null;
-  this.cep = null;
-  this.ehMedico = false;
+//-----------------------------------------------------------------------------------------//
+
+function setPeriodo() {
+  let soap = require("soap");
+  console.log("executando obterPeriodo ");
+
+  soap.createClient(BASE_URL, function(err, client) {
+    console.log("createClient");
+    client.Wsretornaperiodo(null, function(err, result1) {
+      console.log("WSretornaperiodo webservice");
+      if (err) {
+        console.log("WSretornaperiodo Err -> ", err.response.body);
+        dtPeriodo = null;
+        return;
+      }
+      let resposta = JSON.parse(result1.WsretornaperiodoReturn.$value);
+     
+      var dia = resposta.Periodo.substring(0, 2);
+      var mes = resposta.Periodo.substring(3, 5);
+      var ano = resposta.Periodo.substring(6, 10);
+      dtPeriodo = ano + "-" + mes + "-" + dia;
+      console.log("setPeriodo Resposta -> " + dtPeriodo);
+      horaUltimaVerificacao = new Date().getTime();
+    });
+  });
+}
+
+//-----------------------------------------------------------------------------------------//
+
+function setLocais() {
+  let soap = require("soap");
+
+  soap.createClient(BASE_URL, function(err, client) {
+    console.log("createClient");
+    client.Wsretornalocais(null, function(err, result1) {
+      console.log("WSretornalocais webservice");
+      if (err) {
+        locais = null;
+        return;
+      }
+      let resposta = JSON.parse(result1.WsretornalocaisReturn.$value);
+      console.log("doObterLocais Resposta ->", JSON.stringify(resposta.locais));
+      locais = resposta.locais;
+      horaUltimaVerificacao = new Date().getTime();
+    });
+  });
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -112,28 +144,34 @@ function recuperarSessao(req, resp) {
 }
   
 //-----------------------------------------------------------------------------------------//
+
+function SessaoGuiaRosa(login, senha, nome, ehMedico) {
+  this.tempoCorrente = new Date();
+  this.session_id = this.tempoCorrente.getTime().valueOf();
+  this.login = login;
+  this.senha = senha;
+  this.nome = nome;
+  this.celular = null;
+  this.email = null;
+  this.rua = null;
+  this.numero = null;
+  this.complemento = null;
+  this.bairro = null;
+  this.cep = null;
+  this.ehMedico = ehMedico;
+  
+  this.merchantOrderId = null;
+  this.proofOfSale = null;
+  this.paymentId = null;
+}
+//-----------------------------------------------------------------------------------------//
   
 function doInicio(req, resp) {
   console.log("+---------- ");
   console.log("| doInicio");
   console.log("+---------- ");
 
-  let sessao = new SessaoGuiaRosa();
-
-  sessao.tempoCorrente = new Date();
-  sessao.login = null;
-  sessao.senha = null;
-  sessao.nome = null;
-  sessao.email = null;
-  sessao.celular = null;
-  sessao.rua = null;
-  sessao.numero = null;
-  sessao.complemento = null;
-  sessao.bairro = null;
-  sessao.cep = null;
-  sessao.ehMedico = false;
-
-
+  let sessao = new SessaoGuiaRosa(null, null, null, false);
   
   resp.json(sessao);
   resp.end();
@@ -191,13 +229,8 @@ function doGuardarUsuarioCorrente(req, resp) {
   let bairro = req.params.bairro;
   let cep = req.params.cep;
 
-  let sessao = new SessaoGuiaRosa();
+  let sessao = new SessaoGuiaRosa(cpf, senha, nome, false);
   
-  sessao.tempoCorrente = new Date();
-  sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
-  sessao.login = cpf;
-  sessao.senha = senha;
-  sessao.nome = nome;
   sessao.email = email;
   sessao.celular = celular;
   sessao.rua = rua;
@@ -205,7 +238,6 @@ function doGuardarUsuarioCorrente(req, resp) {
   sessao.complemento = complemento;
   sessao.bairro = bairro;
   sessao.cep = cep;
-  sessao.ehMedico = false;
   
   usuariosAtivos.set(sessao.session_id, sessao);
 
@@ -216,54 +248,6 @@ function doGuardarUsuarioCorrente(req, resp) {
   resp.json(sessao);
   resp.end();
   return;
-}
-
-//-----------------------------------------------------------------------------------------//
-
-function setPeriodo() {
-  let soap = require("soap");
-  console.log("executando obterPeriodo ");
-
-  soap.createClient(BASE_URL, function(err, client) {
-    console.log("createClient");
-    client.Wsretornaperiodo(null, function(err, result1) {
-      console.log("WSretornaperiodo webservice");
-      if (err) {
-        console.log("WSretornaperiodo Err -> ", err.response.body);
-        dtPeriodo = null;
-        return;
-      }
-      let resposta = JSON.parse(result1.WsretornaperiodoReturn.$value);
-     
-      var dia = resposta.Periodo.substring(0, 2);
-      var mes = resposta.Periodo.substring(3, 5);
-      var ano = resposta.Periodo.substring(6, 10);
-      dtPeriodo = ano + "-" + mes + "-" + dia;
-      console.log("setPeriodo Resposta -> " + dtPeriodo);
-      horaUltimaVerificacao = new Date().getTime();
-    });
-  });
-}
-
-//-----------------------------------------------------------------------------------------//
-
-function setLocais() {
-  let soap = require("soap");
-
-  soap.createClient(BASE_URL, function(err, client) {
-    console.log("createClient");
-    client.Wsretornalocais(null, function(err, result1) {
-      console.log("WSretornalocais webservice");
-      if (err) {
-        locais = null;
-        return;
-      }
-      let resposta = JSON.parse(result1.WsretornalocaisReturn.$value);
-      console.log("doObterLocais Resposta ->", JSON.stringify(resposta.locais));
-      locais = resposta.locais;
-      horaUltimaVerificacao = new Date().getTime();
-    });
-  });
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -411,6 +395,9 @@ function doLoginPaciente(req, resp) {
       
       let sessao = new SessaoGuiaRosa();
 
+      ###
+        
+      inicializarSessao(login, senha, resposta.nome, false)
       sessao.tempoCorrente = new Date();
       sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
       sessao.login = login;
@@ -933,6 +920,10 @@ async function doPgtoDebito(req, resp) {
   console.log("json doPgtoDebito");
   console.log(myJson);
 
+  
+  
+  
+  
   resp.json(myJson);
 }
 
