@@ -151,13 +151,13 @@ function SessaoGuiaRosa(login, senha, nome, ehMedico) {
   this.login = login;
   this.senha = senha;
   this.nome = nome;
-  this.celular = null;
-  this.email = null;
-  this.rua = null;
-  this.numero = null;
-  this.complemento = null;
-  this.bairro = null;
-  this.cep = null;
+  this.celular = "";
+  this.email = "";
+  this.rua = "";
+  this.numero = "";
+  this.complemento = "";
+  this.bairro = "";
+  this.cep = "";
   this.ehMedico = ehMedico;
   
   this.merchantOrderId = null;
@@ -167,18 +167,72 @@ function SessaoGuiaRosa(login, senha, nome, ehMedico) {
 
 //-----------------------------------------------------------------------------------------//
 
-SessaoGuiaRosa.prototype.setCadastro = function( celular, email, rua, numero, complemento, bairro, cep) {
-  sessao.celular = celular;
-  sessao.email = email;
-  sessao.rua = rua;
-  sessao.numero = numero;
-  sessao.complemento = complemento;
-  sessao.bairro = bairro;
-  sessao.cep = cep;
+SessaoGuiaRosa.prototype.setCadastro = function(celular, email, rua, numero, complemento, bairro, cep) {
+  if(complemento == "null")
+    complemento = "";
+  
+  this.celular = celular;
+  this.email = email;
+  this.rua = rua;
+  this.numero = numero;
+  this.complemento = complemento;
+  this.bairro = bairro;
+  this.cep = cep;
 }
 
 //-----------------------------------------------------------------------------------------//
   
+function Agendamento(nome, cpf, email, id, numeroCartao, nomeCartao, bandeira, me, senha, nome, ehMedico) {
+  let nome = req.params.nome;
+  let cpf = req.params.cpf;
+  let email = req.params.email;
+  let id = req.params.id;
+  let numeroCartao = req.params.numeroCartao;
+  let nomeCartao = req.params.nomeCartao;
+  let bandeira = req.params.bandeira;
+  let mesValidade = req.params.mesValidade;
+  let anoValidade = req.params.anoValidade;
+  let cvv = req.params.cvv;
+  let valor = req.params.valor;
+
+  this.tempoCorrente = new Date();
+  this.session_id = this.tempoCorrente.getTime().valueOf();
+  this.login = login;
+  this.senha = senha;
+  this.nome = nome;
+  this.celular = "";
+  this.email = "";
+  this.rua = "";
+  this.numero = "";
+  this.complemento = "";
+  this.bairro = "";
+  this.cep = "";
+  this.ehMedico = ehMedico;
+  
+  this.merchantOrderId = null;
+  this.proofOfSale = null;
+  this.paymentId = null;
+}
+
+
+SessaoGuiaRosa.prototype.setCadastro = function(celular, email, rua, numero, complemento, bairro, cep) {
+  if(complemento == "null")
+    complemento = "";
+  
+  this.celular = celular;
+  this.email = email;
+  this.rua = rua;
+  this.numero = numero;
+  this.complemento = complemento;
+  this.bairro = bairro;
+  this.cep = cep;
+}
+
+//-----------------------------------------------------------------------------------------//
+
+
+
+
 function doInicio(req, resp) {
   console.log("+---------- ");
   console.log("| doInicio");
@@ -237,21 +291,12 @@ function doGuardarUsuarioCorrente(req, resp) {
   let rua = req.params.rua;
   let numero = req.params.numero;
   let complemento = req.params.complemento;
-  if(complemento == "null")
-    complemento = "";
   let bairro = req.params.bairro;
   let cep = req.params.cep;
 
   let sessao = new SessaoGuiaRosa(cpf, senha, nome, false);
-  
-  sessao.email = email;
-  sessao.celular = celular;
-  sessao.rua = rua;
-  sessao.numero = numero;
-  sessao.complemento = complemento;
-  sessao.bairro = bairro;
-  sessao.cep = cep;
-  
+  sessao.setCadastro(celular, email, rua, numero, complemento, bairro, cep);
+    
   usuariosAtivos.set(sessao.session_id, sessao);
 
   console.log("doGuardarUsuarioCorrente --> session_id: ", sessao.session_id);
@@ -394,14 +439,6 @@ function doLoginPaciente(req, resp) {
       
       let sessao = new SessaoGuiaRosa(login, senha, resposta.nome, false);
 
-      sessao.email = "";
-      sessao.celular = "";
-      sessao.rua = "";
-      sessao.numero = "";
-      sessao.complemento = "";
-      sessao.bairro = "";
-      sessao.cep = "";
-
       usuariosAtivos.set(sessao.session_id, sessao);
       resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
 
@@ -492,14 +529,7 @@ function doIncluirUsuarioPaciente(req, resp) {
       console.log("doIncluirUsuarioPaciente Resposta ->", resposta);
       
       let sessao = new SessaoGuiaRosa(cpf, senhaMD5, nome, false);
-
-      sessao.email = email;
-      sessao.celular = celular;
-      sessao.rua = rua;
-      sessao.numero = numero;
-      sessao.complemento = complemento;
-      sessao.bairro = bairro;
-      sessao.cep = cep;
+      sessao.setCadastro(celular, email, rua, numero, complemento, bairro, cep); 
       
       usuariosAtivos.set(sessao.session_id, sessao);
       resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
