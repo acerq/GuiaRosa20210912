@@ -423,33 +423,18 @@ export default class CtrlSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  async completarPgtoDebito(
-    codExecutante,
-    cpfPaciente,
-    nomePaciente,
-    emailPaciente,
-    codExame,
-    dataExame,
-    numCartao,
-    nomeCartao,
-    bandeira,
-    mesValidade,
-    anoValidade,
-    nomeExame,
-    nomeExecutante,
-    endereco,
-    valor,
-    forma
-  ) {
+  async completarPgtoDebito( ) {
       
   let response = await fetch("/verificarPgto", { credentials : "include" });
-      
-      
-      
-      
-      
-      
-  switch (resposta.Payment.Status) {
+  let ses = await response.json();
+    if (!ses) {
+      console.log("Erro no pagamento");
+      this.view.tirarEspera();
+      alert("Erro - pagamento não processado");
+      return;
+  }
+  
+  switch (ses.pgto.status) {
     case 0:
       alert("Pagamento não finalizado");
       break;
@@ -480,118 +465,19 @@ export default class CtrlSolicitacao {
     default:
       alert("indefinido");
       return;
-    }
-   let resposta = await response.json();
-    if (!resposta) {
-      console.log("Erro no pagamento");
-      this.view.tirarEspera();
-      alert("Erro - pagamento não processado");
-      return;
-    }
-      
-
-      
-      
-      
+    } 
       
     this.view.colocarEspera();
-    let proofOfSale = "";
-    let paymentId = "";
-    let authenticationUrl = "";
-
-    let agora = new Date();
-    let timeMillis = agora.getTime().toString();
-    //let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
-    let merchantOrderId = timeMillis;
-
-    // Processando o pagamento
-    let requisicao =
-      "/pgtodebito" +
-      "/" +
-      cpfPaciente +
-      "/" +
-      nomePaciente +
-      "/" +
-      emailPaciente +
-      "/" +
-      merchantOrderId +
-      "/" + 
-      numCartao.replace(/ /g, "") +
-      "/" +
-      nomeCartao +
-      "/" +
-      bandeira +
-      "/" +
-      mesValidade +
-      "/" +
-      anoValidade +
-      "/" +
-      valor.replace(/\.|\,/g, "");
-      
-    let response = await fetch(requisicao, { credentials : "include" });
-    let resposta = await response.json();
-    if (!resposta) {
-      console.log("Erro no pagamento");
-      this.view.tirarEspera();
-      alert("Erro - pagamento não processado");
-      return;
-    }
-    if (resposta.Payment.ReasonCode == 0) {
-      merchantOrderId = resposta.MerchantOrderId;
-      proofOfSale = resposta.Payment.ProofOfSale;
-      paymentId = resposta.Payment.PaymentId;
-    } else {
-      this.view.tirarEspera();
-      switch (resposta.Payment.ReasonCode) {
-        case 9:
-          merchantOrderId = resposta.MerchantOrderId;
-          proofOfSale = resposta.Payment.ProofOfSale;
-          paymentId = resposta.Payment.PaymentId;
-          authenticationUrl = resposta.Payment.AuthenticationUrl;
-          break;
-        case 7:
-          alert("Pagamento Recusado: Não Autorizado");
-          return;
-        case 12:
-          alert("Pagamento Recusado: Problemas com o Cartão de Débito");
-          return;
-        case 13:
-          alert("Pagamento Recusado: Cartão Cancelado");
-          return;
-        case 14:
-          alert("Pagamento Recusado: Cartão de Débito Bloqueado");
-          return;
-        case 15:
-          alert("Pagamento Recusado: Cartão Expirado");
-          return;
-        case 4:
-        case 22:
-          alert("Pagamento não realizado: Tempo Expirado");
-          return;
-        default:
-          alert("Pagamento Recusado");
-          return;
-      }
-    }
-    //
-    // Status: representa o status atual da transação.
-    // ReasonCode: representa o status da requisição.
-    // ProviderReturnCode: representa o código de resposta da transação da adquirente.
-    // Por exemplo, uma requisição de autorização poderá ter o retorno com ReasonCode=0 (Sucessfull),
-    // ou seja, a requisição finalizou com sucesso, porém, o Status poderá ser 0-Denied, por ter a
-    // transação não autorizada pela adquirente, por exemplo, ProviderReturnCode 57 (um dos códigos de negada da Cielo)
-    //
-    //
 
     // Agendamento
-    requisicao =
+    let requisicao =
       "/agendamento" +
       "/" +
       codExecutante +
       "/" +
       this.usrApp.login +
       "/" +
-      nomePaciente +
+      ses. +
       "/" +
       cpfPaciente.replace(/\.|-/g, "") +
       "/" +
