@@ -384,42 +384,37 @@ export default class CtrlSolicitacao {
       alert("Erro - pagamento não processado");
       return;
     }
-    if (resposta.Payment.ReasonCode == 0) {
-      merchantOrderId = resposta.MerchantOrderId;
-      proofOfSale = resposta.Payment.ProofOfSale;
-      paymentId = resposta.Payment.PaymentId;
-    } else {
-      this.view.tirarEspera();
-      switch (resposta.Payment.ReasonCode) {
-        case 9:
-          merchantOrderId = resposta.MerchantOrderId;
-          proofOfSale = resposta.Payment.ProofOfSale;
-          paymentId = resposta.Payment.PaymentId;
-          authenticationUrl = resposta.Payment.AuthenticationUrl;
-          break;
-        case 7:
-          alert("Pagamento Recusado: Não Autorizado");
-          return;
-        case 12:
-          alert("Pagamento Recusado: Problemas com o Cartão de Débito");
-          return;
-        case 13:
-          alert("Pagamento Recusado: Cartão Cancelado");
-          return;
-        case 14:
-          alert("Pagamento Recusado: Cartão de Débito Bloqueado");
-          return;
-        case 15:
-          alert("Pagamento Recusado: Cartão Expirado");
-          return;
-        case 4:
-        case 22:
-          alert("Pagamento não realizado: Tempo Expirado");
-          return;
-        default:
-          alert("Pagamento Recusado");
-          return;
-      }
+    this.view.tirarEspera();
+    switch (resposta.Payment.ReasonCode) {
+      case 0:
+      case 9:
+        merchantOrderId = resposta.MerchantOrderId;
+        proofOfSale = resposta.Payment.ProofOfSale;
+        paymentId = resposta.Payment.PaymentId;
+        authenticationUrl = resposta.Payment.AuthenticationUrl;
+        break;
+      case 7:
+        alert("Pagamento Recusado: Não Autorizado");
+        return;
+      case 12:
+        alert("Pagamento Recusado: Problemas com o Cartão de Débito");
+        return;
+      case 13:
+        alert("Pagamento Recusado: Cartão Cancelado");
+        return;
+      case 14:
+        alert("Pagamento Recusado: Cartão de Débito Bloqueado");
+        return;
+      case 15:
+        alert("Pagamento Recusado: Cartão Expirado");
+        return;
+      case 4:
+      case 22:
+        alert("Pagamento não realizado: Tempo Expirado");
+        return;
+      default:
+        alert("Pagamento Recusado");
+        return;
     }
     // Agendamento
     requisicao =

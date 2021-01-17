@@ -937,10 +937,12 @@ async function doPgtoDebito(req, resp) {
   console.log(respostaPgto);
   
   sessao.pgto = pgtoCC;
-  if (respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
+  if (respostaPgto.Payment) 
     pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.Status, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
   
-  resp.json(respostaPgto);
+  console.log("json doPgtoDebito sessão");
+  console.log(sessao);
+  resp.json(sessao);
 }
 
 //-----------------------------------------------------------------------------------------//
