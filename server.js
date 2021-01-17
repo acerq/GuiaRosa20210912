@@ -1062,12 +1062,9 @@ async function doVerificarPgto(req, resp) {
     "MerchantKey": "HHNUGBUVGJFMKHGMLWEWJIOEYFAXAKAJAWQCKAFB"
   };
 
-  const myBody = {};
-
   const requisicao = {
     method: "GET",
     headers: myHeaders,
-    body: JSON.stringify(myBody)
   };
 
   console.log("doVerificarPgto --> " + JSON.stringify(requisicao));

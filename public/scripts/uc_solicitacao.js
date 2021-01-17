@@ -9,6 +9,8 @@ export default class CtrlSolicitacao {
   constructor() {
     this.view = new ViewSolicitacao(this);
 
+    this.view.colocarEspera();
+
     this.daoPaciente = new DaoPaciente();
 
     this.usrApp = null;
@@ -22,15 +24,16 @@ export default class CtrlSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async init() {
-    this.view.colocarEspera();
 
     await this.obterLocais();
-
     this.usrApp = await window.retornarUsrApp();
-
     if(this.view.usuarioLogado) {
       await this.daoPaciente.abrirDB();
       await this.obterPacientes();
+      if(this.usrApp.agendamento != null) 
+        this.view.tirarEspera();
+        await this.completarPgtoDebito();
+        return;  
     }
     this.view.atualizarInterface(
       this.usrApp.ehMedico,
@@ -453,7 +456,7 @@ export default class CtrlSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  async completarPgtoDebito( ) {
+  async completarPgtoDebito() {
       
   let response = await fetch("/verificarPgto", { credentials : "include" });
   let ses = await response.json();
