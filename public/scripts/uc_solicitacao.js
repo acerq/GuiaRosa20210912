@@ -31,17 +31,17 @@ export default class CtrlSolicitacao {
     if(this.view.usuarioLogado) {
       await this.daoPaciente.abrirDB();
       await this.obterPacientes();
-      if(this.usrApp.agendamento != null) 
-        alert(this.usrApp.agendamento);
-        this.view.tirarEspera();
-        await this.completarPgtoDebito();
     }
     this.view.atualizarInterface(
       this.usrApp.ehMedico,
       this.arrayPacientes,
       this.arrayLocais
     );
-
+    if(this.view.usuarioLogado && this.usrApp.agendamento != null) {
+        alert(this.usrApp.agendamento);
+        this.view.tirarEspera();
+        await this.completarPgtoDebito();
+    }
     this.view.tirarEspera();
   }
 

@@ -1047,14 +1047,11 @@ async function doVerificarPgto(req, resp) {
   if(sessao == null) 
     return;
   
-  let paymentId = null;
-  if(sessao.pgto != null) {
-    paymentId = sessao.pgto.paymentId;
-  }
-  else
+  if(sessao.pgto == null) 
     return null;
-  
-  console.log("executando doVerificarPgto" + paymentId);
+
+  let paymentId = sessao.pgto.paymentId;
+  console.log("executando doVerificarPgto " + paymentId);
 
   const myHeaders = {
     "Content-Type": "application/json",
