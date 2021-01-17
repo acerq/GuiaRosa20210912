@@ -956,6 +956,7 @@ async function doPgtoBoleto(req, resp) {
   if(sessao == null) 
     return;
   
+  let id = req.params.id;
   let nome = req.params.nome;
   let cpf = req.params.cpf;
   let email = req.params.email;
@@ -968,6 +969,7 @@ async function doPgtoBoleto(req, resp) {
     typeof nome === "undefined" ||
     typeof cpf === "undefined" ||
     typeof email === "undefined" ||
+    typeof id === "undefined" ||
     typeof valor === "undefined" ||
     typeof exame === "undefined" ||
     typeof dataPgto === "undefined" 
@@ -983,7 +985,6 @@ async function doPgtoBoleto(req, resp) {
 
   let agora = new Date();
   let timeMillis = agora.getTime().toString();
-  let id = sessao.login + "_" + timeMillis;
 
   const myHeaders = {
     "Content-Type": "application/json",
@@ -1005,7 +1006,7 @@ async function doPgtoBoleto(req, resp) {
       Type: "Boleto",
       Amount: valor,
       BoletoNumber: id.replace("_",""),
-      Assignor: "Interclínicas ...",
+      Assignor: "Interclínicas ...", //TODO 
       Demonstrative: "Pagamento referente ao Exame " + exame,
       ExpirationDate: dataPgto,
       Identification: cpf,
