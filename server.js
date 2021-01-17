@@ -1370,6 +1370,12 @@ function startServer() {
     doPgtoBoleto
   );
   
+  // Verificar status de pagamento
+  app.get(
+    "/verificarpgto/:paymentId",
+    doVerificarPgto
+  );
+  
   // Gerar PDF de resposta
   app.get(
     "/gerarConfirmacao/:cpf/:nome/:numeroCartao/:nomeCartao/:bandeira/:dataExame/:nomeExame/:nomeExecutante/:endereco" +

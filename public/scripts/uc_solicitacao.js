@@ -441,6 +441,53 @@ export default class CtrlSolicitacao {
     valor,
     forma
   ) {
+      
+
+      
+      
+      
+      
+      
+      
+  switch (resposta.Payment.Status) {
+    case 0:
+      alert("Pagamento não finalizado");
+      break;
+    case 1:
+      alert("Pagamento por boleto autorizado");
+      break;
+    case 2:
+      alert("Pagamento confirmado e finalizado");
+      break;
+    case 3:
+      alert("Pagamento negado por autorizador");
+      return;
+    case 10:
+      alert("Pagamento Cancelado");
+      return;
+    case 11:
+      alert("Pagamento Cancelado/Estornado");
+      return;
+    case 12:
+      alert("Esperando retorno da instituição financeira");
+      return;
+    case 13:
+      alert("Pagamento cancelado por falha no processamento");
+      return;
+    case 20:
+      alert("Pagamento por crédito com recorrência agendada");
+      return;
+    default:
+      alert("indefinido");
+      return;
+    }
+
+      
+
+      
+      
+      
+      
     this.view.colocarEspera();
     let proofOfSale = "";
     let paymentId = "";
