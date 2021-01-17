@@ -164,6 +164,19 @@ function SessaoGuiaRosa(login, senha, nome, ehMedico) {
   this.proofOfSale = null;
   this.paymentId = null;
 }
+
+//-----------------------------------------------------------------------------------------//
+
+SessaoGuiaRosa.prototype.setCadastro = function( celular, email, rua, numero, complemento, bairro, cep) {
+  sessao.celular = celular;
+  sessao.email = email;
+  sessao.rua = rua;
+  sessao.numero = numero;
+  sessao.complemento = complemento;
+  sessao.bairro = bairro;
+  sessao.cep = cep;
+}
+
 //-----------------------------------------------------------------------------------------//
   
 function doInicio(req, resp) {
@@ -324,21 +337,7 @@ function doLoginMedico(req, resp) {
         }
         console.log("doLogin Resposta ->", wsResposta.WsloginReturn.$value);
         
-        let sessao = new SessaoGuiaRosa();
-
-        sessao.tempoCorrente = new Date();
-        sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
-        sessao.login = login;
-        sessao.senha = senha;
-        sessao.nome = resposta.nome;
-        sessao.email = "";
-        sessao.celular = "";
-        sessao.rua = "";
-        sessao.numero = "";
-        sessao.complemento = "";
-        sessao.bairro = "";
-        sessao.cep = "";
-        sessao.ehMedico = true;
+        let sessao = new SessaoGuiaRosa(login, senha, resposta.nome, true);
 
         usuariosAtivos.set(sessao.session_id, sessao);
         resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
@@ -393,16 +392,8 @@ function doLoginPaciente(req, resp) {
       }
       console.log("doLoginPaciente Resposta ->", wsResposta);
       
-      let sessao = new SessaoGuiaRosa();
+      let sessao = new SessaoGuiaRosa(login, senha, resposta.nome, false);
 
-      ###
-        
-      inicializarSessao(login, senha, resposta.nome, false)
-      sessao.tempoCorrente = new Date();
-      sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
-      sessao.login = login;
-      sessao.senha = senha;
-      sessao.nome = resposta.nome;
       sessao.email = "";
       sessao.celular = "";
       sessao.rua = "";
@@ -410,7 +401,6 @@ function doLoginPaciente(req, resp) {
       sessao.complemento = "";
       sessao.bairro = "";
       sessao.cep = "";
-      sessao.ehMedico = false;
 
       usuariosAtivos.set(sessao.session_id, sessao);
       resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
@@ -501,13 +491,8 @@ function doIncluirUsuarioPaciente(req, resp) {
       let resposta = JSON.parse(result1.WsincluipacienteReturn.$value);
       console.log("doIncluirUsuarioPaciente Resposta ->", resposta);
       
-      let sessao = new SessaoGuiaRosa();
+      let sessao = new SessaoGuiaRosa(cpf, senhaMD5, nome, false);
 
-      sessao.tempoCorrente = new Date();
-      sessao.session_id = sessao.tempoCorrente.getTime().valueOf();
-      sessao.login = cpf;
-      sessao.senha = senhaMD5;
-      sessao.nome = nome;
       sessao.email = email;
       sessao.celular = celular;
       sessao.rua = rua;
@@ -515,7 +500,6 @@ function doIncluirUsuarioPaciente(req, resp) {
       sessao.complemento = complemento;
       sessao.bairro = bairro;
       sessao.cep = cep;
-      sessao.ehMedico = false;
       
       usuariosAtivos.set(sessao.session_id, sessao);
       resp.cookie(SESSION_ID, sessao.session_id, { maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true });
