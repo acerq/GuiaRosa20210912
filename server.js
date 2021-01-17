@@ -204,6 +204,14 @@ function PgtoCredito(id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, m
 
 //-----------------------------------------------------------------------------------------//
 
+PgtoCredito.prototype.setDadosPgto = function(merchantOrderId, proofOfSale, paymentId) {
+  this.merchantOrderId = merchantOrderId;
+  this.proofOfSale = proofOfSale;
+  this.paymentId = paymentId;
+}
+
+//-----------------------------------------------------------------------------------------//
+
 function doInicio(req, resp) {
   console.log("+---------- ");
   console.log("| doInicio");
@@ -801,60 +809,15 @@ async function doPgtoCC(req, resp) {
     requisicao
   );
   console.log("fetch doPgtoCC");
-  const myJson = await responseBraspag.json();
+  const respostaPgto = await responseBraspag.json();
   console.log("json doPgtoCC");
-  console.log(myJson);
+  console.log(respostaPgto);
   
-  pgtoCC.setDadosPgto()
   sessao.pgto = pgtoCC;
+  if (respostaPgto && respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
+    pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
   
-  
-  
-  
-      if (!resposta || !resposta.Payment) {
-      console.log("Erro no pagamento");
-      this.view.tirarEspera();
-      let mensagem = "Erro - pagamento não processado";
-      if(resposta.Code)
-        mensagem += ": #" + resposta.Code;
-      return;
-    }
-    if (resposta.Payment.ReasonCode == 0) {
-      merchantOrderId = resposta.MerchantOrderId;
-      proofOfSale = resposta.Payment.ProofOfSale;
-      paymentId = resposta.Payment.PaymentId;
-    } else {
-      this.view.tirarEspera();
-      switch (resposta.Payment.ReasonCode) {
-        case 7:
-          alert("Pagamento Recusado: Não Autorizado");
-          return;
-        case 12:
-          alert("Pagamento Recusado: Problemas com o Cartão de Crédito");
-          return;
-        case 13:
-          alert("Pagamento Recusado: Cartão Cancelado");
-          return;
-        case 14:
-          alert("Pagamento Recusado: Cartão de Crédito Bloqueado");
-          return;
-        case 15:
-          alert("Pagamento Recusado: Cartão Expirado");
-          return;
-        case 4:
-        case 22:
-          alert("Pagamento não realizado: Tempo Expirado");
-          return;
-        default:
-          alert("Pagamento Recusado");
-          return;
-      }
-    }
-
-  
-  
-
-  resp.json(myJson);
+  resp.json(respostaPgto);
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -894,6 +857,8 @@ async function doPgtoDebito(req, resp) {
   }
 
   console.log("parâmetros ok doPgtoDebito ");
+    
+  let pgtoCC = new PgtoCredito(id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, mesValidade, anoValidade, null, valor);
 
   const myHeaders = {
     "Content-Type": "application/json",
@@ -952,15 +917,16 @@ async function doPgtoDebito(req, resp) {
     requisicao
   );
   console.log("fetch doPgtoDebito");
-  const myJson = await responseBraspag.json();
+  
+  const respostaPgto = await responseBraspag.json();
   console.log("json doPgtoDebito");
-  console.log(myJson);
-
+  console.log(respostaPgto);
   
+  sessao.pgto = pgtoCC;
+  if (respostaPgto && respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
+    pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
   
-  
-  
-  resp.json(myJson);
+  resp.json(respostaPgto);
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -998,6 +964,8 @@ async function doPgtoBoleto(req, resp) {
   }
 
   console.log("parâmetros ok doPgtoBoleto");
+
+  let pgtoCC = new PgtoCredito(id, nome, cpf, email, null, null, null, null, null, null, valor);
 
   let agora = new Date();
   let timeMillis = agora.getTime().toString();
@@ -1046,11 +1014,15 @@ async function doPgtoBoleto(req, resp) {
     requisicao
   );
   console.log("fetch doPgtoBoleto");
-  const myJson = await responseBraspag.json();
+  const respostaPgto = await responseBraspag.json();
   console.log("json doPgtoBoleto");
-  console.log(myJson);
-
-  resp.json(myJson);
+  console.log(respostaPgto);
+  
+  sessao.pgto = pgtoCC;
+  if (respostaPgto && respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
+    pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
+  
+  resp.json(respostaPgto);
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -1060,6 +1032,7 @@ async function doVerificarPgto(req, resp) {
   if(sessao == null) 
     return;
   
+  if(sessao.)
   let paymentId = req.params.paymentId;
 
   console.log("executando doVerificarPgto" + paymentId);
