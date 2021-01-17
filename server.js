@@ -204,7 +204,8 @@ function PgtoCredito(id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, m
 
 //-----------------------------------------------------------------------------------------//
 
-PgtoCredito.prototype.setDadosPgto = function(merchantOrderId, proofOfSale, paymentId) {
+PgtoCredito.prototype.setDadosPgto = function(merchantOrderId, status, proofOfSale, paymentId) {
+  this.status = status;
   this.merchantOrderId = merchantOrderId;
   this.proofOfSale = proofOfSale;
   this.paymentId = paymentId;
@@ -814,8 +815,8 @@ async function doPgtoCC(req, resp) {
   console.log(respostaPgto);
   
   sessao.pgto = pgtoCC;
-  if (respostaPgto && respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
-    pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
+  if (respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
+    pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.Status, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
   
   resp.json(respostaPgto);
 }
@@ -923,8 +924,8 @@ async function doPgtoDebito(req, resp) {
   console.log(respostaPgto);
   
   sessao.pgto = pgtoCC;
-  if (respostaPgto && respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
-    pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
+  if (respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
+    pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.Status, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
   
   resp.json(respostaPgto);
 }
@@ -1019,8 +1020,8 @@ async function doPgtoBoleto(req, resp) {
   console.log(respostaPgto);
   
   sessao.pgto = pgtoCC;
-  if (respostaPgto && respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
-    pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
+  if (respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
+    pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.Status, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
   
   resp.json(respostaPgto);
 }
@@ -1032,17 +1033,14 @@ async function doVerificarPgto(req, resp) {
   if(sessao == null) 
     return;
   
-  if(sessao.)
-  let paymentId = req.params.paymentId;
-
-  console.log("executando doVerificarPgto" + paymentId);
-  if (typeof paymentId === "undefined") {
-    console.log("undefined 0012");
-    resp.json(JSON.parse('{"erro" : "[Erro:#0012] Solicitação Inválida"}'));
-    return;
+  let paymentId = null;
+  if(sessao.pgto != null) {
+    paymentId = sessao.pgto.paymentId;
   }
-
-  console.log("parâmetros ok doVerificarPgto");
+  else
+    return null;
+  
+  console.log("executando doVerificarPgto" + paymentId);
 
   const myHeaders = {
     "Content-Type": "application/json",
@@ -1372,7 +1370,7 @@ function startServer() {
   
   // Verificar status de pagamento
   app.get(
-    "/verificarpgto/:paymentId",
+    "/verificarPgto",
     doVerificarPgto
   );
   

@@ -442,7 +442,7 @@ export default class CtrlSolicitacao {
     forma
   ) {
       
-
+  let response = await fetch("/verificarPgto", { credentials : "include" });
       
       
       
@@ -481,7 +481,13 @@ export default class CtrlSolicitacao {
       alert("indefinido");
       return;
     }
-
+   let resposta = await response.json();
+    if (!resposta) {
+      console.log("Erro no pagamento");
+      this.view.tirarEspera();
+      alert("Erro - pagamento não processado");
+      return;
+    }
       
 
       
