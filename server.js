@@ -160,9 +160,7 @@ function SessaoGuiaRosa(login, senha, nome, ehMedico) {
   this.cep = "";
   this.ehMedico = ehMedico;
   
-  this.merchantOrderId = null;
-  this.proofOfSale = null;
-  this.paymentId = null;
+  this.pgto = null;
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -182,56 +180,29 @@ SessaoGuiaRosa.prototype.setCadastro = function(celular, email, rua, numero, com
 
 //-----------------------------------------------------------------------------------------//
   
-function Agendamento(nome, cpf, email, id, numeroCartao, nomeCartao, bandeira, me, senha, nome, ehMedico) {
-  let nome = req.params.nome;
-  let cpf = req.params.cpf;
-  let email = req.params.email;
-  let id = req.params.id;
-  let numeroCartao = req.params.numeroCartao;
-  let nomeCartao = req.params.nomeCartao;
-  let bandeira = req.params.bandeira;
-  let mesValidade = req.params.mesValidade;
-  let anoValidade = req.params.anoValidade;
-  let cvv = req.params.cvv;
-  let valor = req.params.valor;
-
-  this.tempoCorrente = new Date();
-  this.session_id = this.tempoCorrente.getTime().valueOf();
-  this.login = login;
-  this.senha = senha;
+function PgtoCredito(id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, mesValidade, anoValidade, cvv, valor) {
+  this.id = id;
   this.nome = nome;
-  this.celular = "";
-  this.email = "";
-  this.rua = "";
-  this.numero = "";
-  this.complemento = "";
-  this.bairro = "";
-  this.cep = "";
-  this.ehMedico = ehMedico;
+  this.cpf = cpf;
+  this.email = email;
+  this.numeroCartao = numeroCartao;
+  this.nomeCartao = this.nomeCartao;
+  this.bandeira = bandeira;
+  this.mesValidade = mesValidade;
+  this.anoValidade = anoValidade;
+  this.cvv = cvv;
+  this.valor = valor;
+  
+  this.merchantOrderId = null;
+  this.proofOfSale = null;
+  this.paymentId = null;
   
   this.merchantOrderId = null;
   this.proofOfSale = null;
   this.paymentId = null;
 }
 
-
-SessaoGuiaRosa.prototype.setCadastro = function(celular, email, rua, numero, complemento, bairro, cep) {
-  if(complemento == "null")
-    complemento = "";
-  
-  this.celular = celular;
-  this.email = email;
-  this.rua = rua;
-  this.numero = numero;
-  this.complemento = complemento;
-  this.bairro = bairro;
-  this.cep = cep;
-}
-
 //-----------------------------------------------------------------------------------------//
-
-
-
 
 function doInicio(req, resp) {
   console.log("+---------- ");
@@ -782,6 +753,8 @@ async function doPgtoCC(req, resp) {
   }
 
   console.log("parâmetros ok doPgtoCC");
+  
+  let pgtoCC = new PgtoCredito(id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, mesValidade, anoValidade, cvv, valor);
 
   const myHeaders = {
     "Content-Type": "application/json",
@@ -831,6 +804,55 @@ async function doPgtoCC(req, resp) {
   const myJson = await responseBraspag.json();
   console.log("json doPgtoCC");
   console.log(myJson);
+  
+  pgtoCC.setDadosPgto()
+  sessao.pgto = pgtoCC;
+  
+  
+  
+  
+      if (!resposta || !resposta.Payment) {
+      console.log("Erro no pagamento");
+      this.view.tirarEspera();
+      let mensagem = "Erro - pagamento não processado";
+      if(resposta.Code)
+        mensagem += ": #" + resposta.Code;
+      return;
+    }
+    if (resposta.Payment.ReasonCode == 0) {
+      merchantOrderId = resposta.MerchantOrderId;
+      proofOfSale = resposta.Payment.ProofOfSale;
+      paymentId = resposta.Payment.PaymentId;
+    } else {
+      this.view.tirarEspera();
+      switch (resposta.Payment.ReasonCode) {
+        case 7:
+          alert("Pagamento Recusado: Não Autorizado");
+          return;
+        case 12:
+          alert("Pagamento Recusado: Problemas com o Cartão de Crédito");
+          return;
+        case 13:
+          alert("Pagamento Recusado: Cartão Cancelado");
+          return;
+        case 14:
+          alert("Pagamento Recusado: Cartão de Crédito Bloqueado");
+          return;
+        case 15:
+          alert("Pagamento Recusado: Cartão Expirado");
+          return;
+        case 4:
+        case 22:
+          alert("Pagamento não realizado: Tempo Expirado");
+          return;
+        default:
+          alert("Pagamento Recusado");
+          return;
+      }
+    }
+
+  
+  
 
   resp.json(myJson);
 }
