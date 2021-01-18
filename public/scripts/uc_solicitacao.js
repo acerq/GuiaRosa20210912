@@ -38,7 +38,6 @@ export default class CtrlSolicitacao {
       this.arrayLocais
     );
     if(this.view.usuarioLogado && this.usrApp.agendamento != null) {
-        alert(this.usrApp.agendamento);
         this.view.tirarEspera();
         await this.completarPgtoDebito();
     }
@@ -530,11 +529,11 @@ export default class CtrlSolicitacao {
         "/" +
         dataExame +
         "/" +
-        "ses.agendamento.nomeExame" + //TODO
+        ses.agendamento.nomeExame + //TODO
         "/" +
-        "ses.agendamento.nomeExecutante" +
+        ses.agendamento.nomeExecutante +
         "/" +
-        "ses.pgto.endereco" +
+        ses.agendamento.enderecoExecutante +
         "/" +
         valor +
         "/" +

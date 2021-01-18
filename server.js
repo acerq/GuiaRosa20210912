@@ -708,7 +708,7 @@ function doAgendamento(req, resp) {
     cpf +
     '",' +
     '"CD_EXAME":"' +
-    exame +
+    codExame +
     '",' +
     '"DT_EXAME":"' +
     acertaData(dataExame) +
@@ -1336,11 +1336,9 @@ function startServer() {
 
   // Envio de Solicitação de Agendamento de Exame
   app.get(
-    "/agendamento/:executante/:solicitante/:cpf/:paciente/:codExame/:nomeExame/:nomeExecutante/:enderecoExecutante/:data/:faturar",
+    "/agendamento/:executante/:solicitante/:paciente/:cpf/:codExame/:nomeExame/:nomeExecutante/:enderecoExecutante/:data/:faturar",
     doAgendamento
   );
-  
-  https://guia-rosa.glitch.me/agendamento/5401/11111111111/Jos%C3%A9%20da%20Silva/11111111111/100L/ANATOMO%20PATOLOGICO%20-%20APA/LABORATORIO%20AJA/AV.DOM%20HELDER%20CAMARA,%206991%20%20SALA%2003%20%20-%20PIEDADE/2021-01-19/S
   
   // Pagamento por cartão de crédito
   app.get(
