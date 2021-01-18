@@ -330,7 +330,7 @@ export default class CtrlSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  async enviarAgendamentoPgtoDebito(
+  async enviarAgendamentoPgtoDebito( 
     codExecutante,
     cpfPaciente,
     nomePaciente,

@@ -211,18 +211,17 @@ PgtoCredito.prototype.setDadosPgto = function(merchantOrderId, status, proofOfSa
 
 //-----------------------------------------------------------------------------------------//
 
-function Agendamento(executante, solicitante, paciente, cpf, exame, dataExame, faturar) {
+function Agendamento(executante, solicitante, paciente, cpf, codExame, nomeExame, nomeExecutante, enderecoExecutante, dataExame, faturar) {
   this.executante = executante;
   this.solicitante = solicitante;
   this.paciente = paciente;
   this.cpf = cpf;
-  this.exame = exame;
+  this.codExame = codExame;
+  this.nomeExame = nomeExame;
+  this.nomeExecutante = nomeExecutante;
+  this.enderecoExecutante = enderecoExecutante;
   this.dataExame = dataExame;
   this.faturar = faturar;
-  
-    let agendamento = new Agendamento(executante, solicitante, paciente, cpf, codExame, nomeExame, 
-                                    nomeExecutante, enderecoExecutante, dataExame, faturar);
-
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -1258,6 +1257,9 @@ async function doGerarConfirmacao(req, resp) {
        .text(url, { link: url, underline: true });
   }
   pdf.end();
+  
+  sessao.agendamento = null;
+  sessao.pgto = null;
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -1334,10 +1336,11 @@ function startServer() {
 
   // Envio de Solicitação de Agendamento de Exame
   app.get(
-    "/agendamento/:executante/:solicitante/:paciente/:cpf/:codexame/:nomeexame/:nomexecutante/:endereco/:data/:faturar",
+    "/agendamento/:executante/:solicitante/:cpf/:paciente/:codExame/:nomeExame/:nomeExecutante/:enderecoExecutante/:data/:faturar",
     doAgendamento
   );
   
+  https://guia-rosa.glitch.me/agendamento/5401/11111111111/Jos%C3%A9%20da%20Silva/11111111111/100L/ANATOMO%20PATOLOGICO%20-%20APA/LABORATORIO%20AJA/AV.DOM%20HELDER%20CAMARA,%206991%20%20SALA%2003%20%20-%20PIEDADE/2021-01-19/S
   
   // Pagamento por cartão de crédito
   app.get(
