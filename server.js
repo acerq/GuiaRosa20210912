@@ -1056,20 +1056,18 @@ async function doVerificarPgto(req, resp) {
   console.log("executando doVerificarPgto " + paymentId);
 
   const myHeaders = {
-    "Content-Type": "application/json",
     "MerchantId": "0c476fc2-f8f5-4e85-a60c-366463f210e2",
     "MerchantKey": "HHNUGBUVGJFMKHGMLWEWJIOEYFAXAKAJAWQCKAFB"
   };
 
   const requisicao = {
     method: "GET",
-    headers: myHeaders,
-    body: null
+    headers: myHeaders
   };
 
   console.log("doVerificarPgto --> " + JSON.stringify(requisicao));
   const responseBraspag = await fetch(
-    "https://apisandbox.braspag.com.br/v2/sales/" + paymentId,
+    "https://apiquerysandbox.braspag.com.br/v2/sales/" + paymentId,
     requisicao
   );
   console.log("fetch doVerificarPgto");
