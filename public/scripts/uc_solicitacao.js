@@ -254,6 +254,30 @@ export default class CtrlSolicitacao {
       "/" +
       "S";
     //TODO faturar;
+      
+      
+            "/" +
+      codExecutante +
+      "/" +
+      this.usrApp.login +
+      "/" +
+      nomePaciente +
+      "/" +
+      cpfPaciente.replace(/\.|-/g, "") +
+      "/" +
+      codExame +
+      "/" +
+      nomeExame +
+      "/" +
+      nomeExecutante +
+      "/" +
+      endereco +
+      "/" +
+      dataExame +
+      "/" +
+      "S";
+
+      
     console.log("(app.js) Executando agendamento");
     response = await fetch(requisicao, { credentials : "include" });
     resposta = await response.json();
@@ -430,6 +454,12 @@ export default class CtrlSolicitacao {
       "/" +
       codExame +
       "/" +
+      nomeExame +
+      "/" +
+      nomeExecutante +
+      "/" +
+      endereco +
+      "/" +
       dataExame +
       "/" +
       "S";
@@ -534,7 +564,7 @@ export default class CtrlSolicitacao {
         "/" +
         ses.pgto.paymentId +
         "/" +
-        ""; // URL 
+        "null"; // URL 
 
       response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
