@@ -219,6 +219,10 @@ function Agendamento(executante, solicitante, paciente, cpf, exame, dataExame, f
   this.exame = exame;
   this.dataExame = dataExame;
   this.faturar = faturar;
+  
+    let agendamento = new Agendamento(executante, solicitante, paciente, cpf, codExame, nomeExame, 
+                                    nomeExecutante, enderecoExecutante, dataExame, faturar);
+
 }
 
 //-----------------------------------------------------------------------------------------//
@@ -652,12 +656,15 @@ function doAgendamento(req, resp) {
     return;
   
   let soap = require("soap");
-
+  
   let executante = req.params.executante;
   let solicitante = req.params.solicitante;
   let paciente = req.params.paciente;
   let cpf = req.params.cpf;
-  let exame = req.params.exame;
+  let codExame = req.params.codExame;
+  let nomeExame = req.params.nomeExame;
+  let nomeExecutante = req.params.nomeExecutante;
+  let enderecoExecutante = req.params.enderecoExecutante;
   let dataExame = req.params.data;
   let faturar = req.params.faturar;
 
@@ -672,7 +679,10 @@ function doAgendamento(req, resp) {
     typeof executante === "undefined" ||
     typeof solicitante === "undefined" ||
     typeof paciente === "undefined" ||
-    typeof exame === "undefined" ||
+    typeof codExame === "undefined" ||
+    typeof nomeExame === "undefined" ||
+    typeof nomeExecutante === "undefined" ||
+    typeof enderecoExecutante === "undefined" ||
     typeof dataExame === "undefined" ||
     typeof faturar === "undefined"
   ) {
@@ -681,7 +691,8 @@ function doAgendamento(req, resp) {
     return;
   }
 
-  let agendamento = new Agendamento(executante, solicitante, paciente, cpf, exame, dataExame, faturar);
+  let agendamento = new Agendamento(executante, solicitante, paciente, cpf, codExame, nomeExame, 
+                                    nomeExecutante, enderecoExecutante, dataExame, faturar);
   sessao.agendamento = agendamento;
   
   let dados =
@@ -1323,10 +1334,11 @@ function startServer() {
 
   // Envio de Solicitação de Agendamento de Exame
   app.get(
-    "/agendamento/:executante/:solicitante/:paciente/:cpf/:exame/:data/:faturar",
+    "/agendamento/:executante/:solicitante/:paciente/:cpf/:codexame/:nomeexame/:nomexecutante/:endereco/:data/:faturar",
     doAgendamento
   );
-
+  
+  
   // Pagamento por cartão de crédito
   app.get(
     "/pgtocc/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor",

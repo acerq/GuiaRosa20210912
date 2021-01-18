@@ -246,23 +246,6 @@ export default class CtrlSolicitacao {
       "/" +
       nomePaciente +
       "/" +
-      cpfPaciente +
-      "/" +
-      codExame +
-      "/" +
-      dataExame +
-      "/" +
-      "S";
-    //TODO faturar;
-      
-      
-            "/" +
-      codExecutante +
-      "/" +
-      this.usrApp.login +
-      "/" +
-      nomePaciente +
-      "/" +
       cpfPaciente.replace(/\.|-/g, "") +
       "/" +
       codExame +
@@ -276,8 +259,7 @@ export default class CtrlSolicitacao {
       dataExame +
       "/" +
       "S";
-
-      
+      //TODO faturar;
     console.log("(app.js) Executando agendamento");
     response = await fetch(requisicao, { credentials : "include" });
     resposta = await response.json();
@@ -692,6 +674,12 @@ async enviarAgendamentoPgtoBoleto(
       cpfPaciente.replace(/\.|-/g, "") +
       "/" +
       codExame +
+      "/" +
+      nomeExame +
+      "/" +
+      nomeExecutante +
+      "/" +
+      endereco +
       "/" +
       dataExame +
       "/" +
