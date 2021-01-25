@@ -1185,7 +1185,7 @@ async function doGerarConfirmacao(req, resp) {
   );
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .fontSize(25)
-     .text("Agendamento de Exame", 170, 120);
+     .text("Voucher para Execução de Exame", 170, 120);
 
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .fontSize(14)
@@ -1205,11 +1205,6 @@ async function doGerarConfirmacao(req, resp) {
      .text("Valor: ", {continued: true})
      .font("public/fonts/SourceSansPro-Regular.ttf")
      .text("R$ " + valor + "\n");
-
-  pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
-     .text("Data: ", {continued: true})
-     .font("public/fonts/SourceSansPro-Regular.ttf")
-     .text(dataExame + "\n");
   
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .text("Agendado para: ", {continued: true})
@@ -1328,7 +1323,7 @@ function startServer() {
 
   // Envio de Solicitação de Agendamento de Exame
   app.get(
-    "/agendamento/:executante/:solicitante/:paciente/:cpf/:codExame/:nomeExame/:nomeExecutante/:enderecoExecutante/:data/:faturar",
+    "/agendamento/:executante/:solicitante/:paciente/:cpf/:codExame/:nomeExame/:nomeExecutante/:enderecoExecutante/:faturar",
     doAgendamento
   );
   
@@ -1360,7 +1355,7 @@ function startServer() {
   
   // Gerar PDF de resposta
   app.get(
-    "/gerarConfirmacao/:cpf/:nome/:numeroCartao/:nomeCartao/:bandeira/:dataExame/:nomeExame/:nomeExecutante/:endereco" +
+    "/gerarConfirmacao/:cpf/:nome/:numeroCartao/:nomeCartao/:bandeira/:nomeExame/:nomeExecutante/:endereco" +
       "/:valor/:forma/:merchantOrderId/:proofOfSale/:paymentId/:url",
     doGerarConfirmacao
   );
