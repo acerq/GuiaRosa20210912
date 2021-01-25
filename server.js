@@ -211,7 +211,7 @@ PgtoCredito.prototype.setDadosPgto = function(merchantOrderId, status, proofOfSa
 
 //-----------------------------------------------------------------------------------------//
 
-function Agendamento(executante, solicitante, paciente, cpf, codExame, nomeExame, nomeExecutante, enderecoExecutante, dataExame, faturar) {
+function Agendamento(executante, solicitante, paciente, cpf, codExame, nomeExame, nomeExecutante, enderecoExecutante, faturar) {
   this.executante = executante;
   this.solicitante = solicitante;
   this.paciente = paciente;
@@ -220,7 +220,6 @@ function Agendamento(executante, solicitante, paciente, cpf, codExame, nomeExame
   this.nomeExame = nomeExame;
   this.nomeExecutante = nomeExecutante;
   this.enderecoExecutante = enderecoExecutante;
-  this.dataExame = dataExame;
   this.faturar = faturar;
 }
 
@@ -664,7 +663,6 @@ function doAgendamento(req, resp) {
   let nomeExame = req.params.nomeExame;
   let nomeExecutante = req.params.nomeExecutante;
   let enderecoExecutante = req.params.enderecoExecutante;
-  let dataExame = req.params.data;
   let faturar = req.params.faturar;
 
   console.log("Agendamento - " + sessao.login);
@@ -682,7 +680,6 @@ function doAgendamento(req, resp) {
     typeof nomeExame === "undefined" ||
     typeof nomeExecutante === "undefined" ||
     typeof enderecoExecutante === "undefined" ||
-    typeof dataExame === "undefined" ||
     typeof faturar === "undefined"
   ) {
     console.log("undefined 0006");
@@ -691,7 +688,7 @@ function doAgendamento(req, resp) {
   }
 
   let agendamento = new Agendamento(executante, solicitante, paciente, cpf, codExame, nomeExame, 
-                                    nomeExecutante, enderecoExecutante, dataExame, faturar);
+                                    nomeExecutante, enderecoExecutante, faturar);
   sessao.agendamento = agendamento;
   
   let dados =
@@ -709,9 +706,6 @@ function doAgendamento(req, resp) {
     '",' +
     '"CD_EXAME":"' +
     codExame +
-    '",' +
-    '"DT_EXAME":"' +
-    acertaData(dataExame) +
     '",' +
     '"DT_PERIODO":"' +
     dtPeriodo.replace(/-/g, "/") +
@@ -1131,7 +1125,6 @@ async function doGerarConfirmacao(req, resp) {
   let numeroCartao = req.params.numeroCartao;
   let nomeCartao = req.params.nomeCartao;
   let bandeira = req.params.bandeira;
-  let dataExame = req.params.dataExame;
   let nomeExame = req.params.nomeExame;
   let nomeExecutante = req.params.nomeExecutante;
   let endereco = req.params.endereco;
@@ -1149,7 +1142,6 @@ async function doGerarConfirmacao(req, resp) {
     typeof numeroCartao === "undefined" ||
     typeof nomeCartao === "undefined" ||
     typeof bandeira === "undefined" ||
-    typeof dataExame === "undefined" ||
     typeof nomeExame === "undefined" ||
     typeof nomeExecutante === "undefined" ||
     typeof endereco === "undefined" ||

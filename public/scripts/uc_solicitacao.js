@@ -722,9 +722,8 @@ async enviarAgendamentoPgtoBoleto(
       this.view.tirarEspera();
       alert("Documento de confirmação '" + nomeArq + "'\nsalvo na pasta de downloads");
       
-      this.view.exibirConfirmacao(cpfPaciente, nomePaciente, dataExame, 
-                                  nomeExame, nomeExecutante, endereco, valor, "Boleto", 
-                                  merchantOrderId, url);
+      this.view.exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, 
+                                  endereco, valor, "Boleto", merchantOrderId, url);
 
       //window.history.go(-1);
     } else {
