@@ -585,7 +585,17 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     if(this.usuarioLogado)
       history.go(-1);
     else {
-      alert("Para agendar")
+      if (self.codExecutanteSelecionado == null) {
+        fnTirarEspera();
+        alert("O exame não foi escolhido.");
+        return;
+      }
+      if (self.codExameSelecionado == null) {
+        fnTirarEspera();
+        alert("O exame não foi escolhido.");
+        return;
+      }
+      alert("Para agendar, efetue seu login ou crie sua conta");
     }
   }
 
