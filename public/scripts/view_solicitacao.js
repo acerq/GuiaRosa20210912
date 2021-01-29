@@ -41,7 +41,10 @@ export default class ViewSolicitacao {
     if (this.btPacientes != null) {
       this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
       this.btEnviar.onclick = this.irParaCheckout;
-    } else this.usuarioLogado = false;
+    } else { 
+      this.usuarioLogado = false;
+      this.btSair.innerHTML = "Agendar"
+    }
 
     //---- Elementos da página de pagamento
     this.tfNomeCartao = null;

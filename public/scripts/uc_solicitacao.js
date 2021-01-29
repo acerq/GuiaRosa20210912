@@ -31,7 +31,7 @@ export default class CtrlSolicitacao {
     if(this.view.usuarioLogado) {
       await this.daoPaciente.abrirDB();
       await this.obterPacientes();
-    }
+    } 
     this.view.atualizarInterface(
       this.usrApp.ehMedico,
       this.arrayPacientes,
