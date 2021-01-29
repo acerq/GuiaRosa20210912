@@ -31,6 +31,10 @@ function setPeriodo() {
       if (err) {
         console.log("WSretornaperiodo Err -> ", err.response.body);
         dtPeriodo = null;
+
+        //TODO RETIRAR!        
+        dtPeriodo = "2021-01-01";
+
         return;
       }
       let resposta = JSON.parse(result1.WsretornaperiodoReturn.$value);
