@@ -29,6 +29,7 @@ function setPeriodo() {
     client.Wsretornaperiodo(null, function(err, result1) {
       console.log("WSretornaperiodo webservice");
       if (err) {
+        console.log("ERRO setLocais: " + JSON.stringify(err));
         console.log("WSretornaperiodo Err -> ", err.response.body);
         dtPeriodo = null;
 
@@ -59,6 +60,7 @@ function setLocais() {
     client.Wsretornalocais(null, function(err, result1) {
       console.log("WSretornalocais webservice");
       if (err) {
+        console.log("ERRO setLocais: " + JSON.stringify(err));
         locais = null;
         return;
       }
