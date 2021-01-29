@@ -35,7 +35,7 @@ export default class ViewSolicitacao {
 
     this.divResposta = document.getElementById("divResposta");
 
-    this.btSair.onclick = this.sair;
+    this.btSair.onclick = this.voltarOuAgendar;
     this.btConsultar.onclick = this.obterExames;
 
     if (this.btPacientes != null) {
@@ -401,7 +401,7 @@ export default class ViewSolicitacao {
       $("#divExame").html(msg);
 
       self.btOk.onclick = self.enviarSolicitacao;
-      self.btCancelar.onclick = self.sair;
+      self.btCancelar.onclick = self.voltarOuAgendar;
     });
   }
 
@@ -581,8 +581,12 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
 
   //-----------------------------------------------------------------------------------------//
 
-  sair() {
-    history.go(-1);
+  voltarOuAgendar() {
+    if(this.usuarioLogado)
+      history.go(-1);
+    else {
+      alert("Para agendar")
+    }
   }
 
   //-----------------------------------------------------------------------------------------//
