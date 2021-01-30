@@ -43,7 +43,7 @@ export default class ViewSolicitacao {
       this.btEnviar.onclick = this.irParaCheckout;
     } else { 
       this.usuarioLogado = false;
-      this.btSair.innerHTML = "Gerar Pré-Reserva"
+      this.btSair.innerHTML = "Gerar Voucher"
     }
 
     //---- Elementos da página de pagamento
