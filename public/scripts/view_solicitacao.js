@@ -593,7 +593,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         return;
       }
       alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
-      window.location.href = "bdpaciente.html";
+      window.location.href = "cadusuario.html";
     }
   }
 
