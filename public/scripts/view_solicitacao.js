@@ -29,12 +29,12 @@ export default class ViewSolicitacao {
     this.btPacientes = document.getElementById("btPacientes");
     this.btConsultar = document.getElementById("btConsultar");
     this.btEnviar = document.getElementById("btEnviar");
-    this.btSair = document.getElementById("btSair");
+    this.btVoltarOuAgendar = document.getElementById("btVoltarOuAgendar");
     this.usuarioLogado = true;
 
     this.divResposta = document.getElementById("divResposta");
 
-    this.btSair.onclick = this.voltarOuAgendar;
+    this.btVoltarOuAgendar.onclick = this.voltarOuAgendar;
     this.btConsultar.onclick = this.obterExames;
 
     if (this.btPacientes != null) {
@@ -42,7 +42,7 @@ export default class ViewSolicitacao {
       this.btEnviar.onclick = this.irParaCheckout;
     } else { 
       this.usuarioLogado = false;
-      this.btSair.innerHTML = "Gerar Voucher"
+      this.btVoltarOuAgendar.innerHTML = "Gerar Voucher"
     }
 
     //---- Elementos da página de pagamento
@@ -67,6 +67,8 @@ export default class ViewSolicitacao {
     this.dadosExame = null;
     this.formaPgto = null;
 
+    this.db = null; //TODO
+    
     $(document).on("keypress", "input", function(e) {
       if (e.which == 13 && e.target == self.tfExame) {
         self.obterExames();
@@ -578,7 +580,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
 
   //-----------------------------------------------------------------------------------------//
 
-  voltarOuAgendar() {
+  async voltarOuAgendar() {
     if(self.usuarioLogado)
       history.go(-1);
     else {
@@ -592,7 +594,8 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         alert("O exame não foi escolhido.");
         return;
       }
-      self.salvarConsulta();
+      await self.abrirBDConsulta();
+      await self.salvarConsulta();
       alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
       window.location.href = "cadusuario.html";
     }
@@ -612,8 +615,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
 
   //-----------------------------------------------------------------------------------------//
   
-    //-----------------------------------------------------------------------------------------//
-
   async abrirDBConsulta() {
     this.db = await new Promise(function(resolve, reject) {
       // Necessário tratar com Promise pois pode
@@ -624,16 +625,16 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         let store = db.createObjectStore("Consulta", {
           autoIncrement: true
         });
-        store.createIndex("cpf", "cpf", { unique: true });
+        store.createIndex("id", "id", { unique: true });
       };
 
       requestDB.onerror = event => {
-        alert("Erro [DAOPaciente.construtor]: " + event.target.errorCode);
+        alert("Erro [DBConsulta]: " + event.target.errorCode);
         reject(Error("Error: " + event.target.errorCode));
       };
 
       requestDB.onsuccess = event => {
-        console.log("[DAOPaciente.construtor] Sucesso");
+        console.log("[DBConsulta] Sucesso");
         if (event.target.result) resolve(event.target.result);
         else reject(Error("object not found"));
       };
@@ -641,45 +642,26 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
   }
   
  //-----------------------------------------------------------------------------------------//
-
+  
   async salvarConsulta() {
-    let requestDB = window.indexedDB.open("ConsultaUsr", 1);
+    fnColocarEspera();
 
-    requestDB.onupgradeneeded = event => {
-      let db = event.target.result;
-      let store = db.createObjectStore("ConsultaUsr", {
-        autoIncrement: true
-      });
-      store.createIndex("id", "id", { unique: true });
-    };
-
-    requestDB.onerror = event => {
-      alert("Erro [abrirBD]: " + event.target.errorCode);
-    };
-
-    async requestDB.onsuccess = event => await {
-      let db = event.target.result;
-
-      let transacao = db.transaction(["ConsultaUsr"], "readwrite");
-      transacao.oncomplete = event => {};
-      transacao.onerror = event => {
-        alert("Problemas de Conexão com o servidor: " + event.target.errorCode);
+    let db = this.db;
+    let resultado = await new Promise(function(resolve, reject) {
+      let transacao = db.transaction(["Consulta"], "readwrite");
+      transacao.oncomplete = event => {
+        console.log("[Consulta] Sucesso");
+        resolve("Ok");
       };
-      let store = transacao.objectStore("ConsultaUsr");
-    
-      var objectStoreRequest = store.clear();
-    
-      let selecao = self.dadosExame.text.split(SEPARADOR);
-      objectStoreRequest.onsuccess = function(event) {
-        objectStoreRequest = store.add({
+      let store = transacao.objectStore("Consulta");
+      store.add({
           id: 1,
           codLocalSelecionado : self.codLocalSelecionado,
           tfExame : self.tfExame.value,
           dadosExame : self.dadosExame.params.data
-          });
-        objectStoreRequest.onsuccess = function(event) {};
-      }
-    }
+      });
+    });      
+    return true;
   }
 
   //-----------------------------------------------------------------------------------------//
