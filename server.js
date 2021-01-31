@@ -426,8 +426,8 @@ function doLoginPaciente(req, resp) {
       let resposta = JSON.parse(wsResposta.WsvalidapacienteReturn.$value);
       if (resposta.status == "error") {
         console.log("-----> " + wsResposta.WsvalidapacienteReturn.$value);
-        // resp.json(JSON.parse('{"erro" : "[Erro:#0006] Login Inválido"}'));
-        // return;
+        resp.json(JSON.parse('{"erro" : "[Erro:#0006] Login Inválido"}'));
+        return;
       }
       console.log("doLoginPaciente Resposta ->", wsResposta);
       
