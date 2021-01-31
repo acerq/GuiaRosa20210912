@@ -35,14 +35,16 @@ export default class ViewSolicitacao {
     this.divResposta = document.getElementById("divResposta");
 
     this.btVoltarOuAgendar.onclick = this.voltarOuAgendar;
+    this.btVoltarOuAgendar.view = this;
     this.btConsultar.onclick = this.obterExames;
 
     if (this.btPacientes != null) {
       this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
       this.btEnviar.onclick = this.irParaCheckout;
+      this.btVoltarOuAgendar.innerHTML = "Voltar";
     } else { 
       this.usuarioLogado = false;
-      this.btVoltarOuAgendar.innerHTML = "Gerar Voucher"
+      this.btVoltarOuAgendar.innerHTML = "Gerar Voucher";
     }
 
     //---- Elementos da página de pagamento
@@ -581,21 +583,21 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
   //-----------------------------------------------------------------------------------------//
 
   async voltarOuAgendar() {
-    if(self.usuarioLogado)
+    if(this.view.usuarioLogado)
       history.go(-1);
     else {
-      if (self.codExecutanteSelecionado == null) {
+      if (this.view.codExecutanteSelecionado == null) {
         fnTirarEspera();
         alert("O exame não foi escolhido.");
         return;
       }
-      if (self.codExameSelecionado == null) {
+      if (this.view.codExameSelecionado == null) {
         fnTirarEspera();
         alert("O exame não foi escolhido.");
         return;
       }
-      await self.abrirBDConsulta();
-      await self.salvarConsulta();
+      this.view.abrirDBConsulta();
+      this.view.salvarConsulta();
       alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
       window.location.href = "cadusuario.html";
     }
@@ -617,7 +619,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
   
   async abrirDBConsulta() {
     this.db = await new Promise(function(resolve, reject) {
-      // Necessário tratar com Promise pois pode
       var requestDB = window.indexedDB.open("ConsultaUsr", 1); 
       requestDB.onupgradeneeded = event => {
         console.log("Criando IndexedDB Consulta");
