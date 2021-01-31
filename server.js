@@ -1187,7 +1187,7 @@ async function doGerarConfirmacao(req, resp) {
   );
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .fontSize(25)
-     .text("Voucher para Execução de Exame", 170, 120);
+     .text("Voucher para Execução de Exame", 135, 120);
 
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .fontSize(14)
@@ -1196,12 +1196,13 @@ async function doGerarConfirmacao(req, resp) {
      .text(merchantOrderId + "\n");
 
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
+     .text("ID Guia Rosa: #" , 80, 200, {continued: true})
      .text("Exame Agendado:\n");
 
   pdf.font("public/fonts/SourceSansPro-Regular.ttf")
-     .text("    " + nomeExame + "\n")
-     .text("    " + nomeExecutante + "\n")
-     .text("    " + endereco + "\n");
+     .text("       " + nomeExame + "\n")
+     .text("       " + nomeExecutante + "\n")
+     .text("       " + endereco + "\n");
 
   pdf.font("public/fonts/SourceSansPro-SemiBold.ttf")
      .text("Valor: ", {continued: true})

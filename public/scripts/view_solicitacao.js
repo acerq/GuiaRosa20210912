@@ -24,7 +24,6 @@ export default class ViewSolicitacao {
     this.tfExame = document.getElementById("tfExame");
     this.cbPaciente = document.getElementById("cbPaciente");
     this.cbExame = document.getElementById("cbExame");
-    this.dtExame = document.getElementById("dtExame");
     this.cbFaturar = document.getElementById("cbFaturar");
     this.pwSenha = document.getElementById("pwSenha");
     this.btPacientes = document.getElementById("btPacientes");
@@ -541,7 +540,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         self.nomePaciente,
         self.emailPaciente,
         self.codExameSelecionado,
-        self.dtExame.value,
         numCartao,
         nomeCartao,
         bandeira,
@@ -562,7 +560,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           self.nomePaciente,
           self.emailPaciente,
           self.codExameSelecionado,
-          self.dtExame.value,
           numCartao,
           nomeCartao,
           bandeira,
@@ -582,7 +579,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
   //-----------------------------------------------------------------------------------------//
 
   voltarOuAgendar() {
-    if(this.usuarioLogado)
+    if(self.usuarioLogado)
       history.go(-1);
     else {
       if (self.codExecutanteSelecionado == null) {
