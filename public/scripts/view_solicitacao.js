@@ -592,7 +592,8 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         alert("O exame não foi escolhido.");
         return;
       }
-      alert("Para emitir um voucher para este exame, efetue seu login ou crie sua conta");
+      alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
+      window.location.href = "bdpaciente.html";
     }
   }
 
