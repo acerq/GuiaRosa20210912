@@ -743,44 +743,6 @@ async enviarAgendamentoPgtoBoleto(
     history.go(-1);
   }
 
-  //-----------------------------------------------------------------------------------------//
-  
-  abrirDbConsulta() {
-  // Verificações
-  let requestDB = window.indexedDB.open("ConsultaUsr", 1);
-
-  requestDB.onupgradeneeded = event => {
-    let db = event.target.result;
-    let store = db.createObjectStore("ConsultaUsr", {
-      autoIncrement: true
-    });
-    store.createIndex("id", "id", { unique: true });
-  };
-
-  requestDB.onerror = event => {
-    alert("Erro [abrirBD]: " + event.target.errorCode);
-  };
-
-  requestDB.onsuccess = event => {
-    let db = event.target.result;
-
-    let transacao = db.transaction(["ConsultaUsr"], "readwrite");
-    transacao.oncomplete = event => {};
-    transacao.onerror = event => {
-      alert("Problemas de Conexão com o servidor: " + event.target.errorCode);
-    };
-    let store = transacao.objectStore("ConsultaUsr");
-    var objectStoreRequest = store.clear();
-    objectStoreRequest.onsuccess = function(event) {
-      objectStoreRequest = store.add({
-        id: 1,
-        ehMedico: false
-        });
-        objectStoreRequest.onsuccess = function(event) {};
-      }
-    }
-  }
-
 //-----------------------------------------------------------------------------------------//
 
 }
