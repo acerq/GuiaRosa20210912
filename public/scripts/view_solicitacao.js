@@ -42,6 +42,7 @@ export default class ViewSolicitacao {
       this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
       this.btEnviar.onclick = this.irParaCheckout;
       this.btVoltarOuAgendar.innerHTML = "Voltar";
+      this.limparConsulta();
     } else { 
       this.usuarioLogado = false;
       this.btVoltarOuAgendar.innerHTML = "Gerar Voucher";
@@ -635,11 +636,9 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         console.log("[DBConsulta] Sucesso");
         if (event.target.result) resolve(event.target.result);
         else reject(Error("object not found"));
-        alert("salvarConsulta 1");
       };
     });
     
-    alert("salvarConsulta 2");
     let resultado = await new Promise(function(resolve, reject) {
     try {
         let transacao = db.transaction(["Consulta"], "readwrite");
@@ -650,7 +649,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           tfExame : self.tfExame.value,
           dadosExame : self.dadosExame.id
         });
-        alert("salvarConsulta 3");
         resolve("Ok");
 
       } catch (e) {
