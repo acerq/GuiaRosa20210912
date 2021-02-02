@@ -38,6 +38,7 @@ export default class ViewSolicitacao {
     this.btVoltarOuAgendar.view = this;
     this.btConsultar.onclick = this.obterExames;
 
+    this.db = null;
     if (this.btPacientes != null) {
       this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
       this.btEnviar.onclick = this.irParaCheckout;
@@ -582,20 +583,21 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
   //-----------------------------------------------------------------------------------------//
 
   async voltarOuAgendar() {
-    if(this.view.usuarioLogado)
+    if(self.usuarioLogado)
       history.go(-1);
     else {
-      if (this.view.codExecutanteSelecionado == null) {
+      if (self.codExecutanteSelecionado == null) {
         fnTirarEspera();
         alert("O exame não foi escolhido.");
         return;
       }
-      if (this.view.codExameSelecionado == null) {
+      if (self.codExameSelecionado == null) {
         fnTirarEspera();
         alert("O exame não foi escolhido.");
         return;
       }
-      await this.view.salvarConsulta();
+      self.db = await self.abrirDbConsulta();
+      await self.salvarConsulta(self.db);
       alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
       window.location.href = "cadusuario.html";
     }
@@ -615,11 +617,66 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
 
   //-----------------------------------------------------------------------------------------//
   
+  async abrirDbConsulta() {
+    let db = await new Promise(function(resolve, reject) {
+      var requestDB = window.indexedDB.open("ConsultaUsr", 1); 
+      requestDB.onupgradeneeded = event => {
+        console.log("Criando IndexedDB Consulta");
+        let db = event.target.result;
+        let store = db.createObjectStore("Consulta", {
+          autoIncrement: true
+        });
+        store.createIndex("id", "id", { unique: true });
+        resolve(event.target.result);
+      };
+
+      requestDB.onerror = event => {
+        alert("Erro [DBConsulta]: " + event.target.errorCode);
+        reject(Error("Error: " + event.target.errorCode));
+      };
+
+      requestDB.onsuccess = event => {
+        console.log("[DBConsulta] Sucesso");
+        if (event.target.result) resolve(event.target.result);
+        else reject(Error("object not found"));
+      };
+    });
+    self.db = db;
+    return db;
+  }  
+    
+    
+  //-----------------------------------------------------------------------------------------//
+  
+  async salvarConsulta(db) {
+    let resultado = await new Promise(function(resolve, reject) {
+    try {
+        let transacao = db.transaction(["Consulta"], "readwrite");
+        let store = transacao.objectStore("Consulta");
+        store.add({
+          id: 1,
+          codLocalSelecionado : self.codLocalSelecionado,
+          tfExame : self.tfExame.value,
+          dadosExame : self.dadosExame.id
+        });
+        resolve("Ok");
+
+      } catch (e) {
+        alert("salvarConsulta 4 " + e);
+        resolve([]);
+      }
+    });      
+    return resultado;
+  }
+  
+ //-----------------------------------------------------------------------------------------//
+
   async salvarConsulta() {
     let db = await new Promise(function(resolve, reject) {
       var requestDB = window.indexedDB.open("ConsultaUsr", 1); 
       requestDB.onupgradeneeded = event => {
         console.log("Criando IndexedDB Consulta");
+        let db = event.target.result;
         let store = db.createObjectStore("Consulta", {
           autoIncrement: true
         });
