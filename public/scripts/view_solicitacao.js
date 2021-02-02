@@ -594,7 +594,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         alert("O exame não foi escolhido.");
         return;
       }
-      this.view.salvarConsulta();
+      await this.view.salvarConsulta();
       alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
       window.location.href = "cadusuario.html";
     }
@@ -635,9 +635,11 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         console.log("[DBConsulta] Sucesso");
         if (event.target.result) resolve(event.target.result);
         else reject(Error("object not found"));
+        alert("salvarConsulta 1");
       };
     });
     
+    alert("salvarConsulta 2");
     let resultado = await new Promise(function(resolve, reject) {
     try {
         let transacao = db.transaction(["Consulta"], "readwrite");
@@ -648,8 +650,11 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           tfExame : self.tfExame.value,
           dadosExame : self.dadosExame.params.data
         });
+        alert("salvarConsulta 3");
         resolve("Ok");
+
       } catch (e) {
+        alert("salvarConsulta 4 " + e);
         resolve([]);
       }
     });      
