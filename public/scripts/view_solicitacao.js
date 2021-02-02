@@ -93,9 +93,11 @@ export default class ViewSolicitacao {
       this.db = await this.abrirDbConsulta();
       let array = await this.verificarConsultaArmazenada(this.db);
       if(array.length != 0) {
-        
+        this.tfExame = array.tfExame;
+        //codLocalSelecionado : self.codLocalSelecionado,
+        //dadosExame : self.dadosExame.id
       }
-      //TODO       this.limparConsulta();
+      //TODO this.limparConsulta();
       
       if (ehMedico) {
         let i;
