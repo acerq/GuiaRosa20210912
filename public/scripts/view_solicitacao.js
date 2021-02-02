@@ -627,7 +627,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           autoIncrement: true
         });
         store.createIndex("id", "id", { unique: true });
-        resolve(event.target.result);
       };
 
       requestDB.onerror = event => {
@@ -637,8 +636,10 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
 
       requestDB.onsuccess = event => {
         console.log("[DBConsulta] Sucesso");
-        if (event.target.result) resolve(event.target.result);
-        else reject(Error("object not found"));
+        if (event.target.result) 
+          resolve(event.target.result);
+        else 
+          reject(Error("object not found"));
       };
     });
     self.db = db;
@@ -662,54 +663,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         resolve("Ok");
 
       } catch (e) {
-        alert("salvarConsulta 4 " + e);
-        resolve([]);
-      }
-    });      
-    return resultado;
-  }
-  
- //-----------------------------------------------------------------------------------------//
-
-  async salvarConsulta() {
-    let db = await new Promise(function(resolve, reject) {
-      var requestDB = window.indexedDB.open("ConsultaUsr", 1); 
-      requestDB.onupgradeneeded = event => {
-        console.log("Criando IndexedDB Consulta");
-        let db = event.target.result;
-        let store = db.createObjectStore("Consulta", {
-          autoIncrement: true
-        });
-        store.createIndex("id", "id", { unique: true });
-        resolve(event.target.result);
-      };
-
-      requestDB.onerror = event => {
-        alert("Erro [DBConsulta]: " + event.target.errorCode);
-        reject(Error("Error: " + event.target.errorCode));
-      };
-
-      requestDB.onsuccess = event => {
-        console.log("[DBConsulta] Sucesso");
-        if (event.target.result) resolve(event.target.result);
-        else reject(Error("object not found"));
-      };
-    });
-    
-    let resultado = await new Promise(function(resolve, reject) {
-    try {
-        let transacao = db.transaction(["Consulta"], "readwrite");
-        let store = transacao.objectStore("Consulta");
-        store.add({
-          id: 1,
-          codLocalSelecionado : self.codLocalSelecionado,
-          tfExame : self.tfExame.value,
-          dadosExame : self.dadosExame.id
-        });
-        resolve("Ok");
-
-      } catch (e) {
-        alert("salvarConsulta 4 " + e);
+        console.log("salvarConsulta: " + e);
         resolve([]);
       }
     });      
@@ -722,11 +676,36 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     var requestDB = window.indexedDB.open("ConsultaUsr", 1); 
     requestDB.onsuccess = function(event) {
       let db = event.target.result;
-      let transaction = db.transaction(["ConsultaUsr"], "readwrite");
+      let transaction = db.transaction(["Consulta"], "readwrite");
       transaction.oncomplete = function(event) {};
-      let objectStore = transaction.objectStore("ConsultaUsr");
+      let objectStore = transaction.objectStore("Consulta");
       objectStore.clear();
     };
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
+  async verificarConsultaArmazenada(db) {
+    let resultado = await new Promise(function(resolve, reject) {
+      try {
+        let transacao = db.transaction(["Consulta"], "readwrite");
+         let store = transacao.objectStore("Consulta");
+          array = [];
+          store.openCursor().onsuccess = event => {
+            var cursor = event.target.result;
+            if (cursor) {
+              array.push(cursor.value);
+              cursor.continue();
+            } else {
+              resolve(array);
+            }
+          };
+          resolve("Ok");
+      } catch (e) {
+          resolve([]);
+        }
+    });      
+    return resultado;
   }
 
   //-----------------------------------------------------------------------------------------//
