@@ -92,8 +92,10 @@ export default class ViewSolicitacao {
 
       this.db = await this.abrirDbConsulta();
       let array = await this.verificarConsultaArmazenada(this.db);
-      alert(array);
-      this.limparConsulta();
+      if(array.length != 0) {
+        
+      }
+      //TODO       this.limparConsulta();
       
       if (ehMedico) {
         let i;
@@ -705,7 +707,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
             resolve(array);
           }
         };
-        resolve("[]");
       } catch (e) {
         resolve([]);
       }
