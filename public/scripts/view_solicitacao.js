@@ -68,8 +68,6 @@ export default class ViewSolicitacao {
     this.cpfPaciente = null;
     this.dadosExame = null;
     this.formaPgto = null;
-
-    this.db = null; //TODO
     
     $(document).on("keypress", "input", function(e) {
       if (e.which == 13 && e.target == self.tfExame) {
@@ -596,7 +594,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         alert("O exame não foi escolhido.");
         return;
       }
-      this.view.abrirDBConsulta();
       this.view.salvarConsulta();
       alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
       window.location.href = "cadusuario.html";
@@ -617,16 +614,16 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
 
   //-----------------------------------------------------------------------------------------//
   
-  async abrirDBConsulta() {
-    this.db = await new Promise(function(resolve, reject) {
+  async salvarConsulta() {
+    let db = await new Promise(function(resolve, reject) {
       var requestDB = window.indexedDB.open("ConsultaUsr", 1); 
       requestDB.onupgradeneeded = event => {
         console.log("Criando IndexedDB Consulta");
-        let db = event.target.result;
         let store = db.createObjectStore("Consulta", {
           autoIncrement: true
         });
         store.createIndex("id", "id", { unique: true });
+        resolve(event.target.result);
       };
 
       requestDB.onerror = event => {
@@ -640,16 +637,10 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         else reject(Error("object not found"));
       };
     });
-  }
-  
- //-----------------------------------------------------------------------------------------//
-  
-  async salvarConsulta() {
-    let db = this.db;
+    
     let resultado = await new Promise(function(resolve, reject) {
-      let transacao; 
-      try {
-        transacao = db.transaction(["Consulta"], "readwrite");
+    try {
+        let transacao = db.transaction(["Consulta"], "readwrite");
         let store = transacao.objectStore("Consulta");
         store.add({
           id: 1,
@@ -659,15 +650,14 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         });
         resolve("Ok");
       } catch (e) {
-        alert("Problemas de Conexão com o servidor: " + event.target.errorCode);
         resolve([]);
       }
     });      
     return resultado;
   }
-
-  //-----------------------------------------------------------------------------------------//
-
+  
+ //-----------------------------------------------------------------------------------------//
+  
 }
 
 //-----------------------------------------------------------------------------------------//
