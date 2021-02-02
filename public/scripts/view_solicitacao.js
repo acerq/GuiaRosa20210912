@@ -43,7 +43,6 @@ export default class ViewSolicitacao {
       this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
       this.btEnviar.onclick = this.irParaCheckout;
       this.btVoltarOuAgendar.innerHTML = "Voltar";
-      this.limparConsulta();
     } else { 
       this.usuarioLogado = false;
       this.btVoltarOuAgendar.innerHTML = "Gerar Voucher";
@@ -90,6 +89,12 @@ export default class ViewSolicitacao {
   async atualizarInterface(ehMedico, arrayPacientes, arrayLocais) {
     //---- Formata a combobox de pacientes ----//
     if (this.usuarioLogado) {
+
+      this.db = await this.abrirDbConsulta();
+      let array = await this.verificarConsultaArmazenada(this.db);
+      alert(array);
+      this.limparConsulta();
+      
       if (ehMedico) {
         let i;
         let tam = this.cbPaciente.options.length - 1;
@@ -689,21 +694,21 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     let resultado = await new Promise(function(resolve, reject) {
       try {
         let transacao = db.transaction(["Consulta"], "readwrite");
-         let store = transacao.objectStore("Consulta");
-          array = [];
-          store.openCursor().onsuccess = event => {
-            var cursor = event.target.result;
-            if (cursor) {
-              array.push(cursor.value);
-              cursor.continue();
-            } else {
-              resolve(array);
-            }
-          };
-          resolve("Ok");
+        let store = transacao.objectStore("Consulta");
+        let array = [];
+        store.openCursor().onsuccess = event => {
+          var cursor = event.target.result;
+          if (cursor) {
+            array.push(cursor.value);
+            cursor.continue();
+          } else {
+            resolve(array);
+          }
+        };
+        resolve("[]");
       } catch (e) {
-          resolve([]);
-        }
+        resolve([]);
+      }
     });      
     return resultado;
   }
