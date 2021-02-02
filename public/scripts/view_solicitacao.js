@@ -645,24 +645,25 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
  //-----------------------------------------------------------------------------------------//
   
   async salvarConsulta() {
-    fnColocarEspera();
-
     let db = this.db;
     let resultado = await new Promise(function(resolve, reject) {
-      let transacao = db.transaction(["Consulta"], "readwrite");
-      transacao.oncomplete = event => {
-        console.log("[Consulta] Sucesso");
-        resolve("Ok");
-      };
-      let store = transacao.objectStore("Consulta");
-      store.add({
+      let transacao; 
+      try {
+        transacao = db.transaction(["Consulta"], "readwrite");
+        let store = transacao.objectStore("Consulta");
+        store.add({
           id: 1,
           codLocalSelecionado : self.codLocalSelecionado,
           tfExame : self.tfExame.value,
           dadosExame : self.dadosExame.params.data
-      });
+        });
+        resolve("Ok");
+      } catch (e) {
+        alert("Problemas de Conexão com o servidor: " + event.target.errorCode);
+        resolve([]);
+      }
     });      
-    return true;
+    return resultado;
   }
 
   //-----------------------------------------------------------------------------------------//
