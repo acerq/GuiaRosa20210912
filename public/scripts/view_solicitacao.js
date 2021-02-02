@@ -662,7 +662,48 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
   }
   
  //-----------------------------------------------------------------------------------------//
-  
+
+  limparConsulta() {
+    var requestDB = window.indexedDB.open("ConsultaUsr", 1); 
+    requestDB.onsuccess = function(event) {
+  note.innerHTML += '<li>Database initialised.</li>';
+
+  // store the result of opening the database in the db variable.
+  // This is used a lot below
+  db = DBOpenRequest.result;
+
+  // Clear all the data form the object store
+  clearData();
+};
+
+function clearData() {
+  // open a read/write db transaction, ready for clearing the data
+  var transaction = db.transaction(["toDoList"], "readwrite");
+
+  // report on the success of the transaction completing, when everything is done
+  transaction.oncomplete = function(event) {
+    note.innerHTML += '<li>Transaction completed.</li>';
+  };
+
+  transaction.onerror = function(event) {
+    note.innerHTML += '<li>Transaction not opened due to error: ' + transaction.error + '</li>';
+  };
+
+  // create an object store on the transaction
+  var objectStore = transaction.objectStore("toDoList");
+
+  // Make a request to clear all the data out of the object store
+  var objectStoreRequest = objectStore.clear();
+
+  objectStoreRequest.onsuccess = function(event) {
+    // report the success of our request
+    note.innerHTML += '<li>Request successful.</li>';
+  };
+};
+  }
+
+  //-----------------------------------------------------------------------------------------//
+
 }
 
 //-----------------------------------------------------------------------------------------//
