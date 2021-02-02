@@ -648,7 +648,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           id: 1,
           codLocalSelecionado : self.codLocalSelecionado,
           tfExame : self.tfExame.value,
-          dadosExame : self.dadosExame.params.data
+          dadosExame : self.dadosExame.id
         });
         alert("salvarConsulta 3");
         resolve("Ok");
