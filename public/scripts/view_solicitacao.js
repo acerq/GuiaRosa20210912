@@ -92,7 +92,7 @@ export default class ViewSolicitacao {
     //---- Formata a combobox de pacientes ----//
     if (this.usuarioLogado) {
 
-      this.daoConsulta.abrirDbConsulta();
+      await this.daoConsulta.abrirDbConsulta();
       let array = await this.daoConsulta.verificarConsultaArmazenada();
       if(array.length != 0) {
         this.tfExame.value = array[0].tfExame;
@@ -610,8 +610,8 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         alert("O exame não foi escolhido.");
         return;
       }
-      self.daoConsulta.limparConsulta();
-      self.daoConsulta.abrirDbConsulta();
+      await self.daoConsulta.limparConsulta();
+      await self.daoConsulta.abrirDbConsulta();
       await self.daoConsulta.salvarConsulta();
       alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
       window.location.href = "cadusuario.html";
