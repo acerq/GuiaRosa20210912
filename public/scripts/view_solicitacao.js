@@ -669,14 +669,13 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     try {
         let transacao = db.transaction(["Consulta"], "readwrite");
         let store = transacao.objectStore("Consulta");
-        var selectionText = e.params.data.id.split(SEPARADOR);
         store.add({
           id: 1,
           codLocalSelecionado : self.codLocalSelecionado,
           arrayExames : self.arrayExames,
           tfExame : self.tfExame.value,
-          codExecutanteSelecionado : selectionText[0],
-          codExameSelecionado : selectionText[1]
+          codExecutanteSelecionado : self.codExecutanteSelecionado,
+          codExameSelecionado : self.codExameSelecionado
         });
         resolve("Ok");
 
