@@ -2,11 +2,10 @@
 
 // -----------------------------------------------------------------------------------------//
 
-var requestDB = null;
-var db = null;
-var store = null;
-var transacao = null;
-var usrApp = null;
+const novoDaoUsuario = new Function("", "return new DaoUsuario()");
+const fnMD5 = new Function("a", "return md5(a)");
+
+// -----------------------------------------------------------------------------------------//
 
 const divConteudo = document.getElementById("divConteudo");
 const divInstrucao = document.getElementById("divInstrucao");
@@ -16,55 +15,14 @@ const btOk = document.getElementById("btOk");
 const btNovo = document.getElementById("btNovo");
 const labelLogin = document.getElementById("lbLogin");
 
-var fnMD5 = new Function("a", "return md5(a)");
+// -----------------------------------------------------------------------------------------//
+
+var usrApp = null;
 var estadoBtNovo = "Conta";
+var daoUsuario = novoDaoUsuario();
 
 // -----------------------------------------------------------------------------------------//
 
-
-// -----------------------------------------------------------------------------------------//
-
-
-// -----------------------------------------------------------------------------------------//
-
-function incluirDbApp(
-  login,
-  senha,
-  nome,
-  email,
-  celular,
-  rua,
-  numero,
-  complemento,
-  bairro,
-  cep,
-  ehMedico
-) {
-  transacao = db.transaction(["AppUsr"], "readwrite");
-  transacao.onerror = event => {
-    alert("Erro [AppUsr]: " + event.target.errorCode);
-  };
-  store = transacao.objectStore("AppUsr");
-  var objectStoreRequest = store.clear();
-  objectStoreRequest.onsuccess = function(event) {
-    objectStoreRequest = store.add({
-      login: login,
-      senha: fnMD5(senha),
-      nome: nome,
-      email: email,
-      celular: celular,
-      rua: rua,
-      numero: numero,
-      complemento: complemento,
-      bairro: bairro,
-      cep: cep,
-      ehMedico: ehMedico
-    });
-    objectStoreRequest.onsuccess = function(event) {
-      window.location.href = "inicio.html";
-    };
-  };
-}
 
 // -----------------------------------------------------------------------------------------//
 
@@ -221,4 +179,27 @@ tfSenha.addEventListener("keyup", function(event) {
   }
 });
 
-abrirDbApp();
+// -----------------------------------------------------------------------------------------//
+
+daoUsuario.abrirDb();
+usrApp = daoUsuario.obterUsr();
+if(usrApp != null) {
+  tfLogin.value = usrApp.login;
+  tfLogin.disabled = true;
+  btNovo.textContent = "Novo Login";
+  estadoBtNovo = "Login";
+
+  if (usrApp.ehMedico == true) {
+    labelLogin.innerHTML = "Login (Médico):";
+  } else {
+    labelLogin.innerHTML = "CPF:";
+  }  
+}
+else {
+  tfLogin.disabled = false;
+  btNovo.textContent = "Nova Conta";
+  estadoBtNovo = "Conta";
+  instalacaoApp();
+}
+
+

@@ -6,7 +6,7 @@ function DaoUsuario() {
 
 //-----------------------------------------------------------------------------------------//
 
-DaoUsuario.prototype.abrirDbAppUsr = async function() {
+DaoUsuario.prototype.abrirDb = async function() {
   this.db = await new Promise(function(resolve, reject) {
     let requestDB = window.indexedDB.open("AppUsr", 1);
     requestDB.onupgradeneeded = event => {
@@ -26,7 +26,6 @@ DaoUsuario.prototype.abrirDbAppUsr = async function() {
     requestDB.onsuccess = event => {
       console.log("[DBConsulta] Sucesso");
       if (event.target.result) {
-        obterAppUsr();
         resolve(event.target.result);
       }
       else
@@ -39,39 +38,6 @@ DaoUsuario.prototype.abrirDbAppUsr = async function() {
 //-----------------------------------------------------------------------------------------//
 
 DaoUsuario.prototype.obterUsr = async function() {
-  
-  
-  
-    store = transacao.objectStore("");
-  } catch (e) {
-    instalacaoApp();
-    return;
-  }
-  store.openCursor().onsuccess = event => {
-    var cursor = event.target.result;
-    if (cursor) {
-      usrApp = cursor.value;
-      tfLogin.value = usrApp.login;
-      tfLogin.disabled = true;
-      btNovo.textContent = "Novo Login";
-      estadoBtNovo = "Login";
-
-      if (usrApp.ehMedico == true) {
-        labelLogin.innerHTML = "Login (Médico):";
-      } else {
-        labelLogin.innerHTML = "CPF:";
-      }
-    } else {
-      tfLogin.disabled = false;
-      btNovo.textContent = "Nova Conta";
-      estadoBtNovo = "Conta";
-      instalacaoApp();
-    }
-  };
-}
-
-  
-  
   let self = this;
   let resultado = await new Promise(function(resolve, reject) {
     try {
@@ -79,23 +45,60 @@ DaoUsuario.prototype.obterUsr = async function() {
       let store = transacao.objectStore("AppUsr");
       let array = [];
       store.openCursor().onsuccess = event => {
-        var cursor = event.target.result;
-        if (cursor) {
-          array.push(cursor.value);
-          cursor.continue();
-        } else {
-          resolve(array);
-        }
+        let cursor = event.target.result;
+        if (cursor) 
+          resolve(cursor.value);
+        else 
+          resolve(null);
       };
     } catch (e) {
-      resolve([]);
+      resolve(null);
     }
   });
   return resultado;
 };
 
 //-----------------------------------------------------------------------------------------//
-DaoUsuario.prototype.salvarConsulta = async function(codLocalSelecionado, arrayExames, tfExame, codExecutanteSelecionado, codExameSelecionado) {
+
+DaoUsuario.prototype.salvarUsr = async function(codLocalSelecionado, arrayExames, tfExame, codExecutanteSelecionado, codExameSelecionado) {
+
+  
+  
+  
+  
+  function incluirDbApp {
+  transacao = db.transaction(["AppUsr"], "readwrite");
+  transacao.onerror = event => {
+    alert("Erro [AppUsr]: " + event.target.errorCode);
+  };
+  store = transacao.objectStore("AppUsr");
+  var objectStoreRequest = store.clear();
+  objectStoreRequest.onsuccess = function(event) {
+    objectStoreRequest = store.add({
+      login: login,
+      senha: fnMD5(senha),
+      nome: nome,
+      email: email,
+      celular: celular,
+      rua: rua,
+      numero: numero,
+      complemento: complemento,
+      bairro: bairro,
+      cep: cep,
+      ehMedico: ehMedico
+    });
+    objectStoreRequest.onsuccess = function(event) {
+      window.location.href = "inicio.html";
+    };
+  };
+}
+
+  
+  
+  
+  
+  
+  
   let self = this;
   let resultado = await new Promise(async function(resolve, reject) {
     try {
