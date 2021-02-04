@@ -95,9 +95,10 @@ export default class ViewSolicitacao {
       let array = await this.verificarConsultaArmazenada(this.db);
       if(array.length != 0) {
         this.tfExame.value = array[0].tfExame;
+        this.codExecutanteSelecionado = array[0].codExecutanteSelecionado;
+        this.codExameSelecionado = array[0].codExameSelecionado;
         this.atualizarExames(array[0].arrayExames);
         //codLocalSelecionado : self.codLocalSelecionado,
-        //dadosExame : self.dadosExame.id
       }
       //TODO this.limparConsulta();
       
@@ -263,7 +264,9 @@ export default class ViewSolicitacao {
           codExame +
           SEPARADOR +
           valor +
-          "'>" +
+          "' " +  (    this.codExecutanteSelecionado ==  array[0].codExecutanteSelecionado;
+        this.codExameSelecionado = array[0].codExameSelecionado;)
+          ">" +
           descricao +
           "</option>";
         if (index === array.length - 1) res(retorno);
@@ -666,12 +669,14 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     try {
         let transacao = db.transaction(["Consulta"], "readwrite");
         let store = transacao.objectStore("Consulta");
+        var selectionText = e.params.data.id.split(SEPARADOR);
         store.add({
           id: 1,
           codLocalSelecionado : self.codLocalSelecionado,
           arrayExames : self.arrayExames,
           tfExame : self.tfExame.value,
-          dadosExame : self.dadosExame.id
+          codExecutanteSelecionado : selectionText[0],
+          codExameSelecionado : selectionText[1]
         });
         resolve("Ok");
 
