@@ -58,10 +58,26 @@ ViewEfetuarLogin.prototype.instalacaoApp = function() {
 
 ViewEfetuarLogin.prototype.callbackOk = async function() {
   self.colocarEspera();
-  let ok = self.ctrl.verificarLogin(self.tfLogin.value, self.tfSenha.value);
-  this.retirarEspera();
+  let ok = self.ctrlEfetuarLogin.verificarLogin(self.tfLogin.value, self.tfSenha.value);
+  self.retirarEspera();
   if(ok) 
     window.location.href = "inicio.html";
+}
+
+// -----------------------------------------------------------------------------------------//
+
+ViewEfetuarLogin.prototype.callbackCriar = function () {
+  if (self.estadoBtNovo == "Conta") 
+    window.location.href = "cadusuario.html";
+  else {
+    // estadoBtNovo == "Login";
+    self.labelLogin.innerHTML = "Login:";
+    self.tfLogin.value = "";
+    self.tfLogin.disabled = false;
+    self.btNovo.textContent = "Nova Conta";
+    self.estadoBtNovo = "Conta";
+    self.colocarInstrucao("<center><b>Efetue seu Login ou Crie sua Conta</b></center>");
+  }
 }
 
 // -----------------------------------------------------------------------------------------//
@@ -90,24 +106,3 @@ ViewEfetuarLogin.prototype.colocarInstrucao = function(msg) {
 }
 
 // -----------------------------------------------------------------------------------------//
-
-ViewEfetuarLogin.prototype.callbackCriar = function () {
-  if (self.estadoBtNovo == "Conta") 
-    window.location.href = "cadusuario.html";
-  else {
-    // estadoBtNovo == "Login";
-    this.labelLogin.innerHTML = "Login:";
-    this.tfLogin.value = "";
-    this.tfLogin.disabled = false;
-    this.btNovo.textContent = "Nova Conta";
-    this.estadoBtNovo = "Conta";
-    this.divInstrucao.innerHTML =
-      "<center><b>Efetue seu Login ou Crie sua Conta</b></center>";
-  }
-}
-
-// -----------------------------------------------------------------------------------------//
-
-
-// -----------------------------------------------------------------------------------------//
-
