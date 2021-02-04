@@ -2,6 +2,7 @@
 
 const SEPARADOR = "##";
 const funcaoMD5 = new Function("a", "return md5(a)");
+const novoDaoConsulta = new Function("", "return new DaoConsulta()");
 
 const fnTirarEspera = new Function("tirarEspera()");
 const fnColocarEspera = new Function("colocarEspera()");
@@ -21,6 +22,7 @@ export default class ViewSolicitacao {
 
     self = this;
 
+    this.daoConsulta = novoDaoConsulta();
     this.tfExame = document.getElementById("tfExame");
     this.cbPaciente = document.getElementById("cbPaciente");
     this.cbExame = document.getElementById("cbExame");
@@ -38,7 +40,6 @@ export default class ViewSolicitacao {
     this.btVoltarOuAgendar.view = this;
     this.btConsultar.onclick = this.obterExames;
 
-    this.db = null;
     if (this.btPacientes != null) {
       this.btPacientes.onclick = this.ctrl.chamarCadastrarPacientes;
       this.btEnviar.onclick = this.irParaCheckout;
@@ -91,14 +92,14 @@ export default class ViewSolicitacao {
     //---- Formata a combobox de pacientes ----//
     if (this.usuarioLogado) {
 
-      this.db = await this.abrirDbConsulta();
-      let array = await this.verificarConsultaArmazenada(this.db);
+      this.daoConsulta.abrirDbConsulta();
+      let array = await this.daoConsulta.verificarConsultaArmazenada();
       if(array.length != 0) {
         this.tfExame.value = array[0].tfExame;
         this.codExecutanteSelecionado = array[0].codExecutanteSelecionado;
         this.codExameSelecionado = array[0].codExameSelecionado;
         this.atualizarExames(array[0].arrayExames);
-        //codLocalSelecionado : self.codLocalSelecionado,
+        //TODO codLocalSelecionado : self.codLocalSelecionado,
       }      
       if (ehMedico) {
         let i;
@@ -609,9 +610,9 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         alert("O exame não foi escolhido.");
         return;
       }
-      self.limparConsulta();
-      self.db = await self.abrirDbConsulta();
-      await self.salvarConsulta(self.db);
+      self.daoConsulta.limparConsulta();
+      self.daoConsulta.abrirDbConsulta();
+      await self.daoConsulta.salvarConsulta();
       alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
       window.location.href = "cadusuario.html";
     }
@@ -627,100 +628,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
 
   tirarEspera() {
     fnTirarEspera();
-  }
-
-  //-----------------------------------------------------------------------------------------//
-  
-  async abrirDbConsulta() {
-    let db = await new Promise(function(resolve, reject) {
-      var requestDB = window.indexedDB.open("ConsultaUsr", 1); 
-      requestDB.onupgradeneeded = event => {
-        console.log("Criando IndexedDB Consulta");
-        let db = event.target.result;
-        let store = db.createObjectStore("Consulta", {
-          autoIncrement: true
-        });
-        store.createIndex("id", "id", { unique: true });
-      };
-
-      requestDB.onerror = event => {
-        alert("Erro [DBConsulta]: " + event.target.errorCode);
-        reject(Error("Error: " + event.target.errorCode));
-      };
-
-      requestDB.onsuccess = event => {
-        console.log("[DBConsulta] Sucesso");
-        if (event.target.result) 
-          resolve(event.target.result);
-        else 
-          reject(Error("object not found"));
-      };
-    });
-    self.db = db;
-    return db;
-  }  
-    
-    
-  //-----------------------------------------------------------------------------------------//
-  
-  async salvarConsulta(db) {
-    let resultado = await new Promise(async function(resolve, reject) {
-    try {
-        let transacao = db.transaction(["Consulta"], "readwrite");
-        let store = transacao.objectStore("Consulta");
-        let request = await store.add({
-          id: 1,
-          codLocalSelecionado : self.codLocalSelecionado,
-          arrayExames : self.arrayExames,
-          tfExame : self.tfExame.value,
-          codExecutanteSelecionado : self.codExecutanteSelecionado,
-          codExameSelecionado : self.codExameSelecionado
-        });
-        transacao.oncomplete = function(event) {
-          resolve("Ok");
-        };
-        transacao.onerror = function(event) {
-          resolve([]);
-        }
-        // resolve("Ok");
-      } catch (e) {
-        console.log("salvarConsulta: " + e);
-        resolve([]);
-      }
-    });      
-    return resultado;
-  }
-  
- //-----------------------------------------------------------------------------------------//
-
-  limparConsulta() {
-    var requestDB = window.indexedDB.deleteDatabase("ConsultaUsr", 1); 
-    requestDB.onsuccess = function(event) {};
-    requestDB.onerror = function(event) {};
-  }
-
-  //-----------------------------------------------------------------------------------------//
-
-  async verificarConsultaArmazenada(db) {
-    let resultado = await new Promise(function(resolve, reject) {
-      try {
-        let transacao = db.transaction(["Consulta"], "readwrite");
-        let store = transacao.objectStore("Consulta");
-        let array = [];
-        store.openCursor().onsuccess = event => {
-          var cursor = event.target.result;
-          if (cursor) {
-            array.push(cursor.value);
-            cursor.continue();
-          } else {
-            resolve(array);
-          }
-        };
-      } catch (e) {
-        resolve([]);
-      }
-    });      
-    return resultado;
   }
 
   //-----------------------------------------------------------------------------------------//

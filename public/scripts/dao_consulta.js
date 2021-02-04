@@ -71,10 +71,10 @@ DaoConsulta.prototype.limparConsulta = function() {
 
 //-----------------------------------------------------------------------------------------//
 
-DaoConsulta.prototype.verificarConsultaArmazenada = async function(db) {
+DaoConsulta.prototype.verificarConsultaArmazenada = async function() {
   let resultado = await new Promise(function(resolve, reject) {
     try {
-      let transacao = db.transaction(["Consulta"], "readwrite");
+      let transacao = this.db.transaction(["Consulta"], "readwrite");
       let store = transacao.objectStore("Consulta");
       let array = [];
       store.openCursor().onsuccess = event => {
