@@ -110,26 +110,26 @@ UcEfetuarLogin.prototype.verificarLogin = async function(login, senha) {
   }
   if(respJson.hasOwnProperty("erro")) {
     this.viewEfetuarLogin.notificar(respJson.erro);
-
+    
     if(respJson.erro.includes("TIMEOUT")) {
-      self.divInstrucao.innerHTML = "<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>";
-      return;
+      this.viewEfetuarLogin.colocarInstrucao("<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>");
+      return false;
     }
 
-    // if(resposta == null || this.tfLogin.value != usrApp.login || fnMD5(tfSenha.value) != usrApp.senha) {
-      self.divInstrucao.innerHTML = "<b>Login não autorizado</b>";
+    if(respJson == null || login != this.usrApp.login || fnMD5(senha) != this.usrApp.senha) {
+      this.viewEfetuarLogin.colocarInstrucao("<b>Login não autorizado</b>");
       return;
   }
   
-  if(login.replace(/\.|-/g, "") == usrApp.login.replace(/\.|-/g, "") && fnMD5(tfSenha.value) == usrApp.senha) {
-    daoUsuario.salvarUsr(usrApp.login, usrApp.senha, usrApp.nome, usrApp.email, usrApp.celular,
-      usrApp.rua, usrApp.numero, null, null, null, true);
-
-    window.location.href = "inicio.html";
-
-      
   this.usrApp = respJson;
-  return respJson;
+  this.daoUsuario.salvarUsr(this.usrApp.login, this.usrApp.senha, this.usrApp.nome, this.usrApp.email, 
+                            thisusrApp.celular, this.usrApp.rua, this.usrApp.numero, null, null, null, true);
+
+  //if(login.replace(/\.|-/g, "") == this.usrApp.login.replace(/\.|-/g, "") && 
+  //fnMD5(tfSenha.value) == usrApp.senha) 
+
+    
+  return true;
 }
 
 // -----------------------------------------------------------------------------------------//
