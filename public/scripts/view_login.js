@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------------------//
 
 const novoDaoUsuario = new Function("", "return new DaoUsuario()");
-const novaViewEfetuarLogin = new Function("", "return new ViewEfetuarLogin()");
+const novoVwEfetuarLogin = new Function("", "return new VwEfetuarLogin()");
 const fnMD5 = new Function("a", "return md5(a)");
 
 // -----------------------------------------------------------------------------------------//
@@ -19,42 +19,16 @@ const labelLogin = document.getElementById("lbLogin");
 // -----------------------------------------------------------------------------------------//
 
 function UcEfetuarLogin() {
-  this.viewEfetuarLogin = novaViewEfetuarLogin(this);
+  this.vwEfetuarLogin = novoVwEfetuarLogin(this);
   this.usrApp = null;
   this.daoUsuario = novoDaoUsuario();
-  this.iniciar();
 }
 
+var usrApp = null;
+var estadoBtNovo = "Conta";
 
 // -----------------------------------------------------------------------------------------//
 
-UcEfetuarLogin.prototype.iniciar = async function() {
-  await this.daoUsuario.abrirDb();
-  this.usrApp = await this.daoUsuario.obterUsr();
-  this.viewEfetuarLogin.
-  if(usrApp != null) {
-    tfLogin.value = usrApp.login;
-    tfLogin.disabled = true;
-    btNovo.textContent = "Novo Login";
-    estadoBtNovo = "Login";
-
-    if (usrApp.ehMedico == true) {
-      labelLogin.innerHTML = "Login (Médico):";
-    } else {
-      labelLogin.innerHTML = "CPF:";
-    }  
-  }
-  else {
-    tfLogin.disabled = false;
-    btNovo.textContent = "Nova Conta";
-    estadoBtNovo = "Conta";
-    instalacaoApp();
-  }
-}
-
-// -----------------------------------------------------------------------------------------//
-
-iniciar();
 
 // -----------------------------------------------------------------------------------------//
 
@@ -201,4 +175,30 @@ tfSenha.addEventListener("keyup", function(event) {
 
 // -----------------------------------------------------------------------------------------//
 
+async function iniciar() {
+  await daoUsuario.abrirDb();
+  usrApp = await daoUsuario.obterUsr();
+  if(usrApp != null) {
+    tfLogin.value = usrApp.login;
+    tfLogin.disabled = true;
+    btNovo.textContent = "Novo Login";
+    estadoBtNovo = "Login";
+
+    if (usrApp.ehMedico == true) {
+      labelLogin.innerHTML = "Login (Médico):";
+    } else {
+      labelLogin.innerHTML = "CPF:";
+    }  
+  }
+  else {
+    tfLogin.disabled = false;
+    btNovo.textContent = "Nova Conta";
+    estadoBtNovo = "Conta";
+    instalacaoApp();
+  }
+}
+
+// -----------------------------------------------------------------------------------------//
+
+iniciar();
 
