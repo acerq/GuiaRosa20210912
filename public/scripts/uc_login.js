@@ -26,10 +26,11 @@ UcEfetuarLogin.prototype.iniciar = async function() {
 // -----------------------------------------------------------------------------------------//
 
 UcEfetuarLogin.prototype.verificarLogin = async function(login, senha) {
-  if (this.usrApp != null && this.usrApp.login == login) {
-    if (this.usrApp.senha == fnMD5(senha)) {
+  if (this.usrApp != null && this.usrApp.login == login && !this.usrApp.ehMedico) {
+    if (this.usrApp.senha == fnMD5(senha)) {        
       return this.usrApp;
-    }
+    } 
+    //TODO não é médico e a senha não é a mesma
   }
   let response = await fetch("/login/" + login + "/" + fnMD5(senha), { credentials : "include" } );
   let respJson = await response.json();
@@ -52,7 +53,7 @@ UcEfetuarLogin.prototype.verificarLogin = async function(login, senha) {
     }
   }
   
-  this.usrApp = respJson;
+  this.usrApp = respJson; 
   this.daoUsuario.salvarUsr(this.usrApp.login, this.usrApp.senha, this.usrApp.nome, this.usrApp.email, 
                             this.usrApp.celular, this.usrApp.rua, this.usrApp.numero, null, null, null, true);
 

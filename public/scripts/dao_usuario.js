@@ -60,8 +60,8 @@ DaoUsuario.prototype.obterUsr = async function() {
 
 //-----------------------------------------------------------------------------------------//
 
-DaoUsuario.prototype.salvarUsr = async function(login,senha,nome,email,celular,rua,numero,
-                                                complemento,bairro,cep,ehMedico){
+DaoUsuario.prototype.salvarUsr = async function(login, senha, nome, email, celular, rua, numero,
+                                                complemento, bairro, cep, ehMedico){
 
   let self = this;
   let resultado = await new Promise(async function(resolve, reject) {

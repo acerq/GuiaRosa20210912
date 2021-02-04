@@ -58,7 +58,7 @@ ViewEfetuarLogin.prototype.instalacaoApp = function() {
 
 ViewEfetuarLogin.prototype.callbackOk = async function() {
   self.colocarEspera();
-  let ok = self.ctrlEfetuarLogin.verificarLogin(self.tfLogin.value, self.tfSenha.value);
+  let ok = await self.ctrlEfetuarLogin.verificarLogin(self.tfLogin.value, self.tfSenha.value);
   self.retirarEspera();
   if(ok) 
     window.location.href = "inicio.html";
