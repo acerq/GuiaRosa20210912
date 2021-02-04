@@ -4,7 +4,7 @@
 var self;
 
 function ViewEfetuarLogin(ctrl) {
-  
+  self = this;
   this.ctrlEfetuarLogin = ctrl;
   this.estadoBtNovo = "Login";
   this.divConteudo = document.getElementById("divConteudo");
@@ -15,11 +15,11 @@ function ViewEfetuarLogin(ctrl) {
   this.btNovo = document.getElementById("btNovo");
   this.labelLogin = document.getElementById("lbLogin");
   
-  this.btOk.addEventListener("click", callbackOk);
-  this.btNovo.addEventListener("click", callbackCriar);
+  this.btOk.addEventListener("click", this.callbackOk);
+  this.btNovo.addEventListener("click", this.callbackCriar);
   this.tfSenha.addEventListener("keyup", function(event) {
     if(event.keyCode === 13) {
-      callbackOk();
+      self.callbackOk();
     }
   });
 }
@@ -56,23 +56,23 @@ ViewEfetuarLogin.prototype.instalacaoApp = function() {
 
 // -----------------------------------------------------------------------------------------//
 
-function renderEfetuarLogin(resposta) {
+ViewEfetuarLogin.prototype.callbackOk = async function() {
+  this.colocarEspera();
+  let resposta = this.ctrl.verificarLogin(this.tfLogin.value, this.tfSenha.value);
   if (resposta == null) {
     alert("Problemas de Conexão com o Servidor");
     return;
   }
-  
-  if (resposta.hasOwnProperty("erro")) {
+  if(resposta.hasOwnProperty("erro")) {
     alert(resposta.erro);
 
-    if (resposta.erro.includes("TIMEOUT")) {
-      divInstrucao.innerHTML =
-        "<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>";
+    if(resposta.erro.includes("TIMEOUT")) {
+      this.divInstrucao.innerHTML = "<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>";
       return;
     }
 
-    if(usrApp == null || tfLogin.value != usrApp.login || fnMD5(tfSenha.value) != usrApp.senha) {
-      divInstrucao.innerHTML = "<b>Login não autorizado</b>";
+    if(resposta == null || this.tfLogin.value != usrApp.login || fnMD5(tfSenha.value) != usrApp.senha) {
+      this.divInstrucao.innerHTML = "<b>Login não autorizado</b>";
       return;
     }
   }
@@ -86,6 +86,30 @@ function renderEfetuarLogin(resposta) {
     //  return;
     //});
   }
+
+  
+  this.retirarEspera();
+
+  // chama efetuarLogin e atualiza a tela
+  let retorno = await doEfetuarLogin(login, senha);
+  renderEfetuarLogin(retorno);
+}
+
+// -----------------------------------------------------------------------------------------//
+
+ViewEfetuarLogin.prototype.colocarEspera = function() {
+  $("div.circle").addClass("wait");
+}
+
+// -----------------------------------------------------------------------------------------//
+
+ViewEfetuarLogin.prototype.retirarEspera = function() {
+  $("div.circle").removeClass("wait");
+}
+
+// -----------------------------------------------------------------------------------------//
+
+function renderEfetuarLogin(resposta) {
 }
 
 // -----------------------------------------------------------------------------------------//
@@ -140,18 +164,6 @@ async function doEfetuarLogin(login, senha) {
 
 // -----------------------------------------------------------------------------------------//
 
-async function callbackOk() {
-  const login = tfLogin.value;
-  const senha = fnMD5(tfSenha.value);
-
-  colocarEspera();
-  // chama efetuarLogin e atualiza a tela
-  let retorno = await doEfetuarLogin(login, senha);
-  renderEfetuarLogin(retorno);
-  retirarEspera();
-}
-
-// -----------------------------------------------------------------------------------------//
 
 function callbackCriar() {
   if (estadoBtNovo == "Conta") 
@@ -166,18 +178,6 @@ function callbackCriar() {
     divInstrucao.innerHTML =
       "<center><b>Efetue seu Login ou Crie sua Conta</b></center>";
   }
-}
-
-// -----------------------------------------------------------------------------------------//
-
-function colocarEspera() {
-  $("div.circle").addClass("wait");
-}
-
-// -----------------------------------------------------------------------------------------//
-
-function retirarEspera() {
-  $("div.circle").removeClass("wait");
 }
 
 // -----------------------------------------------------------------------------------------//

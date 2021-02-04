@@ -32,13 +32,6 @@ iniciar();
 
 // -----------------------------------------------------------------------------------------//
 
-function instalacaoApp() {
-  divInstrucao.innerHTML =
-    "<center><b>Efetue seu Login ou Crie sua Conta</b></center>";
-}
-
-// -----------------------------------------------------------------------------------------//
-
 function renderEfetuarLogin(resposta) {
   if (resposta == null) {
     alert("Problemas de Conexão com o Servidor");
@@ -109,29 +102,16 @@ function doGuardarUsuarioCorrente() {
 
 // -----------------------------------------------------------------------------------------//
 
-async function doEfetuarLogin(login, senha) {
-  if (usrApp != null && login == usrApp.login) {
-    if (senha == usrApp.senha) {
-      return usrApp;
+UcEfetuarLogin.prototype.verificarLogin = async function(login, senha) {
+  if (this.usrApp != null && this.usrApp.login == login) {
+    if (this.usrApp.senha == fnMD5(senha)) {
+      return this.usrApp;
     }
   }
   let response = await fetch("/login/" + login + "/" + senha, { credentials : "include" } );
   let respJson = await response.json();
-  usrApp = respJson;
+  this.usrApp = respJson;
   return respJson;
-}
-
-// -----------------------------------------------------------------------------------------//
-
-async function callbackOk() {
-  const login = tfLogin.value;
-  const senha = fnMD5(tfSenha.value);
-
-  colocarEspera();
-  // chama efetuarLogin e atualiza a tela
-  let retorno = await doEfetuarLogin(login, senha);
-  renderEfetuarLogin(retorno);
-  retirarEspera();
 }
 
 // -----------------------------------------------------------------------------------------//
