@@ -282,13 +282,13 @@ export default class ViewSolicitacao {
           templateResult: this.formatarItensDeExames,
           templateSelection: this.formatarSelecaoExame
         })
-        .on("select2:select", function(e) {
+        .on("select2:select", async function(e) {
           var selectionText = e.params.data.id.split(SEPARADOR);
           self.dadosExame = e.params.data;
           self.codExecutanteSelecionado = selectionText[0];
           self.codExameSelecionado = selectionText[1];
           self.valorExameSelecionado = selectionText[2];
-        });
+      });
 
       var element = document.querySelector(
         '[aria-labelledby="select2-cbExame-container"]'
@@ -676,12 +676,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           codExecutanteSelecionado : self.codExecutanteSelecionado,
           codExameSelecionado : self.codExameSelecionado
         });
-        request.onsuccess = function(event) {
-          alert("sucesso");
-        }
-        request.onerror = function(event) {
-          alert("erro");
-        }
         transacao.oncomplete = function(event) {
           resolve("Ok");
         };
@@ -700,16 +694,9 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
  //-----------------------------------------------------------------------------------------//
 
   limparConsulta() {
-    var requestDB = window.indexedDB.open("ConsultaUsr", 1); 
-    requestDB.onsuccess = async function(event) {
-      let db = event.target.result;
-      let transaction = db.transaction(["Consulta"], "readwrite");
-      transaction.oncomplete = function(event) {
-        let objectStore = transaction.objectStore("Consulta");
-        objectStore.clear();
-      }
-      transaction.onerror = function(event) {}
-    };
+    var requestDB = window.indexedDB.deleteDatabase("ConsultaUsr", 1); 
+    requestDB.onsuccess = function(event) {};
+    requestDB.onerror = function(event) {};
   }
 
   //-----------------------------------------------------------------------------------------//
