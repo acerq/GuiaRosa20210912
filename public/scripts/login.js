@@ -8,9 +8,6 @@ const fnMD5 = new Function("a", "return md5(a)");
 
 // -----------------------------------------------------------------------------------------//
 
-
-// -----------------------------------------------------------------------------------------//
-
 function UcEfetuarLogin() {
   this.viewEfetuarLogin = novaViewEfetuarLogin(this);
   this.usrApp = null;
@@ -25,10 +22,6 @@ UcEfetuarLogin.prototype.iniciar = async function() {
   this.usrApp = await this.daoUsuario.obterUsr();
   this.viewEfetuarLogin.iniciar(this.usrApp);
 }
-
-// -----------------------------------------------------------------------------------------//
-
-iniciar();
 
 // -----------------------------------------------------------------------------------------//
 
@@ -110,49 +103,36 @@ UcEfetuarLogin.prototype.verificarLogin = async function(login, senha) {
   }
   let response = await fetch("/login/" + login + "/" + senha, { credentials : "include" } );
   let respJson = await response.json();
+  
+  if(respJson == null) {
+    this.viewEfetuarLogin.notificar("Problemas de Conexão com o Servidor");
+    return false;
+  }
+  if(respJson.hasOwnProperty("erro")) {
+    this.viewEfetuarLogin.notificar(respJson.erro);
+
+    if(respJson.erro.includes("TIMEOUT")) {
+      self.divInstrucao.innerHTML = "<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>";
+      return;
+    }
+
+    // if(resposta == null || this.tfLogin.value != usrApp.login || fnMD5(tfSenha.value) != usrApp.senha) {
+      self.divInstrucao.innerHTML = "<b>Login não autorizado</b>";
+      return;
+  }
+  
+  if(login.replace(/\.|-/g, "") == usrApp.login.replace(/\.|-/g, "") && fnMD5(tfSenha.value) == usrApp.senha) {
+    daoUsuario.salvarUsr(usrApp.login, usrApp.senha, usrApp.nome, usrApp.email, usrApp.celular,
+      usrApp.rua, usrApp.numero, null, null, null, true);
+
+    window.location.href = "inicio.html";
+
+      
   this.usrApp = respJson;
   return respJson;
 }
 
 // -----------------------------------------------------------------------------------------//
 
-function callbackCriar() {
-  if (estadoBtNovo == "Conta") 
-    window.location.href = "cadusuario.html";
-  else {
-    // estadoBtNovo == "Login";
-    labelLogin.innerHTML = "Login:";
-    tfLogin.value = "";
-    tfLogin.disabled = false;
-    btNovo.textContent = "Nova Conta";
-    estadoBtNovo = "Conta";
-    divInstrucao.innerHTML =
-      "<center><b>Efetue seu Login ou Crie sua Conta</b></center>";
-  }
-}
-
-// -----------------------------------------------------------------------------------------//
-
-function colocarEspera() {
-  $("div.circle").addClass("wait");
-}
-
-// -----------------------------------------------------------------------------------------//
-
-function retirarEspera() {
-  $("div.circle").removeClass("wait");
-}
-
-// -----------------------------------------------------------------------------------------//
-
-btOk.addEventListener("click", callbackOk);
-btNovo.addEventListener("click", callbackCriar);
-tfSenha.addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
-    callbackOk();
-  }
-});
-
-// -----------------------------------------------------------------------------------------//
-
+iniciar();
 

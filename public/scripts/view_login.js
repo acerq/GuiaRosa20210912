@@ -57,8 +57,8 @@ ViewEfetuarLogin.prototype.instalacaoApp = function() {
 // -----------------------------------------------------------------------------------------//
 
 ViewEfetuarLogin.prototype.callbackOk = async function() {
-  this.colocarEspera();
-  let resposta = this.ctrl.verificarLogin(this.tfLogin.value, this.tfSenha.value);
+  self.colocarEspera();
+  let resposta = self.ctrl.verificarLogin(self.tfLogin.value, self.tfSenha.value);
   if (resposta == null) {
     alert("Problemas de Conexão com o Servidor");
     return;
@@ -67,14 +67,13 @@ ViewEfetuarLogin.prototype.callbackOk = async function() {
     alert(resposta.erro);
 
     if(resposta.erro.includes("TIMEOUT")) {
-      this.divInstrucao.innerHTML = "<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>";
+      self.divInstrucao.innerHTML = "<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>";
       return;
     }
 
-    if(resposta == null || this.tfLogin.value != usrApp.login || fnMD5(tfSenha.value) != usrApp.senha) {
-      this.divInstrucao.innerHTML = "<b>Login não autorizado</b>";
+    // if(resposta == null || this.tfLogin.value != usrApp.login || fnMD5(tfSenha.value) != usrApp.senha) {
+      self.divInstrucao.innerHTML = "<b>Login não autorizado</b>";
       return;
-    }
   }
 
   if (tfLogin.value.replace(/\.|-/g, "") == usrApp.login.replace(/\.|-/g, "") && fnMD5(tfSenha.value) == usrApp.senha) {
@@ -109,68 +108,25 @@ ViewEfetuarLogin.prototype.retirarEspera = function() {
 
 // -----------------------------------------------------------------------------------------//
 
-function renderEfetuarLogin(resposta) {
+ViewEfetuarLogin.prototype.notificar = function(msg) {
+  alert(msg);
 }
 
 // -----------------------------------------------------------------------------------------//
 
-function doGuardarUsuarioCorrente() {
-  return fetch(
-    "/guardarUsuarioCorrente/" +
-      usrApp.login +
-      "/" +
-      usrApp.senha +
-      "/" +
-      usrApp.nome +
-      "/" +
-      usrApp.email +
-      "/" +
-      usrApp.celular +
-      "/" +
-      usrApp.rua +
-      "/" +
-      usrApp.numero +
-      "/" +
-      usrApp.complemento +
-      "/" +
-      usrApp.bairro +
-      "/" +
-      usrApp.cep,
-    {
-      credentials: "include"
-    }
-  )
-    .then(response => {
-      return response.json();
-    })
-    .catch(() => {
-      return null;
-    });
+ViewEfetuarLogin.prototype.apresentarInstrucao = function(msg) {
+    self.divInstrucao.innerHTML = "<b>Tempo de Conexão Excedido<br/>com o Servidor. Tente mais tarde.</b>";
+
 }
 
 // -----------------------------------------------------------------------------------------//
 
-async function doEfetuarLogin(login, senha) {
-  if (usrApp != null && login == usrApp.login) {
-    if (senha == usrApp.senha) {
-      return usrApp;
-    }
-  }
-  let response = await fetch("/login/" + login + "/" + senha, { credentials : "include" } );
-  let respJson = await response.json();
-  usrApp = respJson;
-  return respJson;
-}
-
-// -----------------------------------------------------------------------------------------//
-
-
-function callbackCriar() {
-  if (estadoBtNovo == "Conta") 
+  ViewEfetuarLogin.prototype.callbackCriar = function () {
+  if (this.estadoBtNovo == "Conta") 
     window.location.href = "cadusuario.html";
   else {
     // estadoBtNovo == "Login";
-    labelLogin.innerHTML = "Login:";
+    this.labelLogin.innerHTML = "Login:";
     tfLogin.value = "";
     tfLogin.disabled = false;
     btNovo.textContent = "Nova Conta";
