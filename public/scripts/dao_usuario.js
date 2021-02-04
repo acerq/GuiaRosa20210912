@@ -60,68 +60,35 @@ DaoUsuario.prototype.obterUsr = async function() {
 
 //-----------------------------------------------------------------------------------------//
 
-DaoUsuario.prototype.salvarUsr = async function(codLocalSelecionado, arrayExames, tfExame, codExecutanteSelecionado, codExameSelecionado) {
+DaoUsuario.prototype.salvarUsr = async function(login,senha,nome,email,celular,rua,numero,
+                                                complemento,bairro,cep,ehMedico){
 
-  
-  
-  
-  
-  function incluirDbApp {
-  transacao = db.transaction(["AppUsr"], "readwrite");
-  transacao.onerror = event => {
-    alert("Erro [AppUsr]: " + event.target.errorCode);
-  };
-  store = transacao.objectStore("AppUsr");
-  var objectStoreRequest = store.clear();
-  objectStoreRequest.onsuccess = function(event) {
-    objectStoreRequest = store.add({
-      login: login,
-      senha: fnMD5(senha),
-      nome: nome,
-      email: email,
-      celular: celular,
-      rua: rua,
-      numero: numero,
-      complemento: complemento,
-      bairro: bairro,
-      cep: cep,
-      ehMedico: ehMedico
-    });
-    objectStoreRequest.onsuccess = function(event) {
-      window.location.href = "inicio.html";
-    };
-  };
-}
-
-  
-  
-  
-  
-  
-  
   let self = this;
   let resultado = await new Promise(async function(resolve, reject) {
     try {
-      let transacao = self.db.transaction(["Consulta"], "readwrite");
-      let store = transacao.objectStore("Consulta");
+      let transacao = self.db.transaction(["AppUsr"], "readwrite");
+      let store = transacao.objectStore("AppUsr");
       let request = await store.add({
-        id: 1,
-        codLocalSelecionado: codLocalSelecionado,
-        arrayExames: arrayExames,
-        tfExame: tfExame,
-        codExecutanteSelecionado: codExecutanteSelecionado,
-        codExameSelecionado: codExameSelecionado
+        login: login,
+        senha: fnMD5(senha),
+        nome: nome,
+        email: email,
+        celular: celular,
+        rua: rua,
+        numero: numero,
+        complemento: complemento,
+        bairro: bairro,
+        cep: cep,
+        ehMedico: ehMedico
       });
       transacao.oncomplete = function(event) {
-        resolve("Ok");
+        resolve(true);
       };
       transacao.onerror = function(event) {
-        resolve([]);
+        resolve(false);
       };
-      // resolve("Ok");
     } catch (e) {
-      console.log("salvarConsulta: " + e);
-      resolve([]);
+        resolve(false);
     }
   });
   return resultado;

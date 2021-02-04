@@ -47,30 +47,16 @@ function renderEfetuarLogin(resposta) {
       return;
     }
 
-    if (
-      usrApp == null ||
-      tfLogin.value != usrApp.login ||
-      fnMD5(tfSenha.value) != usrApp.senha
-    ) {
+    if(usrApp == null || tfLogin.value != usrApp.login || fnMD5(tfSenha.value) != usrApp.senha) {
       divInstrucao.innerHTML = "<b>Login não autorizado</b>";
       return;
     }
   }
 
   if (tfLogin.value.replace(/\.|-/g, "") == usrApp.login.replace(/\.|-/g, "") && fnMD5(tfSenha.value) == usrApp.senha) {
-    incluirDbApp(
-      usrApp.login,
-      usrApp.senha,
-      usrApp.nome,
-      usrApp.email,
-      usrApp.celular,
-      usrApp.rua,
-      usrApp.numero,
-      null,
-      null,
-      null,
-      true
-    );
+    daoUsuario.salvarUsr(usrApp.login, usrApp.senha, usrApp.nome, usrApp.email, usrApp.celular,
+      usrApp.rua, usrApp.numero, null, null, null, true);
+
     window.location.href = "inicio.html";
     //doGuardarUsuarioCorrente().then(retorno => {
     //  return;
@@ -181,25 +167,30 @@ tfSenha.addEventListener("keyup", function(event) {
 
 // -----------------------------------------------------------------------------------------//
 
-daoUsuario.abrirDb();
-usrApp = daoUsuario.obterUsr();
-if(usrApp != null) {
-  tfLogin.value = usrApp.login;
-  tfLogin.disabled = true;
-  btNovo.textContent = "Novo Login";
-  estadoBtNovo = "Login";
+async function iniciar() {
+  await daoUsuario.abrirDb();
+  usrApp = await daoUsuario.obterUsr();
+  if(usrApp != null) {
+    tfLogin.value = usrApp.login;
+    tfLogin.disabled = true;
+    btNovo.textContent = "Novo Login";
+    estadoBtNovo = "Login";
 
-  if (usrApp.ehMedico == true) {
-    labelLogin.innerHTML = "Login (Médico):";
-  } else {
-    labelLogin.innerHTML = "CPF:";
-  }  
-}
-else {
-  tfLogin.disabled = false;
-  btNovo.textContent = "Nova Conta";
-  estadoBtNovo = "Conta";
-  instalacaoApp();
+    if (usrApp.ehMedico == true) {
+      labelLogin.innerHTML = "Login (Médico):";
+    } else {
+      labelLogin.innerHTML = "CPF:";
+    }  
+  }
+  else {
+    tfLogin.disabled = false;
+    btNovo.textContent = "Nova Conta";
+    estadoBtNovo = "Conta";
+    instalacaoApp();
+  }
 }
 
+// -----------------------------------------------------------------------------------------//
+
+iniciar();
 
