@@ -59,6 +59,7 @@ export default class ViewSolicitacao {
     this.btCancelar = null;
     //----
 
+    this.arrayExames = null;
     this.codLocalSelecionado = null;
     this.codExecutanteSelecionado = null;
     this.codExameSelecionado = null;
@@ -94,7 +95,7 @@ export default class ViewSolicitacao {
       let array = await this.verificarConsultaArmazenada(this.db);
       if(array.length != 0) {
         this.tfExame.value = array[0].tfExame;
-        this.obterExames();
+        this.atualizarExames(array[0].arrayExames);
         //codLocalSelecionado : self.codLocalSelecionado,
         //dadosExame : self.dadosExame.id
       }
@@ -230,6 +231,7 @@ export default class ViewSolicitacao {
       );
       return;
     }
+    this.arrayExames = arrayExames;
     new Promise((res, rej) => {
       arrayExames.sort(function(a, b) {
         let keyA = a.exame;
@@ -667,6 +669,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         store.add({
           id: 1,
           codLocalSelecionado : self.codLocalSelecionado,
+          arrayExames : self.arrayExames,
           tfExame : self.tfExame.value,
           dadosExame : self.dadosExame.id
         });
