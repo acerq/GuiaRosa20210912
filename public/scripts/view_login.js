@@ -1,39 +1,56 @@
 "use strict";
 
 // -----------------------------------------------------------------------------------------//
+var self;
 
-const novoDaoUsuario = new Function("", "return new DaoUsuario()");
-const novoVwEfetuarLogin = new Function("", "return new VwEfetuarLogin()");
-const fnMD5 = new Function("a", "return md5(a)");
-
-// -----------------------------------------------------------------------------------------//
-
-const divConteudo = document.getElementById("divConteudo");
-const divInstrucao = document.getElementById("divInstrucao");
-const tfLogin = document.getElementById("tfLogin");
-const tfSenha = document.getElementById("tfSenha");
-const btOk = document.getElementById("btOk");
-const btNovo = document.getElementById("btNovo");
-const labelLogin = document.getElementById("lbLogin");
-
-// -----------------------------------------------------------------------------------------//
-
-function UcEfetuarLogin() {
-  this.vwEfetuarLogin = novoVwEfetuarLogin(this);
-  this.usrApp = null;
-  this.daoUsuario = novoDaoUsuario();
+function ViewEfetuarLogin(ctrl) {
+  
+  this.ctrlEfetuarLogin = ctrl;
+  this.estadoBtNovo = "Login";
+  this.divConteudo = document.getElementById("divConteudo");
+  this.divInstrucao = document.getElementById("divInstrucao");
+  this.tfLogin = document.getElementById("tfLogin");
+  this.tfSenha = document.getElementById("tfSenha");
+  this.btOk = document.getElementById("btOk");
+  this.btNovo = document.getElementById("btNovo");
+  this.labelLogin = document.getElementById("lbLogin");
+  
+  this.btOk.addEventListener("click", callbackOk);
+  this.btNovo.addEventListener("click", callbackCriar);
+  this.tfSenha.addEventListener("keyup", function(event) {
+    if(event.keyCode === 13) {
+      callbackOk();
+    }
+  });
 }
 
-var usrApp = null;
-var estadoBtNovo = "Conta";
+// -----------------------------------------------------------------------------------------//
+
+ViewEfetuarLogin.prototype.iniciar = async function(usrApp) {
+  if(usrApp != null) {
+    this.tfLogin.value = usrApp.login;
+    this.tfLogin.disabled = true;
+    this.btNovo.textContent = "Novo Login";
+    this.estadoBtNovo = "Login";
+
+    if (usrApp.ehMedico == true) {
+      this.labelLogin.innerHTML = "Login (Médico):";
+    } else {
+      this.labelLogin.innerHTML = "CPF:";
+    }  
+  }
+  else {
+    this.tfLogin.disabled = false;
+    this.btNovo.textContent = "Nova Conta";
+    this.estadoBtNovo = "Conta";
+    this.instalacaoApp();
+  }
+}
 
 // -----------------------------------------------------------------------------------------//
 
-
-// -----------------------------------------------------------------------------------------//
-
-function instalacaoApp() {
-  divInstrucao.innerHTML =
+ViewEfetuarLogin.prototype.instalacaoApp = function() {
+  this.divInstrucao.innerHTML =
     "<center><b>Efetue seu Login ou Crie sua Conta</b></center>";
 }
 
@@ -165,40 +182,6 @@ function retirarEspera() {
 
 // -----------------------------------------------------------------------------------------//
 
-btOk.addEventListener("click", callbackOk);
-btNovo.addEventListener("click", callbackCriar);
-tfSenha.addEventListener("keyup", function(event) {
-  if (event.keyCode === 13) {
-    callbackOk();
-  }
-});
 
 // -----------------------------------------------------------------------------------------//
-
-async function iniciar() {
-  await daoUsuario.abrirDb();
-  usrApp = await daoUsuario.obterUsr();
-  if(usrApp != null) {
-    tfLogin.value = usrApp.login;
-    tfLogin.disabled = true;
-    btNovo.textContent = "Novo Login";
-    estadoBtNovo = "Login";
-
-    if (usrApp.ehMedico == true) {
-      labelLogin.innerHTML = "Login (Médico):";
-    } else {
-      labelLogin.innerHTML = "CPF:";
-    }  
-  }
-  else {
-    tfLogin.disabled = false;
-    btNovo.textContent = "Nova Conta";
-    estadoBtNovo = "Conta";
-    instalacaoApp();
-  }
-}
-
-// -----------------------------------------------------------------------------------------//
-
-iniciar();
 

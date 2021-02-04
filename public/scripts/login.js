@@ -8,13 +8,6 @@ const fnMD5 = new Function("a", "return md5(a)");
 
 // -----------------------------------------------------------------------------------------//
 
-const divConteudo = document.getElementById("divConteudo");
-const divInstrucao = document.getElementById("divInstrucao");
-const tfLogin = document.getElementById("tfLogin");
-const tfSenha = document.getElementById("tfSenha");
-const btOk = document.getElementById("btOk");
-const btNovo = document.getElementById("btNovo");
-const labelLogin = document.getElementById("lbLogin");
 
 // -----------------------------------------------------------------------------------------//
 
@@ -25,31 +18,12 @@ function UcEfetuarLogin() {
   this.iniciar();
 }
 
-
 // -----------------------------------------------------------------------------------------//
 
 UcEfetuarLogin.prototype.iniciar = async function() {
   await this.daoUsuario.abrirDb();
   this.usrApp = await this.daoUsuario.obterUsr();
-  this.viewEfetuarLogin.
-  if(usrApp != null) {
-    tfLogin.value = usrApp.login;
-    tfLogin.disabled = true;
-    btNovo.textContent = "Novo Login";
-    estadoBtNovo = "Login";
-
-    if (usrApp.ehMedico == true) {
-      labelLogin.innerHTML = "Login (Médico):";
-    } else {
-      labelLogin.innerHTML = "CPF:";
-    }  
-  }
-  else {
-    tfLogin.disabled = false;
-    btNovo.textContent = "Nova Conta";
-    estadoBtNovo = "Conta";
-    instalacaoApp();
-  }
+  this.viewEfetuarLogin.iniciar(this.usrApp);
 }
 
 // -----------------------------------------------------------------------------------------//
