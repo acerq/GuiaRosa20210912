@@ -612,7 +612,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
       }
       await self.daoConsulta.limparConsulta();
       await self.daoConsulta.abrirDbConsulta();
-      await self.daoConsulta.salvarConsulta();
+      await self.daoConsulta.salvarConsulta(self.codLocalSelecionado, self.arrayExames, self.tfExame.value, self.codExecutanteSelecionado, self.codExameSelecionado);
       alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
       window.location.href = "cadusuario.html";
     }

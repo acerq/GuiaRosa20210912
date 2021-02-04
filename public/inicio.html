@@ -30,8 +30,12 @@
     <footer class="footer"></footer>
   </body>
   <script src="scripts/nav.js"></script>
-  <script src="scripts/view_solicitacao.js"> 
-    let view = new ViewSolicitacao(null); 
-    view.
+  <script src="scripts/dao_consulta.js">   </script>
+  <script>
+    let dao = new DaoConsulta();
+    dao.abrirDbConsulta();
+    let array = dao.verificarConsultaArmazenada();
+    if(array.length > 0)
+      alert("Tem consulta");
   </script>
 </html>
