@@ -55,8 +55,9 @@ UcEfetuarLogin.prototype.verificarLogin = async function(login, senha) {
   
   this.usrApp = respJson; 
   this.daoUsuario.salvarUsr(this.usrApp.login, this.usrApp.senha, this.usrApp.nome, this.usrApp.email, 
-                            this.usrApp.celular, this.usrApp.rua, this.usrApp.numero, null, null, null, true);
-
+                            this.usrApp.celular, this.usrApp.rua, this.usrApp.numero, this.usrApp.complemento, 
+                            this.usrApp.bairro, this.usrApp.cep, this.usrApp.ehMedico);
+  
   //if(login.replace(/\.|-/g, "") == this.usrApp.login.replace(/\.|-/g, "") && 
   //fnMD5(tfSenha.value) == usrApp.senha) 
   
