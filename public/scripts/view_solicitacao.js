@@ -665,11 +665,11 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
   //-----------------------------------------------------------------------------------------//
   
   async salvarConsulta(db) {
-    let resultado = await new Promise(function(resolve, reject) {
+    let resultado = await new Promise(async function(resolve, reject) {
     try {
         let transacao = db.transaction(["Consulta"], "readwrite");
         let store = transacao.objectStore("Consulta");
-        store.add({
+        let request = await store.add({
           id: 1,
           codLocalSelecionado : self.codLocalSelecionado,
           arrayExames : self.arrayExames,
@@ -678,7 +678,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           codExameSelecionado : self.codExameSelecionado
         });
         resolve("Ok");
-
       } catch (e) {
         console.log("salvarConsulta: " + e);
         resolve([]);
