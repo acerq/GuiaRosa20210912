@@ -667,8 +667,8 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
   async salvarConsulta(db) {
     let resultado = await new Promise(async function(resolve, reject) {
     try {
-        let transacao = db.transaction(["ConsultaUsr"], "readwrite");
-        let store = transacao.objectStore("ConsultaUsr");
+        let transacao = db.transaction(["Consulta"], "readwrite");
+        let store = transacao.objectStore("Consulta");
         let request = await store.add({
           id: 1,
           codLocalSelecionado : self.codLocalSelecionado,
