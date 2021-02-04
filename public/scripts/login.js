@@ -38,6 +38,7 @@ function renderEfetuarLogin(resposta) {
     alert("Problemas de Conexão com o Servidor");
     return;
   }
+  
   if (resposta.hasOwnProperty("erro")) {
     alert(resposta.erro);
 
@@ -130,7 +131,8 @@ async function callbackOk() {
 // -----------------------------------------------------------------------------------------//
 
 function callbackCriar() {
-  if (estadoBtNovo == "Conta") window.location.href = "cadusuario.html";
+  if (estadoBtNovo == "Conta") 
+    window.location.href = "cadusuario.html";
   else {
     // estadoBtNovo == "Login";
     labelLogin.innerHTML = "Login:";

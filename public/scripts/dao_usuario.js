@@ -70,7 +70,7 @@ DaoUsuario.prototype.salvarUsr = async function(login,senha,nome,email,celular,r
       let store = transacao.objectStore("AppUsr");
       let request = await store.add({
         login: login,
-        senha: fnMD5(senha),
+        senha: senha,
         nome: nome,
         email: email,
         celular: celular,
@@ -96,8 +96,8 @@ DaoUsuario.prototype.salvarUsr = async function(login,senha,nome,email,celular,r
 
 //-----------------------------------------------------------------------------------------//
 
-DaoUsuario.prototype.limparConsulta = function() {
-  var requestDB = window.indexedDB.deleteDatabase("ConsultaUsr", 1);
+DaoUsuario.prototype.limparDb = function() {
+  var requestDB = window.indexedDB.deleteDatabase("AppUsr", 1);
   requestDB.onsuccess = function(event) {};
   requestDB.onerror = function(event) {};
 };
