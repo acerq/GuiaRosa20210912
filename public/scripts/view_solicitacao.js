@@ -667,8 +667,8 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
   async salvarConsulta(db) {
     let resultado = await new Promise(async function(resolve, reject) {
     try {
-        let transacao = db.transaction(["Consulta"], "readwrite");
-        let store = transacao.objectStore("Consulta");
+        let transacao = db.transaction(["ConsultaUsr"], "readwrite");
+        let store = transacao.objectStore("ConsultaUsr");
         let request = await store.add({
           id: 1,
           codLocalSelecionado : self.codLocalSelecionado,
@@ -677,7 +677,19 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           codExecutanteSelecionado : self.codExecutanteSelecionado,
           codExameSelecionado : self.codExameSelecionado
         });
-        resolve("Ok");
+        request.onsuccess = function(event) {
+          alert("sucesso");
+        }
+        request.onerror = function(event) {
+          alert("erro");
+        }
+        transacao.oncomplete = function(event) {
+          resolve("Ok");
+        };
+        transacao.onerror = function(event) {
+          resolve([]);
+        }
+        // resolve("Ok");
       } catch (e) {
         console.log("salvarConsulta: " + e);
         resolve([]);
