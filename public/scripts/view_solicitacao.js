@@ -99,9 +99,7 @@ export default class ViewSolicitacao {
         this.codExameSelecionado = array[0].codExameSelecionado;
         this.atualizarExames(array[0].arrayExames);
         //codLocalSelecionado : self.codLocalSelecionado,
-      }
-      //TODO this.limparConsulta();
-      
+      }      
       if (ehMedico) {
         let i;
         let tam = this.cbPaciente.options.length - 1;
@@ -611,6 +609,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         alert("O exame não foi escolhido.");
         return;
       }
+      self.limparConsulta();
       self.db = await self.abrirDbConsulta();
       await self.salvarConsulta(self.db);
       alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
@@ -702,12 +701,14 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
 
   limparConsulta() {
     var requestDB = window.indexedDB.open("ConsultaUsr", 1); 
-    requestDB.onsuccess = function(event) {
+    requestDB.onsuccess = async function(event) {
       let db = event.target.result;
       let transaction = db.transaction(["Consulta"], "readwrite");
-      transaction.oncomplete = function(event) {};
-      let objectStore = transaction.objectStore("Consulta");
-      objectStore.clear();
+      transaction.oncomplete = function(event) {
+        let objectStore = transaction.objectStore("Consulta");
+        objectStore.clear();
+      }
+      transaction.onerror = function(event) {}
     };
   }
 
