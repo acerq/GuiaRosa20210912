@@ -32,10 +32,13 @@
   <script src="scripts/nav.js"></script>
   <script src="scripts/dao_consulta.js">   </script>
   <script>
-    let dao = new DaoConsulta();
-    dao.abrirDbConsulta();
-    let array = dao.verificarConsultaArmazenada();
-    if(array.length > 0)
-      alert("Tem consulta");
+    async function ver() {
+      let dao = new DaoConsulta();
+      await dao.abrirDbConsulta();
+      let array = await dao.verificarConsultaArmazenada();
+      if(array.length > 0)
+        window.location.href = "solicitacao.html";
+    }
+    ver();
   </script>
 </html>
