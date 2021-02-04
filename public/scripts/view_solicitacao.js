@@ -93,7 +93,8 @@ export default class ViewSolicitacao {
       this.db = await this.abrirDbConsulta();
       let array = await this.verificarConsultaArmazenada(this.db);
       if(array.length != 0) {
-        this.tfExame = array.tfExame;
+        this.tfExame.value = array[0].tfExame;
+        this.obterExames();
         //codLocalSelecionado : self.codLocalSelecionado,
         //dadosExame : self.dadosExame.id
       }
