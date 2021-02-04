@@ -31,7 +31,7 @@ UcEfetuarLogin.prototype.verificarLogin = async function(login, senha) {
       return this.usrApp;
     }
   }
-  let response = await fetch("/login/" + login + "/" + senha, { credentials : "include" } );
+  let response = await fetch("/login/" + login + "/" + fnMD5(senha), { credentials : "include" } );
   let respJson = await response.json();
   
   if(respJson == null) {
