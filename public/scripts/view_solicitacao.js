@@ -264,8 +264,8 @@ export default class ViewSolicitacao {
           codExame +
           SEPARADOR +
           valor +
-          "' " +  (    this.codExecutanteSelecionado ==  array[0].codExecutanteSelecionado;
-        this.codExameSelecionado = array[0].codExameSelecionado;)
+          "' " +  
+          (this.codExecutanteSelecionado ==  codExecutante && this.codExameSelecionado == codExame ? "selected" : "") +
           ">" +
           descricao +
           "</option>";
