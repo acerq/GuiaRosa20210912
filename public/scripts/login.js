@@ -21,59 +21,9 @@ var estadoBtNovo = "Conta";
 
 // -----------------------------------------------------------------------------------------//
 
-function abrirDbApp() {
-  requestDB = window.indexedDB.open("AppUsr", 1);
-
-  requestDB.onupgradeneeded = event => {
-    db = event.target.result;
-    store = db.createObjectStore("AppUsr", {
-      autoIncrement: true
-    });
-    store.createIndex("login", "login", { unique: true });
-  };
-
-  requestDB.onerror = event => {
-    alert("Erro [AppUsr]: " + event.target.errorCode);
-  };
-
-  requestDB.onsuccess = event => {
-    db = event.target.result;
-    obterAppUsr();
-  };
-}
 
 // -----------------------------------------------------------------------------------------//
 
-function obterAppUsr() {
-  try {
-    transacao = db.transaction(["AppUsr"], "readonly");
-    store = transacao.objectStore("AppUsr");
-  } catch (e) {
-    instalacaoApp();
-    return;
-  }
-  store.openCursor().onsuccess = event => {
-    var cursor = event.target.result;
-    if (cursor) {
-      usrApp = cursor.value;
-      tfLogin.value = usrApp.login;
-      tfLogin.disabled = true;
-      btNovo.textContent = "Novo Login";
-      estadoBtNovo = "Login";
-
-      if (usrApp.ehMedico == true) {
-        labelLogin.innerHTML = "Login (Médico):";
-      } else {
-        labelLogin.innerHTML = "CPF:";
-      }
-    } else {
-      tfLogin.disabled = false;
-      btNovo.textContent = "Nova Conta";
-      estadoBtNovo = "Conta";
-      instalacaoApp();
-    }
-  };
-}
 
 // -----------------------------------------------------------------------------------------//
 
