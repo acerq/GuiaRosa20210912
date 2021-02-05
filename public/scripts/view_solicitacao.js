@@ -97,6 +97,7 @@ export default class ViewSolicitacao {
       await this.daoConsulta.abrirDbConsulta();
       let array = await this.daoConsulta.verificarConsultaArmazenada();
       if(array.length != 0) {
+        this.daoConsulta.limparConsulta();
         this.tfExame.value = array[0].tfExame;
         this.idDadosExame = array[0].idDadosExame;
         this.codExecutanteSelecionado = array[0].codExecutanteSelecionado;
@@ -235,6 +236,7 @@ export default class ViewSolicitacao {
       alert("Nenhum exame encontrado\ncom os parâmetros informados.\nTente novamente.");
       var divExame = document.getElementById("divExame"); 
       divExame.innerHTML = "";
+      divExame.style = "";
       return;
     }
     this.arrayExames = arrayExames;
