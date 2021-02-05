@@ -142,7 +142,7 @@ function incluirDbApp() {
       ehMedico: false
     });
     objectStoreRequest.onsuccess = function(event) {
-      window.location.href = "inicio.html";
+      history.pushState(null, null, 'https://guia-rosa.glitch.me/inicio.html');
     };
   };
 }
@@ -226,11 +226,12 @@ function doGuardarUsuarioCorrente() {
 //-----------------------------------------------------------------------------------------//
 
 function callbackCancelar() {
-  var tamHistory = window.history.length;
-  while (tamHistory > 0) {
-    window.history.go(-1);
-    tamHistory--;
-  }
+  history.pushState(null, null, 'https://guia-rosa.glitch.me/');
+  //var tamHistory = window.history.length;
+  //while (tamHistory > 0) {
+  //  window.history.go(-1);
+  //  tamHistory--;
+  //}
 }
 
 //-----------------------------------------------------------------------------------------//

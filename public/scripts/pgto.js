@@ -94,11 +94,12 @@ function doPgtoCredito() {
 //-----------------------------------------------------------------------------------------//
 
 function callbackCancelar() {
-  var tamHistory = window.history.length;
-  while (tamHistory > 0) {
-    window.history.go(-1);
-    tamHistory--;
-  }
+  history.pushState(null, null, 'https://guia-rosa.glitch.me/inicio.html');
+  //var tamHistory = window.history.length;
+  //while (tamHistory > 0) {
+  //  window.history.go(-1);
+  //  tamHistory--;
+  //}
 }
 
 //-----------------------------------------------------------------------------------------//

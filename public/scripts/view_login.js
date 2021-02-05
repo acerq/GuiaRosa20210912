@@ -61,14 +61,14 @@ ViewEfetuarLogin.prototype.callbackOk = async function() {
   let ok = await self.ctrlEfetuarLogin.verificarLogin(self.tfLogin.value, self.tfSenha.value);
   self.retirarEspera();
   if(ok) 
-    window.location.href = "inicio.html";
+    history.pushState(null, null, 'https://guia-rosa.glitch.me/inicio.html');
 }
 
 // -----------------------------------------------------------------------------------------//
 
 ViewEfetuarLogin.prototype.callbackCriar = function () {
   if (self.estadoBtNovo == "Conta") 
-    window.location.href = "cadusuario.html";
+    history.pushState(null, null, 'https://guia-rosa.glitch.me/cadusuario.html');
   else {
     // estadoBtNovo == "Login";
     self.labelLogin.innerHTML = "Login:";

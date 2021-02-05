@@ -39,8 +39,10 @@ $("div.menu ul li a").on("click", function(e) {
 // -----------------------------------------------------------------------------------------//
 
 function irPara(ref) {
-  if (!ref.includes(".pdf")) window.location.href = ref;
-  else window.open(ref);
+  if (!ref.includes(".pdf")) 
+    history.pushState(null, null, 'https://guia-rosa.glitch.me/' + ref);
+  else 
+    window.open(ref);
 }
 
 // -----------------------------------------------------------------------------------------//
@@ -217,7 +219,7 @@ window.retornarUsrApp = async function() {
 // -----------------------------------------------------------------------------------------//
 
 function loginApp() {
-  window.location.href='login.html';
+  history.pushState(null, null, 'https://guia-rosa.glitch.me/login.html');
 }
 
 // -----------------------------------------------------------------------------------------//
@@ -250,7 +252,7 @@ async function fecharApp() {
   } catch (e) {
     var tamHistory = window.history.length;
     if(tamHistory == 0)
-        window.location.href='index.html';
+      history.pushState(null, null, 'https://guia-rosa.glitch.me/');
     else
       while (tamHistory > 0) {
         window.history.go(-1);

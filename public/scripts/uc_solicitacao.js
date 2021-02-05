@@ -734,13 +734,13 @@ async enviarAgendamentoPgtoBoleto(
 //-----------------------------------------------------------------------------------------//
 
   chamarCadastrarPacientes() {
-    window.location.href = "bdpaciente.html";
+    history.pushState(null, null, 'https://guia-rosa.glitch.me/bdpaciente.html');
   }
 
   //-----------------------------------------------------------------------------------------//
 
   callbackSair() {
-    history.go(-1);
+    history.pushState(null, null, 'https://guia-rosa.glitch.me/inicio.html');
   }
 
 //-----------------------------------------------------------------------------------------//
