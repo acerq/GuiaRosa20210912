@@ -131,8 +131,11 @@ export default class ViewSolicitacao {
       arrayLocais.forEach((value, index, array) => {
         var codigo = value.codigolocal;
         var descricao = value.nomelocal;
-        retorno += "<option value='" + codigo + "'>" + descricao + "</option>";
-        if (index === array.length - 1) resolve(retorno);
+        retorno += "<option value='" + codigo + "'" +           
+                    (this.codLocalSelecionado == codigo  ? "selected" : "") +  
+                   ">" + descricao + "</option>";
+        if (index === array.length - 1) 
+          resolve(retorno);
       });
     });
 
@@ -272,7 +275,7 @@ export default class ViewSolicitacao {
           SEPARADOR +
           valor +
           "' " +  
-          (this.codExecutanteSelecionado ==  codExecutante && this.codExameSelecionado == codExame ? "selected" : "") +
+          (this.codExecutanteSelecionado == codExecutante && this.codExameSelecionado == codExame ? "selected" : "") +
           ">" +
           descricao +
           "</option>";
