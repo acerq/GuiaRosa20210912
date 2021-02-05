@@ -62,7 +62,7 @@ export default class ViewSolicitacao {
     //----
 
     this.arrayExames = null;
-    this.codLocalSelecionado = null;
+    this.codLocalSelecionado = 0;
     this.codExecutanteSelecionado = null;
     this.codExameSelecionado = null;
     this.valorExameSelecionado = null;
@@ -150,9 +150,8 @@ export default class ViewSolicitacao {
         templateSelection: this.formatarLocal
       })
       .on("select2:select", function(e) {
-        this.codLocalSelecionado = e.params.data.id;
+        self.codLocalSelecionado = e.params.data.id;
       });
-    this.codLocalSelecionado = 0;
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -170,10 +169,6 @@ export default class ViewSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterExames() {
-    if (self.codLocalSelecionado == null) {
-      alert("Não foi indicado o local para realização do exame.");
-      return;
-    }
     self.tfExame.value = self.tfExame.value.toUpperCase();
     var strExame = self.tfExame.value;
     if(strExame == null || strExame == ""){
