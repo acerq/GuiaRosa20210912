@@ -232,9 +232,9 @@ export default class ViewSolicitacao {
 
   atualizarExames(arrayExames) {
     if (arrayExames == null || arrayExames.length == 0) {
-      alert(
-        "Nenhum exame encontrado\ncom os parâmetros informados.\nTente novamente."
-      );
+      alert("Nenhum exame encontrado\ncom os parâmetros informados.\nTente novamente.");
+      var divExame = document.getElementById("divExame"); 
+      divExame.innerHTML = "";
       return;
     }
     this.arrayExames = arrayExames;
