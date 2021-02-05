@@ -597,8 +597,9 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
   //-----------------------------------------------------------------------------------------//
 
   async voltarOuAgendar() {
-    if(self.usuarioLogado)
+    if(self.usuarioLogado) {
       history.go(-1);
+    }
     else {
       if (self.codExecutanteSelecionado == null) {
         fnTirarEspera();
