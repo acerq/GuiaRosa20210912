@@ -102,7 +102,7 @@ export default class ViewSolicitacao {
         this.codExecutanteSelecionado = array[0].codExecutanteSelecionado;
         this.codExameSelecionado = array[0].codExameSelecionado;
         this.atualizarExames(array[0].arrayExames);
-        //TODO codLocalSelecionado : self.codLocalSelecionado,
+        this.codLocalSelecionado = array[0].codLocalSelecionado;
       }      
       if (ehMedico) {
         let i;
@@ -627,7 +627,8 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
       await self.daoConsulta.salvarConsulta(self.codLocalSelecionado, self.arrayExames, self.tfExame.value, self.dadosExame.text, self.codExecutanteSelecionado, self.codExameSelecionado);
       
       let daoUsuario = novoDaoUsuario();
-      let usrApp = await this.daoUsuario.obterUsr();
+      await daoUsuario.abrirDb();
+      let usrApp = await daoUsuario.obterUsr();
       if(usrApp == null) {
         alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");      
         window.location.href = "cadusuario.html";
