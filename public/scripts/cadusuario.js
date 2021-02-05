@@ -40,6 +40,18 @@ var complemento;
 var bairro;
 var cep;
 
+// Tratando evento voltar
+if(tfCpf.value != null && tfCpf.value != "") {
+  let tamHistory = window.history.length;
+  if(tamHistory == 0)
+    window.location.href='index.html';
+  else
+    while (tamHistory > 0) {
+      window.history.go(-1);
+      tamHistory--;
+    }
+}
+
 var funcaoMD5 = new Function("a", "return md5(a)");
 
 $(document).ready(function() {
