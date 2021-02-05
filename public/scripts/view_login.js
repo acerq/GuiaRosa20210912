@@ -62,6 +62,7 @@ ViewEfetuarLogin.prototype.callbackOk = async function() {
   self.retirarEspera();
   if(ok) {
     history.pushState(null, "Inicio", 'https://guia-rosa.glitch.me/inicio.html');
+    window.
 }
 
 // -----------------------------------------------------------------------------------------//
