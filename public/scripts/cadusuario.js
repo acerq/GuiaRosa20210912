@@ -408,13 +408,3 @@ tfReplay.addEventListener("keyup", function(event) {
   }
 });
 
-window.onpopstate = function(event) {
- var tamHistory = window.history.length;
- if(tamHistory == 0)
-   window.location.href='index.html';
- else
-   while (tamHistory > 0) {
-     window.history.go(-1);
-     tamHistory--;
-  }
-};
