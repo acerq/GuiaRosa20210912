@@ -70,6 +70,7 @@ export default class ViewSolicitacao {
     this.nomePaciente = null;
     this.cpfPaciente = null;
     this.dadosExame = null;
+    this.idDadosExame = null;
     this.formaPgto = null;
     
     $(document).on("keypress", "input", function(e) {
@@ -96,7 +97,7 @@ export default class ViewSolicitacao {
       let array = await this.daoConsulta.verificarConsultaArmazenada();
       if(array.length != 0) {
         this.tfExame.value = array[0].tfExame;
-        //this.dadosExame.text = array[0].dadosExame;
+        this.idDadosExame = array[0].idDadosExame;
         this.codExecutanteSelecionado = array[0].codExecutanteSelecionado;
         this.codExameSelecionado = array[0].codExameSelecionado;
         this.atualizarExames(array[0].arrayExames);
@@ -355,10 +356,10 @@ export default class ViewSolicitacao {
     self.emailPaciente = dadosPaciente[2];
 
     let selecao;
-    if(self.dadosExame != null) {
+    if(self.dadosExame != null) 
       selecao = self.dadosExame.text.split(SEPARADOR);
     else
-      selecao = self.
+      selecao = self.idDadosExame.split(SEPARADOR); // Foi obtido pela consulta armazenada
     let nomeExame = tiraEspacos(selecao[0]).replace(/\//g, " ");
     let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
     let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
@@ -408,7 +409,12 @@ export default class ViewSolicitacao {
       $("#tfMesValidade").mask("99");
       $("#tfAnoValidade").mask("9999");
 
-      let selecao = self.dadosExame.text.split(SEPARADOR);
+      let selecao;
+      if(self.dadosExame != null) 
+        selecao = self.dadosExame.text.split(SEPARADOR);
+      else
+        selecao = self.idDadosExame.split(SEPARADOR); // Foi obtido pela consulta armazenada
+      
       let msg =
         "<center><b>Exame Solicitado:</b><br/>" +
         "<span style='font-size: 10px;'><b>" +
