@@ -3,6 +3,7 @@
 const SEPARADOR = "##";
 const funcaoMD5 = new Function("a", "return md5(a)");
 const novoDaoConsulta = new Function("", "return new DaoConsulta()");
+const novoDaoUsuario = new Function("", "return new DaoUsuario()");
 
 const fnTirarEspera = new Function("tirarEspera()");
 const fnColocarEspera = new Function("colocarEspera()");
@@ -624,8 +625,16 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
       await self.daoConsulta.limparConsulta();
       await self.daoConsulta.abrirDbConsulta();
       await self.daoConsulta.salvarConsulta(self.codLocalSelecionado, self.arrayExames, self.tfExame.value, self.dadosExame.text, self.codExecutanteSelecionado, self.codExameSelecionado);
-      alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
-      window.location.href = "cadusuario.html";
+      
+      let daoUsuario = novoDaoUsuario();
+      let usrApp = await this.daoUsuario.obterUsr();
+      if(usrApp == null) {
+        alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");      
+        window.location.href = "cadusuario.html";
+      } else {
+        alert("Faça seu login para emissão do voucher.");      
+        window.location.href = "login.html";
+      }
     }
   }
 
