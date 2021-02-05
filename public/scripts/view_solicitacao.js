@@ -96,7 +96,7 @@ export default class ViewSolicitacao {
       let array = await this.daoConsulta.verificarConsultaArmazenada();
       if(array.length != 0) {
         this.tfExame.value = array[0].tfExame;
-        this.dadosExame.text = array[0].dadosExame;
+        //this.dadosExame.text = array[0].dadosExame;
         this.codExecutanteSelecionado = array[0].codExecutanteSelecionado;
         this.codExameSelecionado = array[0].codExameSelecionado;
         this.atualizarExames(array[0].arrayExames);
@@ -354,7 +354,11 @@ export default class ViewSolicitacao {
     self.cpfPaciente = dadosPaciente[1].replace(/\.|-/g, "");
     self.emailPaciente = dadosPaciente[2];
 
-    let selecao = self.dadosExame.text.split(SEPARADOR);
+    let selecao;
+    if(self.dadosExame != null) {
+      selecao = self.dadosExame.text.split(SEPARADOR);
+    else
+      selecao = self.
     let nomeExame = tiraEspacos(selecao[0]).replace(/\//g, " ");
     let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
     let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
