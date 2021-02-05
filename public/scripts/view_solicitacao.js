@@ -616,7 +616,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
       await self.daoConsulta.salvarConsulta(self.codLocalSelecionado, self.arrayExames, self.tfExame.value, self.codExecutanteSelecionado, self.codExameSelecionado);
       alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
       history.pushState(null, null, 'https://guia-rosa.glitch.me/cadusuario.html');
-      window.location.href = "cadusuario.html";
     }
   }
 

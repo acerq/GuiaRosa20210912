@@ -37,7 +37,7 @@
       await dao.abrirDbConsulta();
       let array = await dao.verificarConsultaArmazenada();
       if(array.length > 0)
-        window.location.href = "solicitacao.html";
+        history.pushState(null, null, 'https://guia-rosa.glitch.me/solicitacao.html');
     }
     history.replaceState(null, null, 'INÍCIO');
     ver();

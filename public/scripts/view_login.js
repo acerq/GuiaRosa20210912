@@ -60,8 +60,8 @@ ViewEfetuarLogin.prototype.callbackOk = async function() {
   self.colocarEspera();
   let ok = await self.ctrlEfetuarLogin.verificarLogin(self.tfLogin.value, self.tfSenha.value);
   self.retirarEspera();
-  if(ok) 
-    history.pushState(null, null, 'https://guia-rosa.glitch.me/inicio.html');
+  if(ok) {
+    history.pushState(null, "Inicio", 'https://guia-rosa.glitch.me/inicio.html');
 }
 
 // -----------------------------------------------------------------------------------------//
