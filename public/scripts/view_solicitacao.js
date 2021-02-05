@@ -96,6 +96,7 @@ export default class ViewSolicitacao {
       let array = await this.daoConsulta.verificarConsultaArmazenada();
       if(array.length != 0) {
         this.tfExame.value = array[0].tfExame;
+        this.dadosExame.text = array[0].dadosExame;
         this.codExecutanteSelecionado = array[0].codExecutanteSelecionado;
         this.codExameSelecionado = array[0].codExameSelecionado;
         this.atualizarExames(array[0].arrayExames);
@@ -612,7 +613,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
       }
       await self.daoConsulta.limparConsulta();
       await self.daoConsulta.abrirDbConsulta();
-      await self.daoConsulta.salvarConsulta(self.codLocalSelecionado, self.arrayExames, self.tfExame.value, self.codExecutanteSelecionado, self.codExameSelecionado);
+      await self.daoConsulta.salvarConsulta(self.codLocalSelecionado, self.arrayExames, self.tfExame.value, self.dadosExame.text, self.codExecutanteSelecionado, self.codExameSelecionado);
       alert("Para emitir um voucher para este exame, precisamos solicitar seus dados para identificação.");
       window.location.href = "cadusuario.html";
     }
