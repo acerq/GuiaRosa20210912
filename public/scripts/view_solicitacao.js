@@ -367,9 +367,8 @@ export default class ViewSolicitacao {
     let selecao;
     if(self.dadosExame != null) 
       selecao = self.dadosExame.text.split(SEPARADOR);
-    else {
+    else 
       selecao = self.idDadosExame.split(SEPARADOR); // Foi obtido pela consulta armazenada
-      self.dadosE
     let nomeExame = tiraEspacos(selecao[0]).replace(/\//g, " ");
     let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
     let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
@@ -564,7 +563,12 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
       }
     }
 
-    let selecao = self.dadosExame.text.split(SEPARADOR);
+    let selecao;
+    if(self.dadosExame != null) 
+      selecao = self.dadosExame.text.split(SEPARADOR);
+    else 
+      selecao = self.idDadosExame.split(SEPARADOR); // Foi obtido pela consulta armazenada
+
     let nomeExame = tiraEspacos(selecao[0]).replace(/\//g, " ");
     let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
     let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
