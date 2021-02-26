@@ -4,7 +4,7 @@ const express = require("express");
 const fetch = require("node-fetch");
 const redirectToHTTPS = require("express-http-to-https").redirectToHTTPS;
 const cookieParser = require('cookie-parser');
- 
+
 const BASE_URL = "http://sisp.e-sisp.org:8049/webrunstudio_73/webservices/GSIServices.jws?wsdl";
 const SESSION_ID = "session_id"; 
 const TEMPO_MAXIMO_SESSAO = 20 * 60 * 1000; // 20 minutos
