@@ -15,13 +15,13 @@ function tiraEspacos(item) {
   return item.substr(0, pos + 1);
 }
 
-var self;
+var _objAtual;
 
 export default class ViewSolicitacao {
   constructor(ctrlSolicitacao) {
     this.ctrl = ctrlSolicitacao;
 
-    self = this;
+    _objAtual = this;
 
     this.daoConsulta = novoDaoConsulta();
     this.tfExame = document.getElementById("tfExame");
@@ -78,15 +78,15 @@ export default class ViewSolicitacao {
     this.formaPgto = null;
     
     $(document).on("keypress", "input", function(e) {
-      if (e.which == 13 && e.target == self.tfExame) {
-        self.obterExames();
+      if (e.which == 13 && e.target == _objAtual.tfExame) {
+        _objAtual.obterExames();
       }
     });
 
     if (this.usuarioLogado)
       this.pwSenha.addEventListener("keyup", function(event) {
         if (event.keyCode === 13) {
-          self.irParaCheckout();
+          _objAtual.irParaCheckout();
         }
       });
   }
@@ -154,7 +154,7 @@ export default class ViewSolicitacao {
         templateSelection: this.formatarLocal
       })
       .on("select2:select", function(e) {
-        self.codLocalSelecionado = e.params.data.id;
+        _objAtual.codLocalSelecionado = e.params.data.id;
       });
   }
 
@@ -173,14 +173,14 @@ export default class ViewSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async obterExames() {
-    self.tfExame.value = self.tfExame.value.toUpperCase();
-    var strExame = self.tfExame.value;
+    _objAtual.tfExame.value = _objAtual.tfExame.value.toUpperCase();
+    var strExame = _objAtual.tfExame.value;
     if(strExame == null || strExame == ""){
       alert("Digite o nome ou parte do nome do exame.");
       return;
     }
     fnColocarEspera();
-    await self.ctrl.obterExames(self.codLocalSelecionado, strExame);
+    await _objAtual.ctrl.obterExames(_objAtual.codLocalSelecionado, strExame);
     fnTirarEspera();
   }
 
@@ -296,10 +296,10 @@ export default class ViewSolicitacao {
         })
         .on("select2:select", async function(e) {
           var selectionText = e.params.data.id.split(SEPARADOR);
-          self.dadosExame = e.params.data;
-          self.codExecutanteSelecionado = selectionText[0];
-          self.codExameSelecionado = selectionText[1];
-          self.valorExameSelecionado = selectionText[2];
+          _objAtual.dadosExame = e.params.data;
+          _objAtual.codExecutanteSelecionado = selectionText[0];
+          _objAtual.codExameSelecionado = selectionText[1];
+          _objAtual.valorExameSelecionado = selectionText[2];
       });
 
       var element = document.querySelector(
@@ -317,35 +317,35 @@ export default class ViewSolicitacao {
 
   async irParaCheckout() {
     fnColocarEspera();
-    if (self.codExecutanteSelecionado == null) {
+    if (_objAtual.codExecutanteSelecionado == null) {
       fnTirarEspera();
       alert("O exame não foi escolhido.");
       return;
     }
-    if (self.codExameSelecionado == null) {
+    if (_objAtual.codExameSelecionado == null) {
       fnTirarEspera();
       alert("O exame não foi escolhido.");
       return;
     }
-    let pacienteValue = self.cbPaciente.value;
+    let pacienteValue = _objAtual.cbPaciente.value;
     if (pacienteValue == null || pacienteValue == "") {
       fnTirarEspera();
       alert("O paciente não foi escolhido.");
       return;
     }
     
-    let faturar = self.cbFaturar.value;
+    let faturar = _objAtual.cbFaturar.value;
     if (faturar == null) {
       fnTirarEspera();
       alert("Não foi indicado se o exame será faturado ou não.");
       return;
     }
     // Data Para Boleto
-    let formaPgto = self.cbFaturar.value;
+    let formaPgto = _objAtual.cbFaturar.value;
     let tresDiasDepoisDeHoje = new Date();
     tresDiasDepoisDeHoje.setDate(tresDiasDepoisDeHoje.getDate() + 3);
     
-    let senha = funcaoMD5(self.pwSenha.value);
+    let senha = funcaoMD5(_objAtual.pwSenha.value);
     if (senha == null) {
       fnTirarEspera();
       alert("Informe sua senha para confirmação.");
@@ -353,22 +353,22 @@ export default class ViewSolicitacao {
     }
 
     fnColocarEspera();
-    if (!(await self.ctrl.verificarSenha(senha))) {
+    if (!(await _objAtual.ctrl.verificarSenha(senha))) {
       fnTirarEspera();
       alert("Senha não confere.");
       return;
     }
 
-    let dadosPaciente = self.cbPaciente.value.split(SEPARADOR);
-    self.nomePaciente = dadosPaciente[0];
-    self.cpfPaciente = dadosPaciente[1].replace(/\.|-/g, "");
-    self.emailPaciente = dadosPaciente[2];
+    let dadosPaciente = _objAtual.cbPaciente.value.split(SEPARADOR);
+    _objAtual.nomePaciente = dadosPaciente[0];
+    _objAtual.cpfPaciente = dadosPaciente[1].replace(/\.|-/g, "");
+    _objAtual.emailPaciente = dadosPaciente[2];
 
     let selecao;
-    if(self.dadosExame != null) 
-      selecao = self.dadosExame.text.split(SEPARADOR);
+    if(_objAtual.dadosExame != null) 
+      selecao = _objAtual.dadosExame.text.split(SEPARADOR);
     else 
-      selecao = self.idDadosExame.split(SEPARADOR); // Foi obtido pela consulta armazenada
+      selecao = _objAtual.idDadosExame.split(SEPARADOR); // Foi obtido pela consulta armazenada
     let nomeExame = tiraEspacos(selecao[0]).replace(/\//g, " ");
     let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
     let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
@@ -376,22 +376,22 @@ export default class ViewSolicitacao {
     fnTirarEspera();
     if (formaPgto == "Crédito" || formaPgto == "Débito") {
       alert("Procedendo checkout por " + formaPgto + " para o pedido de exame");
-      self.colocarFormPgto(formaPgto);
+      _objAtual.colocarFormPgto(formaPgto);
     }
     if (formaPgto == "Boleto") {
       alert("Procedendo checkout do pedido de exame - Geração do Boleto");
       fnColocarEspera();
-      self.ctrl.enviarAgendamentoPgtoBoleto(
-        self.codExecutanteSelecionado,
-        self.cpfPaciente,
-        self.nomePaciente,
-        self.emailPaciente,
-        self.codExameSelecionado,
+      _objAtual.ctrl.enviarAgendamentoPgtoBoleto(
+        _objAtual.codExecutanteSelecionado,
+        _objAtual.cpfPaciente,
+        _objAtual.nomePaciente,
+        _objAtual.emailPaciente,
+        _objAtual.codExameSelecionado,
         tresDiasDepoisDeHoje,
         nomeExame,
         nomeExecutante,
         endereco,
-        self.valorExameSelecionado.replace(/\./g, ""),
+        _objAtual.valorExameSelecionado.replace(/\./g, ""),
         formaPgto
       );
       fnTirarEspera();
@@ -405,24 +405,24 @@ export default class ViewSolicitacao {
     if(forma != "Crédito")
       endereco = "pgto_debito.html"
     $("#divConteudo").load(endereco, function() {
-      self.tfNomeCartao = document.getElementById("tfNomeCartao");
-      self.tfNumCartao = document.getElementById("tfNumCartao");
-      self.tfMesValidade = document.getElementById("tfMesValidade");
-      self.tfAnoValidade = document.getElementById("tfAnoValidade");
-      self.cbBandeira = document.getElementById("cbBandeira");
-      self.tfCvv = document.getElementById("tfCvv");
-      self.btOk = document.getElementById("btOk");
-      self.btCancelar = document.getElementById("btCancelar");
+      _objAtual.tfNomeCartao = document.getElementById("tfNomeCartao");
+      _objAtual.tfNumCartao = document.getElementById("tfNumCartao");
+      _objAtual.tfMesValidade = document.getElementById("tfMesValidade");
+      _objAtual.tfAnoValidade = document.getElementById("tfAnoValidade");
+      _objAtual.cbBandeira = document.getElementById("cbBandeira");
+      _objAtual.tfCvv = document.getElementById("tfCvv");
+      _objAtual.btOk = document.getElementById("btOk");
+      _objAtual.btCancelar = document.getElementById("btCancelar");
 
       $("#tfNumCartao").mask("9999 9999 9999 9999");
       $("#tfMesValidade").mask("99");
       $("#tfAnoValidade").mask("9999");
 
       let selecao;
-      if(self.dadosExame != null) 
-        selecao = self.dadosExame.text.split(SEPARADOR);
+      if(_objAtual.dadosExame != null) 
+        selecao = _objAtual.dadosExame.text.split(SEPARADOR);
       else
-        selecao = self.idDadosExame.split(SEPARADOR); // Foi obtido pela consulta armazenada
+        selecao = _objAtual.idDadosExame.split(SEPARADOR); // Foi obtido pela consulta armazenada
       
       let msg =
         "<center><b>Exame Solicitado:</b><br/>" +
@@ -437,8 +437,8 @@ export default class ViewSolicitacao {
         "</span></center>";
       $("#divExame").html(msg);
 
-      self.btOk.onclick = self.enviarSolicitacao;
-      self.btCancelar.onclick = self.voltarOuAgendar;
+      _objAtual.btOk.onclick = _objAtual.enviarSolicitacao;
+      _objAtual.btCancelar.onclick = _objAtual.voltarOuAgendar;
     });
   }
 
@@ -488,7 +488,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
   enviarSolicitacao() {
     fnColocarEspera();
 
-    let numCartao = self.tfNumCartao.value;
+    let numCartao = _objAtual.tfNumCartao.value;
     if (numCartao == null || numCartao == "") {
       fnTirarEspera();
       alert("O número do cartão não foi informado!");
@@ -501,21 +501,21 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
       return;
     }
 
-    let nomeCartao = self.tfNomeCartao.value;
+    let nomeCartao = _objAtual.tfNomeCartao.value;
     if (nomeCartao == null || nomeCartao == "") {
       fnTirarEspera();
       alert("O nome no cartão não foi informado!");
       return;
     }
 
-    let bandeira = self.cbBandeira.value;
+    let bandeira = _objAtual.cbBandeira.value;
     if (bandeira == null || bandeira == "") {
       fnTirarEspera();
       alert("A Bandeira não foi selecionada.");
       return;
     }
 
-    let mesValidade = self.tfMesValidade.value;
+    let mesValidade = _objAtual.tfMesValidade.value;
     if (mesValidade == null || mesValidade == "") {
       fnTirarEspera();
       alert("O mês da validade do cartão não foi informado!");
@@ -528,7 +528,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
       return;
     }
 
-    let anoValidade = self.tfAnoValidade.value;
+    let anoValidade = _objAtual.tfAnoValidade.value;
     if (anoValidade == null || anoValidade == "") {
       fnTirarEspera();
       alert("O ano da validade do cartão não foi informado!");
@@ -553,9 +553,9 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     }
 
     let cvv = null;
-    let forma = self.cbFaturar.value;
+    let forma = _objAtual.cbFaturar.value;
     if(forma == "Crédito") { // Só verificamos o CVV no crédito
-      cvv = self.tfCvv.value;
+      cvv = _objAtual.tfCvv.value;
       if (cvv == null || cvv == "" || cvv.length != 3) {
         fnTirarEspera();
         alert("CVV inválido!");
@@ -564,25 +564,25 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     }
 
     let selecao;
-    if(self.dadosExame != null) 
-      selecao = self.dadosExame.text.split(SEPARADOR);
+    if(_objAtual.dadosExame != null) 
+      selecao = _objAtual.dadosExame.text.split(SEPARADOR);
     else 
-      selecao = self.idDadosExame.split(SEPARADOR); // Foi obtido pela consulta armazenada
+      selecao = _objAtual.idDadosExame.split(SEPARADOR); // Foi obtido pela consulta armazenada
 
     let nomeExame = tiraEspacos(selecao[0]).replace(/\//g, " ");
     let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
     let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
 
-    self.cpfPaciente = self.cpfPaciente.replace(/\.|-/g, "");
-    self.valorExameSelecionado = self.valorExameSelecionado.replace(/\./g, "");
+    _objAtual.cpfPaciente = _objAtual.cpfPaciente.replace(/\.|-/g, "");
+    _objAtual.valorExameSelecionado = _objAtual.valorExameSelecionado.replace(/\./g, "");
     
     if (forma == "Crédito") {
-      self.ctrl.enviarAgendamentoPgtoCC(
-        self.codExecutanteSelecionado,
-        self.cpfPaciente,
-        self.nomePaciente,
-        self.emailPaciente,
-        self.codExameSelecionado,
+      _objAtual.ctrl.enviarAgendamentoPgtoCC(
+        _objAtual.codExecutanteSelecionado,
+        _objAtual.cpfPaciente,
+        _objAtual.nomePaciente,
+        _objAtual.emailPaciente,
+        _objAtual.codExameSelecionado,
         numCartao,
         nomeCartao,
         bandeira,
@@ -592,17 +592,17 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         nomeExame,
         nomeExecutante,
         endereco,
-        self.valorExameSelecionado.replace(/\./g, ""),
+        _objAtual.valorExameSelecionado.replace(/\./g, ""),
         forma
       );
     } else if (forma == "Débito") {
       {
-        self.ctrl.enviarAgendamentoPgtoDebito(
-          self.codExecutanteSelecionado,
-          self.cpfPaciente,
-          self.nomePaciente,
-          self.emailPaciente,
-          self.codExameSelecionado,
+          _objAtual.ctrl.enviarAgendamentoPgtoDebito(
+          _objAtual.codExecutanteSelecionado,
+          _objAtual.cpfPaciente,
+          _objAtual.nomePaciente,
+          _objAtual.emailPaciente,
+          _objAtual.codExameSelecionado,
           numCartao,
           nomeCartao,
           bandeira,
@@ -611,7 +611,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           nomeExame,
           nomeExecutante,
           endereco,
-          self.valorExameSelecionado.replace(/\./g, ""),
+          _objAtual.valorExameSelecionado.replace(/\./g, ""),
           forma
         );
       }
@@ -622,22 +622,22 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
   //-----------------------------------------------------------------------------------------//
 
   async voltarOuAgendar() {
-    if(self.usuarioLogado)
+    if(_objAtual.usuarioLogado)
       history.go(-1);
     else {
-      if (self.codExecutanteSelecionado == null) {
+      if (_objAtual.codExecutanteSelecionado == null) {
         fnTirarEspera();
         alert("O exame não foi escolhido.");
         return;
       }
-      if (self.codExameSelecionado == null) {
+      if (_objAtual.codExameSelecionado == null) {
         fnTirarEspera();
         alert("O exame não foi escolhido.");
         return;
       }
-      await self.daoConsulta.limparConsulta();
-      await self.daoConsulta.abrirDbConsulta();
-      await self.daoConsulta.salvarConsulta(self.codLocalSelecionado, self.arrayExames, self.tfExame.value, self.dadosExame.text, self.codExecutanteSelecionado, self.codExameSelecionado);
+      await _objAtual.daoConsulta.limparConsulta();
+      await _objAtual.daoConsulta.abrirDbConsulta();
+      await _objAtual.daoConsulta.salvarConsulta(_objAtual.codLocalSelecionado, _objAtual.arrayExames, _objAtual.tfExame.value, _objAtual.dadosExame.text, _objAtual.codExecutanteSelecionado, _objAtual.codExameSelecionado);
       
       let daoUsuario = novoDaoUsuario();
       await daoUsuario.abrirDb();
