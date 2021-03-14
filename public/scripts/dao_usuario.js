@@ -40,10 +40,10 @@ DaoUsuario.prototype.abrirDb = async function() {
 DaoUsuario.prototype.obterUsr = async function() {
   if(this.db == null)
     return null;
-  let self = this;
+  let _objAtual = this;
   let resultado = await new Promise(function(resolve, reject) {
     try {
-      let transacao = self.db.transaction(["AppUsr"], "readonly");
+      let transacao = _objAtual.db.transaction(["AppUsr"], "readonly");
       let store = transacao.objectStore("AppUsr");
       let array = [];
       store.openCursor().onsuccess = event => {
@@ -65,10 +65,10 @@ DaoUsuario.prototype.obterUsr = async function() {
 DaoUsuario.prototype.salvarUsr = async function(login, senha, nome, email, celular, rua, numero,
                                                 complemento, bairro, cep, ehMedico){
 
-  let self = this;
+  let _objAtual = this;
   let resultado = await new Promise(async function(resolve, reject) {
     try {
-      let transacao = self.db.transaction(["AppUsr"], "readwrite");
+      let transacao = _objAtual.db.transaction(["AppUsr"], "readwrite");
       let store = transacao.objectStore("AppUsr");
       let request = await store.add({
         login: login,

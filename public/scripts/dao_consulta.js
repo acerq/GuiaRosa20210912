@@ -34,10 +34,10 @@ DaoConsulta.prototype.abrirDbConsulta = async function() {
 //-----------------------------------------------------------------------------------------//
 
 DaoConsulta.prototype.salvarConsulta = async function(codLocalSelecionado, arrayExames, tfExame, idDadosExame, codExecutanteSelecionado, codExameSelecionado) {
-  let self = this;
+  let _objAtual = this;
   let resultado = await new Promise(async function(resolve, reject) {
     try {
-      let transacao = self.db.transaction(["Consulta"], "readwrite");
+      let transacao = _objAtual.db.transaction(["Consulta"], "readwrite");
       let store = transacao.objectStore("Consulta");
       let request = await store.add({
         id: 1,
@@ -74,10 +74,10 @@ DaoConsulta.prototype.limparConsulta = function() {
 //-----------------------------------------------------------------------------------------//
 
 DaoConsulta.prototype.verificarConsultaArmazenada = async function() {
-  let self = this;
+  let _objAtual = this;
   let resultado = await new Promise(function(resolve, reject) {
     try {
-      let transacao = self.db.transaction(["Consulta"], "readwrite");
+      let transacao = _objAtual.db.transaction(["Consulta"], "readwrite");
       let store = transacao.objectStore("Consulta");
       let array = [];
       store.openCursor().onsuccess = event => {

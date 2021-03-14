@@ -1,10 +1,10 @@
 "use strict";
 
 // -----------------------------------------------------------------------------------------//
-var self;
+var _objAtual;
 
 function ViewEfetuarLogin(ctrl) {
-  self = this;
+  _objAtual = this;
   this.ctrlEfetuarLogin = ctrl;
   this.estadoBtNovo = "Login";
   this.divConteudo = document.getElementById("divConteudo");
@@ -19,7 +19,7 @@ function ViewEfetuarLogin(ctrl) {
   this.btNovo.addEventListener("click", this.callbackCriar);
   this.tfSenha.addEventListener("keyup", function(event) {
     if(event.keyCode === 13) {
-      self.callbackOk();
+      _objAtual.callbackOk();
     }
   });
 }
@@ -57,9 +57,9 @@ ViewEfetuarLogin.prototype.instalacaoApp = function() {
 // -----------------------------------------------------------------------------------------//
 
 ViewEfetuarLogin.prototype.callbackOk = async function() {
-  self.colocarEspera();
-  let ok = await self.ctrlEfetuarLogin.verificarLogin(self.tfLogin.value, self.tfSenha.value);
-  self.retirarEspera();
+  _objAtual.colocarEspera();
+  let ok = await _objAtual.ctrlEfetuarLogin.verificarLogin(_objAtual.tfLogin.value, _objAtual.tfSenha.value);
+  _objAtual.retirarEspera();
   if(ok) 
     window.location.href = "inicio.html";
 }
@@ -67,16 +67,16 @@ ViewEfetuarLogin.prototype.callbackOk = async function() {
 // -----------------------------------------------------------------------------------------//
 
 ViewEfetuarLogin.prototype.callbackCriar = function () {
-  if (self.estadoBtNovo == "Conta") 
+  if (_objAtual.estadoBtNovo == "Conta") 
     window.location.href = "cadusuario.html";
   else {
     // estadoBtNovo == "Login";
-    self.labelLogin.innerHTML = "Login:";
-    self.tfLogin.value = "";
-    self.tfLogin.disabled = false;
-    self.btNovo.textContent = "Nova Conta";
-    self.estadoBtNovo = "Conta";
-    self.colocarInstrucao("<center><b>Efetue seu Login ou Crie sua Conta</b></center>");
+    _objAtual.labelLogin.innerHTML = "Login:";
+    _objAtual.tfLogin.value = "";
+    _objAtual.tfLogin.disabled = false;
+    _objAtual.btNovo.textContent = "Nova Conta";
+    _objAtual.estadoBtNovo = "Conta";
+    _objAtual.colocarInstrucao("<center><b>Efetue seu Login ou Crie sua Conta</b></center>");
   }
 }
 
