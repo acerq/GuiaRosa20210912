@@ -783,6 +783,17 @@ async function doPgtoCC(req, resp) {
   
   let pgtoCC = new PgtoCredito(id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, mesValidade, anoValidade, cvv, valor);
 
+  
+  
+  
+  let clientId = "85012692-b03b-437d-990c-1f0be4a2a377";
+  let clientSecret = "fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o=";
+  
+  
+  
+  
+  
+  
   const myHeaders = {
     "Content-Type": "application/json",
     "MerchantId": "0c476fc2-f8f5-4e85-a60c-366463f210e2",
@@ -824,7 +835,7 @@ async function doPgtoCC(req, resp) {
 
   console.log("doPgtoCC --> " + JSON.stringify(requisicao));
   const responseBraspag = await fetch(
-    "https://apisandbox.braspag.com.br/v2/sales/",
+    "https://splitsandbox.braspag.com.br/",
     requisicao
   );
   console.log("fetch doPgtoCC");
