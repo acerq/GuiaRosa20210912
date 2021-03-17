@@ -786,13 +786,17 @@ async function doPgtoCC(req, resp) {
   
   
   
-  let clientId = "85012692-b03b-437d-990c-1f0be4a2a377";
-  let clientSecret = "fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o=";
+  const clientId = "85012692-b03b-437d-990c-1f0be4a2a377";
+  const clientSecret = "fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o=";
+  const concatBase64 = new Buffer(clientId + clientSecret).toString('base64');
+  const ServidorOAUTH2 = "https://authsandbox.braspag.com.br/";
   
-  let concatBase64 = ""
   
   
-   let ServidorOAUTH2 = "https://authsandbox.braspag.com.br/";
+//x-www-form-urlencoded
+//--header "Authorization: Basic {base64}"  
+//--header "Content-Type: application/x-www-form-urlencoded"  
+//grant_type=client_credentials
   
   
   
