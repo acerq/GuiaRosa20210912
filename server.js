@@ -789,8 +789,10 @@ async function doPgtoCC(req, resp) {
   let clientId = "85012692-b03b-437d-990c-1f0be4a2a377";
   let clientSecret = "fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o=";
   
+  let concatBase64 = ""
   
   
+   let ServidorOAUTH2 = "https://authsandbox.braspag.com.br/";
   
   
   
