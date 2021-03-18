@@ -794,16 +794,15 @@ async function doPgtoCC(req, resp) {
   
   
 //x-www-form-urlencoded
-//--header "Authorization: Basic {base64}"  
+//--header ": "  
 //--header "Content-Type: application/x-www-form-urlencoded"  
 //grant_type=client_credentials
   
   
   
   const myHeaders = {
-    "Content-Type": "application/json",
-    "MerchantId": "0c476fc2-f8f5-4e85-a60c-366463f210e2",
-    "MerchantKey": "HHNUGBUVGJFMKHGMLWEWJIOEYFAXAKAJAWQCKAFB"
+    "Content-Type": "application/x-www-form-urlencoded",
+    "Authorization": "Basic {base64}"
   };
 
   const myBody = {
