@@ -788,17 +788,8 @@ async function doPgtoCC(req, resp) {
   
   const clientId = "85012692-b03b-437d-990c-1f0be4a2a377";
   const clientSecret = "fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o=";
-  const concatBase64 = new Buffer(clientId + clientSecret).toString('base64');
-  const ServidorOAUTH2 = "https://authsandbox.braspag.com.br/";
-  
-  
-  
-//x-www-form-urlencoded
-//--header ": "  
-//--header "Content-Type: application/x-www-form-urlencoded"  
-//grant_type=client_credentials
-  
-  
+  const clientCredentials = "grant_type=" + new Buffer(clientId + ":" + clientSecret).toString('base64');
+  const ServidorOAUTH2 = "https://authsandbox.braspag.com.br/";  
   
   const myHeaders = {
     "Content-Type": "application/x-www-form-urlencoded",
@@ -835,7 +826,7 @@ async function doPgtoCC(req, resp) {
   const requisicao = {
     method: "POST",
     headers: myHeaders,
-    body: JSON.stringify(myBody)
+    body: clientCredentials
   };
 
   console.log("doPgtoCC --> " + JSON.stringify(requisicao));
