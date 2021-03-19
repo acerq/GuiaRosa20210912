@@ -572,9 +572,10 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     let nomeExame = tiraEspacos(selecao[0]).replace(/\//g, " ");
     let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
     let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
+    let valor = tiraEspacos(selecao[3]).replace(/\./g, "");
 
     _objAtual.cpfPaciente = _objAtual.cpfPaciente.replace(/\.|-/g, "");
-    _objAtual.valorExameSelecionado = _objAtual.valorExameSelecionado.replace(/\./g, "");
+    _objAtual.valorExameSelecionado = valor;
     
     if (forma == "Crédito") {
       _objAtual.ctrl.enviarAgendamentoPgtoCC(
