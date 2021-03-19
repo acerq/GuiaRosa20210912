@@ -831,7 +831,7 @@ async function doPgtoCC(req, resp) {
 
   console.log("doPgtoCC --> " + JSON.stringify(requisicao));
   const responseBraspag = await fetch(
-    "https://splitsandbox.braspag.com.br/",
+    "https://splitsandbox.braspag.com.br/oauth2/token",
     requisicao
   );
   console.log("fetch doPgtoCC");
