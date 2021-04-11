@@ -69,6 +69,8 @@ export default class ViewSolicitacao {
     this.codExecutanteSelecionado = null;
     this.codExameSelecionado = null;
     this.valorExameSelecionado = null;
+    this.merchand_id = null;
+    this.perccomis = null;
     this.dtPeriodo = null;
 
     this.nomePaciente = null;
@@ -259,7 +261,8 @@ export default class ViewSolicitacao {
         let codExecutante = value.id_executante;
         let codExame = value.cd_exame;
         let valor = value.valor;
-        let merchand_id = value.marchand_id; //#
+        let merchand_id = value.marchand_id; //TODO Trocar
+        let perccomis = value.perccomis; 
         let descricao =
           tiraEspacos(value.exame) +
           SEPARADOR +
@@ -277,6 +280,8 @@ export default class ViewSolicitacao {
           valor +
           SEPARADOR +
           valor +
+          SEPARADOR +
+          perccomis +
           "' " +  
           (this.codExecutanteSelecionado == codExecutante && this.codExameSelecionado == codExame ? "selected" : "") +
           ">" +
@@ -303,6 +308,8 @@ export default class ViewSolicitacao {
           _objAtual.codExecutanteSelecionado = selectionText[0];
           _objAtual.codExameSelecionado = selectionText[1];
           _objAtual.valorExameSelecionado = selectionText[2];
+          _objAtual.merchand_id = selectionText[3];
+          _objAtual.perccomis = selectionText[4];
       });
 
       var element = document.querySelector(
@@ -395,6 +402,8 @@ export default class ViewSolicitacao {
         nomeExecutante,
         endereco,
         _objAtual.valorExameSelecionado.replace(/\./g, ""),
+        _objAtual.merchand_id,
+        _objAtual.perccomis.replace(/\./g, ""),
         formaPgto
       );
       fnTirarEspera();
@@ -576,6 +585,8 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
     let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
     let valor = tiraEspacos(selecao[3]).replace(/\./g, "");
+    let merchand_id = tiraEspacos(selecao[4]);
+    let perccomis = tiraEspacos(selecao[5]).replace(/\./g, "");
 
     _objAtual.cpfPaciente = _objAtual.cpfPaciente.replace(/\.|-/g, "");
     _objAtual.valorExameSelecionado = valor;
@@ -596,7 +607,9 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         nomeExame,
         nomeExecutante,
         endereco,
-        _objAtual.valorExameSelecionado.replace(/\./g, ""),
+        valor,
+        merchand_id,
+        perccomis,
         forma
       );
     } else if (forma == "Débito") {
@@ -615,7 +628,9 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           nomeExame,
           nomeExecutante,
           endereco,
-          _objAtual.valorExameSelecionado.replace(/\./g, ""),
+          valor,
+          merchand_id,
+          perccomis,
           forma
         );
       }

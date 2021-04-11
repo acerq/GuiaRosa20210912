@@ -560,6 +560,8 @@ async enviarAgendamentoPgtoBoleto(
     nomeExecutante,
     endereco,
     valor,
+    merchand_id,
+    perccomis,
     forma
   ) {
     this.view.colocarEspera();
@@ -585,6 +587,10 @@ async enviarAgendamentoPgtoBoleto(
       merchantOrderId +
       "/" +
       valor.replace(/\.|\,/g, "") +
+      "/" +
+      merchand_id +
+      "/" +
+      perccomis.replace(/\.|\,/g, "") +
       "/" +
       nomeExame;
       
