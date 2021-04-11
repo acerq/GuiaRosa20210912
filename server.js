@@ -765,7 +765,7 @@ async function doPgtoCC(req, resp) {
   let cvv = req.params.cvv;
   let valor = req.params.valor;
   let merchandId = req.params.merchandId;
-  let perccomis = req.params.valor;
+  let perccomis = req.params.perccomis;
 
   console.log("executando doPgtoCC" + nome);
   if (
