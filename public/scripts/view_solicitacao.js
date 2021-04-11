@@ -104,11 +104,13 @@ export default class ViewSolicitacao {
       if(array.length != 0) {
         this.daoConsulta.limparConsulta();
         this.tfExame.value = array[0].tfExame;
-        this.idDadosExame = array[0].idDadosExame;
         this.codExecutanteSelecionado = array[0].codExecutanteSelecionado;
         this.codExameSelecionado = array[0].codExameSelecionado;
         this.atualizarExames(array[0].arrayExames);
         this.codLocalSelecionado = array[0].codLocalSelecionado;
+        this.merchand_id = array[0].merchand_id;
+        this.perccomis = array[0].perccomis;
+        this.idDadosExame = array[0].idDadosExame;
       }      
       if (ehMedico) {
         let i;
@@ -276,8 +278,6 @@ export default class ViewSolicitacao {
           codExecutante +
           SEPARADOR +
           codExame +
-          SEPARADOR +
-          valor +
           SEPARADOR +
           valor +
           SEPARADOR +
@@ -655,7 +655,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
       }
       await _objAtual.daoConsulta.limparConsulta();
       await _objAtual.daoConsulta.abrirDbConsulta();
-      await _objAtual.daoConsulta.salvarConsulta(_objAtual.codLocalSelecionado, _objAtual.arrayExames, _objAtual.tfExame.value, _objAtual.dadosExame.text, _objAtual.codExecutanteSelecionado, _objAtual.codExameSelecionado);
+      await _objAtual.daoConsulta.salvarConsulta(_objAtual.codLocalSelecionado, _objAtual.arrayExames, _objAtual.tfExame.value, _objAtual.dadosExame.text, _objAtual.codExecutanteSelecionado, _objAtual.codExameSelecionado, _objAtual.merchand_id, _objAtual.perccomis);
       
       let daoUsuario = novoDaoUsuario();
       await daoUsuario.abrirDb();
