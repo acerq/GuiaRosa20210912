@@ -1340,13 +1340,13 @@ function startServer() {
   
   // Pagamento por cartão de crédito
   app.get(
-    "/pgtocc/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor",
+    "/pgtocc/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor/:merchandId/:perccomis",
     doPgtoCC
   );
 
   // Pagamento por cartão de debito
   app.get(
-    "/pgtodebito/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:valor",
+    "/pgtodebito/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:valor/:merchandId/:perccomis",
     doPgtoDebito
   );
   app.post("/finalizarDebito", doFinalizarPgtoDebito );
@@ -1354,7 +1354,7 @@ function startServer() {
 
   // Pagamento por boleto
   app.get(
-    "/pgtoboleto/:cpf/:nome/:email/:id/:valor/:exame/:dataPgto",
+    "/pgtoboleto/:cpf/:nome/:email/:id/:valor/:exame/:dataPgto/:merchandId/:perccomis",
     doPgtoBoleto
   );
   

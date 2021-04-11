@@ -281,6 +281,8 @@ export default class ViewSolicitacao {
           SEPARADOR +
           valor +
           SEPARADOR +
+          merchand_id +
+          SEPARADOR +
           perccomis +
           "' " +  
           (this.codExecutanteSelecionado == codExecutante && this.codExameSelecionado == codExame ? "selected" : "") +
