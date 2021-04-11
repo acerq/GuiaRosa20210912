@@ -746,9 +746,9 @@ function doAgendamento(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 async function doPgtoCC(req, resp) {
-  let sessao = recuperarSessao(req, resp);
-  if(sessao == null) 
-    return;
+  // TODO let sessao = recuperarSessao(req, resp);
+  //if(sessao == null) 
+  //  return;
   
   let nome = req.params.nome;
   let cpf = req.params.cpf;
@@ -814,6 +814,7 @@ async function doPgtoCC(req, resp) {
   console.log(respostaOAUTH2);
   
   let access_token = respostaOAUTH2.access_token;
+  let percSubordinado = 10000 - perccomis;
   
   const myBody = {
     MerchantOrderId: id,
@@ -840,20 +841,19 @@ async function doPgtoCC(req, resp) {
         SecurityCode: cvv,
         Brand: bandeira
       },
-      "FraudAnalysis":{
-            "Provider":"Cybersource",
-            "TotalOrderAmount":valor
-      },
       "splitpayments": [
         {
           "subordinatemerchantid": merchandId,
           "amount": valor,
           "fares": {
-            "mdr": 10000 - perccomis,
+            "mdr": percSubordinado,
             "fee": 0
             }
-        }
-      ]
+        }],
+      "FraudAnalysis":{
+            "Provider":"Cybersource",
+            "TotalOrderAmount":valor
+      },
     }
   };
 
@@ -873,13 +873,16 @@ async function doPgtoCC(req, resp) {
     "https://apisandbox.cieloecommerce.cielo.com.br/",
     requisicao
   );
-  console.log("fetch doPgtoCC");
+  console.log("fetch doPgtoCC" + perccomis + " " + percSubordinado);
   
-  let respostaPgto = await responseBraspag.json();
+  let respostaPgto = await responseBraspag.json().catch(error => {
+              console.log('Erro:' + error);
+                                        });
+  
   console.log("json doPgtoCC");
   console.log(respostaPgto);
     
-  sessao.pgto = pgtoCC;
+  //TODO sessao.pgto = pgtoCC;
   if (respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
     pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.Status, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
   
