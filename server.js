@@ -785,47 +785,17 @@ async function doPgtoCC(req, resp) {
   
   let pgtoCC = new PgtoCredito(id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, mesValidade, anoValidade, cvv, valor);
 
-  
-  
-  
   const clientId = "85012692-b03b-437d-990c-1f0be4a2a377";
   const clientSecret = "fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o=";
   const base64 = new Buffer(clientId + ":" + clientSecret).toString('base64');
   const ServidorOAUTH2 = "https://authsandbox.braspag.com.br/";  
   
-  const myHeaders = {
+  let myHeaders = {
     "Content-Type": "application/x-www-form-urlencoded",
     "Authorization": "Basic " + base64
   };
 
-  const myBody = {
-    MerchantOrderId: id,
-    Customer: {
-      Name: nome,
-      Identity: cpf,
-      IdentityType: "CPF",
-      Email: email
-    },
-    Payment: {
-      Provider: "Simulado",
-      Type: "CreditCard",
-      Amount: valor,
-      Currency: "BRL",
-      Country: "BRA",
-      SoftDescriptor: "GuiaRosa",
-      Capture: true,
-      Installments: 1,
-      CreditCard: {
-        CardNumber: numeroCartao,
-        Holder: nomeCartao,
-        ExpirationDate: mesValidade + "/" + anoValidade,
-        SecurityCode: cvv,
-        Brand: bandeira
-      }
-    }
-  };
-
-  const requisicao = {
+  let requisicao = {
     method: "POST",
     headers: myHeaders,
     body: "grant_type=client_credentials"
@@ -842,6 +812,59 @@ async function doPgtoCC(req, resp) {
   console.log(respostaPgto);
   
   let access_token = respostaPgto.access_token;
+
+  
+  
+  
+  const myBody = {
+    MerchantOrderId: id,
+    Customer: {
+      Name: nome,
+      Identity: cpf,
+      IdentityType: "CPF",
+      Email: email
+    },
+    Payment: {
+      Provider: "Simulado",
+      Type: "CreditCard",
+      DoSplit : "True",
+      Amount: valor,
+      Currency: "BRL",
+      Country: "BRA",
+      SoftDescriptor: "GuiaRosa",
+      Capture: true,
+      Installments: 1,
+      CreditCard: {
+        CardNumber: numeroCartao,
+        Holder: nomeCartao,
+        ExpirationDate: mesValidade + "/" + anoValidade,
+        SecurityCode: cvv,
+        Brand: bandeira
+      },
+      "FraudAnalysis":{
+            "Provider":"Cybersource",
+            "TotalOrderAmount":valor
+      ,
+      "splitpayments": [
+        {
+          "subordinatemerchantid": "f2d6eb34-2c6b-4948-8fff-51facdd2a28f",
+          "amount": 5000,
+          "fares": {
+            "mdr": 20,
+            "fee": 25
+            }
+        },
+        {
+          "subordinatemerchantid": "9140ca78-3955-44a5-bd44-793370afef94",
+          "amount": 5000,
+          "fares": {
+            "mdr": 10,
+            "fee": 15
+          }
+        } ]
+    }
+  };
+
   
   
   sessao.pgto = pgtoCC;
