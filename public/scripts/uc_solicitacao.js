@@ -146,7 +146,8 @@ export default class CtrlSolicitacao {
     nomeExecutante,
     endereco,
     valor,
-    forma
+    merchand_id,
+    perccomis
   ) {
     this.view.colocarEspera();
     let agora = new Date();
@@ -181,7 +182,11 @@ export default class CtrlSolicitacao {
       "/" +
       cvv +
       "/" +
-      valor.replace(/\.|\,/g, "");
+      valor.replace(/\.|\,/g, "") +
+      "/" +
+      merchand_id +
+      "/" +
+      perccomis;
       
     let response = await fetch(requisicao, { credentials : "include" });
     let resposta = await response.json();
@@ -235,8 +240,10 @@ export default class CtrlSolicitacao {
     //
 
     // Agendamento
-    requisicao =   //TODO ACRESCENTAR O merchantOrderId
+    requisicao =   
       "/agendamento" +   
+      "/" +
+      merchantOrderId +
       "/" +
       codExecutante +
       "/" +
@@ -254,8 +261,7 @@ export default class CtrlSolicitacao {
       "/" +
       endereco +
       "/" +
-      "S";
-      //TODO faturar;
+      "C";
     console.log("(app.js) Executando agendamento");
     response = await fetch(requisicao, { credentials : "include" });
     resposta = await response.json();
@@ -338,7 +344,8 @@ export default class CtrlSolicitacao {
     nomeExecutante,
     endereco,
     valor,
-    forma
+    merchand_id,
+    perccomis
   ) {
     this.view.colocarEspera();
     let proofOfSale = "";
@@ -347,7 +354,6 @@ export default class CtrlSolicitacao {
 
     let agora = new Date();
     let timeMillis = agora.getTime().toString();
-    //let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
     let merchantOrderId = timeMillis;
 
     // Processando o pagamento
@@ -372,7 +378,11 @@ export default class CtrlSolicitacao {
       "/" +
       anoValidade +
       "/" +
-      valor.replace(/\.|\,/g, "");
+      valor.replace(/\.|\,/g, "") +
+      "/" +
+      merchand_id +
+      "/" +
+      perccomis;
       
     let response = await fetch(requisicao, { credentials : "include" });
     let resposta = await response.json();
@@ -418,6 +428,8 @@ export default class CtrlSolicitacao {
     requisicao =
       "/agendamento" +
       "/" +
+      merchantOrderId +
+      "/" +
       codExecutante +
       "/" +
       this.usrApp.login +
@@ -434,8 +446,7 @@ export default class CtrlSolicitacao {
       "/" +
       endereco +
       "/" +
-      "S";
-    //faturar;
+      "D";
     console.log("(app.js) Executando agendamento");
     response = await fetch(requisicao, { credentials : "include" });
     resposta = await response.json();
@@ -561,8 +572,7 @@ async enviarAgendamentoPgtoBoleto(
     endereco,
     valor,
     merchand_id,
-    perccomis,
-    forma
+    perccomis
   ) {
     this.view.colocarEspera();
     let proofOfSale = "";
@@ -654,6 +664,8 @@ async enviarAgendamentoPgtoBoleto(
     requisicao =
       "/agendamento" +
       "/" +
+      merchantOrderId +
+      "/" +
       codExecutante +
       "/" +
       this.usrApp.login +
@@ -670,8 +682,7 @@ async enviarAgendamentoPgtoBoleto(
       "/" +
       endereco +
       "/" +
-      "S";
-    //faturar;
+      "B";
     console.log("(app.js) Executando agendamento");
     response = await fetch(requisicao, { credentials : "include" });
     resposta = await response.json();

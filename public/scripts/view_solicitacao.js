@@ -403,8 +403,7 @@ export default class ViewSolicitacao {
         endereco,
         _objAtual.valorExameSelecionado.replace(/\./g, ""),
         _objAtual.merchand_id,
-        _objAtual.perccomis.replace(/\./g, ""),
-        formaPgto
+        _objAtual.perccomis.replace(/\./g, "")
       );
       fnTirarEspera();
     }
@@ -609,8 +608,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         endereco,
         valor,
         merchand_id,
-        perccomis,
-        forma
+        perccomis
       );
     } else if (forma == "Débito") {
       {
@@ -630,8 +628,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           endereco,
           valor,
           merchand_id,
-          perccomis,
-          forma
+          perccomis
         );
       }
     }
