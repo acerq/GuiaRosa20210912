@@ -861,7 +861,7 @@ async function doPgtoCC(req, resp) {
   };
 
   myHeaders = {
-    "Authorization": "Bearer {" + access_token + "}",
+    "Authorization": "Bearer " + access_token,
     "Content-Type": "application/json"
   };
 
@@ -871,14 +871,14 @@ async function doPgtoCC(req, resp) {
     body: myBody
   };
 
-  console.log("doPgtoCC --> " + JSON.stringify(myBody));
+  console.log("doPgtoCC --> " + JSON.stringify(requisicao));
   responseBraspag = await fetch(
     "https://apisandbox.cieloecommerce.cielo.com.br/",
     requisicao
   );
   console.log("fetch doPgtoCC " + perccomis + " " + percSubordinado);
   
-  let respostaPgto = await responseBraspag.json().catch(error => {
+  let respostaPgto = await responseBraspag.json().then()catch(error => {
               console.log('Erro:' + error);
                                         });
   
