@@ -695,7 +695,10 @@ function doAgendamento(req, resp) {
   sessao.agendamento = agendamento;
   
   let dados =
-    '[{"CD_EXECUTANTE":' +
+    '[{"ORDER_ID":' +
+    executante +
+    "," +
+    "CD_EXECUTANTE":' +
     executante +
     "," +
     '"CD_SOLICITANTE":' +
@@ -721,7 +724,7 @@ function doAgendamento(req, resp) {
 
   soap.createClient(BASE_URL, function(err, client) {
     console.log("createClient");
-    client.Importacaoguiarosaimportarincluirregistromobws(
+    client.Importacaoguiarosaimportarincluirregistromob3ws(
       { Dados: dados },
       function(err, result) {
         console.log("doAgendamento webservice");
@@ -734,7 +737,7 @@ function doAgendamento(req, resp) {
         }
         console.log(result);
         let resposta =
-          result.ImportacaoguiarosaimportarincluirregistromobwsReturn.multiRef
+          result.Importacaoguiarosaimportarincluirregistromob3wsReturn.multiRef
             .$value;
         console.log("doAgendamento Resposta 1->" + resposta);
         resp.json(JSON.parse('{"mensagem":"Ok"}'));
