@@ -259,6 +259,7 @@ export default class ViewSolicitacao {
         let codExecutante = value.id_executante;
         let codExame = value.cd_exame;
         let valor = value.valor;
+        let merchand_id = value.marchand_id; //#
         let descricao =
           tiraEspacos(value.exame) +
           SEPARADOR +
@@ -272,6 +273,8 @@ export default class ViewSolicitacao {
           codExecutante +
           SEPARADOR +
           codExame +
+          SEPARADOR +
+          valor +
           SEPARADOR +
           valor +
           "' " +  
