@@ -657,6 +657,7 @@ function doAgendamento(req, resp) {
   let soap = require("soap");
   
   let executante = req.params.executante;
+  let merchandOrderId = req.params.merchandOrderId;
   let solicitante = req.params.solicitante;
   let paciente = req.params.paciente;
   let cpf = req.params.cpf;
@@ -674,6 +675,7 @@ function doAgendamento(req, resp) {
   }
   console.log("executando doAgendamento");
   if (
+    typeof merchandOrderId === "undefined" ||
     typeof executante === "undefined" ||
     typeof solicitante === "undefined" ||
     typeof paciente === "undefined" ||
