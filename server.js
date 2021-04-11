@@ -804,7 +804,7 @@ async function doPgtoCC(req, resp) {
   };
 
   console.log("doPgtoCC --> " + JSON.stringify(requisicao));
-  const responseBraspag = await fetch(
+  let responseBraspag = await fetch(
     " https://authsandbox.braspag.com.br/oauth2/token",
     requisicao
   );
@@ -865,7 +865,7 @@ async function doPgtoCC(req, resp) {
   requisicao = {
     method: "POST",
     headers: myHeaders,
-    body: "grant_type=client_credentials"
+    body: myBody
   };
 
   console.log("doPgtoCC --> " + JSON.stringify(requisicao));
@@ -878,16 +878,7 @@ async function doPgtoCC(req, resp) {
   let respostaPgto = await responseBraspag.json();
   console.log("json doPgtoCC");
   console.log(respostaPgto);
-  
-  sessao.pgto = pgtoCC;
-  if (respostaPgto.Payment) 
-    pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.Status, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
-  
-  console.log("json doPgtoDebito sessão");
-  console.log(sessao);
-  resp.json(respostaPgto);
-
-
+    
   sessao.pgto = pgtoCC;
   if (respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
     pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.Status, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
