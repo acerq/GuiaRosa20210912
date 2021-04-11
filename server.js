@@ -814,7 +814,7 @@ async function doPgtoCC(req, resp) {
   console.log(respostaOAUTH2);
   
   let access_token = respostaOAUTH2.access_token;
-  let percSubordinado = 10000 - perccomis;
+  let percSubordinado = 30; //todo 10000 - perccomis;
   
   const myBody = {
     MerchantOrderId: id,
@@ -873,7 +873,7 @@ async function doPgtoCC(req, resp) {
     "https://apisandbox.cieloecommerce.cielo.com.br/",
     requisicao
   );
-  console.log("fetch doPgtoCC" + perccomis + " " + percSubordinado);
+  console.log("fetch doPgtoCC " + perccomis + " " + percSubordinado);
   
   let respostaPgto = await responseBraspag.json().catch(error => {
               console.log('Erro:' + error);
