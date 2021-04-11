@@ -69,7 +69,7 @@ export default class ViewSolicitacao {
     this.codExecutanteSelecionado = null;
     this.codExameSelecionado = null;
     this.valorExameSelecionado = null;
-    this.merchand_id = null;
+    this.merchandId = null;
     this.perccomis = null;
     this.dtPeriodo = null;
 
@@ -108,7 +108,7 @@ export default class ViewSolicitacao {
         this.codExameSelecionado = array[0].codExameSelecionado;
         this.atualizarExames(array[0].arrayExames);
         this.codLocalSelecionado = array[0].codLocalSelecionado;
-        this.merchand_id = array[0].merchand_id;
+        this.merchandId = array[0].merchandId;
         this.perccomis = array[0].perccomis;
         this.idDadosExame = array[0].idDadosExame;
       }      
@@ -263,7 +263,7 @@ export default class ViewSolicitacao {
         let codExecutante = value.id_executante;
         let codExame = value.cd_exame;
         let valor = value.valor;
-        let merchand_id = value.marchand_id; //TODO Trocar
+        let merchandId = value.marchand_id; //TODO Trocar
         let perccomis = value.perccomis; 
         let descricao =
           tiraEspacos(value.exame) +
@@ -281,7 +281,7 @@ export default class ViewSolicitacao {
           SEPARADOR +
           valor +
           SEPARADOR +
-          merchand_id +
+          merchandId +
           SEPARADOR +
           perccomis +
           "' " +  
@@ -310,7 +310,7 @@ export default class ViewSolicitacao {
           _objAtual.codExecutanteSelecionado = selectionText[0];
           _objAtual.codExameSelecionado = selectionText[1];
           _objAtual.valorExameSelecionado = selectionText[2];
-          _objAtual.merchand_id = selectionText[3];
+          _objAtual.merchandId = selectionText[3];
           _objAtual.perccomis = selectionText[4];
       });
 
@@ -404,7 +404,7 @@ export default class ViewSolicitacao {
         nomeExecutante,
         endereco,
         _objAtual.valorExameSelecionado.replace(/\./g, ""),
-        _objAtual.merchand_id,
+        _objAtual.merchandId,
         _objAtual.perccomis.replace(/\./g, "")
       );
       fnTirarEspera();
@@ -586,8 +586,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     let nomeExecutante = tiraEspacos(selecao[1]).replace(/\//g, " ");
     let endereco = tiraEspacos(selecao[2]).replace(/\//g, " ");
     let valor = tiraEspacos(selecao[3]).replace(/\./g, "");
-    let merchand_id = tiraEspacos(selecao[4]);
-    let perccomis = tiraEspacos(selecao[5]).replace(/\./g, "");
 
     _objAtual.cpfPaciente = _objAtual.cpfPaciente.replace(/\.|-/g, "");
     _objAtual.valorExameSelecionado = valor;
@@ -609,8 +607,8 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         nomeExecutante,
         endereco,
         valor,
-        merchand_id,
-        perccomis
+        _objAtual.merchandId,
+        _objAtual.perccomis
       );
     } else if (forma == "Débito") {
       {
@@ -629,8 +627,8 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           nomeExecutante,
           endereco,
           valor,
-          merchand_id,
-          perccomis
+          _objAtual.merchandId,
+          _objAtual.perccomis
         );
       }
     }
@@ -655,7 +653,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
       }
       await _objAtual.daoConsulta.limparConsulta();
       await _objAtual.daoConsulta.abrirDbConsulta();
-      await _objAtual.daoConsulta.salvarConsulta(_objAtual.codLocalSelecionado, _objAtual.arrayExames, _objAtual.tfExame.value, _objAtual.dadosExame.text, _objAtual.codExecutanteSelecionado, _objAtual.codExameSelecionado, _objAtual.merchand_id, _objAtual.perccomis);
+      await _objAtual.daoConsulta.salvarConsulta(_objAtual.codLocalSelecionado, _objAtual.arrayExames, _objAtual.tfExame.value, _objAtual.dadosExame.text, _objAtual.codExecutanteSelecionado, _objAtual.codExameSelecionado, _objAtual.merchandId, _objAtual.perccomis);
       
       let daoUsuario = novoDaoUsuario();
       await daoUsuario.abrirDb();

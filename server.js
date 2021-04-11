@@ -841,6 +841,9 @@ async function doPgtoCC(req, resp) {
   console.log("json doPgtoCC");
   console.log(respostaPgto);
   
+  let access_token = respostaPgto.access_token;
+  
+  
   sessao.pgto = pgtoCC;
   if (respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
     pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.Status, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
