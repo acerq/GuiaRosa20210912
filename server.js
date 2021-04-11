@@ -695,10 +695,10 @@ function doAgendamento(req, resp) {
   sessao.agendamento = agendamento;
   
   let dados =
-    '[{"ORDER_ID":' +
-    executante +
+    '[{"CD_ORDER":"' +
+    merchandOrderId +
     "," +
-    "CD_EXECUTANTE":' +
+    '"CD_EXECUTANTE":"' +
     executante +
     "," +
     '"CD_SOLICITANTE":' +
