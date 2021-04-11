@@ -858,8 +858,8 @@ async function doPgtoCC(req, resp) {
   };
 
   myHeaders = {
-    "Content-Type": "application/json",
-    "Authorization": "Bearer {" + access_token + "}"
+    "Authorization": "Bearer {" + access_token + "}",
+    "Content-Type": "application/json"
   };
 
   requisicao = {
@@ -868,9 +868,9 @@ async function doPgtoCC(req, resp) {
     body: myBody
   };
 
-  console.log("doPgtoCC --> " + JSON.stringify(requisicao));
+  console.log("doPgtoCC --> " + JSON.stringify(myBody));
   responseBraspag = await fetch(
-    "https://splitsandbox.braspag.com.br/v2/sales/",
+    "https://apisandbox.cieloecommerce.cielo.com.br/",
     requisicao
   );
   console.log("fetch doPgtoCC");
