@@ -761,6 +761,8 @@ async function doPgtoCC(req, resp) {
   let anoValidade = req.params.anoValidade;
   let cvv = req.params.cvv;
   let valor = req.params.valor;
+  let merchandId = req.params.merchandId;
+  let perccomis = req.params.valor;
 
   console.log("executando doPgtoCC" + nome);
   if (
@@ -806,15 +808,12 @@ async function doPgtoCC(req, resp) {
     " https://authsandbox.braspag.com.br/oauth2/token",
     requisicao
   );
-  console.log("fetch doPgtoCC");
-  const respostaPgto = await responseBraspag.json();
-  console.log("json doPgtoCC");
-  console.log(respostaPgto);
+  console.log("fetch OAUTH2 Passo 1");
+  let respostaOAUTH2 = await responseBraspag.json();
+  console.log("json OAUTH2");
+  console.log(respostaOAUTH2);
   
-  let access_token = respostaPgto.access_token;
-
-  
-  
+  let access_token = respostaOAUTH2.access_token;
   
   const myBody = {
     MerchantOrderId: id,
@@ -844,29 +843,51 @@ async function doPgtoCC(req, resp) {
       "FraudAnalysis":{
             "Provider":"Cybersource",
             "TotalOrderAmount":valor
-      ,
+      },
       "splitpayments": [
         {
-          "subordinatemerchantid": "f2d6eb34-2c6b-4948-8fff-51facdd2a28f",
-          "amount": 5000,
+          "subordinatemerchantid": merchandId,
+          "amount": valor,
           "fares": {
-            "mdr": 20,
-            "fee": 25
+            "mdr": 10000 - perccomis,
+            "fee": 0
             }
-        },
-        {
-          "subordinatemerchantid": "9140ca78-3955-44a5-bd44-793370afef94",
-          "amount": 5000,
-          "fares": {
-            "mdr": 10,
-            "fee": 15
-          }
-        } ]
+        }
+      ]
     }
   };
 
+  myHeaders = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer {" + access_token + "}"
+  };
+
+  requisicao = {
+    method: "POST",
+    headers: myHeaders,
+    body: "grant_type=client_credentials"
+  };
+
+  console.log("doPgtoCC --> " + JSON.stringify(requisicao));
+  responseBraspag = await fetch(
+    "https://splitsandbox.braspag.com.br/v2/sales/",
+    requisicao
+  );
+  console.log("fetch doPgtoCC");
   
+  let respostaPgto = await responseBraspag.json();
+  console.log("json doPgtoCC");
+  console.log(respostaPgto);
   
+  sessao.pgto = pgtoCC;
+  if (respostaPgto.Payment) 
+    pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.Status, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
+  
+  console.log("json doPgtoDebito sessão");
+  console.log(sessao);
+  resp.json(respostaPgto);
+
+
   sessao.pgto = pgtoCC;
   if (respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0) 
     pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.Status, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
