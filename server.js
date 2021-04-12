@@ -878,7 +878,7 @@ async function doPgtoCC(req, resp) {
   );
   console.log("fetch doPgtoCC ");
   
-  let respostaPgto = await responseBraspag.text();
+  let respostaPgto = await responseBraspag.json();
   
   console.log("json doPgtoCC");
   console.log(respostaPgto);
