@@ -828,37 +828,28 @@ async function doPgtoCC(req, resp) {
       Email: email
     },
     Payment: {
-      Provider: "Simulado",
-      Type: "CreditCard",
-      DoSplit : "True",
+      Type: "SplittedCreditCard",
       Amount: valor,
+      DoSplit : true,
+      Installments: 1,
       Currency: "BRL",
       Country: "BRA",
       SoftDescriptor: "GuiaRosa",
       Capture: true,
-      Installments: 1,
       CreditCard: {
         CardNumber: numeroCartao,
         Holder: nomeCartao,
-        ExpirationDate: mesValidade + "/" + anoValidade,
+        ExpirationDate: "\" + mesValidade + "/" + anoValidade \"",
         SecurityCode: cvv,
         Brand: bandeira
       },
-      "splitpayments": [
+      "SplitPayments": [
         {
-          "subordinatemerchantid": merchandId,
-          "amount": valor,
-          "fares": {
-            "mdr": percSubordinado,
-            "fee": 0
-            }
-        },
-        {
-          "subordinatemerchantid": merchandId,
-          "amount": valor,
-          "fares": {
-            "mdr": percSubordinado,
-            "fee": 0
+          "SubordinateMerchantId": merchandId,
+          "Amount": valor,
+          "Fares": {
+            "Mdr": percSubordinado,
+            "Fee": 0
             }
         }],
       "FraudAnalysis":{
