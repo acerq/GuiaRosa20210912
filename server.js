@@ -808,7 +808,7 @@ async function doPgtoCC(req, resp) {
 
   console.log("doPgtoCC --> " + JSON.stringify(requisicao));
   let responseBraspag = await fetch(
-    " https://authsandbox.braspag.com.br/oauth2/token",
+    "https://authsandbox.braspag.com.br/oauth2/token",
     requisicao
   );
   console.log("fetch OAUTH2 Passo 1");
@@ -839,7 +839,7 @@ async function doPgtoCC(req, resp) {
       CreditCard: {
         CardNumber: numeroCartao,
         Holder: nomeCartao,
-        ExpirationDate: "\" + mesValidade + "/" + anoValidade \"",
+        ExpirationDate: mesValidade + "/" + anoValidade,
         SecurityCode: cvv,
         Brand: bandeira
       },
