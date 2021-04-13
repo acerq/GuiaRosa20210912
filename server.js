@@ -852,6 +852,14 @@ async function doPgtoCC(req, resp) {
             "mdr": percSubordinado,
             "fee": 0
             }
+        },
+        {
+          "subordinatemerchantid": merchandId,
+          "amount": valor,
+          "fares": {
+            "mdr": percSubordinado,
+            "fee": 0
+            }
         }],
       "FraudAnalysis":{
             "Provider":"Cybersource",
