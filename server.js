@@ -870,6 +870,9 @@ async function doPgtoCC(req, resp) {
     body: myBody
   };
 
+  
+  requisicao = JSON.parse(JSON.stringify(requisicao));
+  
   console.log("doPgtoCC --> " + JSON.stringify(requisicao));
   responseBraspag = await fetch(
     "https://apisandbox.cieloecommerce.cielo.com.br/1/sales/",
