@@ -855,7 +855,7 @@ async function doPgtoCC(req, resp) {
       "FraudAnalysis":{
             "Provider":"Cybersource",
             "TotalOrderAmount":valor
-      },
+      }
     }
   };
 
