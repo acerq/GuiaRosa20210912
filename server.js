@@ -708,7 +708,7 @@ async function doPgtoCC(req, resp) {
 	}
 
 	console.log('parâmetros ok doPgtoCC');
-  valor = 1.25;
+  valor = 100.25;
   
 	let pgtoCC = new PgtoCredito(id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, mesValidade, anoValidade, cvv, valor);
 
@@ -799,7 +799,8 @@ async function doPgtoCC(req, resp) {
 
 	console.log('json doPgtoCC');
 	console.log(respostaPgto);
-	console.log(respostaPgto.Payment.SplitErrors);
+	console.log(respostaPgto.Payment.Links);
+	//console.log(respostaPgto.Payment.SplitErrors);
 
 	//TODO sessao.pgto = pgtoCC;
 	if (respostaPgto.Payment && respostaPgto.Status == 1)
