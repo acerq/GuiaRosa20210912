@@ -800,7 +800,7 @@ async function doPgtoCC(req, resp) {
 	console.log(respostaPgto);
 
 	//TODO sessao.pgto = pgtoCC;
-	if (respostaPgto.Payment && respostaPgto.Payment.ReasonCode == 0)
+	if (respostaPgto.Payment && respostaPgto.Status == 1)
 		pgtoCC.setDadosPgto(respostaPgto.MerchantOrderId, respostaPgto.Payment.Status, respostaPgto.Payment.ProofOfSale, respostaPgto.Payment.PaymentId);
 
 	resp.json(respostaPgto);
