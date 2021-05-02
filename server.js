@@ -708,7 +708,8 @@ async function doPgtoCC(req, resp) {
 	}
 
 	console.log('parâmetros ok doPgtoCC');
-
+  valor = 1.0;
+  
 	let pgtoCC = new PgtoCredito(id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, mesValidade, anoValidade, cvv, valor);
 
 	const clientId = '85012692-b03b-437d-990c-1f0be4a2a377';
