@@ -712,8 +712,8 @@ async function doPgtoCC(req, resp) {
   
 	let pgtoCC = new PgtoCredito(id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, mesValidade, anoValidade, cvv, valor);
 
-	const clientId = '85012692-b03b-437d-990c-1f0be4a2a377';
-	const clientSecret = 'fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o=';
+	const clientId = 'f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b'; //### ANTIGO '85012692-b03b-437d-990c-1f0be4a2a377';
+	const clientSecret = '+L9frnKV8EM1AVZYkZCmn+7YJtMOdgU250CIS++9+JU='; //### ANTIGO 'fwMtZMpiCSnQ45aDSTQpjTb8/xcwO8UJQawRRKQEK1o=';
 	const base64 = new Buffer(clientId + ':' + clientSecret).toString('base64');
 	const ServidorOAUTH2 = 'https://authsandbox.braspag.com.br/';
 
