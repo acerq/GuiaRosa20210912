@@ -736,7 +736,7 @@ async function doPgtoCC(req, resp) {
 	console.log(respostaOAUTH2);
 
 	let access_token = respostaOAUTH2.access_token;
-	let percSubordinado = 30; //todo 10000 - perccomis;
+	let percSubordinado = 30; //### todo 10000 - perccomis;
 
 	const myBody = {
 		MerchantOrderId: id,
@@ -784,10 +784,13 @@ async function doPgtoCC(req, resp) {
 		'Content-Type': 'application/json'
 	};
 
+  let corpo = JSON.stringify(myBody);
+	console.log('doPgtoCC --> ' + corpo);
+  
 	requisicao = {
 		method: 'POST',
 		headers: myHeaders,
-		body: JSON.stringify(myBody)
+	  body: corpo
 	};
 
 	console.log('doPgtoCC --> ' + JSON.stringify(requisicao));
