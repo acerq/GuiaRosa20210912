@@ -1207,12 +1207,25 @@ async function doObterEnderecoPeloCep(req, resp) {
 function startServer() {
   // Instancio um objeto Server (Express). Todas as requisições serão tratadas por este objeto
 	const app = express();
+  
   // Servidor irá processar cookies
 	app.use(cookieParser());
 
-	// Se a requisição vier http, redire
+	// Se a requisição vier http, redireciono para https (requisito para PWA)
 	app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
 
+  
+  public interface ProcessadorRequisicao  {
+    
+        public void processar(HttpServletRequest req, HttpServletResponse res, String next);
+    
+  }
+  
+  
+  
+  
+  
+  
 	// Efetuando o log para cada requisição
 	app.use((req, resp, next) => {
 		const now = new Date();
