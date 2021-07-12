@@ -1205,10 +1205,12 @@ async function doObterEnderecoPeloCep(req, resp) {
 //-----------------------------------------------------------------------------------------//
 
 function startServer() {
+  // Instancio um objeto Server (Express). Todas as requisições serão tratadas por este objeto
 	const app = express();
+  // Servidor irá processar cookies
 	app.use(cookieParser());
 
-	// Redirect HTTP to HTTPS,
+	// Se a requisição vier http, redire
 	app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
 
 	// Efetuando o log para cada requisição
