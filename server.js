@@ -1212,22 +1212,10 @@ function startServer() {
 	app.use(cookieParser());
 
 	// Se a requisição vier http, redireciono para https (requisito para PWA)
-	app.use(redirectToHTTPS([/localhost:(\d{4})/], [], 301));
-
-  
-  public interface ProcessadorRequisicao  {
-    
-        public void processar(HttpServletRequest req, HttpServletResponse res, String next);
-    
-  }
-  
-  
-  
-  
-  
+	app.use(   redirectToHTTPS([/localhost:(\d{4})/], [], 301)   );
   
 	// Efetuando o log para cada requisição
-	app.use((req, resp, next) => {
+	app.use( (req, resp, next) => {
 		const now = new Date();
 		const time = now.toLocaleDateString() + ' - ' + now.toLocaleTimeString();
 		const path = req.method + ' ' + req.path;
