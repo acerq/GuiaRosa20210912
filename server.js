@@ -749,19 +749,29 @@ async function doPgtoCC(req, resp) {
 		Payment: {
 			Type: 'SplittedCreditCard',
 			Amount: valor,
-			DoSplit: true,
-			Installments: 1,
-			Currency: 'BRL',
-			Country: 'BRA',
-			SoftDescriptor: 'GuiaRosa',
 			Capture: true,
+      Installments: 1,
+      SoftDescriptor: 'GuiaRosa',
 			CreditCard: {
 				CardNumber: numeroCartao,
 				Holder: nomeCartao,
 				ExpirationDate: mesValidade + '/' + anoValidade,
 				SecurityCode: cvv,
-				Brand: bandeira
+				Brand: bandeira,
+        SaveCard: 'false'
 			},
+      FraudAnalysis: {
+				Provider: 'Cybersource',
+				TotalOrderAmount: valor
+			},
+      
+      
+      DoSplit: true,
+			
+			Currency: 'BRL',
+			Country: 'BRA',
+			
+			
 			SplitPayments: [
 				{
 					SubordinateMerchantId: merchandId,
@@ -772,10 +782,7 @@ async function doPgtoCC(req, resp) {
 					}
 				}
 			],
-			FraudAnalysis: {
-				Provider: 'Cybersource',
-				TotalOrderAmount: valor
-			}
+			
 		}
 	};
 
