@@ -765,8 +765,7 @@ async function doPgtoCC(req, resp) {
 				TotalOrderAmount: valor
 			},
       
-      
-      DoSplit: true,
+
 			
 			Currency: 'BRL',
 			Country: 'BRA',
