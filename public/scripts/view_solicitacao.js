@@ -590,6 +590,11 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     _objAtual.cpfPaciente = _objAtual.cpfPaciente.replace(/\.|-/g, "");
     _objAtual.valorExameSelecionado = valor;
     
+    
+    
+    // https://h.online-metrix.net/fp/tags.js?org_id=<?php echo $orgID ?>&amp;session_id=<?php echo $mechantID?><?php echo $sessionID ?>
+    
+    
     if (forma == "Crédito") {
       _objAtual.ctrl.enviarAgendamentoPgtoCC(
         _objAtual.codExecutanteSelecionado,

@@ -158,6 +158,10 @@ export default class CtrlSolicitacao {
     let proofOfSale = "";
     let paymentId = "";
 
+      
+    // https://h-onlinemetrix.net/fp/tags.js?org_id=1snn5n9w&session_id=guiarosa01
+      
+      
     // Processando o pagamento
     let requisicao =
       "/pgtocc" +
