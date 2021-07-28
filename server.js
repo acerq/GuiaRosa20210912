@@ -709,15 +709,29 @@ async function doPgtoCC(req, resp) {
 
   
   //
+  // REQUISITOS PARA O CYBERSOURCE - ANTIFRAUDE
   //
-  //
-  var 
+  let ip = null; 
+  let browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + id;
+  
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.open("GET", 'http://meuip.com/api/meuip.php');
   xmlhttp.send();
   xmlhttp.onload = function(e) {
-    alert("Seu IP é: "+xmlhttp.response);
+    ip = xmlhttp.response;
   }
+  
+  
+  
+  1234">
+</script>
+  
+  xmlhttp.open("GET", 'https://h.online-metrix.net/fp/clear.png?org_id=k8vif92e&amp;session_id=braspag_nomecliente123456&amp;m=1');
+  xmlhttp.send();
+  xmlhttp.onload = function(e) {
+    ip = xmlhttp.response;
+  }
+  
   
   
   
