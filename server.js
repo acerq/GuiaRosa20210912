@@ -714,6 +714,7 @@ async function doPgtoCC(req, resp) {
   let ip = null; 
   let browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + id;
   
+  var XMLHttpRequest = require('xhr2');
   var xmlhttp = new XMLHttpRequest();
   xmlhttp.open("GET", 'http://meuip.com/api/meuip.php');
   xmlhttp.send();
@@ -721,18 +722,20 @@ async function doPgtoCC(req, resp) {
     ip = xmlhttp.response;
   }
   
-  
-  
-  1234">
-</script>
-  
-  xmlhttp.open("GET", 'https://h.online-metrix.net/fp/clear.png?org_id=k8vif92e&amp;session_id=braspag_nomecliente123456&amp;m=1');
+  xmlhttp.open("GET", 'https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=1');
   xmlhttp.send();
   xmlhttp.onload = function(e) {
-    ip = xmlhttp.response;
   }
-  
-  
+
+  xmlhttp.open("GET", 'https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=2');
+  xmlhttp.send();
+  xmlhttp.onload = function(e) {
+  }
+
+  let script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src = 'https://h.online-metrix.net/fp/check.js?org_id=1snn5n9w&session_id=' + browserFingerPrint;
+  document.body.appendChild(script);
   
   
 	console.log('parâmetros ok doPgtoCC');
@@ -794,18 +797,13 @@ async function doPgtoCC(req, resp) {
           "ShippingMethod": "None",
         },
         browser: {
-          "ipaddress": "179.221.103.151",
-          "browserfingerprint": "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + id
+          "ipaddress": ip,
+          "browserfingerprint": browserFingerPrint
         },
 				TotalOrderAmount: valor
 			},
-      
-
-			
 			Currency: 'BRL',
 			Country: 'BRA',
-			
-			
 			SplitPayments: [
 				{
 					SubordinateMerchantId: merchandId,
