@@ -739,7 +739,7 @@ async function doPgtoCC(req, resp) {
 	let percSubordinado = 30; //### todo 10000 - perccomis;
 
 	const myBody = {
-		MerchantOrderId: id,
+		MerchantOrderId: 1234, //id
 		Customer: {
 			Name: nome,
 			Identity: cpf,
