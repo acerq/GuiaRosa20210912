@@ -707,6 +707,20 @@ async function doPgtoCC(req, resp) {
 		return;
 	}
 
+  
+  //
+  //
+  //
+  var 
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("GET", 'http://meuip.com/api/meuip.php');
+  xmlhttp.send();
+  xmlhttp.onload = function(e) {
+    alert("Seu IP é: "+xmlhttp.response);
+  }
+  
+  
+  
 	console.log('parâmetros ok doPgtoCC');
   valor = 100.25;
   
@@ -739,7 +753,7 @@ async function doPgtoCC(req, resp) {
 	let percSubordinado = 30; //### todo 10000 - perccomis;
 
 	const myBody = {
-		MerchantOrderId: 1234, //id
+		MerchantOrderId: id, 
 		Customer: {
 			Name: nome,
 			Identity: cpf,
@@ -767,7 +781,7 @@ async function doPgtoCC(req, resp) {
         },
         browser: {
           "ipaddress": "179.221.103.151",
-          "browserfingerprint": "22082019"
+          "browserfingerprint": "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + id
         },
 				TotalOrderAmount: valor
 			},
