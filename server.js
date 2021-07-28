@@ -762,6 +762,9 @@ async function doPgtoCC(req, resp) {
 			},
       FraudAnalysis: {
 				Provider: 'Cybersource',
+        "Shipping": {
+          "ShippingMethod": "None",
+        },
         browser: {
           "ipaddress": "179.221.103.151",
           "browserfingerprint": "22082019"
