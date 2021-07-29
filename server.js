@@ -711,35 +711,23 @@ async function doPgtoCC(req, resp) {
   //
   // REQUISITOS PARA O CYBERSOURCE - ANTIFRAUDE
   //
-  let ip = null; 
   let browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + id;
-  
-  var XMLHttpRequest = require('xhr2');
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("GET", 'http://meuip.com/api/meuip.php');
-  xmlhttp.send();
-  xmlhttp.onload = function(e) {
-    ip = xmlhttp.response;
-  }
-  
-  xmlhttp.open("GET", 'https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=1');
-  xmlhttp.send();
-  xmlhttp.onload = function(e) {
-  }
 
-  xmlhttp.open("GET", 'https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=2');
-  xmlhttp.send();
-  xmlhttp.onload = function(e) {
-  }
+  let reqFetch = await fetch('http://meuip.com/api/meuip.php');
+	const ip = await reqFetch.text();
+  
+  reqFetch = await fetch('https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=1');
+	let foo = await reqFetch.text();
+
+  reqFetch = await fetch('https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=2');
+	foo = await reqFetch.text();
 
   let script = document.createElement('script');
   script.type = 'text/javascript';
   script.src = 'https://h.online-metrix.net/fp/check.js?org_id=1snn5n9w&session_id=' + browserFingerPrint;
   document.body.appendChild(script);
-  
-  
+    
 	console.log('parâmetros ok doPgtoCC');
-  valor = 100.25;
   
 	let pgtoCC = new PgtoCredito(id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, mesValidade, anoValidade, cvv, valor);
 
