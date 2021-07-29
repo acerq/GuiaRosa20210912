@@ -48,9 +48,9 @@
   </div>
 </div>
 <script type="text/javascript">
-  let reqFetch = await fetch('https://checkip.amazonaws.com/', {mode: 'cors'}).then(
+  let reqFetch = fetch('https://checkip.amazonaws.com/', {mode: 'no-cors'}).then(
     function(response) {
-      document.getElementById(hdIp).value = response.text(); 
+      document.getElementById('hdIp').value = response.text(); 
     }).catch(
     function(error) {  
       console.log('Request failed', error)  
