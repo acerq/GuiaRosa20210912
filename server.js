@@ -678,7 +678,6 @@ async function doPgtoCC(req, resp) {
 	let cpf = req.params.cpf;
 	let email = req.params.email;
 	let id = req.params.id;
-  let ip = req.params.ip;
 	let numeroCartao = req.params.numeroCartao;
 	let nomeCartao = req.params.nomeCartao;
 	let bandeira = req.params.bandeira;
@@ -695,7 +694,6 @@ async function doPgtoCC(req, resp) {
 		typeof cpf === 'undefined' ||
 		typeof email === 'undefined' ||
 		typeof id === 'undefined' ||
-		typeof ip === 'undefined' ||
 		typeof numeroCartao === 'undefined' ||
 		typeof nomeCartao === 'undefined' ||
 		typeof bandeira === 'undefined' ||
@@ -710,7 +708,11 @@ async function doPgtoCC(req, resp) {
 	}
 
   let browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + id;
-    
+  let reqFetch = await fetch('https://checkip.amazonaws.com/');
+	const ip = await reqFetch.text();  
+  
+  
+  
 	console.log('parâmetros ok doPgtoCC');
   
 	let pgtoCC = new PgtoCredito(id, nome, cpf, email, numeroCartao, nomeCartao, bandeira, mesValidade, anoValidade, cvv, valor);

@@ -47,12 +47,12 @@
     </button>
   </div>
 </div>
-<script type="text/javascript" src="https://l2.io/ip.js?var=userip"></script>
 <script type="text/javascript">
-    var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("GET", 'http://meuip.com/api/meuip.php');
-  xmlhttp.send();
-  xmlhttp.onload = function(e) {
-    document.getElementById(hdIp).value = ; 
-  }
-    </script>
+  let reqFetch = await fetch('https://checkip.amazonaws.com/', {mode: 'cors'}).then(
+    function(response) {
+      document.getElementById(hdIp).value = response.text(); 
+    }).catch(
+    function(error) {  
+      console.log('Request failed', error)  
+    });
+</script>
