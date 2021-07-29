@@ -1234,6 +1234,8 @@ function startServer() {
 		const path = req.method + ' ' + req.path;
 		const m = req.ip + ' - ' + time + ' - ' + path + ' - ' + JSON.stringify(req.cookies);
 		console.log(m);
+    resp.header("Access-Control-Allow-Origin", "*");
+    resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 		next();
 	});
 

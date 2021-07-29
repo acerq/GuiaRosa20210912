@@ -146,7 +146,6 @@ export default class CtrlSolicitacao {
     nomeExecutante,
     endereco,
     valor,
-    ip,
     merchand_id,
     perccomis
   ) {
@@ -160,8 +159,10 @@ export default class CtrlSolicitacao {
     let paymentId = "";
       
     let browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + merchantOrderId;
+    let reqFetch = await fetch('https://checkip.amazonaws.com/');
+	  const ip = await reqFetch.text();
   
-    let reqFetch = await fetch('https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=1');
+    reqFetch = await fetch('https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=1');
 	  let foo = await reqFetch.text();
 
     reqFetch = await fetch('https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=2');
