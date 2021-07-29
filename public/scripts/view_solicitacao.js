@@ -28,6 +28,7 @@ export default class ViewSolicitacao {
     this.cbPaciente = document.getElementById("cbPaciente");
     this.cbExame = document.getElementById("cbExame");
     this.cbFaturar = document.getElementById("cbFaturar");
+    this.hdIp = document.getElementById("hdIp");
     this.pwSenha = document.getElementById("pwSenha");
     this.btPacientes = document.getElementById("btPacientes");
     this.btConsultar = document.getElementById("btConsultar");
@@ -404,6 +405,7 @@ export default class ViewSolicitacao {
         nomeExecutante,
         endereco,
         _objAtual.valorExameSelecionado.replace(/\./g, ""),
+        _objAtual.hdIp,
         _objAtual.merchandId,
         _objAtual.perccomis.replace(/\./g, "")
       );
@@ -612,6 +614,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         nomeExecutante,
         endereco,
         valor,
+        _objAtual.hdIp,
         _objAtual.merchandId,
         _objAtual.perccomis
       );
