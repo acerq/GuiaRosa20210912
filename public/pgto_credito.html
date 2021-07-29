@@ -1,8 +1,3 @@
-<script type="text/javascript" src="https://l2.io/ip.js?var=userip"></script>
-
-    <script type="text/javascript">
-      document.write("Seu IP e:", userip);
-    </script>
 <div class="grade">
   <div class="rotulo" id="divExame"></div>
   <hr />
@@ -39,6 +34,7 @@
   <div class="rotulo">CVV</div>
   <div>
     <input id="tfCvv" type="text" class="trinta" />
+    <input id="hdIp" type="hidden" />
   </div>
 </div>
 <div class="caixaBotoes">
@@ -51,3 +47,12 @@
     </button>
   </div>
 </div>
+<script type="text/javascript" src="https://l2.io/ip.js?var=userip"></script>
+<script type="text/javascript">
+    var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("GET", 'http://meuip.com/api/meuip.php');
+  xmlhttp.send();
+  xmlhttp.onload = function(e) {
+    document.getElementById(hdIp).value = ; 
+  }
+    </script>
