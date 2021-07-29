@@ -709,10 +709,6 @@ async function doPgtoCC(req, resp) {
 		return;
 	}
 
-  
-  //
-  // REQUISITOS PARA O CYBERSOURCE - ANTIFRAUDE
-  //
   let browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + id;
     
 	console.log('parâmetros ok doPgtoCC');
