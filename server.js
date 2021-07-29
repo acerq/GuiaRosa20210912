@@ -678,6 +678,7 @@ async function doPgtoCC(req, resp) {
 	let cpf = req.params.cpf;
 	let email = req.params.email;
 	let id = req.params.id;
+  let ip = req.params.ip;
 	let numeroCartao = req.params.numeroCartao;
 	let nomeCartao = req.params.nomeCartao;
 	let bandeira = req.params.bandeira;
@@ -694,6 +695,7 @@ async function doPgtoCC(req, resp) {
 		typeof cpf === 'undefined' ||
 		typeof email === 'undefined' ||
 		typeof id === 'undefined' ||
+		typeof ip === 'undefined' ||
 		typeof numeroCartao === 'undefined' ||
 		typeof nomeCartao === 'undefined' ||
 		typeof bandeira === 'undefined' ||
@@ -712,20 +714,6 @@ async function doPgtoCC(req, resp) {
   // REQUISITOS PARA O CYBERSOURCE - ANTIFRAUDE
   //
   let browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + id;
-
-  let reqFetch = await fetch('http://meuip.com/api/meuip.php');
-	const ip = await reqFetch.text();
-  
-  reqFetch = await fetch('https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=1');
-	let foo = await reqFetch.text();
-
-  reqFetch = await fetch('https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=2');
-	foo = await reqFetch.text();
-
-  let script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.src = 'https://h.online-metrix.net/fp/check.js?org_id=1snn5n9w&session_id=' + browserFingerPrint;
-  document.body.appendChild(script);
     
 	console.log('parâmetros ok doPgtoCC');
   
@@ -1289,7 +1277,7 @@ function startServer() {
 	app.get('/agendamento/:merchandOrderId/:executante/:solicitante/:paciente/:cpf/:codExame/:nomeExame/:nomeExecutante/:enderecoExecutante/:faturar', doAgendamento);
 
 	// Pagamento por cartão de crédito
-	app.get('/pgtocc/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor/:merchandId/:perccomis', doPgtoCC);
+	app.get('/pgtocc/:cpf/:nome/:email/:id/:ip/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor/:merchandId/:perccomis', doPgtoCC);
 
 	// Pagamento por cartão de debito
 	app.get('/pgtodebito/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:valor/:merchandId/:perccomis', doPgtoDebito);

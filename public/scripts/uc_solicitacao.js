@@ -157,10 +157,21 @@ export default class CtrlSolicitacao {
 
     let proofOfSale = "";
     let paymentId = "";
+      
+    let browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + merchantOrderId;
+    let reqFetch = await fetch('http://meuip.com/api/meuip.php');
+	  const ip = await reqFetch.text();
+  
+    reqFetch = await fetch('https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=1');
+	  let foo = await reqFetch.text();
 
-      
-    // https://h-onlinemetrix.net/fp/tags.js?org_id=1snn5n9w&session_id=guiarosa01
-      
+    reqFetch = await fetch('https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=2');
+	  foo = await reqFetch.text();
+
+    let script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = 'https://h.online-metrix.net/fp/check.js?org_id=1snn5n9w&session_id=' + browserFingerPrint;
+    document.body.appendChild(script);
       
     // Processando o pagamento
     let requisicao =
@@ -173,6 +184,8 @@ export default class CtrlSolicitacao {
       emailPaciente +
       "/" +
       merchantOrderId +
+      "/" +
+      ip +
       "/" +
       numCartao.replace(/ /g, "") +
       "/" +
