@@ -1228,6 +1228,8 @@ function startServer() {
 	app.use( (req, resp, next) => {
     resp.header("Access-Control-Allow-Origin", "*");
     resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    resp.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    
 		const now = new Date();
 		const time = now.toLocaleDateString() + ' - ' + now.toLocaleTimeString();
 		const path = req.method + ' ' + req.path;
