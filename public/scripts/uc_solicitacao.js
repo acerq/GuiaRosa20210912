@@ -159,7 +159,9 @@ export default class CtrlSolicitacao {
     let paymentId = "";
       
     let browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + merchantOrderId;
-    let reqFetch = await fetch('https://checkip.amazonaws.com/',{ credentials : "include", mode: "no-cors"});
+    let reqFetch = await fetch('https://checkip.amazonaws.com/',{ credentials : "include", mode: "no-cors"}).catch(function(error) {
+        console.log(error);
+    });
 	  let ip = await reqFetch.text();
     alert(ip);
     ip = '186.223.170.234';
