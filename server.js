@@ -721,7 +721,7 @@ async function doPgtoCC(req, resp) {
 
 	let myHeaders = {
 		'Content-Type': 'application/x-www-form-urlencoded',
-		Authorization: 'Basic ' + base64
+		'Authorization': 'Basic ' + base64
 	};
 
 	let requisicao = {
