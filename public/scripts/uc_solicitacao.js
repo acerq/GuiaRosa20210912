@@ -159,11 +159,8 @@ export default class CtrlSolicitacao {
     let paymentId = "";
       
     let browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + merchantOrderId;
-    let reqFetch = await fetch('https://checkip.amazonaws.com/',{ credentials : "include", mode: "no-cors"}).catch(function(error) {
-        console.log(error);
-    });
-	  let ip = await reqFetch.text();
-    alert(ip);
+    let reqFetch = await fetch('https://checkip.amazonaws.com/', {credentials : "include"});
+    let ip = await reqFetch.text();
     ip = '186.223.170.234';
   
     reqFetch = await fetch('https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&session_id=' + browserFingerPrint + '&m=1',{ credentials : "include", mode: "no-cors"});
