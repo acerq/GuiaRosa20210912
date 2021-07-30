@@ -1223,16 +1223,16 @@ function startServer() {
 
 	// Se a requisição vier http, redireciono para https (requisito para PWA)
 	app.use(   redirectToHTTPS([/localhost:(\d{4})/], [], 301)   );
-  
+    
 	// Efetuando o log para cada requisição
 	app.use( (req, resp, next) => {
+    resp.header("Access-Control-Allow-Origin", "*");
+    resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 		const now = new Date();
 		const time = now.toLocaleDateString() + ' - ' + now.toLocaleTimeString();
 		const path = req.method + ' ' + req.path;
 		const m = req.ip + ' - ' + time + ' - ' + path + ' - ' + JSON.stringify(req.cookies);
 		console.log(m);
-    resp.header("Access-Control-Allow-Origin", "*");
-    resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 		next();
 	});
 
