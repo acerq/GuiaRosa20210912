@@ -455,7 +455,6 @@ export default class ViewSolicitacao {
                 '<img src="https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&amp;session_id=' + browserFingerPrint + '&amp;m=2" alt="">' + 
                 '<script src="https://h.online-metrix.net/fp/check.js?org_id=1snn5n9w&amp;session_id=' + browserFingerPrint + '" type="text/javascript"></script>';
     
-      
       $("#divExame").html(msg + bfp);
 
       _objAtual.btOk.onclick = _objAtual.enviarSolicitacao;
@@ -465,8 +464,7 @@ export default class ViewSolicitacao {
 
 //-----------------------------------------------------------------------------------------//
 
-exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, valor, formaPgto, 
-                  merchantOrderId, url) {
+exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, valor, formaPgto, merchantOrderId, url) {
   $("#divConteudo").empty();
   // $("#divConteudo").html("<div id='pdfId'></div><script>PDFObject.embed('" + arq +"#zoom=30', '#pdfId');</script><button onclick='window.history.go(-1)' style='width:100%;'>Fechar</button>");
   $("#divConteudo").load("comprovante.html", function() {
@@ -486,8 +484,7 @@ exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco
 
 //-----------------------------------------------------------------------------------------//
 
-apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, valor, formaPgto, 
-                  merchantOrderId, url) {
+apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, valor, formaPgto, merchantOrderId, url) {
   $("#divConteudo").empty();
   $("#divConteudo").load("comprovante.html", function() {
 
