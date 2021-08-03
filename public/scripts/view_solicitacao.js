@@ -69,7 +69,7 @@ export default class ViewSolicitacao {
     this.codExecutanteSelecionado = null;
     this.codExameSelecionado = null;
     this.valorExameSelecionado = null;
-    this.merchandId = null;
+    this.merchandIdExecutor = null;
     this.perccomis = null;
     this.dtPeriodo = null;
 
@@ -108,7 +108,7 @@ export default class ViewSolicitacao {
         this.codExameSelecionado = array[0].codExameSelecionado;
         this.atualizarExames(array[0].arrayExames);
         this.codLocalSelecionado = array[0].codLocalSelecionado;
-        this.merchandId = array[0].merchandId;
+        this.merchandIdExecutor = array[0].merchandIdExecutor;
         this.perccomis = array[0].perccomis;
         this.idDadosExame = array[0].idDadosExame;
       }      
@@ -263,7 +263,7 @@ export default class ViewSolicitacao {
         let codExecutante = value.id_executante;
         let codExame = value.cd_exame;
         let valor = value.valor;
-        let merchandId = value.marchand_id; //TODO Trocar
+        let merchandIdExecutor = value.marchand_id; //TODO Trocar
         let perccomis = value.perccomis; 
         let descricao =
           tiraEspacos(value.exame) +
@@ -281,7 +281,7 @@ export default class ViewSolicitacao {
           SEPARADOR +
           valor +
           SEPARADOR +
-          merchandId +
+          merchandIdExecutor +
           SEPARADOR +
           perccomis +
           "' " +  
@@ -310,7 +310,7 @@ export default class ViewSolicitacao {
           _objAtual.codExecutanteSelecionado = selectionText[0];
           _objAtual.codExameSelecionado = selectionText[1];
           _objAtual.valorExameSelecionado = selectionText[2];
-          _objAtual.merchandId = selectionText[3];
+          _objAtual.merchandIdExecutor = selectionText[3];
           _objAtual.perccomis = selectionText[4];
       });
 
@@ -404,7 +404,7 @@ export default class ViewSolicitacao {
         nomeExecutante,
         endereco,
         _objAtual.valorExameSelecionado.replace(/\./g, ""),
-        _objAtual.merchandId,
+        _objAtual.merchandIdExecutor,
         _objAtual.perccomis.replace(/\./g, "")
       );
       fnTirarEspera();
@@ -617,7 +617,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         nomeExecutante,
         endereco,
         valor,
-        _objAtual.browserFingerPrint,
         _objAtual.perccomis
       );
     } else if (forma == "Débito") {
@@ -637,7 +636,6 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           nomeExecutante,
           endereco,
           valor,
-          _objAtual.merchandId,
           _objAtual.perccomis
         );
       }
@@ -663,7 +661,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
       }
       await _objAtual.daoConsulta.limparConsulta();
       await _objAtual.daoConsulta.abrirDbConsulta();
-      await _objAtual.daoConsulta.salvarConsulta(_objAtual.codLocalSelecionado, _objAtual.arrayExames, _objAtual.tfExame.value, _objAtual.dadosExame.text, _objAtual.codExecutanteSelecionado, _objAtual.codExameSelecionado, _objAtual.merchandId, _objAtual.perccomis);
+      await _objAtual.daoConsulta.salvarConsulta(_objAtual.codLocalSelecionado, _objAtual.arrayExames, _objAtual.tfExame.value, _objAtual.dadosExame.text, _objAtual.codExecutanteSelecionado, _objAtual.codExameSelecionado, _objAtual.perccomis);
       
       let daoUsuario = novoDaoUsuario();
       await daoUsuario.abrirDb();

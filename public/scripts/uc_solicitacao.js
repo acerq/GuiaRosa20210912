@@ -583,7 +583,7 @@ async enviarAgendamentoPgtoBoleto(
     nomeExecutante,
     endereco,
     valor,
-    merchand_id,
+    merchandIdExecutor,
     perccomis
   ) {
     this.view.colocarEspera();
