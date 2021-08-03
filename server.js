@@ -2,6 +2,7 @@
 
 const express = require('express');
 const fetch = require('node-fetch');
+const cors = require('cors');
 const redirectToHTTPS = require('express-http-to-https').redirectToHTTPS;
 const cookieParser = require('cookie-parser');
 
@@ -1217,7 +1218,10 @@ async function doObterEnderecoPeloCep(req, resp) {
 function startServer() {
   // Instancio um objeto Server (Express). Todas as requisições serão tratadas por este objeto
 	const app = express();
+
   
+  app.use(cors());
+
   // Servidor irá processar cookies
 	app.use(cookieParser());
 
