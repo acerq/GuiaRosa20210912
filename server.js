@@ -1226,6 +1226,7 @@ function startServer() {
     
 	// Efetuando o log para cada requisição
 	app.use( (req, resp, next) => {
+    resp.header("Referrer-Policy", "no-referrer"); 
     resp.header("Access-Control-Allow-Origin", "*");
     resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     resp.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
