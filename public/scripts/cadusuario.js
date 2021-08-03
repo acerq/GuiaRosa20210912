@@ -41,8 +41,8 @@ var bairro;
 var cep;
 
 
-
 var funcaoMD5 = new Function("a", "return md5(a)");
+
 
 $(document).ready(function() {
   

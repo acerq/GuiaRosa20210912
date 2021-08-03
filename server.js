@@ -1236,9 +1236,9 @@ function startServer() {
       timeZone: 'America/Sao_Paulo', // Lista de Timezones no fim do artigo
       hour12: false, // Alterna entre a mostragem dos horários em 24 horas, ou então AM/PM
     }
-		const hora = dataFormatada + ':' + now.toLocaleTimeString('pt-BR',options);
+		const hora = dataFormatada + '-' + now.toLocaleTimeString('pt-BR',options);
 		const path = req.method + ' ' + req.path;
-		const m = '(' + req.ip + ') - ' + hora + ' - ' + path + ' ---> ' + JSON.stringify(req.cookies);
+		const m = '(' + req.ip + ') - ' + hora + ' - ' + path + ' - Cookies: ' + JSON.stringify(req.cookies);
 		console.log(m);
 		next();
 	});
@@ -1301,6 +1301,9 @@ function startServer() {
 
 	// obter dados pelo CEP
 	app.get('/obterEnderecoPeloCep/:cep', doObterEnderecoPeloCep);
+
+	// obter IP
+	app.get('/obterIP', doObterIP);
 
 	// Obter Locais
 	app.get('/obterLocais/', doObterLocais);
