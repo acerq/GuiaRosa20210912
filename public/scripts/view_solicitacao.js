@@ -414,7 +414,7 @@ export default class ViewSolicitacao {
   //-----------------------------------------------------------------------------------------//
 
   async colocarFormPgto(forma) {
-    let browserFingerPrint = _objAtual.ctrl.obterBrowserFingerPrint();
+    let browserFingerPrint = _objAtual.ctrl.obterFingerPrint();
         
     let endereco = "pgto_credito.html";
     if(forma != "Crédito")
@@ -451,12 +451,12 @@ export default class ViewSolicitacao {
         tiraEspacos(selecao[3]) +
         "</span></center>";
       
+      let bfp = '<p style="background:url(https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&amp;session_id=' + browserFingerPrint + '&amp;m=1)"></p>' +
+                '<img src="https://h.online-metrix.net/fp/clear.png?org_id=1snn5n9w&amp;session_id=' + browserFingerPrint + '&amp;m=2" alt="">' + 
+                '<script src="https://h.online-metrix.net/fp/check.js?org_id=1snn5n9w&amp;session_id=' + browserFingerPrint + '" type="text/javascript"></script>';
+    
       
-      
-      
-      
-      
-      $("#divExame").html(msg);
+      $("#divExame").html(msg + bfp);
 
       _objAtual.btOk.onclick = _objAtual.enviarSolicitacao;
       _objAtual.btCancelar.onclick = _objAtual.voltarOuAgendar;
@@ -620,7 +620,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         nomeExecutante,
         endereco,
         valor,
-        _objAtual.merchandId,
+        _objAtual.browserFingerPrint,
         _objAtual.perccomis
       );
     } else if (forma == "Débito") {

@@ -17,6 +17,7 @@ export default class CtrlSolicitacao {
     this.arrayPacientes = [];
     this.arrayLocais = [];
     this.arrayExames = [];
+    this.browserFingerPrint = null;
 
     this.init();
   }
@@ -128,15 +129,16 @@ export default class CtrlSolicitacao {
     return true;
   }
 
-//-----------------------------------------------------------------------------------------//
+  //-----------------------------------------------------------------------------------------//
 
-obterFingerPrint() {
+  obterFingerPrint() {
     let agora = new Date();
     let timeMillis = agora.getTime().toString();
-    return "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + timeMillis;
-}
+    this.browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + timeMillis;
+    return this.browserFingerPrint;
+  }
 
-//-----------------------------------------------------------------------------------------//
+  //-----------------------------------------------------------------------------------------//
 
   async enviarAgendamentoPgtoCC(
     codExecutante,
