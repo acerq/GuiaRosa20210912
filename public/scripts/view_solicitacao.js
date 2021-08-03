@@ -617,6 +617,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         nomeExecutante,
         endereco,
         valor,
+        _objAtual.merchantIdExecutor,
         _objAtual.perccomis
       );
     } else if (forma == "Débito") {
@@ -636,6 +637,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           nomeExecutante,
           endereco,
           valor,
+          _objAtual.merchantIdExecutor,
           _objAtual.perccomis
         );
       }
