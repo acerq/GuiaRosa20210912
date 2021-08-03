@@ -1220,6 +1220,15 @@ function startServer() {
 	const app = express();
 
   
+  const allowedOrigins = ['*'];
+  const options : cors.CorsOptions = {
+    origin: allowedOrigins
+  };
+
+// Then pass these options to cors:
+app.use(cors(options));
+  
+  
   app.use(cors());
 
   // Servidor irá processar cookies
