@@ -1220,15 +1220,11 @@ function startServer() {
     
 	// Efetuando o log para cada requisição
 	app.use( (req, resp, next) => {
-    resp.header("Access-Control-Allow-Origin", "*");
-    resp.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    resp.header("Access-Control-Allow-Credentials", "true");    
-    resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     
 		const now = new Date();
 		const time = now.toLocaleDateString() + ' - ' + now.toLocaleTimeString();
 		const path = req.method + ' ' + req.path;
-		const m = req.ip + ' - ' + time + ' - ' + path + ' - ' + JSON.stringify(req.cookies);
+		const m = req.ips + ' - ' + time + ' - ' + path + ' - ' + JSON.stringify(req.cookies);
 		console.log(m);
 		next();
 	});
@@ -1318,8 +1314,6 @@ function startServer() {
 }
 
 //----------------------------------------------------------------------------------------//
-
-
 
 //
 // Início do Programa
