@@ -1219,18 +1219,8 @@ function startServer() {
   // Instancio um objeto Server (Express). Todas as requisições serão tratadas por este objeto
 	const app = express();
 
-  
-  const allowedOrigins = ['*'];
-  const options : cors.CorsOptions = {
-    origin: allowedOrigins
-  };
-
-// Then pass these options to cors:
-app.use(cors(options));
-  
-  
   app.use(cors());
-
+  
   // Servidor irá processar cookies
 	app.use(cookieParser());
 
@@ -1239,10 +1229,10 @@ app.use(cors(options));
     
 	// Efetuando o log para cada requisição
 	app.use( (req, resp, next) => {
-    resp.header("Access-Control-Allow-Origin", "*");
-    resp.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    resp.header("Access-Control-Allow-Credentials", "true");    
-    resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    //resp.header("Access-Control-Allow-Origin", "*");
+    //resp.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    //resp.header("Access-Control-Allow-Credentials", "true");    
+    //resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     
 		const now = new Date();
 		const time = now.toLocaleDateString() + ' - ' + now.toLocaleTimeString();

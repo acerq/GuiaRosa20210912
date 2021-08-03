@@ -173,12 +173,7 @@ export default class CtrlSolicitacao {
 ];
       
   let reqFetch = await fetch('https://checkip.amazonaws.com/', {
-      'mode': 'no-cors', 
-      'headers': {  
-          'Content-type': "application/x-www-form-urlencoded; charset=UTF-8",  
-          'Accept': 'text/plain'
-        }, 
-        credentials : "include"
+      'mode': 'no-cors'
       });
     if(!reqFetch.ok) {
       alert('request failed: ' + JSON.stringify(reqFetch));
