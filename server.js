@@ -3,6 +3,7 @@
 const express = require('express');
 const fetch = require('node-fetch');
 const cors = require('cors');
+const soap = require('soap');
 const redirectToHTTPS = require('express-http-to-https').redirectToHTTPS;
 const cookieParser = require('cookie-parser');
 
@@ -22,7 +23,6 @@ var locais;
 //-----------------------------------------------------------------------------------------//
 
 function setPeriodo() {
-	let soap = require('soap');
 	console.log('executando obterPeriodo ');
 
 	soap.createClient(BASE_URL, function(err, client) {
@@ -50,8 +50,6 @@ function setPeriodo() {
 //-----------------------------------------------------------------------------------------//
 
 function setLocais() {
-	let soap = require('soap');
-
 	soap.createClient(BASE_URL, function(err, client) {
 		console.log('createClient');
 		client.Wsretornalocais(null, function(err, result1) {
@@ -119,7 +117,9 @@ function recuperarSessao(req, resp) {
 		console.log('#-->', usuariosAtivos.get(session_id));
 	}
 
-	let sessao = usuariosAtivos.get(session_id);
+	console.log('#### session_id --> ', session_id);
+  let sessao = usuariosAtivos.get(session_id);
+  console.log(JSON.stringify(usuariosAtivos));
 	console.log('#### sessao --> ', sessao);
 	if (sessao == null || sessao == undefined) {
 		resp.json(JSON.parse('{"erro" : "Sessão não iniciada ou expirada"}'));
@@ -320,7 +320,6 @@ function doLoginMedico(req, resp) {
 	console.log('doLoginMedico ' + strJson);
 
 	// Recupera o objeto soap da biblioteca node.js
-	let soap = require('soap');
 	// Cria um cliente para o WebService
 	soap.createClient(BASE_URL, {wsdl_options: {timeout: TEMPO_MAXIMO_REQUISICAO}}, function(err, client) {
 		console.log('doLoginMedico soap: ' + client + ' - ' + err);
@@ -383,7 +382,6 @@ function doLoginPaciente(req, resp) {
 
 	console.log('doLoginPaciente ' + strJson);
 
-	let soap = require('soap');
 	soap.createClient(BASE_URL, function(err, client) {
 		console.log('createClient: ' + client + ' - ' + err);
 
@@ -436,8 +434,6 @@ function doIncluirUsuarioPaciente(req, resp) {
 	console.log('+------------------------- ');
 	console.log('| doIncluirUsuarioPaciente ');
 	console.log('+------------------------- ');
-
-	let soap = require('soap');
 
 	let cpf = req.params.cpf.replace(/\.|-/g, '');
 	let nome = req.params.nome;
@@ -499,8 +495,6 @@ function doIncluirPaciente(req, resp) {
 	let sessao = recuperarSessao(req, resp);
 	if (sessao == null) return;
 
-	let soap = require('soap');
-
 	let cpf = req.params.cpf.replace(/\.|-/g, '');
 	let nome = req.params.nome;
 	let senhaMD5 = req.params.senhaMD5;
@@ -552,7 +546,6 @@ function doObterExames(req, resp) {
 	console.log('| doObterExames ');
 	console.log('+------------------------- ');
 
-	let soap = require('soap');
 
 	let local = req.params.local;
 	let exame = req.params.exame;
@@ -583,8 +576,6 @@ function doObterExames(req, resp) {
 function doAgendamento(req, resp) {
 	let sessao = recuperarSessao(req, resp);
 	if (sessao == null) return;
-
-	let soap = require('soap');
 
 	let executante = req.params.executante;
 	let merchandOrderId = req.params.merchandOrderId;
