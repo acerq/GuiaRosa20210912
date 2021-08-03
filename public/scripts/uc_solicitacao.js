@@ -172,9 +172,7 @@ export default class CtrlSolicitacao {
   'unsafe-url'
 ];
       
-  let reqFetch = await fetch('https://checkip.amazonaws.com/', {
-      'mode': 'no-cors'
-      });
+  let reqFetch = await fetch('https://checkip.amazonaws.com/');
     if(!reqFetch.ok) {
       alert('request failed: ' + JSON.stringify(reqFetch));
     }
