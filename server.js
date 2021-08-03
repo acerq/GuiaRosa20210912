@@ -1226,10 +1226,10 @@ function startServer() {
     
 	// Efetuando o log para cada requisição
 	app.use( (req, resp, next) => {
-    resp.header("Referrer-Policy", "no-referrer"); 
     resp.header("Access-Control-Allow-Origin", "*");
+    resp.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    resp.header("Access-Control-Allow-Credentials", "true");    
     resp.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    resp.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
     
 		const now = new Date();
 		const time = now.toLocaleDateString() + ' - ' + now.toLocaleTimeString();
