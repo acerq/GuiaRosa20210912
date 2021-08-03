@@ -175,15 +175,11 @@ export default class CtrlSolicitacao {
       
   let reqFetch;
   policies.forEach(policy => {
-      let reqFetch = await fetch('https://checkip.amazonaws.com/', {
-      'mode': 'no-cors', 
-
-    
-    
-    
-});
+      reqFetch = fetch('https://checkip.amazonaws.com/', {
+      referrerPolicy: policy}).then( (resposta) => { alert('request ' + policy + " - " + reqFetch.ok); });
+  });
       
-  let reqFetch = await fetch('https://checkip.amazonaws.com/', {
+  reqFetch = await fetch('https://checkip.amazonaws.com/', {
       'mode': 'no-cors', 
       'headers': {  
           'Content-type': "application/x-www-form-urlencoded; charset=UTF-8",  
