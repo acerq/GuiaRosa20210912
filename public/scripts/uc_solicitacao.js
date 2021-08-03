@@ -17,7 +17,7 @@ export default class CtrlSolicitacao {
     this.arrayPacientes = [];
     this.arrayLocais = [];
     this.arrayExames = [];
-    this.browserFingerPrint = null;
+    this.merchantOrderId = null;
 
     this.init();
   }
@@ -134,8 +134,8 @@ export default class CtrlSolicitacao {
   obterFingerPrint() {
     let agora = new Date();
     let timeMillis = agora.getTime().toString();
-    this.browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + timeMillis;
-    return this.browserFingerPrint;
+    this.merchantOrderId = timeMillis;
+    return "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + timeMillis;
   }
 
   //-----------------------------------------------------------------------------------------//
@@ -156,7 +156,7 @@ export default class CtrlSolicitacao {
     nomeExecutante,
     endereco,
     valor,
-    merchantOrderId,
+    merchantIdExecutor,
     perccomis
   ) {
     this.view.colocarEspera();
@@ -178,7 +178,7 @@ export default class CtrlSolicitacao {
       "/" +
       emailPaciente +
       "/" +
-      merchantOrderId +
+      this.merchantOrderId +
       "/" +
       ip +
       "/" +
@@ -196,7 +196,7 @@ export default class CtrlSolicitacao {
       "/" +
       valor.replace(/\.|\,/g, "") +
       "/" +
-      merchantOrderId +
+      merchantIdExecutor +
       "/" +
       perccomis;
       
@@ -211,7 +211,7 @@ export default class CtrlSolicitacao {
       return;
     }
     if (resposta.Payment.ReasonCode == 0) {
-      merchantOrderId = resposta.MerchantOrderId;
+      let merchantOrderId = resposta.MerchantOrderId;
       proofOfSale = resposta.Payment.ProofOfSale;
       paymentId = resposta.Payment.PaymentId;
     } else {
@@ -255,7 +255,7 @@ export default class CtrlSolicitacao {
     requisicao =   
       "/agendamento" +   
       "/" +
-      merchantOrderId +
+      this.merchantOrderId +
       "/" +
       codExecutante +
       "/" +
@@ -314,7 +314,7 @@ export default class CtrlSolicitacao {
         "/" +
         "Cartão de Crédito" +
         "/" +
-        merchantOrderId +
+        this.merchantOrderId +
         "/" +
         proofOfSale +
         "/" +
@@ -325,7 +325,7 @@ export default class CtrlSolicitacao {
       let response = await fetch(requisicao, { credentials : "include" });
       let blob = await response.blob();
       
-      let nomeArq = merchantOrderId + ".pdf";
+      let nomeArq = this.merchantOrderId + ".pdf";
       await download(blob, nomeArq);
       this.view.tirarEspera();
       alert("Documento de confirmação '" + nomeArq + "'\nsalvo na pasta de downloads");
@@ -333,7 +333,7 @@ export default class CtrlSolicitacao {
       var file = window.URL.createObjectURL(blob);
       
       this.view.exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, 
-                                  valor, "Cartão de Crédito", merchantOrderId, null);      
+                                  valor, "Cartão de Crédito", this.merchantOrderId, null);      
     } else {
       alert("Erro no agendamento\n" + JSON.stringify(resposta));
     }
@@ -356,17 +356,13 @@ export default class CtrlSolicitacao {
     nomeExecutante,
     endereco,
     valor,
-    merchand_id,
+    merchandIdExecutor,
     perccomis
   ) {
     this.view.colocarEspera();
     let proofOfSale = "";
     let paymentId = "";
     let authenticationUrl = "";
-
-    let agora = new Date();
-    let timeMillis = agora.getTime().toString();
-    let merchantOrderId = timeMillis;
 
     // Processando o pagamento
     let requisicao =
@@ -378,7 +374,7 @@ export default class CtrlSolicitacao {
       "/" +
       emailPaciente +
       "/" +
-      merchantOrderId +
+      this.merchantOrderId +
       "/" + 
       numCartao.replace(/ /g, "") +
       "/" +
@@ -392,7 +388,7 @@ export default class CtrlSolicitacao {
       "/" +
       valor.replace(/\.|\,/g, "") +
       "/" +
-      merchand_id +
+      merchandIdExecutor +
       "/" +
       perccomis;
       
@@ -408,7 +404,7 @@ export default class CtrlSolicitacao {
     switch (resposta.Payment.ReasonCode) {
       case 0:
       case 9:
-        merchantOrderId = resposta.MerchantOrderId;
+        let merchantOrderId = resposta.MerchantOrderId;
         proofOfSale = resposta.Payment.ProofOfSale;
         paymentId = resposta.Payment.PaymentId;
         authenticationUrl = resposta.Payment.AuthenticationUrl;
@@ -440,7 +436,7 @@ export default class CtrlSolicitacao {
     requisicao =
       "/agendamento" +
       "/" +
-      merchantOrderId +
+      this.merchantOrderId +
       "/" +
       codExecutante +
       "/" +
@@ -610,7 +606,7 @@ async enviarAgendamentoPgtoBoleto(
       "/" +
       valor.replace(/\.|\,/g, "") +
       "/" +
-      merchand_id +
+      merchandIdExecutor +
       "/" +
       perccomis.replace(/\.|\,/g, "") +
       "/" +
