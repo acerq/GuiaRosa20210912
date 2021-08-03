@@ -1206,6 +1206,15 @@ async function doObterEnderecoPeloCep(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
+async function doObterEnderecoPeloCep(req, resp) {
+	let cep = req.params.cep;
+	let response = await fetch('http://cep.republicavirtual.com.br/web_cep.php?cep=' + cep + '&formato=jsonp');
+	let myJson = await response.json();
+	console.log('doObterCep ' + JSON.stringify(myJson));
+	resp.json(myJson);
+}
+
+//-----------------------------------------------------------------------------------------//
 function startServer() {
   // Instancio um objeto Server (Express). Todas as requisições serão tratadas por este objeto
 	const app = express();
@@ -1224,7 +1233,7 @@ function startServer() {
 		const now = new Date();
 		const time = now.toLocaleDateString() + ' - ' + now.toLocaleTimeString();
 		const path = req.method + ' ' + req.path;
-		const m = req.ips + ' - ' + time + ' - ' + path + ' - ' + JSON.stringify(req.cookies);
+		const m = '(' + req.ip + ') - ' + time + ':' + path + ' ---> ' + JSON.stringify(req.cookies);
 		console.log(m);
 		next();
 	});
@@ -1307,6 +1316,8 @@ function startServer() {
 	// Indicando ao express que os arquivos estáticos estão na pasta 'public'
 	app.use(express.static('public'));
 
+  app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
+  
 	// Iniciando o servidor local
 	return app.listen('8000', () => {
 		console.log('Servidor Local iniciado na porta 8000');
