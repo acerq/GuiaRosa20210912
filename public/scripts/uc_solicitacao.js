@@ -128,7 +128,15 @@ export default class CtrlSolicitacao {
     return true;
   }
 
-  //-----------------------------------------------------------------------------------------//
+//-----------------------------------------------------------------------------------------//
+
+obterFingerPrint() {
+    let agora = new Date();
+    let timeMillis = agora.getTime().toString();
+    return "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + timeMillis;
+}
+
+//-----------------------------------------------------------------------------------------//
 
   async enviarAgendamentoPgtoCC(
     codExecutante,
@@ -146,24 +154,18 @@ export default class CtrlSolicitacao {
     nomeExecutante,
     endereco,
     valor,
-    merchand_id,
+    merchantOrderId,
     perccomis
   ) {
     this.view.colocarEspera();
-    let agora = new Date();
-    let timeMillis = agora.getTime().toString();
-    //let merchantOrderId =   this.usrApp.login + "-" + timeMillis;
-    let merchantOrderId = timeMillis;
 
     let proofOfSale = "";
     let paymentId = "";
       
-    let browserFingerPrint = "f0073a5b-a2e8-4cb8-af4f-cb4c95bf003b" + merchantOrderId;
-    
-    
-  
-      
-          
+    let obterIp = await fetch('/obterIp');
+    let ip = await obterIp.text();
+
+            
     // Processando o pagamento
     let requisicao =
       "/pgtocc" +
@@ -192,7 +194,7 @@ export default class CtrlSolicitacao {
       "/" +
       valor.replace(/\.|\,/g, "") +
       "/" +
-      merchand_id +
+      merchantOrderId +
       "/" +
       perccomis;
       
@@ -769,18 +771,6 @@ async enviarAgendamentoPgtoBoleto(
   }
 
 //-----------------------------------------------------------------------------------------//
-
 }
 
 var ucSolicitacao = new CtrlSolicitacao();
-
-fetch('https://checkip.amazonaws.com/')
-  .then(function(response) {
-      return response.text();
-    })
-  .then(function(response) {
-    console.log("IP = " + response);
-  });
-
-//ip = '186.223.170.234';
-

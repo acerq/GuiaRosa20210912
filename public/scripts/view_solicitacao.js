@@ -413,7 +413,9 @@ export default class ViewSolicitacao {
 
   //-----------------------------------------------------------------------------------------//
 
-  colocarFormPgto(forma) {
+  async colocarFormPgto(forma) {
+    let browserFingerPrint = _objAtual.ctrl.obterBrowserFingerPrint();
+        
     let endereco = "pgto_credito.html";
     if(forma != "Crédito")
       endereco = "pgto_debito.html"
@@ -448,6 +450,12 @@ export default class ViewSolicitacao {
         "<br/>R$ " +
         tiraEspacos(selecao[3]) +
         "</span></center>";
+      
+      
+      
+      
+      
+      
       $("#divExame").html(msg);
 
       _objAtual.btOk.onclick = _objAtual.enviarSolicitacao;
