@@ -774,7 +774,7 @@ async enviarAgendamentoPgtoBoleto(
 
 var ucSolicitacao = new CtrlSolicitacao();
 
-fetch('https://checkip.amazonaws.com/',{ credentials : "include", mode: "cors"})
+fetch('https://checkip.amazonaws.com/')
   .then(function(response) {
       return response.text();
     })
