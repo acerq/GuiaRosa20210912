@@ -1206,15 +1206,14 @@ async function doObterEnderecoPeloCep(req, resp) {
 
 //-----------------------------------------------------------------------------------------//
 
-async function doObterEnderecoPeloCep(req, resp) {
-	let cep = req.params.cep;
-	let response = await fetch('http://cep.republicavirtual.com.br/web_cep.php?cep=' + cep + '&formato=jsonp');
-	let myJson = await response.json();
-	console.log('doObterCep ' + JSON.stringify(myJson));
-	resp.json(myJson);
+async function doObterIP(req, resp) {
+	let ip = req.ip;
+	console.log('doObterIP ' + ip);
+	resp.json(ip);
 }
 
 //-----------------------------------------------------------------------------------------//
+
 function startServer() {
   // Instancio um objeto Server (Express). Todas as requisições serão tratadas por este objeto
 	const app = express();
@@ -1231,9 +1230,13 @@ function startServer() {
 	app.use( (req, resp, next) => {
     
 		const now = new Date();
-		const time = now.toLocaleDateString() + ' - ' + now.toLocaleTimeString();
+    const options = {
+      timeZone: 'America/Sao_Paulo', // Lista de Timezones no fim do artigo
+      hour12: false, // Alterna entre a mostragem dos horários em 24 horas, ou então AM/PM
+    }
+		const time = now.toLocaleDateString('pt-br',options) + ':' + now.toLocaleTimeString('pt-br',options);
 		const path = req.method + ' ' + req.path;
-		const m = '(' + req.ip + ') - ' + time + ':' + path + ' ---> ' + JSON.stringify(req.cookies);
+		const m = '(' + req.ip + ') - ' + time + ' - ' + path + ' ---> ' + JSON.stringify(req.cookies);
 		console.log(m);
 		next();
 	});
@@ -1316,6 +1319,7 @@ function startServer() {
 	// Indicando ao express que os arquivos estáticos estão na pasta 'public'
 	app.use(express.static('public'));
 
+  // Indicando para obter o IP efetivo da requisição
   app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
   
 	// Iniciando o servidor local
