@@ -1,5 +1,6 @@
 dependencies:
-  cookie-parser: 1.4.0
+  cookie-parser: 1.4.5
+  cors: 2.8.5
   express: 4.17.1
   express-http-to-https: 1.1.4
   node-fetch: 2.6.0
@@ -244,25 +245,19 @@ packages:
     dev: false
     resolution:
       integrity: sha512-4FJkXzKXEDB1snCFZlLP4gpC3JILicCpGbzG9f9G7tGqGCzETQ2hWPrcinA9oU4wtf2biUaEH5065UnMeR33oA==
-  /cookie-parser/1.4.0:
+  /cookie-parser/1.4.5:
     dependencies:
-      cookie: 0.2.2
+      cookie: 0.4.0
       cookie-signature: 1.0.6
     dev: false
     engines:
       node: '>= 0.8.0'
     resolution:
-      integrity: sha1-czI9Wn3jQQeMRGEJxiLS9wCBZO4=
+      integrity: sha512-f13bPUj/gG/5mDr+xLmSxxDsB9DQiTIfhJS/sqjrmfAWiAN+x2O4i/XguTL9yDZ+/IFDanJ+5x7hC4CXT9Tdzw==
   /cookie-signature/1.0.6:
     dev: false
     resolution:
       integrity: sha1-4wOogrNCzD7oylE6eZmXNNqzriw=
-  /cookie/0.2.2:
-    dev: false
-    engines:
-      node: '>= 0.6'
-    resolution:
-      integrity: sha1-V574vJstb36XWha/QWTVcudS5UA=
   /cookie/0.4.0:
     dev: false
     engines:
@@ -279,6 +274,15 @@ packages:
     dev: false
     resolution:
       integrity: sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
+  /cors/2.8.5:
+    dependencies:
+      object-assign: 4.1.1
+      vary: 1.1.2
+    dev: false
+    engines:
+      node: '>= 0.10'
+    resolution:
+      integrity: sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==
   /crypto-js/3.3.0:
     dev: false
     resolution:
@@ -1015,6 +1019,12 @@ packages:
     dev: false
     resolution:
       integrity: sha512-fexhUFFPTGV8ybAtSIGbV6gOkSv8UtRbDBnAyLQw4QPKkgNlsH2ByPGtMUqdWkos6YCRmAqViwgZrJc/mRDzZQ==
+  /object-assign/4.1.1:
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
   /object-inspect/1.8.0:
     dev: false
     resolution:
@@ -1625,7 +1635,8 @@ registry: 'https://registry.npmjs.org/'
 shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
-  cookie-parser: 1.4.0
+  cookie-parser: ^1.4.0
+  cors: ^2.8.5
   express: ^4.16.4
   express-http-to-https: ^1.1.4
   node-fetch: ^2.3.0
