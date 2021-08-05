@@ -661,7 +661,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
       }
       await _objAtual.daoConsulta.limparConsulta();
       await _objAtual.daoConsulta.abrirDbConsulta();
-      await _objAtual.daoConsulta.salvarConsulta(_objAtual.codLocalSelecionado, _objAtual.arrayExames, _objAtual.tfExame.value, _objAtual.dadosExame.text, _objAtual.codExecutanteSelecionado, _objAtual.codExameSelecionado, _objAtual.perccomis);
+      await _objAtual.daoConsulta.salvarConsulta(_objAtual.codLocalSelecionado, _objAtual.arrayExames, _objAtual.tfExame.value, _objAtual.dadosExame.text, _objAtual.codExecutanteSelecionado, _objAtual.codExameSelecionado, _objAtual.merchantIdExecutor, _objAtual.perccomis);
       
       let daoUsuario = novoDaoUsuario();
       await daoUsuario.abrirDb();
