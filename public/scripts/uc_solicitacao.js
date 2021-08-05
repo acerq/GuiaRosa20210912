@@ -167,7 +167,7 @@ export default class CtrlSolicitacao {
     let obterIp = await fetch('/obterIp');
     let ip = await obterIp.text();
 
-            
+      
     // Processando o pagamento
     let requisicao =
       "/pgtocc" +
