@@ -464,7 +464,7 @@ export default class ViewSolicitacao {
 
 //-----------------------------------------------------------------------------------------//
 
-exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, valor, formaPgto, merchantOrderId, url) {
+exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, valor, formaPgto, merchandOrderId, url) {
   $("#divConteudo").empty();
   // $("#divConteudo").html("<div id='pdfId'></div><script>PDFObject.embed('" + arq +"#zoom=30', '#pdfId');</script><button onclick='window.history.go(-1)' style='width:100%;'>Fechar</button>");
   $("#divConteudo").load("comprovante.html", function() {
@@ -476,7 +476,7 @@ exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco
     $("#endereco").html(endereco);
     $("#valor").html(valor);
     $("#formaPgto").html(formaPgto);
-    $("#merchantOrderId").html(merchantOrderId);
+    $("#merchandOrderId").html(merchandOrderId);
     if(url != null)
       $("#boleto").html("<a href='" + url + "'>Clique aqui para visualizar o boleto</a>");
   });
@@ -484,7 +484,7 @@ exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco
 
 //-----------------------------------------------------------------------------------------//
 
-apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, valor, formaPgto, merchantOrderId, url) {
+apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, valor, formaPgto, merchandOrderId, url) {
   $("#divConteudo").empty();
   $("#divConteudo").load("comprovante.html", function() {
 
@@ -495,7 +495,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     $("#endereco").html(endereco);
     $("#valor").html(valor);
     $("#formaPgto").html(formaPgto);
-    $("#merchantOrderId").html(merchantOrderId);
+    $("#merchandOrderId").html(merchandOrderId);
     if(url != null)
       $("#boleto").html("<a href='" + url + "'>Clique aqui para visualizar o boleto</a>");
   });
@@ -594,9 +594,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
 
     _objAtual.cpfPaciente = _objAtual.cpfPaciente.replace(/\.|-/g, "");
     _objAtual.valorExameSelecionado = valor;
-    
-    
-    
+        
     // https://h.online-metrix.net/fp/tags.js?org_id=1snn5n9w&session_id=guiarosa01?php echo $mechantID?><?php echo $sessionID ?>
     
     
@@ -617,7 +615,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         nomeExecutante,
         endereco,
         valor,
-        _objAtual.merchantIdExecutor,
+        merchandIdExecutor,
         _objAtual.perccomis
       );
     } else if (forma == "Débito") {
@@ -637,7 +635,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           nomeExecutante,
           endereco,
           valor,
-          _objAtual.merchantIdExecutor,
+          merchandIdExecutor,
           _objAtual.perccomis
         );
       }

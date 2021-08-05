@@ -356,7 +356,7 @@ export default class CtrlSolicitacao {
     nomeExecutante,
     endereco,
     valor,
-    merchandIdExecutor,
+    merchantIdExecutor,
     perccomis
   ) {
     this.view.colocarEspera();
@@ -388,7 +388,7 @@ export default class CtrlSolicitacao {
       "/" +
       valor.replace(/\.|\,/g, "") +
       "/" +
-      merchandIdExecutor +
+      merchantIdExecutor +
       "/" +
       perccomis;
       
@@ -404,7 +404,7 @@ export default class CtrlSolicitacao {
     switch (resposta.Payment.ReasonCode) {
       case 0:
       case 9:
-        let merchantOrderId = resposta.MerchantOrderId;
+        let merchandOrderId = resposta.MerchandOrderId;
         proofOfSale = resposta.Payment.ProofOfSale;
         paymentId = resposta.Payment.PaymentId;
         authenticationUrl = resposta.Payment.AuthenticationUrl;
@@ -579,7 +579,7 @@ async enviarAgendamentoPgtoBoleto(
     nomeExecutante,
     endereco,
     valor,
-    merchandIdExecutor,
+    merchantIdExecutor,
     perccomis
   ) {
     this.view.colocarEspera();
@@ -606,7 +606,7 @@ async enviarAgendamentoPgtoBoleto(
       "/" +
       valor.replace(/\.|\,/g, "") +
       "/" +
-      merchandIdExecutor +
+      merchantIdExecutor +
       "/" +
       perccomis.replace(/\.|\,/g, "") +
       "/" +
