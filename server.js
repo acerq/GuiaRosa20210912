@@ -678,7 +678,7 @@ async function doPgtoCC(req, resp) {
 	let anoValidade = req.params.anoValidade;
 	let cvv = req.params.cvv;
 	let valor = req.params.valor;
-	let merchantId = req.params.merchantId;
+	let merchantIdExecutor = req.params.merchantIdExecutor;
 	let perccomis = req.params.perccomis;
 
 	console.log('executando doPgtoCC' + nome);
@@ -776,6 +776,18 @@ async function doPgtoCC(req, resp) {
                 {  
                     "Id":9,
                     "Value":"SIM"
+                },
+                {  
+                    "Id":33,
+                    "Value":"Digitado"
+                },
+                {  
+                    "Id":41,
+                    "Value":"CPF"
+                },
+                {  
+                    "Id":52,
+                    "Value":"Saúde e Beleza"
                 }
             ]
 			},
@@ -783,7 +795,7 @@ async function doPgtoCC(req, resp) {
 			Country: 'BRA',
 			SplitPayments: [
 				{
-					SubordinateMerchantId: merchantId,
+					SubordinateMerchantId: merchantIdExecutor,
 					Amount: valor,
 					Fares: {
 						Mdr: percSubordinado,
@@ -1295,7 +1307,7 @@ function startServer() {
 	app.get('/agendamento/:merchantOrderId/:executante/:solicitante/:paciente/:cpf/:codExame/:nomeExame/:nomeExecutante/:enderecoExecutante/:faturar', doAgendamento);
 
 	// Pagamento por cartão de crédito
-	app.get('/pgtocc/:cpf/:nome/:email/:id/:ip/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor/:merchantId/:perccomis', doPgtoCC);
+	app.get('/pgtocc/:cpf/:nome/:email/:id/:ip/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor/:merchantIdExecutor/:perccomis', doPgtoCC);
 
 	// Pagamento por cartão de debito
 	app.get('/pgtodebito/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:valor/:merchantId/:perccomis', doPgtoDebito);
