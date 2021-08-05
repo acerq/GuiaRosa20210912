@@ -69,7 +69,7 @@ export default class ViewSolicitacao {
     this.codExecutanteSelecionado = null;
     this.codExameSelecionado = null;
     this.valorExameSelecionado = null;
-    this.merchandIdExecutor = null;
+    this.merchantIdExecutor = null;
     this.perccomis = null;
     this.dtPeriodo = null;
 
@@ -108,7 +108,7 @@ export default class ViewSolicitacao {
         this.codExameSelecionado = array[0].codExameSelecionado;
         this.atualizarExames(array[0].arrayExames);
         this.codLocalSelecionado = array[0].codLocalSelecionado;
-        this.merchandIdExecutor = array[0].merchandIdExecutor;
+        this.merchantIdExecutor = array[0].merchantIdExecutor;
         this.perccomis = array[0].perccomis;
         this.idDadosExame = array[0].idDadosExame;
       }      
@@ -263,7 +263,7 @@ export default class ViewSolicitacao {
         let codExecutante = value.id_executante;
         let codExame = value.cd_exame;
         let valor = value.valor;
-        let merchandIdExecutor = value.marchand_id; //TODO Trocar
+        let merchantIdExecutor = value.marchand_id; //TODO Trocar
         let perccomis = value.perccomis; 
         let descricao =
           tiraEspacos(value.exame) +
@@ -281,7 +281,7 @@ export default class ViewSolicitacao {
           SEPARADOR +
           valor +
           SEPARADOR +
-          merchandIdExecutor +
+          merchantIdExecutor +
           SEPARADOR +
           perccomis +
           "' " +  
@@ -310,7 +310,7 @@ export default class ViewSolicitacao {
           _objAtual.codExecutanteSelecionado = selectionText[0];
           _objAtual.codExameSelecionado = selectionText[1];
           _objAtual.valorExameSelecionado = selectionText[2];
-          _objAtual.merchandIdExecutor = selectionText[3];
+          _objAtual.merchantIdExecutor = selectionText[3];
           _objAtual.perccomis = selectionText[4];
       });
 
@@ -404,7 +404,7 @@ export default class ViewSolicitacao {
         nomeExecutante,
         endereco,
         _objAtual.valorExameSelecionado.replace(/\./g, ""),
-        _objAtual.merchandIdExecutor,
+        _objAtual.merchantIdExecutor,
         _objAtual.perccomis.replace(/\./g, "")
       );
       fnTirarEspera();
@@ -464,7 +464,7 @@ export default class ViewSolicitacao {
 
 //-----------------------------------------------------------------------------------------//
 
-exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, valor, formaPgto, merchandOrderId, url) {
+exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, valor, formaPgto, merchantOrderId, url) {
   $("#divConteudo").empty();
   // $("#divConteudo").html("<div id='pdfId'></div><script>PDFObject.embed('" + arq +"#zoom=30', '#pdfId');</script><button onclick='window.history.go(-1)' style='width:100%;'>Fechar</button>");
   $("#divConteudo").load("comprovante.html", function() {
@@ -476,7 +476,7 @@ exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco
     $("#endereco").html(endereco);
     $("#valor").html(valor);
     $("#formaPgto").html(formaPgto);
-    $("#merchandOrderId").html(merchandOrderId);
+    $("#merchantOrderId").html(merchantOrderId);
     if(url != null)
       $("#boleto").html("<a href='" + url + "'>Clique aqui para visualizar o boleto</a>");
   });
@@ -484,7 +484,7 @@ exibirConfirmacao(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco
 
 //-----------------------------------------------------------------------------------------//
 
-apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, valor, formaPgto, merchandOrderId, url) {
+apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, endereco, valor, formaPgto, merchantOrderId, url) {
   $("#divConteudo").empty();
   $("#divConteudo").load("comprovante.html", function() {
 
@@ -495,7 +495,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
     $("#endereco").html(endereco);
     $("#valor").html(valor);
     $("#formaPgto").html(formaPgto);
-    $("#merchandOrderId").html(merchandOrderId);
+    $("#merchantOrderId").html(merchantOrderId);
     if(url != null)
       $("#boleto").html("<a href='" + url + "'>Clique aqui para visualizar o boleto</a>");
   });
@@ -615,7 +615,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
         nomeExecutante,
         endereco,
         valor,
-        merchandIdExecutor,
+        _objAtual.merchantIdExecutor,
         _objAtual.perccomis
       );
     } else if (forma == "Débito") {
@@ -635,7 +635,7 @@ apresentarPgtoDebito(cpfPaciente, nomePaciente, nomeExame, nomeExecutante, ender
           nomeExecutante,
           endereco,
           valor,
-          merchandIdExecutor,
+          merchantIdExecutor,
           _objAtual.perccomis
         );
       }

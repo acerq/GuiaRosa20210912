@@ -578,7 +578,7 @@ function doAgendamento(req, resp) {
 	if (sessao == null) return;
 
 	let executante = req.params.executante;
-	let merchandOrderId = req.params.merchandOrderId;
+	let merchantOrderId = req.params.merchantOrderId;
 	let solicitante = req.params.solicitante;
 	let paciente = req.params.paciente;
 	let cpf = req.params.cpf;
@@ -596,7 +596,7 @@ function doAgendamento(req, resp) {
 	}
 	console.log('executando doAgendamento');
 	if (
-		typeof merchandOrderId === 'undefined' ||
+		typeof merchantOrderId === 'undefined' ||
 		typeof executante === 'undefined' ||
 		typeof solicitante === 'undefined' ||
 		typeof paciente === 'undefined' ||
@@ -616,7 +616,7 @@ function doAgendamento(req, resp) {
 
 	let dados =
 		'[{"CD_ORDER":"' +
-		merchandOrderId +
+		merchantOrderId +
 		',' +
 		'"CD_EXECUTANTE":"' +
 		executante +
@@ -678,7 +678,7 @@ async function doPgtoCC(req, resp) {
 	let anoValidade = req.params.anoValidade;
 	let cvv = req.params.cvv;
 	let valor = req.params.valor;
-	let merchandId = req.params.merchandId;
+	let merchantId = req.params.merchantId;
 	let perccomis = req.params.perccomis;
 
 	console.log('executando doPgtoCC' + nome);
@@ -769,7 +769,7 @@ async function doPgtoCC(req, resp) {
 			Country: 'BRA',
 			SplitPayments: [
 				{
-					SubordinateMerchantId: merchandId,
+					SubordinateMerchantId: merchantId,
 					Amount: valor,
 					Fares: {
 						Mdr: percSubordinado,
@@ -1278,17 +1278,17 @@ function startServer() {
 	app.get('/incluirPaciente/:cpf/:nome/:senhaMD5/:email/:celular/:rua/:numero/:complemento/:bairro/:cep', doIncluirPaciente);
 
 	// Envio de Solicitação de Agendamento de Exame
-	app.get('/agendamento/:merchandOrderId/:executante/:solicitante/:paciente/:cpf/:codExame/:nomeExame/:nomeExecutante/:enderecoExecutante/:faturar', doAgendamento);
+	app.get('/agendamento/:merchantOrderId/:executante/:solicitante/:paciente/:cpf/:codExame/:nomeExame/:nomeExecutante/:enderecoExecutante/:faturar', doAgendamento);
 
 	// Pagamento por cartão de crédito
-	app.get('/pgtocc/:cpf/:nome/:email/:id/:ip/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor/:merchandId/:perccomis', doPgtoCC);
+	app.get('/pgtocc/:cpf/:nome/:email/:id/:ip/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:cvv/:valor/:merchantId/:perccomis', doPgtoCC);
 
 	// Pagamento por cartão de debito
-	app.get('/pgtodebito/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:valor/:merchandId/:perccomis', doPgtoDebito);
+	app.get('/pgtodebito/:cpf/:nome/:email/:id/:numeroCartao/:nomeCartao/:bandeira/:mesValidade/:anoValidade/:valor/:merchantId/:perccomis', doPgtoDebito);
 	app.post('/finalizarDebito', doFinalizarPgtoDebito);
 
 	// Pagamento por boleto
-	app.get('/pgtoboleto/:cpf/:nome/:email/:id/:valor/:exame/:dataPgto/:merchandId/:perccomis', doPgtoBoleto);
+	app.get('/pgtoboleto/:cpf/:nome/:email/:id/:valor/:exame/:dataPgto/:merchantId/:perccomis', doPgtoBoleto);
 
 	// Verificar status de pagamento
 	app.get('/verificarPgto', doVerificarPgto);

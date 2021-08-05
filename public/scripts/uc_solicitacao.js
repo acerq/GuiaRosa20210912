@@ -404,7 +404,7 @@ export default class CtrlSolicitacao {
     switch (resposta.Payment.ReasonCode) {
       case 0:
       case 9:
-        let merchandOrderId = resposta.MerchandOrderId;
+        let merchantOrderId = resposta.MerchantOrderId;
         proofOfSale = resposta.Payment.ProofOfSale;
         paymentId = resposta.Payment.PaymentId;
         authenticationUrl = resposta.Payment.AuthenticationUrl;
