@@ -756,6 +756,7 @@ async function doPgtoCC(req, resp) {
 			},
       FraudAnalysis: {
 				Provider: 'Cybersource',
+				TotalOrderAmount: valor,
         "Shipping": {
           "ShippingMethod": "None",
         },
@@ -763,7 +764,7 @@ async function doPgtoCC(req, resp) {
           "ipaddress": ip,
           "browserfingerprint": browserFingerPrint
         },
-				TotalOrderAmount: valor
+        MerchantDefinedFields
 			},
 			Currency: 'BRL',
 			Country: 'BRA',
