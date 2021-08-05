@@ -764,7 +764,20 @@ async function doPgtoCC(req, resp) {
           "ipaddress": ip,
           "browserfingerprint": browserFingerPrint
         },
-        MerchantDefinedFields
+        MerchantDefinedFields: [  
+                {  
+                    "Id":1,
+                    "Value":cpf
+                },
+                {  
+                    "Id":4,
+                    "Value":"Movel"
+                },
+                {  
+                    "Id":9,
+                    "Value":"SIM"
+                }
+            ]
 			},
 			Currency: 'BRL',
 			Country: 'BRA',
