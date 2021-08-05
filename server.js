@@ -756,12 +756,12 @@ async function doPgtoCC(req, resp) {
 			},
       FraudAnalysis: {
 				Provider: 'Cybersource',
-				TotalOrderAmount: valor,
+				TotalOrderAmount: 30000, //valor, ###
         "Shipping": {
           "ShippingMethod": "None",
         },
         browser: {
-          "ipaddress": ip,
+          "ipaddress":"187.115.4.38", //ip, ###
           "browserfingerprint": browserFingerPrint
         },
         MerchantDefinedFields: [  
