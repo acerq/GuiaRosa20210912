@@ -796,9 +796,9 @@ async function doPgtoCC(req, resp) {
 			SplitPayments: [
 				{
 					SubordinateMerchantId: merchantIdExecutor,
-					Amount: valor,
+					Amount: 30000, //valor, ###
 					Fares: {
-						Mdr: percSubordinado,
+						Mdr: 30.00, //percSubordinado, ###
 						Fee: 0
 					}
 				}
