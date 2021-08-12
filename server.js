@@ -795,7 +795,7 @@ async function doPgtoCC(req, resp) {
 			Country: 'BRA',
 			SplitPayments: [
 				{                         
-					"SubordinateMerchantId": "-0ecde1ed-51b7-405c-b7ed-7f44af1fefa3", //### merchantIdExecutor,
+					"SubordinateMerchantId": "0ecde1ed-51b7-405c-b7ed-7f44af1fefa3", //### merchantIdExecutor,
 					"Amount": 30000, //valor, ###
 					"Fares": {
 						"Mdr": 30.00, //percSubordinado, ###
