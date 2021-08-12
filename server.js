@@ -794,12 +794,12 @@ async function doPgtoCC(req, resp) {
 			Currency: 'BRL',
 			Country: 'BRA',
 			SplitPayments: [
-				{
-					SubordinateMerchantId: merchantIdExecutor,
-					Amount: 30000, //valor, ###
-					Fares: {
-						Mdr: 30.00, //percSubordinado, ###
-						Fee: 0
+				{                         
+					"SubordinateMerchantId": "-0ecde1ed-51b7-405c-b7ed-7f44af1fefa3", //### merchantIdExecutor,
+					"Amount": 30000, //valor, ###
+					"Fares": {
+						"Mdr": 30.00, //percSubordinado, ###
+						"Fee": 0
 					}
 				}
 			],
