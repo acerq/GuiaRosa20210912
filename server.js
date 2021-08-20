@@ -1234,7 +1234,7 @@ async function doObterEnderecoPeloCep(req, resp) {
 
 async function doObterIP(req, resp) {
 	let ip = req.ip;
-	console.log('doObterIP ' + ip);
+	console.log('doObterIP: ' + ip);
 	resp.json(ip);
 }
 
