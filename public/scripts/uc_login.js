@@ -27,7 +27,8 @@ UcEfetuarLogin.prototype.iniciar = async function() {
 
 UcEfetuarLogin.prototype.verificarLogin = async function(login, senha) {
   if (this.usrApp != null && this.usrApp.login == login && !this.usrApp.ehMedico) {
-    if (this.usrApp.senha == fnMD5(senha)) {        
+    if (this.usrApp.senha == fnMD5(senha)) { 
+      this.guardarUsuarioCorrente();
       return this.usrApp;
     } 
     //TODO não é médico e a senha não é a mesma
