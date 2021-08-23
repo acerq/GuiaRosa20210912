@@ -291,7 +291,6 @@ function doGuardarUsuarioCorrente(req, resp) {
 
 	resp.json(sessao);
 	resp.end();
-	return;
 }
 
 //-----------------------------------------------------------------------------------------//
