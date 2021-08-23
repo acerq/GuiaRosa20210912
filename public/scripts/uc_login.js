@@ -67,8 +67,10 @@ UcEfetuarLogin.prototype.verificarLogin = async function(login, senha) {
 
 // -----------------------------------------------------------------------------------------//
 
-UcEfetuarLogin.prototype.guardarUsuarioCorrente = function() {
-  return fetch(
+UcEfetuarLogin.prototype.guardarUsuarioCorrente = async function() {
+  if(this.usrApp.complemento == null || this.usrApp.complemento == "")
+    this.usrApp.complemento = '-';
+  let resposta = await fetch(
     "/guardarUsuarioCorrente/" +
       this.usrApp.login +
       "/" +
@@ -92,13 +94,8 @@ UcEfetuarLogin.prototype.guardarUsuarioCorrente = function() {
     {
       credentials: "include"
     }
-  )
-    .then(response => {
-      return response.json();
-    })
-    .catch(() => {
-      return null;
-    });
+  );
+  return resposta.json();
 }
 
 // -----------------------------------------------------------------------------------------//
