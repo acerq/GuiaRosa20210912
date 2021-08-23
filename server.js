@@ -289,6 +289,12 @@ function doGuardarUsuarioCorrente(req, resp) {
 	console.log('doGuardarUsuarioCorrente --> ', JSON.stringify(sessao));
 	console.log('doGuardarUsuarioCorrente --> session_id: ', sessao.session_id);
 
+  
+  //###
+  resp.cookie(SESSION_ID, sessao.session_id, {maxAge: TEMPO_MAXIMO_SESSAO + TEMPO_COOKIE_APOS_SESSAO_FINALIZADA, httpOnly: true});
+
+  
+  
 	resp.json(sessao);
 	resp.end();
 }

@@ -36,8 +36,9 @@
       let dao = new DaoConsulta();
       await dao.abrirDbConsulta();
       let array = await dao.verificarConsultaArmazenada();
-      if(array.length > 0)
+      if(array.length > 0) {
         window.location.href = "solicitacao.html";
+      } 
     }
     ver();
   </script>
