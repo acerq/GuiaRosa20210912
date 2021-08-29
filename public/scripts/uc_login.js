@@ -95,7 +95,6 @@ UcEfetuarLogin.prototype.guardarUsuarioCorrente = async function() {
       credentials: "include"
     }
   );
-  alert("PASSOU!");
   return await resposta.json();
 }
 

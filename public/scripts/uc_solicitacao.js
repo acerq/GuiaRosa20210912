@@ -210,30 +210,29 @@ export default class CtrlSolicitacao {
         mensagem += ": #" + resposta.Code;
       return;
     }
-    if (resposta.Payment.ReasonCode == 0) {
+    if (resposta.Payment.ReturnCode == 4 || resposta.Payment.ReturnCode == 6) {
       let merchantOrderId = resposta.MerchantOrderId;
       proofOfSale = resposta.Payment.ProofOfSale;
       paymentId = resposta.Payment.PaymentId;
     } else {
       this.view.tirarEspera();
-      switch (resposta.Payment.ReasonCode) {
-        case 7:
+      switch (resposta.Payment.ReturnCode) {
+        case 5:
           alert("Pagamento Recusado: Não Autorizado");
           return;
-        case 12:
+        case 70:
           alert("Pagamento Recusado: Problemas com o Cartão de Crédito");
           return;
-        case 13:
+        case 77:
           alert("Pagamento Recusado: Cartão Cancelado");
           return;
-        case 14:
+        case 78:
           alert("Pagamento Recusado: Cartão de Crédito Bloqueado");
           return;
-        case 15:
+        case 57:
           alert("Pagamento Recusado: Cartão Expirado");
           return;
-        case 4:
-        case 22:
+        case 99:
           alert("Pagamento não realizado: Tempo Expirado");
           return;
         default:
@@ -251,6 +250,8 @@ export default class CtrlSolicitacao {
     //
     //
 
+    //###
+    endereco = "<sem endereço>";
     // Agendamento
     requisicao =   
       "/agendamento" +   
