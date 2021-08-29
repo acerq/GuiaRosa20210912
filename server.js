@@ -40,7 +40,7 @@ function setPeriodo() {
 			var dia = resposta.Periodo.substring(0, 2);
 			var mes = resposta.Periodo.substring(3, 5);
 			var ano = resposta.Periodo.substring(6, 10);
-			dtPeriodo = ano + '-' + mes + '-' + dia;
+			dtPeriodo = dia + '-' + mes + '-' + ano;
 			console.log('setPeriodo Resposta -> ' + dtPeriodo);
 			horaUltimaVerificacao = new Date().getTime();
 		});
@@ -597,7 +597,7 @@ function doAgendamento(req, resp) {
 	if (sessao.ehMedico) {
 		solicitante = sessao.login;
 	} else {
-		solicitante = '0000'; //TODO
+		solicitante = '0200'; //### TODO
 	}
 	console.log('executando doAgendamento');
 	if (
@@ -660,7 +660,7 @@ function doAgendamento(req, resp) {
 				return;
 			}
 			console.log(result);
-			let resposta = result.Importacaoguiarosaimportarincluirregistromob3wsReturn.multiRef.$value;
+			let resposta = result.Importacaoguiarosaimportarincluirregistromob3wsReturn.$value;
 			console.log('doAgendamento Resposta 1->' + resposta);
 			resp.json(JSON.parse('{"mensagem":"Ok"}'));
 		});
