@@ -251,7 +251,7 @@ export default class CtrlSolicitacao {
     //
 
     //###
-    endereco = "<sem endereço>";
+    endereco = "sem endereço";
     // Agendamento
     requisicao =   
       "/agendamento" +   
