@@ -620,30 +620,33 @@ function doAgendamento(req, resp) {
 	sessao.agendamento = agendamento;
 
 	let dados =
-		'[{"CD_ORDER":"' +
-		merchantOrderId +
-		',' +
-		'"CD_EXECUTANTE":"' +
+		'{"CD_EXECUTANTE":"' +
 		executante +
-		',' +
-		'"CD_SOLICITANTE":' +
+		'",' +
+		'"CD_SOLICITANTE":"' +
 		solicitante +
-		',' +
+		'",' +
 		'"NM_PACIENTE":"' +
 		paciente +
-		'",' +
-		'"CPF":"' +
-		cpf +
 		'",' +
 		'"CD_EXAME":"' +
 		codExame +
 		'",' +
+		'"DT_EXAME":"' +
+		'2021/08/29' + //### codExame +
+		'",' +
 		'"DT_PERIODO":"' +
 		dtPeriodo.replace(/-/g, '/') +
 		'",' +
+		'"CPF":"' +
+		cpf +
+		'",' +
 		'"FAT_SN":"' +
 		faturar +
-		'"}]';
+		'",' +      
+		'"CD_ORDER":"' +
+		merchantOrderId +
+		'"}';
 
 	console.log(dados);
 
